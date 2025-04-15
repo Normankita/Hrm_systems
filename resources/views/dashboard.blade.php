@@ -1,17 +1,15 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+@extends("layouts.system")
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    {{ __("You're logged in!") }}
-                </div>
-            </div>
+@section('content')
+    <div class="card card-default">
+        <div class="px-6 py-4">
+            <p>Mono provides a variety of <span class="text-secondary text-capitalize"> Bootstrap Basic
+                    inputs </span> components with a
+                little customization that suits its design standards. For more information, please see
+                the official <a class="font-weight-bold"
+                    href="https://getbootstrap.com/docs/4.3/components/forms/" target="_blank">
+                    Bootstrap documentation.</a></p>
+            <x-system.input name="gender" placeholder="Enter your name" />
         </div>
     </div>
-</x-app-layout>
+@endsection
