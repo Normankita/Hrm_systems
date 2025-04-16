@@ -12,27 +12,12 @@
             <!-- sidebar menu -->
             <ul class="nav sidebar-inner" id="sidebar-menu">
 
-
-
                 <li>
-                    <a class="sidenav-item-link" href="index.html">
+                    <a class="sidenav-item-link" href="/dashboard">
                         <i class="mdi mdi-briefcase-account-outline"></i>
-                        <span class="nav-text">Business Dashboard</span>
+                        <span class="nav-text">Dashboard</span>
                     </a>
                 </li>
-
-
-
-
-
-                <li>
-                    <a class="sidenav-item-link" href="analytics.html">
-                        <i class="mdi mdi-chart-line"></i>
-                        <span class="nav-text">Analytics Dashboard</span>
-                    </a>
-                </li>
-
-
 
 
 
@@ -45,9 +30,9 @@
 
 
                 <li>
-                    <a class="sidenav-item-link" href="chat.html">
+                    <a class="sidenav-item-link" href="employees">
                         <i class="mdi mdi-wechat"></i>
-                        <span class="nav-text">Chat</span>
+                        <span class="nav-text">Employees</span>
                     </a>
                 </li>
 
@@ -69,7 +54,7 @@
                 <li>
                     <a class="sidenav-item-link" href="team.html">
                         <i class="mdi mdi-account-group"></i>
-                        <span class="nav-text">Team</span>
+                        <span class="nav-text">Benefits</span>
                     </a>
                 </li>
 
@@ -682,7 +667,7 @@
 
 
                             <li>
-                                <a class="sidenav-item-link" href="sign-up.html">
+                                <a class="sidenav-item-link" href="/registera">
                                     <span class="nav-text">Sign Up</span>
 
                                 </a>

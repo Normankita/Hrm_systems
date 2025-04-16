@@ -7,37 +7,27 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  @extends('_partials._title')
-   @section('name')
-   Login
-  @endsection
+  <title>Mono - Responsive Admin & Dashboard Template</title>
 
   <!-- GOOGLE FONTS -->
   <link href="https://fonts.googleapis.com/css?family=Karla:400,700|Roboto" rel="stylesheet">
-  <link href="{{ asset('bootstrap5.1.1/plugins/material/css/materialdesignicons.min.css') }}" rel="stylesheet" />
-  <link href="{{ asset('bootstrap5.1.1/plugins/simplebar/simplebar.css') }}" rel="stylesheet" />
+  <link href="{{asset('bootstrap5.1.1/plugins/material/css/materialdesignicons.min.css')}}" rel="stylesheet" />
+  <link href="{{asset('bootstrap5.1.1/plugins/simplebar/simplebar.css')}}" rel="stylesheet" />
 
   <!-- PLUGINS CSS STYLE -->
-  <link href="{{ asset('bootstrap5.1.1/plugins/nprogress/nprogress.css') }}" rel="stylesheet" />
-
+  <link href="{{asset('bootstrap5.1.1/plugins/nprogress/nprogress.css')}}" rel="stylesheet" />
+  
   <!-- MONO CSS -->
-  <link id="main-css-href" rel="stylesheet" href="{{ asset('bootstrap5.1.1/css/style.css') }}" />
+  <link id="main-css-href" rel="stylesheet" href="{{asset('bootstrap5.1.1/css/style.css')}}" />
 
-
+  
 
 
   <!-- FAVICON -->
-  <link href="images/favicon.png" rel="shortcut icon" />
+  <link href="{{asset('bootstrap5.1.1/images/favicon.png')}}" rel="shortcut icon" />
 
-  <!--
-    HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries
-  -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
-  <script src="plugins/nprogress/nprogress.js"></script>
+
+  <script src="{{asset('bootstrap5.1.1/plugins/nprogress/nprogress.js')}}"></script>
 </head>
 
 </head>
@@ -50,8 +40,8 @@
                   <div class="card-header pb-0">
                     <div class="app-brand w-100 d-flex justify-content-center border-bottom-0">
                       <a class="w-auto pl-0" href="/index.html">
-                        {{-- <img src="images/logo.png" alt="Mono"> --}}
-                        <span class="brand-name text-dark">HRM SYSTEM</span>
+                        <img src="images/logo.png" alt="Mono">
+                        <span class="brand-name text-dark">MONO</span>
                       </a>
                     </div>
                   </div>
@@ -59,7 +49,7 @@
 
                     <h4 class="text-dark mb-6 text-center">Sign in for free</h4>
 
-                    <form action="/dashboard">
+                    <form action="/index.html">
                       <div class="row">
                         <div class="form-group col-md-12 mb-4">
                           <input type="email" class="form-control input-lg" id="email" aria-describedby="emailHelp"
