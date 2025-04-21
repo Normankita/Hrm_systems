@@ -514,8 +514,6 @@
                     <ul class="collapse" id="charts" data-parent="#sidebar-menu">
                         <div class="sub-menu">
 
-
-
                             <li>
                                 <a class="sidenav-item-link" href="apex-charts.html">
                                     <span class="nav-text">Apex Charts</span>
@@ -667,7 +665,7 @@
 
 
                             <li>
-                                <a class="sidenav-item-link" href="/registera">
+                                <a class="sidenav-item-link" href="/registera ">
                                     <span class="nav-text">Sign Up</span>
 
                                 </a>

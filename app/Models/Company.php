@@ -1,0 +1,25 @@
+<?php
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class Company extends Model
+{
+    use SoftDeletes;
+
+    protected $fillable = [
+        'name', 'address', 'contact_number', 'email',
+        'brela_reg_number', 'tin_number'
+    ];
+
+    public function departments()
+    {
+        return $this->hasMany(Department::class);
+    }
+
+    public function designations()
+    {
+        return $this->hasMany(Designation::class);
+    }
+}
