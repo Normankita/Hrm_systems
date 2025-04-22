@@ -133,7 +133,7 @@
                             <label for="company_id" class="text-dark font-weight-medium">Company</label>
                             <select name="company_id" id="company_id" class="form-control" required>
                                 <option value="" disabled selected>-- Select Company --</option>
-                                @foreach($companies as $company)
+                                @foreach(App\Models\Company::all() as $company)
                                     <option value="{{ $company->id }}">{{ $company->name }}</option>
                                 @endforeach
                             </select>
@@ -144,7 +144,7 @@
                             <label for="department_id" class="text-dark font-weight-medium">Department</label>
                             <select name="department_id" id="department_id" class="form-control" required>
                                 <option value="" disabled selected>-- Select Department --</option>
-                                @foreach($departments as $department)
+                                @foreach(App\Models\Department::all() as $department)
                                     <option value="{{ $department->id }}">{{ $department->name }}</option>
                                 @endforeach
                             </select>
