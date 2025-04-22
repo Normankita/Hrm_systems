@@ -13,7 +13,7 @@ class AdminEmployeeController extends Controller
 {
     public function create()
     {
-        $roles = Role::where('name', '!=', 'ADMIN');
+        $roles = Role::where('name', '!=', 'ADMIN')->get();
         return view('admin.employee.create')
             ->with('roles', $roles);
     }
