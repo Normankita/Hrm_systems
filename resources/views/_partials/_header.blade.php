@@ -5,7 +5,6 @@
             <span class="sr-only">Toggle navigation</span>
         </button>
 
-        <span class="page-title">basic input</span>
 
         <div class="navbar-right ">
 
@@ -329,9 +328,8 @@
                 <!-- User Account -->
                 <li class="dropdown user-menu">
                     <button class="dropdown-toggle nav-link" data-toggle="dropdown">
-                        <img src="images/user/user-xs-01.jpg" class="user-image rounded-circle"
-                            alt="User Image" />
-                        <span class="d-none d-lg-inline-block">John Doe</span>
+                        
+                        <span class="d-none d-lg-inline-block">User Name</span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right">
                         <li>
