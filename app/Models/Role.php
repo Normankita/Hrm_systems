@@ -18,16 +18,5 @@ class Role extends Model
         return $this->hasMany(DesignationRoleMapping::class);
     }
 
-    //  Optional: direct access to designations through the mappping
-    // public function designations()
-    // {
-    //     return $this->hasManyThrough(
-    //         Designation::class,
-    //         DesignationRoleMapping::class,
-    //         'role_id',          // Foreign key on pivot
-    //         'id',               // Foreign key on designation
-    //         'id',               // Local key on role
-    //         'designation_id'    // Local key on pivot
-    //     );
-    // }
+
 }

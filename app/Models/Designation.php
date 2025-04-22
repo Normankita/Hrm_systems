@@ -10,7 +10,7 @@ class Designation extends Model
 
     protected $fillable = [
         'company_id', 'department_id', 'name',
-        'description', 'role_key', 'is_active'
+        'description', 'is_active'
     ];
 
     protected $casts = [
@@ -31,4 +31,10 @@ class Designation extends Model
     {
         return $this->hasMany(DesignationRoleMapping::class);
     }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, DesignationRoleMapping::class);
+    }
 }
+

@@ -13,7 +13,6 @@ class CreateDesignationsTable extends Migration
             $table->foreignId('department_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->text('description')->nullable();
-            $table->string('role_key', 100)->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->softDeletes();
