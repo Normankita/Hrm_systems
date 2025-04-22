@@ -14,4 +14,16 @@ class AdminEmployeeController extends Controller
         return view('admin.employee.create')
             ->with('roles', $roles);
     }
+
+    public function store(Request $request) {
+        $rules = array(
+            ['role_id' => 'requered'],
+            ['department_id'],
+            ['company_id'],
+            ['first_name'],
+            ['last_name'],
+            ['email'],
+            ['phone']
+        );
+    }
 }
