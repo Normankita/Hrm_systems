@@ -6,15 +6,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->middleware('guest')->name('home');
 
-Route::get('/registera', function(){
+Route::get('/registera', function () {
     return view('registera');
 })->name('registera');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
+Route::middleware(['auth', 'role:ADMIN'])
+    ->get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -22,6 +23,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::resource('employee', EmployeeController::class);
+Route::resource('employee', controller: EmployeeController::class);
 
-require __DIR__.'/auth.php';
+require __DIR__. '/admin.php';
+
+require __DIR__. '/hr.php';
+
+require __DIR__. '/payroll.php';
+
+require __DIR__. '/employee.php';
+
+require __DIR__ . '/auth.php';

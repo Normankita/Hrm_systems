@@ -20,7 +20,7 @@ return new class extends Migration
                   ->onDelete('cascade');
 
             // Foreign key to roles
-            $table->foreignId('role_id')
+            $table->foreignId('rank_id')
                   ->constrained()
                   ->onDelete('cascade');
 

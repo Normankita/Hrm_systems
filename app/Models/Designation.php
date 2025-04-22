@@ -34,7 +34,7 @@ class Designation extends Model
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class, DesignationRoleMapping::class);
+        return $this->belongsToMany(Rank::class, DesignationRoleMapping::class);
     }
 }
 
