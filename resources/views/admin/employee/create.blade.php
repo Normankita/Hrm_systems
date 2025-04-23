@@ -132,7 +132,9 @@
                                     <span class="input-group-text mdi mdi-home-map-marker"></span>
                                     <input type="text" name="residential_address" class="form-control"
                                         placeholder="e.g., Sinza Mori, Dar es Salaam">
-                                        
+                                    @error('residential_address')
+                                        <span>{{ $message }}</span>
+                                    @enderror
                                 </div>
                             </div>
 
@@ -156,6 +158,9 @@
                                 <div class="input-group">
                                     <span class="input-group-text mdi mdi-calendar-check"></span>
                                     <input type="date" name="date_of_hire" class="form-control" required>
+                                    @error('date_of_hire')
+                                        <span>{{ $message }}</span>
+                                    @enderror
                                 </div>
                             </div>
 
