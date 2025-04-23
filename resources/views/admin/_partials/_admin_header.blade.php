@@ -351,7 +351,8 @@
                                 <span class="nav-text">Activitise</span></a>
                         </li>
                         <li>
-                            <a class="dropdown-link-item" href="user-account-settings.html">
+                            <a class="dropdown-link-item"
+                                href="{{ route('admin.settings.create') }}">
                                 <i class="mdi mdi-settings"></i>
                                 <span class="nav-text">Account Setting</span>
                             </a>

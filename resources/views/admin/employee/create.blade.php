@@ -128,19 +128,8 @@
                             </div>
                         </div>
 
-                        {{-- Company --}}
-                        <div class="col-md-4 mb-4">
-                            <label for="company_id" class="text-dark font-weight-medium">Company</label>
-                            <select name="company_id" id="company_id" class="form-control" required>
-                                <option value="" disabled selected>-- Select Company --</option>
-                                @foreach(App\Models\Company::all() as $company)
-                                    <option value="{{ $company->id }}">{{ $company->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
                         {{-- Department --}}
-                        <div class="col-md-4 mb-4">
+                        <div class="col-md-6 mb-4">
                             <label for="department_id" class="text-dark font-weight-medium">Department</label>
                             <select name="department_id" id="department_id" class="form-control" required>
                                 <option value="" disabled selected>-- Select Department --</option>
@@ -151,7 +140,7 @@
                         </div>
 
                         {{-- Role --}}
-                        <div class="col-md-4 mb-4">
+                        <div class="col-md-6 mb-4">
                             <label for="role_id" class="text-dark font-weight-medium">Designation (Role)</label>
                             <select name="role_id" id="role_id" class="form-control" required>
                                 <option value="" disabled selected>Select designation</option>

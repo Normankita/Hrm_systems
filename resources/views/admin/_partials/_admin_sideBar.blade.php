@@ -21,7 +21,7 @@
                 <li class="has-sub">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#employee-menu" aria-expanded="false" aria-controls="employee-menu">
                         <i class="mdi mdi-account-multiple"></i>
-                        <span class="nav-text">Employee</span>
+                        <span class="nav-text">Employees</span>
                         <b class="caret"></b>
                     </a>
                     <ul class="collapse" id="employee-menu" data-parent="#sidebar-menu">
@@ -37,6 +37,24 @@
                                 </a> --}}
                                 <a class="sidenav-item-link" href="">
                                     <span class="nav-text">View Employees</span>
+                                </a>
+                            </li>
+                        </div>
+                    </ul>
+                </li>
+
+
+                <li class="has-sub">
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#department_menu" aria-expanded="false" aria-controls="department_menu">
+                        <i class="mdi mdi-account-multiple"></i>
+                        <span class="nav-text">Departments</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="collapse" id="department_menu" data-parent="#sidebar-menu">
+                        <div class="sub-menu">
+                            <li>
+                                <a class="sidenav-item-link" href="{{ route('admin.departments.index') }}">
+                                    <span class="nav-text">view departments</span>
                                 </a>
                             </li>
                         </div>

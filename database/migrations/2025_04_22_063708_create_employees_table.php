@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('company_id')->constrained()->onDelete('cascade');
             $table->foreignId('department_id')->constrained()->onDelete('cascade');
-            $table->foreignId('designation_id')->constrained()->onDelete('cascade');
             $table->string('full_name');
             $table->enum('gender', ['Male', 'Female', 'Other']);
             $table->date('date_of_birth');
@@ -27,6 +27,8 @@ return new class extends Migration
             $table->string('tin_number')->nullable();
             $table->enum('employee_type', ['Permanent', 'Contract', 'Probation']);
             $table->date('date_of_hire');
+            $table->date('date_of_termination')->nullable();
+            $table->double('salary')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

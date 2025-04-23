@@ -26,8 +26,6 @@ Route::middleware('auth')->group(function () {
 
 Route::resource('employee', controller: EmployeeController::class);
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
 require __DIR__. '/admin.php';
 
 require __DIR__. '/hr.php';

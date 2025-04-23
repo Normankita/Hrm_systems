@@ -7,8 +7,25 @@ use Illuminate\Database\Eloquent\Model;
 class Employee extends Model
 {
 
-    protected $guarded = [];
-    
+    protected $fillable = [
+        'user_id',
+        'company_id',
+        'department_id',
+        'full_name',
+        'gender',
+        'date_of_birth',
+        'phone_number',
+        'email',
+        'national_id',
+        'marital_status',
+        'residential_address',
+        'tin_number',
+        'employee_type',
+        'date_of_hire',
+        'date_of_termination',
+        'salary'
+    ];
+
     public function user() {
         return $this->hasOne(User::class);
     }
