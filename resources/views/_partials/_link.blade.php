@@ -19,9 +19,6 @@
 {{-- My links if exist --}}
 
 
-
-
-
 <link href="{{asset("bootstrap5.1.1/plugins/DataTables/DataTables-1.10.18/css/jquery.dataTables.min.css")}}" rel="stylesheet" />
 
 

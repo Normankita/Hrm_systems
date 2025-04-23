@@ -4,6 +4,8 @@
 
 <head>
     @include('_partials._link')
+
+    @yield('_links')
 </head>
 
 
@@ -44,6 +46,8 @@
     @include("_partials._offCanvas")
 
     @include("_partials._scripts")
+
+    @yield('scripts')
 </body>
 
 </html>

@@ -24,6 +24,7 @@ Route::middleware(['auth', 'role:ADMIN'])
     ->group(function () {
         Route::get('/index', 'index')->name('index');
         Route::post('/store', 'store')->name('store');
+        Route::patch('/update/{id}', 'update')->name('update');
     });
 
 
