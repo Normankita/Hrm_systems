@@ -357,12 +357,18 @@
                                 <span class="nav-text">Account Setting</span>
                             </a>
                         </li>
-
                         <li class="dropdown-footer">
-                            <a class="dropdown-link-item" href=""> <i
-                                class="mdi mdi-logout"></i> Log Out </a>
+                        
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                            
+                                <x-responsive-nav-link :href="route('logout')"
+                                    onclick="event.preventDefault(); this.closest('form').submit();">
+                                    {!! '<i class="mdi mdi-logout"></i> Log Out' !!}
+                                </x-responsive-nav-link>
+                            </form>
+                            
                         </li>
-
                     </ul>
                 </li>
             </ul>
