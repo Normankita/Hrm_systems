@@ -1,69 +1,220 @@
-@extends("layouts.system")
+@extends('layouts.system')
 
 @section('content')
-<div class="container mt-5">
-    <div class="card shadow rounded">
-        <div class="card-header bg-secondary text-white">
-            <h4 class="mb-0">Register New Employee</h4>
-        </div>
-        <div class="card-body">
-            <form action="{{ route('employee.store') }}" class="form mb-5" method="POST">
-                @csrf
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <div class="card">
+                <div class="card-body p-30">
+                    <form action="{{ route('admin.employees.store') }}" method="POST">
+                        @csrf
+                        <div class="row">
 
-                <div class="mb-3">
-                    <label for="first_name" class="form-label">First Name <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="first_name" name="first_name" required>
+                            {{-- Full Name --}}
+                            {{-- First Name --}}
+                            <div class="col-md-6 mb-4">
+                                <label class="text-dark font-weight-medium">First Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text mdi mdi-account"></span>
+                                    <input type="text" name="first_name" class="form-control" placeholder="John"
+                                        value="{{ old('first_name') }}" required>
+                                    @error('first_name')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            {{-- Last Name --}}
+                            <div class="col-md-6 mb-4">
+                                <label class="text-dark font-weight-medium">Last Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text mdi mdi-account"></span>
+                                    <input type="text" name="last_name" class="form-control" placeholder="Doe"
+                                        value="{{ old('last_name') }}" required>
+                                    @error('last_name')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            {{-- Gender --}}
+                            <div class="col-md-12 mb-4">
+                                <label class="text-dark font-weight-medium">Gender</label>
+                                <div class="input-group">
+                                    <span class="input-group-text mdi mdi-gender-male-female"></span>
+                                    <select name="gender" class="form-control" required>
+                                        <option value="" disabled {{ old('gender') ? '' : 'selected' }}>Select Gender</option>
+                                        <option value="Male" {{ old('gender') == 'Male' ? 'selected' : '' }}>Male</option>
+                                        <option value="Female" {{ old('gender') == 'Female' ? 'selected' : '' }}>Female</option>
+                                        <option value="Other" {{ old('gender') == 'Other' ? 'selected' : '' }}>Other</option>
+                                    </select>
+                                </div>
+                                @error('gender')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            {{-- Date of Birth --}}
+                            <div class="col-md-6 mb-4">
+                                <label class="text-dark font-weight-medium">Date of Birth</label>
+                                <div class="input-group">
+                                    <span class="input-group-text mdi mdi-calendar"></span>
+                                    <input type="date" name="date_of_birth" class="form-control"
+                                        value="{{ old('date_of_birth') }}" required>
+                                </div>
+                                @error('date_of_birth')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            {{-- Email --}}
+                            <div class="col-md-6 mb-4">
+                                <label class="text-dark font-weight-medium">Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text mdi mdi-email"></span>
+                                    <input type="email" name="email" class="form-control" placeholder="john@example.com"
+                                        value="{{ old('email') }}" required>
+                                </div>
+                                @error('email')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            {{-- Phone Number --}}
+                            <div class="col-md-6 mb-4">
+                                <label class="text-dark font-weight-medium">Phone Number</label>
+                                <div class="input-group">
+                                    <span class="input-group-text mdi mdi-phone"></span>
+                                    <input type="text" name="phone_number" class="form-control"
+                                        placeholder="+255712345678" value="{{ old('phone_number') }}" required>
+                                </div>
+                                @error('phone_number')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            {{-- National ID --}}
+                            <div class="col-md-6 mb-4">
+                                <label class="text-dark font-weight-medium">National ID</label>
+                                <div class="input-group">
+                                    <span class="input-group-text mdi mdi-card-account-details"></span>
+                                    <input type="text" name="national_id" class="form-control"
+                                        placeholder="1234567890123456" value="{{ old('national_id') }}" required>
+                                </div>
+                                @error('national_id')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            {{-- TIN Number --}}
+                            <div class="col-md-6 mb-4">
+                                <label class="text-dark font-weight-medium">TIN Number</label>
+                                <div class="input-group">
+                                    <span class="input-group-text mdi mdi-currency-usd"></span>
+                                    <input type="text" name="tin_number" class="form-control" placeholder="Optional"
+                                        value="{{ old('tin_number') }}">
+                                </div>
+                                @error('tin_number')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            {{-- Marital Status --}}
+                            <div class="col-md-6 mb-4">
+                                <label class="text-dark font-weight-medium">Marital Status</label>
+                                <div class="input-group">
+                                    <span class="input-group-text mdi mdi-heart"></span>
+                                    <input type="text" name="marital_status" class="form-control"
+                                        placeholder="e.g., Single, Married" value="{{ old('marital_status') }}">
+                                </div>
+                                @error('marital_status')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            {{-- Residential Address --}}
+                            <div class="col-md-12 mb-4">
+                                <label class="text-dark font-weight-medium">Residential Address</label>
+                                <div class="input-group">
+                                    <span class="input-group-text mdi mdi-home-map-marker"></span>
+                                    <input type="text" name="residential_address" class="form-control"
+                                        placeholder="e.g., Sinza Mori, Dar es Salaam" value="{{ old('residential_address') }}">
+                                </div>
+                            </div>
+
+                            {{-- Employee Type --}}
+                            <div class="col-md-6 mb-4">
+                                <label class="text-dark font-weight-medium">Employee Type</label>
+                                <div class="input-group">
+                                    <span class="input-group-text mdi mdi-account-box-outline"></span>
+                                    <select name="employee_type" class="form-control" required>
+                                        <option value="" disabled {{ old('employee_type') ? '' : 'selected' }}>Select Type</option>
+                                        <option value="Permanent" {{ old('employee_type') == 'Permanent' ? 'selected' : '' }}>Permanent</option>
+                                        <option value="Contract" {{ old('employee_type') == 'Contract' ? 'selected' : '' }}>Contract</option>
+                                        <option value="Probation" {{ old('employee_type') == 'Probation' ? 'selected' : '' }}>Probation</option>
+                                    </select>
+                                </div>
+                                @error('employee_type')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            {{-- Date of Hire --}}
+                            <div class="col-md-6 mb-4">
+                                <label class="text-dark font-weight-medium">Date of Hire</label>
+                                <div class="input-group">
+                                    <span class="input-group-text mdi mdi-calendar-check"></span>
+                                    <input type="date" name="date_of_hire" class="form-control"
+                                        value="{{ old('date_of_hire') }}" required>
+                                </div>
+                                @error('date_of_hire')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            {{-- Department --}}
+                            <div class="col-md-6 mb-4">
+                                <label for="department_id" class="text-dark font-weight-medium">Department</label>
+                                <select name="department_id" id="department_id" class="form-control" required>
+                                    <option value="" disabled {{ old('department_id') ? '' : 'selected' }}>-- Select Department --</option>
+                                    @foreach (App\Models\Department::all() as $department)
+                                        <option value="{{ $department->id }}"
+                                            {{ old('department_id') == $department->id ? 'selected' : '' }}>
+                                            {{ $department->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('department_id')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            {{-- Role --}}
+                            <div class="col-md-6 mb-4">
+                                <label for="role_id" class="text-dark font-weight-medium">Designation (Role)</label>
+                                <select name="role_id" id="role_id" class="form-control" required>
+                                    <option value="" disabled {{ old('role_id') ? '' : 'selected' }}>Select designation</option>
+                                    @foreach ($roles as $role)
+                                        <option value="{{ $role->id }}"
+                                            {{ old('role_id') == $role->id ? 'selected' : '' }}>
+                                            {{ $role->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('role_id')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            {{-- Submit Button --}}
+                            <div class="col-md-12 text-end">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="mdi mdi-content-save"></i> Save Employee
+                                </button>
+                            </div>
+
+                        </div>
+                    </form>
                 </div>
-
-                <div class="mb-3">
-                    <label for="last_name" class="form-label">Last Name <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" id="last_name" name="last_name" required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
-                    <input type="email" class="form-control" id="email" name="email" required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="phone" class="form-label">Phone Number</label>
-                    <input type="text" class="form-control" id="phone" name="phone">
-                </div>
-
-                <div class="mb-3">
-                    <label for="designation_id" class="form-label">Designation</label>
-                    <select class="form-control" id="designation_id" name="designation_id" required>
-                        <option value="" disabled selected>Select designation</option>
-                        @foreach($designations as $designation)
-                            <option value="{{ $designation->id }}">{{ $designation->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label for="department_id" class="form-label">Department</label>
-                    <select name="department_id" id="department_id" class="form-control">
-                        <option value="">-- Select Department --</option>
-                        @foreach($departments as $department)
-                            <option value="{{ $department->id }}">{{ $department->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label for="company_id" class="form-label">Company</label>
-                    <select name="company_id" id="company_id" class="form-control">
-                        <option value="">-- Select Company --</option>
-                        @foreach($companies as $company)
-                            <option value="{{ $company->id }}">{{ $company->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <button type="submit" class="btn btn-success">Register</button>
-                <a href="{{ route('employee.index') }}" class="btn btn-secondary">Cancel</a>
-            </form>
+            </div>
         </div>
     </div>
-</div>
 @endsection
