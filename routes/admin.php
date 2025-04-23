@@ -23,6 +23,7 @@ Route::middleware(['auth', 'role:ADMIN'])
     ->name('admin.departments.')
     ->group(function () {
         Route::get('/index', 'index')->name('index');
+        Route::post('/store', 'store')->name('store');
     });
 
 

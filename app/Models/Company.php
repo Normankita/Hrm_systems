@@ -22,4 +22,17 @@ class Company extends Model
     {
         return $this->hasMany(Designation::class);
     }
+
+    public function employees()
+    {
+        return $this->hasMany(Employee::class);
+    }
+
+    public function admin() {
+        return $this->hasOne(User::class, 'company_id', 'id')
+            ->whereHas('roles', function($query) {
+                $query->where('name', 'ADMIN');
+            });
+    }
 }
+
