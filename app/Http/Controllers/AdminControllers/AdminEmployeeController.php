@@ -48,7 +48,6 @@ class AdminEmployeeController extends Controller
         ];
         $validate = Validator::make($request->all(), $rules);
         if ($validate->fails()) {
-            dd( $validate->errors());
             return redirect()->back()
                 ->withErrors($validate)
                 ->withInput();
@@ -56,7 +55,8 @@ class AdminEmployeeController extends Controller
         // adding company_id and department_id to the request
         $request->merge([
             'company_id' => Auth::user()->company_id,
-            'department_id' => $request->input('department_id')
+            'department_id' => $request->input('department_id'),
+            'full_name' => $request->input('first_name') . ' ' . $request->input('last_name'),
         ]);
         $employee = EmployeeTrait::createEmployee($request->all());
         return redirect()->route('admin.employees.show', ['id' => $employee->id])
@@ -66,7 +66,7 @@ class AdminEmployeeController extends Controller
     public function show($id)
     {
         $employee = EmployeeTrait::getEmployeeById($id);
-        return view('admin.employee.show')
+        return view('admin.employee.show', $employee->id)
             ->with('employee', $employee);
     }
 }
