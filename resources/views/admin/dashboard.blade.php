@@ -63,7 +63,8 @@
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
                       <a class="dropdown-item" href="#">Action</a>
                       <a class="dropdown-item" href="#">Another action</a>
-                      <a class="dropdown-item" href="#">Something else here</a>
+                      <a class="dropdown-ite
+                      m" href="#">Something else here</a>
                     </div>
                   </div>
                   <div class="sub-title">
