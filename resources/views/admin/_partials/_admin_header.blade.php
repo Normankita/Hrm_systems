@@ -350,17 +350,12 @@
                                 <i class="mdi mdi-diamond-stone"></i>
                                 <span class="nav-text">Activitise</span></a>
                         </li>
-                        <li>
-                            <a class="dropdown-link-item" href="user-account-settings.html">
-                                <i class="mdi mdi-settings"></i>
-                                <span class="nav-text">Account Setting</span>
-                            </a>
-                        </li>
 
                         <li class="dropdown-footer">
-                            <a class="dropdown-link-item" href="sign-in.html"> <i
-                                    class="mdi mdi-logout"></i> Log Out </a>
+                            <a class="dropdown-link-item" href=""> <i
+                                class="mdi mdi-logout"></i> Log Out </a>
                         </li>
+                        
                     </ul>
                 </li>
             </ul>

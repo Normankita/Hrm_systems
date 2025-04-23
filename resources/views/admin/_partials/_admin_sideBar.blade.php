@@ -43,6 +43,13 @@
                     </ul>
                 </li>
 
+                <li>
+                    <a class="sidenav-item-link" href="">
+                        <i class="mdi mdi-settings"></i>
+                        <span class="nav-text">Company Setting</span>
+                    </a>
+                </li>
+
             </ul>
         </div>
     </div>

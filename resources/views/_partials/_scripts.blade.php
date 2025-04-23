@@ -8,3 +8,4 @@
 <script src="{{ asset('bootstrap5.1.1/js/chart.js') }}"></script>
 <script src="{{ asset('bootstrap5.1.1/js/map.js') }}"></script>
 <script src="{{ asset('bootstrap5.1.1/js/custom.js') }}"></script>
+<script src="{{asset('bootstrap5.1.1/plugins/nprogress/nprogress.js')}}"></script>
