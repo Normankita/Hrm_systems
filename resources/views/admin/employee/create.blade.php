@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-sm-12 col-md-12">
         <div class="card">
-            <div class="card-body">
+            <div class="card-body p-30">
                 <form action="{{ route('admin.employees.store') }}" method="POST">
                     @csrf
                     <div class="row">
