@@ -11,6 +11,12 @@ use Spatie\Permission\Models\Role;
 
 class AdminEmployeeController extends Controller
 {
+    public function index()
+    {
+        $employees = EmployeeTrait::getAllEmployees();
+        return view('admin.employee.index')
+            ->with('employees', $employees);
+    }
     public function create()
     {
         $roles = Role::where('name', '!=', 'ADMIN')->get();

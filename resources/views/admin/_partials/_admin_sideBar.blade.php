@@ -19,7 +19,8 @@
                 </li>
 
                 <li class="has-sub">
-                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#employee-menu" aria-expanded="false" aria-controls="employee-menu">
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                        data-target="#employee-menu" aria-expanded="false" aria-controls="employee-menu">
                         <i class="mdi mdi-account-multiple"></i>
                         <span class="nav-text">Employees</span>
                         <b class="caret"></b>
@@ -45,7 +46,8 @@
 
 
                 <li class="has-sub">
-                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#department_menu" aria-expanded="false" aria-controls="department_menu">
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                        data-target="#department_menu" aria-expanded="false" aria-controls="department_menu">
                         <i class="mdi mdi-account-multiple"></i>
                         <span class="nav-text">Departments</span>
                         <b class="caret"></b>
@@ -60,7 +62,12 @@
                         </div>
                     </ul>
                 </li>
-
+                <li>
+                    <a class="sidenav-item-link" href="">
+                        <i class="mdi mdi-settings"></i>
+                        <span class="nav-text">Company Setting</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
