@@ -57,7 +57,7 @@
                   </div>
                   <div class="card-body px-5 pb-5 pt-0">
 
-                    <h4 class="text-dark mb-6 text-center">Sign in for free</h4>
+                    <h4 class="text-dark mb-6 text-center">Sign in</h4>
 
                     <div>
                         @if($errors->any())

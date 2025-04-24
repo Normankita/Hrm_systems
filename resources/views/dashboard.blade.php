@@ -8,5 +8,9 @@
     @role('ADMIN')
         @include('admin.dashboard')
     @endrole>
+
+    @role('EMPLOYEE')
+        @include('employee.dashboard')
+    @endrole
 @endsection
 

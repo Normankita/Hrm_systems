@@ -13,7 +13,7 @@ Route::get('/registera', function () {
     return view('registera');
 })->name('registera');
 
-Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
+Route::middleware(['auth', 'HasCompanyProfile'])
     ->get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
