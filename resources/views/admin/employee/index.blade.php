@@ -12,14 +12,9 @@
                 </div>
             
                 <div class="table-responsive">
+                    <span>Total Employees: {{ $employees->count() }}</span>
                     <table class="table table-bordered table-hover align-middle text-nowrap">
                         <thead class="table-light text-lime">
-                            <tr>
-                                <th colspan="10" class="text-center">Employee List</th>
-                            </tr>
-                            <tr>
-                                <th colspan="10" class="text-start">Total Employees: {{ $employees->count() }}</th>
-                            </tr>
                             {{-- <tr>
                                 <th colspan="10" class="text-center">Date: {{ \Carbon\Carbon::now()->format('d M Y') }}</th>
                             </tr>
