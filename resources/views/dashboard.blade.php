@@ -7,7 +7,7 @@
 @section('content')
     @role('ADMIN')
         @include('admin.dashboard')
-    @endrole>
+    @endrole
 
     @role('EMPLOYEE')
         @include('employee.dashboard')
