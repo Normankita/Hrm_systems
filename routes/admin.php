@@ -3,7 +3,6 @@
 use App\Http\Controllers\AdminControllers\AdminCompanyController;
 use App\Http\Controllers\AdminControllers\AdminDepartmentController;
 use App\Http\Controllers\AdminControllers\AdminEmployeeController;
-use App\Http\Controllers\AdminControllers\AdminSettingController;
 use Illuminate\Support\Facades\Route;
 
 

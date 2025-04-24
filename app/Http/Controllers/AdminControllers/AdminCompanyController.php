@@ -20,6 +20,28 @@ class AdminCompanyController extends Controller
     }
 
     public function update(Request $request, $id) {
-        dd($request->all());
+        // Validate the incoming request data
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'contact_number' => 'required|string|max:20',
+            'email' => 'required|email|max:255',
+            'brela_reg_number' => 'required|string|max:50',
+            'tin_number' => 'required|string|max:50',
+        ]);
+
+        // Fetch the company from the database
+        $company = Company::find($id);
+
+        // Check if the company exists
+        if (!$company) {
+            return redirect()->back()->with('error', 'Company not found.');
+        }
+
+        // Update the company data
+        $company->update($request->all());
+
+        // Redirect back with a success message
+        return redirect()->route('admin.companies.edit', $id)->with('success', 'Company details updated successfully.');
     }
 }
