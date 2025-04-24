@@ -29,20 +29,22 @@ class AdminEmployeeController extends Controller
 
     public function store(Request $request) {
         $rules = [
-            'role_id' => 'required',
-            'department_id' => 'required',
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'gender' => 'required',
-            'date_of_birth' => 'required',
-            'phone_number' => 'required',
-            'national_id' => 'required|unique:employees,national_id',
-            'marital_status' => 'required',
-            'residential_address' => 'required',
-            'tin_number' => 'required|unique:employees,tin_number',
-            'employee_type' => 'required',
-            'date_of_hire' => 'required'
+            'role_id' => '',
+            'department_id' => '',
+            'company_id' => '',
+            'first_name' => '',
+            'last_name' => '',
+            'email' => '',
+            'phone' => '',
+            'gender' => '',
+            'date_of_birth' => '',
+            'phone_number' => '',
+            'national_id' => '',
+            'marital_status' => '',
+            'residential_address' => '',
+            'tin_number' => '',
+            'employee_type' => '',
+            'date_of_hire' => ''
         ];
         $validate = Validator::make($request->all(), $rules);
         if ($validate->fails()) {
