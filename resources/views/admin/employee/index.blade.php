@@ -41,8 +41,8 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <a href="{{ route('admin.employees.show', $employee->id) }}" class="btn btn-info btn-sm">View</a>
-                                        <a href="{{ route('admin.employees.edit', $employee->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                        <a href="{{ route('admin.employees.show', $employee->id) }}" class="mdi mdi-pencil text-dark">&nbsp View &nbsp &nbsp &nbsp </a>
+                                        <a href="{{ route('admin.employees.edit', $employee->id) }}" class="mdi mdi-eye-outline text-dark">&nbsp Edit </a>
                                         {{-- <form action="{{ route('admin.employees.destroy', $employee->id) }}" method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
