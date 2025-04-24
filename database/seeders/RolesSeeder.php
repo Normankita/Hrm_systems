@@ -29,6 +29,10 @@ class RolesSeeder extends Seeder
                 'name' => 'EMPLOYEE',
                 'guard_name' => 'web',
             ],
+            [
+                'name' => 'OWNER',
+                'guard_name' => 'web',
+            ],
         );
 
         // create the actual roles

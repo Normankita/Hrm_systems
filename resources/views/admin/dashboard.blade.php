@@ -3,20 +3,9 @@
 
         <!-- Top Statistics -->
         <div class="row">
-            <!-- Total Employees -->
-            <div class="col-xl-3 col-sm-6">
-                <div class="card card-default card-mini">
-                    <div class="card-header">
-                        <h2>152</h2> <!-- Replace with dynamic total employee count -->
-                        <div class="sub-title">
-                            <span>Total Employees</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!-- Payroll This Month -->
-            <div class="col-xl-3 col-sm-6">
+            <div class="col-sm-6 col-md-3">
                 <div class="card card-default card-mini">
                     <div class="card-header">
                         <h2>38,700,000 TZS</h2> <!-- Replace with dynamic total payroll value -->
@@ -28,7 +17,7 @@
             </div>
 
             <!-- Statutory Deductions -->
-            <div class="col-xl-3 col-sm-6">
+            <div class="col-sm-6 col-md-3">
                 <div class="card card-default card-mini">
                     <div class="card-header">
                         <h2>8,200,000 TZS</h2> <!-- Replace with dynamic deductions value -->
@@ -40,7 +29,7 @@
             </div>
 
             <!-- Employees on Leave -->
-            <div class="col-xl-3 col-sm-6">
+            <div class="col-sm-6 col-md-3">
                 <div class="card card-default card-mini">
                     <div class="card-header">
                         <h2>12</h2> <!-- Replace with dynamic count -->
@@ -50,7 +39,20 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Total Employees -->
+            <div class="col-sm-6 col-md-3">
+                <div class="card card-default card-mini">
+                    <div class="card-header">
+                        <h2>152</h2> <!-- Replace with dynamic total employee count -->
+                        <div class="sub-title">
+                            <span>Total Employees</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
 
         <!-- Second Row: Charts and Insights -->
         <div class="row mt-4">

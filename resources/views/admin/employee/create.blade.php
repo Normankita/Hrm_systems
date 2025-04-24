@@ -16,10 +16,10 @@
                                     <span class="input-group-text mdi mdi-account"></span>
                                     <input type="text" name="first_name" class="form-control" placeholder="John"
                                         value="{{ old('first_name') }}" required>
-                                    @error('first_name')
-                                        <span>{{ $message }}</span>
-                                    @enderror
                                 </div>
+                                @error('first_name')
+                                    <span class="text-danger d-block">massanga</span>
+                                @enderror
                             </div>
 
                             {{-- Last Name --}}
@@ -29,10 +29,10 @@
                                     <span class="input-group-text mdi mdi-account"></span>
                                     <input type="text" name="last_name" class="form-control" placeholder="Doe"
                                         value="{{ old('last_name') }}" required>
-                                    @error('last_name')
-                                        <span>{{ $message }}</span>
-                                    @enderror
                                 </div>
+                                @error('last_name')
+                                    <span class="text-danger d-block">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             {{-- Gender --}}
@@ -41,10 +41,13 @@
                                 <div class="input-group">
                                     <span class="input-group-text mdi mdi-gender-male-female"></span>
                                     <select name="gender" class="form-control" required>
-                                        <option value="" disabled {{ old('gender') ? '' : 'selected' }}>Select Gender</option>
+                                        <option value="" disabled {{ old('gender') ? '' : 'selected' }}>Select Gender
+                                        </option>
                                         <option value="Male" {{ old('gender') == 'Male' ? 'selected' : '' }}>Male</option>
-                                        <option value="Female" {{ old('gender') == 'Female' ? 'selected' : '' }}>Female</option>
-                                        <option value="Other" {{ old('gender') == 'Other' ? 'selected' : '' }}>Other</option>
+                                        <option value="Female" {{ old('gender') == 'Female' ? 'selected' : '' }}>Female
+                                        </option>
+                                        <option value="Other" {{ old('gender') == 'Other' ? 'selected' : '' }}>Other
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -56,10 +59,10 @@
                                     <span class="input-group-text mdi mdi-calendar"></span>
                                     <input type="date" name="date_of_birth" class="form-control"
                                         value="{{ old('date_of_birth') }}" required>
-                                    @error('date_of_birth')
-                                        <span>{{ $message }}</span>
-                                    @enderror
                                 </div>
+                                @error('date_of_birth')
+                                    <span class="text-danger d-block">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             {{-- Email --}}
@@ -69,10 +72,10 @@
                                     <span class="input-group-text mdi mdi-email"></span>
                                     <input type="email" name="email" class="form-control" placeholder="john@example.com"
                                         value="{{ old('email') }}" required>
-                                    @error('email')
-                                        <span>{{ $message }}</span>
-                                    @enderror
                                 </div>
+                                @error('email')
+                                    <span class="text-danger d-block">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             {{-- Phone Number --}}
@@ -82,10 +85,10 @@
                                     <span class="input-group-text mdi mdi-phone"></span>
                                     <input type="text" name="phone_number" class="form-control"
                                         placeholder="+255712345678" value="{{ old('phone_number') }}" required>
-                                    @error('phone_number')
-                                        <span>{{ $message }}</span>
-                                    @enderror
                                 </div>
+                                @error('phone_number')
+                                    <span class="text-danger d-block">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             {{-- National ID --}}
@@ -95,10 +98,10 @@
                                     <span class="input-group-text mdi mdi-card-account-details"></span>
                                     <input type="text" name="national_id" class="form-control"
                                         placeholder="1234567890123456" value="{{ old('national_id') }}" required>
-                                    @error('national_id')
-                                        <span>{{ $message }}</span>
-                                    @enderror
                                 </div>
+                                @error('national_id')
+                                    <span class="text-danger d-block">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             {{-- TIN Number --}}
@@ -108,10 +111,10 @@
                                     <span class="input-group-text mdi mdi-currency-usd"></span>
                                     <input type="text" name="tin_number" class="form-control" placeholder="Optional"
                                         value="{{ old('tin_number') }}">
-                                    @error('tin_number')
-                                        <span>{{ $message }}</span>
-                                    @enderror
                                 </div>
+                                @error('tin_number')
+                                    <span class="text-danger d-block">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             {{-- Marital Status --}}
@@ -121,10 +124,10 @@
                                     <span class="input-group-text mdi mdi-heart"></span>
                                     <input type="text" name="marital_status" class="form-control"
                                         placeholder="e.g., Single, Married" value="{{ old('marital_status') }}">
-                                    @error('marital_status')
-                                        <span>{{ $message }}</span>
-                                    @enderror
                                 </div>
+                                @error('marital_status')
+                                    <span class="text-danger d-block">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             {{-- Residential Address --}}
@@ -135,11 +138,10 @@
                                     <input type="text" name="residential_address" class="form-control"
                                         placeholder="e.g., Sinza Mori, Dar es Salaam"
                                         value="{{ old('residential_address') }}">>
-                                    @error('residential_address')
-                                        <span>{{ $message }}</span>
-                                    @enderror
-
                                 </div>
+                                @error('residential_address')
+                                    <span class="text-danger d-block">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             {{-- Employee Type --}}
@@ -148,10 +150,14 @@
                                 <div class="input-group">
                                     <span class="input-group-text mdi mdi-account-box-outline"></span>
                                     <select name="employee_type" class="form-control" required>
-                                        <option value="" disabled {{ old('employee_type') ? '' : 'selected' }}>Select Type</option>
-                                        <option value="Permanent" {{ old('employee_type') == 'Permanent' ? 'selected' : '' }}>Permanent</option>
-                                        <option value="Contract" {{ old('employee_type') == 'Contract' ? 'selected' : '' }}>Contract</option>
-                                        <option value="Probation" {{ old('employee_type') == 'Probation' ? 'selected' : '' }}>Probation</option>
+                                        <option value="" disabled {{ old('employee_type') ? '' : 'selected' }}>
+                                            Select Type</option>
+                                        <option value="Permanent"
+                                            {{ old('employee_type') == 'Permanent' ? 'selected' : '' }}>Permanent</option>
+                                        <option value="Contract"
+                                            {{ old('employee_type') == 'Contract' ? 'selected' : '' }}>Contract</option>
+                                        <option value="Probation"
+                                            {{ old('employee_type') == 'Probation' ? 'selected' : '' }}>Probation</option>
                                     </select>
                                 </div>
                             </div>
@@ -162,17 +168,19 @@
                                 <div class="input-group">
                                     <span class="input-group-text mdi mdi-calendar-check"></span>
                                     <input type="date" name="date_of_hire" class="form-control"
-                                        value="{{ old('date_of_hire') }}" required>                                    @error('date_of_hire')
-                                        <span>{{ $message }}</span>
-                                    @enderror
+                                        value="{{ old('date_of_hire') }}" required>
                                 </div>
+                                @error('date_of_hire')
+                                    <span class="text-danger d-block">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             {{-- Department --}}
                             <div class="col-md-6 mb-4">
                                 <label for="department_id" class="text-dark font-weight-medium">Department</label>
                                 <select name="department_id" id="department_id" class="form-control" required>
-                                    <option value="" disabled {{ old('department_id') ? '' : 'selected' }}>-- Select Department --</option>
+                                    <option value="" disabled {{ old('department_id') ? '' : 'selected' }}>-- Select
+                                        Department --</option>
                                     @foreach (App\Models\Department::all() as $department)
                                         <option value="{{ $department->id }}"
                                             {{ old('department_id') == $department->id ? 'selected' : '' }}>
@@ -186,7 +194,8 @@
                             <div class="col-md-6 mb-4">
                                 <label for="role_id" class="text-dark font-weight-medium">Designation (Role)</label>
                                 <select name="role_id" id="role_id" class="form-control" required>
-                                    <option value="" disabled {{ old('role_id') ? '' : 'selected' }}>Select designation</option>
+                                    <option value="" disabled {{ old('role_id') ? '' : 'selected' }}>Select
+                                        designation</option>
                                     @foreach ($roles as $role)
                                         <option value="{{ $role->id }}"
                                             {{ old('role_id') == $role->id ? 'selected' : '' }}>

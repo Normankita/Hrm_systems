@@ -352,22 +352,22 @@
                         </li>
                         <li>
                             <a class="dropdown-link-item"
-                                href="{{ route('admin.settings.create') }}">
+                                href="{{ route('admin.settings.edit') }}">
                                 <i class="mdi mdi-settings"></i>
                                 <span class="nav-text">Account Setting</span>
                             </a>
                         </li>
                         <li class="dropdown-footer">
-                        
+
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                            
+
                                 <x-responsive-nav-link :href="route('logout')"
                                     onclick="event.preventDefault(); this.closest('form').submit();">
                                     {!! '<i class="mdi mdi-logout"></i> Log Out' !!}
                                 </x-responsive-nav-link>
                             </form>
-                            
+
                         </li>
                     </ul>
                 </li>

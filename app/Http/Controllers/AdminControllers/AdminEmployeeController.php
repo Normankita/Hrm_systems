@@ -29,22 +29,22 @@ class AdminEmployeeController extends Controller
 
     public function store(Request $request) {
         $rules = [
-            'role_id' => '',
-            'department_id' => '',
-            'company_id' => '',
-            'first_name' => '',
-            'last_name' => '',
-            'email' => '',
-            'phone' => '',
-            'gender' => '',
-            'date_of_birth' => '',
-            'phone_number' => '',
-            'national_id' => '',
-            'marital_status' => '',
-            'residential_address' => '',
-            'tin_number' => '',
-            'employee_type' => '',
-            'date_of_hire' => ''
+            'role_id' => 'required',
+            'department_id' => 'required',
+            'company_id' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'phone' => 'required',
+            'gender' => 'required',
+            'date_of_birth' => 'required',
+            'phone_number' => 'required',
+            'national_id' => 'required',
+            'marital_status' => 'required',
+            'residential_address' => 'required',
+            'tin_number' => 'required',
+            'employee_type' => 'required',
+            'date_of_hire' => 'required'
         ];
         $validate = Validator::make($request->all(), $rules);
         if ($validate->fails()) {
@@ -59,7 +59,7 @@ class AdminEmployeeController extends Controller
             'full_name' => $request->input('first_name') . ' ' . $request->input('last_name'),
         ]);
         $employee = EmployeeTrait::createEmployee($request->all());
-        return redirect()->route('admin.employees.show', ['id' => $employee->id])
+        return redirect()->route('admin.employees.show', $employee->id)
                         ->with('success', 'Employee created successfully');
     }
 

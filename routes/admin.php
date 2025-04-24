@@ -33,5 +33,5 @@ Route::middleware(['auth', 'role:ADMIN'])
     ->controller(AdminSettingController::class)
     ->name('admin.settings.')
     ->group(function () {
-        Route::get('/create', 'create')->name('create');
+        Route::get('/edit', 'edit')->name('edit');
     });
