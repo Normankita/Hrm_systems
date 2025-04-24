@@ -3,81 +3,87 @@
 @section('content')
 <div class="container mt-4">
     <div class="card shadow rounded">
-        <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">Employee Profile - {{ $employee->first_name }} {{ $employee->last_name }}</h4>
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">
+                <i class="bi bi-person-circle me-2"></i>
+                Employee Profile - {{ $employee->first_name }} {{ $employee->last_name }}
+            </h4>
         </div>
         <div class="card-body">
-            <div class="row">
-
-                <div class="col-md-6 mb-3">
+            <div class="row gy-3">
+                <div class="col-md-6">
                     <strong>Full Name:</strong>
-                    <p>{{ $employee->first_name }} {{ $employee->last_name }}</p>
+                    <div>{{ $employee->full_name}}</div>
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-md-6">
                     <strong>Gender:</strong>
-                    <p>{{ $employee->gender }}</p>
+                    <div>{{ ucfirst($employee->gender) }}</div>
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-md-6">
                     <strong>Date of Birth:</strong>
-                    <p>{{ \Carbon\Carbon::parse($employee->date_of_birth)->format('d M, Y') }}</p>
+                    <div>{{ \Carbon\Carbon::parse($employee->date_of_birth)->format('d M, Y') }}</div>
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-md-6">
                     <strong>Email:</strong>
-                    <p>{{ $employee->email }}</p>
+                    <div>{{ $employee->email }}</div>
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-md-6">
                     <strong>Phone Number:</strong>
-                    <p>{{ $employee->phone_number }}</p>
+                    <div>{{ $employee->phone_number }}</div>
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-md-6">
                     <strong>National ID:</strong>
-                    <p>{{ $employee->national_id }}</p>
+                    <div>{{ $employee->national_id }}</div>
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-md-6">
                     <strong>TIN Number:</strong>
-                    <p>{{ $employee->tin_number ?? 'N/A' }}</p>
+                    <div>{{ $employee->tin_number ?? 'N/A' }}</div>
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-md-6">
                     <strong>Marital Status:</strong>
-                    <p>{{ $employee->marital_status ?? 'N/A' }}</p>
+                    <div>{{ $employee->marital_status ?? 'N/A' }}</div>
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-md-6">
                     <strong>Residential Address:</strong>
-                    <p>{{ $employee->residential_address }}</p>
+                    <div>{{ $employee->residential_address }}</div>
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-md-6">
                     <strong>Employee Type:</strong>
-                    <p>{{ $employee->employee_type }}</p>
+                    <div>{{ ucfirst($employee->employee_type) }}</div>
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-md-6">
                     <strong>Date of Hire:</strong>
-                    <p>{{ \Carbon\Carbon::parse($employee->date_of_hire)->format('d M, Y') }}</p>
+                    <div>{{ \Carbon\Carbon::parse($employee->date_of_hire)->format('d M, Y') }}</div>
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-md-6">
                     <strong>Department:</strong>
-                    <p>{{ $employee->department->name }}</p>
+                    <div>{{ $employee->department->name ?? 'N/A' }}</div>
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-md-6">
                     <strong>Designation (Role):</strong>
-                    <p>{{ $employee->role->name }}</p>
+                    <div>{{ $employee->role->name ?? 'N/A' }}</div>
                 </div>
             </div>
 
-            <div class="text-end">
-                <a href="{{ route('admin.employees.index') }}" class="btn btn-secondary">Back to List</a>
-                <a href="{{ route('admin.employees.edit', $employee->id) }}" class="btn btn-warning">Edit</a>
+            <div class="text-end mt-4">
+                <a href="{{ route('admin.employees.index') }}" class="btn btn-outline-secondary me-2">
+                    <i class="bi bi-arrow-left"></i> Back to List
+                </a>
+                <a href="{{ route('admin.employees.edit', $employee->id) }}" class="btn btn-warning">
+                    <i class="bi bi-pencil-square"></i> Edit
+                </a>
             </div>
         </div>
     </div>

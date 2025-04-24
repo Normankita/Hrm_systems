@@ -12,6 +12,8 @@ Route::middleware(['auth', 'role:ADMIN'])
     ->name('admin.employees.')
     ->group(function () {
         Route::get('/', 'index')->name('index');
+        Route::get('edit/{id}', 'edit')->name('edit');
+        Route::put('update/{id}', 'update')->name('update');
         Route::get('/create', 'create')->name('create');
         Route::post('/store', 'store')->name('store');
         Route::get('/show/{id}', 'show')->name('show');
