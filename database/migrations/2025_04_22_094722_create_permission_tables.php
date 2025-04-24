@@ -43,6 +43,8 @@ return new class extends Migration
             }
             $table->string('name');       // For MyISAM use string('name', 225); // (or 166 for InnoDB with Redundant/Compact row format)
             $table->string('guard_name'); // For MyISAM use string('guard_name', 25);
+            $table->enum('role_type', ['general', 'specific'])->default('general'); // For MyISAM use string('role_type', 25);
+            $table->unsignedBigInteger('company_id')->nullable();
             $table->timestamps();
             if ($teams || config('permission.testing')) {
                 $table->unique([$columnNames['team_foreign_key'], 'name', 'guard_name']);

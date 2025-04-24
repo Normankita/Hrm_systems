@@ -1,12 +1,13 @@
 <?php
 
+use App\Http\Controllers\AdminController\AdminRoleController;
 use App\Http\Controllers\AdminControllers\AdminCompanyController;
 use App\Http\Controllers\AdminControllers\AdminDepartmentController;
 use App\Http\Controllers\AdminControllers\AdminEmployeeController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::middleware(['auth', 'HasCompanyProfile' ,'role:ADMIN'])
+Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
     ->prefix('/admin/employee')
     ->controller(AdminEmployeeController::class)
     ->name('admin.employees.')
@@ -45,5 +46,15 @@ Route::middleware(['auth', 'role:ADMIN'])
     ->name('admin.companies.')
     ->group(function () {
         Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::put('/update/{id}', 'update')->name('update');
+    });
+
+
+Route::middleware(['auth', 'role:ADMIN'])
+    ->prefix('/admin/role')
+    ->controller(AdminRoleController::class)
+    ->name('admin.roles.')
+    ->group(function () {
+        Route::get('index', 'index')->name('index');
         Route::put('/update/{id}', 'update')->name('update');
     });

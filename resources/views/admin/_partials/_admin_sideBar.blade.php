@@ -44,6 +44,32 @@
                     </ul>
                 </li>
 
+                <li class="has-sub">
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                        data-target="#roles_menu" aria-expanded="false" aria-controls="roles_menu">
+                        <i class="mdi mdi-account-multiple"></i>
+                        <span class="nav-text">Roles</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="collapse" id="roles_menu" data-parent="#sidebar-menu">
+                        <div class="sub-menu">
+                            <li>
+                                <a class="sidenav-item-link" href="
+                                    {{ route('admin.roles.index') }}">
+                                    <span class="nav-text">Create Role</span>
+                                </a>
+                            </li>
+                            <li>
+                                {{-- <a class="sidenav-item-link" href="{{ route('admin.employees.index') }}">
+                                    <span class="nav-text">View Employees</span>
+                                </a> --}}
+                                <a class="sidenav-item-link" href="{{route('admin.employees.index')}}">
+                                    <span class="nav-text">Manage Role</span>
+                                </a>
+                            </li>
+                        </div>
+                    </ul>
+                </li>
 
                 <li class="has-sub">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
