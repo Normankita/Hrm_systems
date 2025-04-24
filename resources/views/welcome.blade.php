@@ -72,7 +72,7 @@
                         @endif
                     </div>
 
-                    <form action="{{ route('login') }}" method="POST">
+                    <form action="{{ route('login') }}" method="post">
                         @csrf
                       <div class="row">
                         <div class="form-group col-md-12 mb-4">

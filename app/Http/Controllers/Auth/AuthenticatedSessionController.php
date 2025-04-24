@@ -28,6 +28,18 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        // Check if the user is an owner
+        if (Auth::user()->hasRole('OWNER')) {
+        } else {
+            // save settings to session
+            $settings = Auth::user()->company->settings()
+                ->first();
+                dd($settings);
+            $request->session()->put('settings', $settings);
+        }
+
+        dd($request->session()->get('settings'));
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 

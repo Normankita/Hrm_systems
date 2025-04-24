@@ -41,8 +41,8 @@
             <ul class="nav navbar-nav">
                 <!-- Offcanvas -->
                 <li class="custom-dropdown">
-                    <a class="offcanvas-toggler active custom-dropdown-toggler"
-                        data-offcanvas="contact-off" href="javascript:">
+                    <a class="offcanvas-toggler active custom-dropdown-toggler" data-offcanvas="contact-off"
+                        href="javascript:">
                         <i class="mdi mdi-contacts icon"></i>
                     </a>
                 </li>
@@ -55,15 +55,12 @@
 
                         <header>
                             <div class="nav nav-underline" id="nav-tab" role="tablist">
-                                <a class="nav-item nav-link active" id="all-tabs" data-toggle="tab"
-                                    href="#all" role="tab" aria-controls="nav-home"
-                                    aria-selected="true">All (5)</a>
-                                <a class="nav-item nav-link" id="message-tab" data-toggle="tab"
-                                    href="#message" role="tab" aria-controls="nav-profile"
-                                    aria-selected="false">Msgs (4)</a>
-                                <a class="nav-item nav-link" id="other-tab" data-toggle="tab"
-                                    href="#other" role="tab" aria-controls="nav-contact"
-                                    aria-selected="false">Others (3)</a>
+                                <a class="nav-item nav-link active" id="all-tabs" data-toggle="tab" href="#all"
+                                    role="tab" aria-controls="nav-home" aria-selected="true">All (5)</a>
+                                <a class="nav-item nav-link" id="message-tab" data-toggle="tab" href="#message"
+                                    role="tab" aria-controls="nav-profile" aria-selected="false">Msgs (4)</a>
+                                <a class="nav-item nav-link" id="other-tab" data-toggle="tab" href="#other"
+                                    role="tab" aria-controls="nav-contact" aria-selected="false">Others (3)</a>
                             </div>
                         </header>
 
@@ -141,8 +138,7 @@
                                                 <div class="buttons">
                                                     <a href="#"
                                                         class="btn btn-sm btn-success shadow-none text-white">accept</a>
-                                                    <a href="#"
-                                                        class="btn btn-sm shadow-none">delete</a>
+                                                    <a href="#" class="btn btn-sm shadow-none">delete</a>
                                                 </div>
                                                 <span class="time">
                                                     <time>6 hrs ago</time>...
@@ -284,8 +280,7 @@
                                                 <div class="buttons">
                                                     <a href="#"
                                                         class="btn btn-sm btn-success shadow-none text-white">accept</a>
-                                                    <a href="#"
-                                                        class="btn btn-sm shadow-none">delete</a>
+                                                    <a href="#" class="btn btn-sm shadow-none">delete</a>
                                                 </div>
                                                 <span class="time">
                                                     <time>6 hrs ago</time>...
@@ -319,8 +314,7 @@
                         <footer class="border-top dropdown-notify-footer">
                             <div class="d-flex justify-content-between align-items-center py-2 px-4">
                                 <span>Last updated 3 min ago</span>
-                                <a id="refress-button" href="javascript:"
-                                    class="btn mdi mdi-cached btn-refress"></a>
+                                <a id="refress-button" href="javascript:" class="btn mdi mdi-cached btn-refress"></a>
                             </div>
                         </footer>
                     </div>
@@ -351,14 +345,14 @@
                                 <span class="nav-text">Activitise</span></a>
                         </li>
                         <li>
-                            <a class="dropdown-link-item"
-                                href="{{ route('admin.settings.edit') }}">
+                            <!-- the value of settings id will be found on session  -->
+                            {{-- <a class="dropdown-link-item" href="
+                            {{ route('admin.settings.edit', Session::get('settings')->id) }}">
                                 <i class="mdi mdi-settings"></i>
-                                <span class="nav-text">Account Setting</span>
+                                <span class="nav-text">Account Setting</span> --}}
                             </a>
                         </li>
                         <li class="dropdown-footer">
-
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
 
