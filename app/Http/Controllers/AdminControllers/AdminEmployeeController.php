@@ -31,18 +31,16 @@ class AdminEmployeeController extends Controller
         $rules = [
             'role_id' => 'required',
             'department_id' => 'required',
-            'company_id' => 'required',
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required|email|unique:users,email',
-            'phone' => 'required',
             'gender' => 'required',
             'date_of_birth' => 'required',
             'phone_number' => 'required',
-            'national_id' => 'required',
+            'national_id' => 'required|unique:employees,national_id',
             'marital_status' => 'required',
             'residential_address' => 'required',
-            'tin_number' => 'required',
+            'tin_number' => 'required|unique:employees,tin_number',
             'employee_type' => 'required',
             'date_of_hire' => 'required'
         ];
