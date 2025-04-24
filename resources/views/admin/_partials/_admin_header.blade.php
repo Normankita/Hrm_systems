@@ -7,6 +7,7 @@
 
 
         <div class="navbar-right ">
+            <span>{{ \Carbon\Carbon::now()->format('d M') }}</span>
 
             <!-- search form -->
             {{-- <div class="search-form">
