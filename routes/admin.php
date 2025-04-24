@@ -7,7 +7,7 @@ use App\Http\Controllers\AdminControllers\AdminSettingController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::middleware(['auth', 'role:ADMIN'])
+Route::middleware(['auth', 'HasCompanyProfile' ,'role:ADMIN'])
     ->prefix('/admin/employee')
     ->controller(AdminEmployeeController::class)
     ->name('admin.employees.')
@@ -21,7 +21,7 @@ Route::middleware(['auth', 'role:ADMIN'])
     });
 
 
-Route::middleware(['auth', 'role:ADMIN'])
+Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
     ->prefix('/admin/department')
     ->controller(AdminDepartmentController::class)
     ->name('admin.departments.')
@@ -45,6 +45,6 @@ Route::middleware(['auth', 'role:ADMIN'])
     ->controller(AdminCompanyController::class)
     ->name('admin.companies.')
     ->group(function () {
-        // Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::get('/edit/{id}', 'edit')->name('edit');
         Route::put('/update/{id}', 'update')->name('update');
     });
