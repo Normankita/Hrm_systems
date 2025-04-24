@@ -9,7 +9,7 @@
         <div class="navbar-right ">
 
             <!-- search form -->
-            <div class="search-form">
+            {{-- <div class="search-form">
                 <form action="index.html" method="get">
                     <div class="input-group input-group-sm" id="input-group-search">
                         <input type="text" autocomplete="off" name="query" id="search-input"
@@ -36,7 +36,7 @@
 
                 </ul>
 
-            </div>
+            </div> --}}
 
             <ul class="nav navbar-nav">
                 <!-- Offcanvas -->
