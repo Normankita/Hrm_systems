@@ -11578,7 +11578,7 @@ button {
 
 /* Content */
 .content {
-  padding-top: 1rem;
+  padding-top: 0rem;
   padding-left: 1rem;
   padding-right: 1rem;
   width: 100%;
@@ -11587,14 +11587,14 @@ button {
   .content {
     margin-right: auto;
     margin-left: auto;
-    padding-top: 1.9rem;
+    padding-top: 0rem;
     padding-left: 1.875rem;
     padding-right: 1.875rem;
   }
 }
 @media (min-width: 1200px) {
   .content {
-    padding-top: 2.5rem;
+    padding-top: 1rem;
     padding-bottom: 0.625rem;
   }
 }

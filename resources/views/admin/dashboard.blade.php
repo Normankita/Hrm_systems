@@ -1,12 +1,11 @@
 <div class="card card-default">
-    <div class="px-6 py-4">
+    <div class="px-6">
 
         <!-- Top Statistics -->
         <div class="row">
-
             <!-- Payroll This Month -->
             <div class="col-sm-6 col-md-3">
-                <div class="card card-default card-mini">
+                <div class="card card-default ">
                     <div class="card-header">
                         <h2>38,700,000 TZS</h2> <!-- Replace with dynamic total payroll value -->
                         <div class="sub-title">
@@ -18,7 +17,7 @@
 
             <!-- Statutory Deductions -->
             <div class="col-sm-6 col-md-3">
-                <div class="card card-default card-mini">
+                <div class="card card-default">
                     <div class="card-header">
                         <h2>8,200,000 TZS</h2> <!-- Replace with dynamic deductions value -->
                         <div class="sub-title">
@@ -30,7 +29,7 @@
 
             <!-- Employees on Leave -->
             <div class="col-sm-6 col-md-3">
-                <div class="card card-default card-mini">
+                <div class="card card-default">
                     <div class="card-header">
                         <h2>12</h2> <!-- Replace with dynamic count -->
                         <div class="sub-title">
@@ -42,7 +41,7 @@
 
             <!-- Total Employees -->
             <div class="col-sm-6 col-md-3">
-                <div class="card card-default card-mini">
+                <div class="card card-default">
                     <div class="card-header">
                         <h2>152</h2> <!-- Replace with dynamic total employee count -->
                         <div class="sub-title">
@@ -55,7 +54,7 @@
 
 
         <!-- Second Row: Charts and Insights -->
-        <div class="row mt-4">
+        <div class="row ">
             <!-- Attendance Chart -->
             <div class="col-xl-8">
                 <div class="card card-default">
