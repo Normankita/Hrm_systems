@@ -34,5 +34,10 @@ class Company extends Model
                 $query->where('name', 'ADMIN');
             });
     }
+
+    public function settings()
+    {
+        return $this->hasOne(Setting::class);
+    }
 }
 
