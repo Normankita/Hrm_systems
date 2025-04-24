@@ -56,5 +56,6 @@ Route::middleware(['auth', 'role:ADMIN'])
     ->name('admin.roles.')
     ->group(function () {
         Route::get('index', 'index')->name('index');
+        Route::post('store', 'store')->name('store');
         Route::put('/update/{id}', 'update')->name('update');
     });
