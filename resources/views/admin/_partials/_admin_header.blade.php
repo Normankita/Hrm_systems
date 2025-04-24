@@ -347,10 +347,10 @@
                         <li>
                             <!-- the value of settings id will be found on session  -->
                             {{-- <a class="dropdown-link-item" href="
-                            {{ route('admin.settings.edit', Session::get('settings')->id) }}">
+                            {{ route('admin.companies.edit', auth()->user()->company_id) }}">
                                 <i class="mdi mdi-settings"></i>
-                                <span class="nav-text">Account Setting</span> --}}
-                            </a>
+                                <span class="nav-text">Company Profile</span>
+                            </a> --}}
                         </li>
                         <li class="dropdown-footer">
                             <form method="POST" action="{{ route('logout') }}">

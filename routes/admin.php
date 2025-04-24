@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminControllers\AdminCompanyController;
 use App\Http\Controllers\AdminControllers\AdminDepartmentController;
 use App\Http\Controllers\AdminControllers\AdminEmployeeController;
 use App\Http\Controllers\AdminControllers\AdminSettingController;
@@ -28,10 +29,19 @@ Route::middleware(['auth', 'role:ADMIN'])
     });
 
 
+// Route::middleware(['auth', 'role:ADMIN'])
+//     ->prefix('/admin/settings')
+//     ->controller(AdminSettingController::class)
+//     ->name('admin.settings.')
+//     ->group(function () {
+//         Route::get('/edit', 'edit')->name('edit');
+//     });
+
 Route::middleware(['auth', 'role:ADMIN'])
-    ->prefix('/admin/settings')
-    ->controller(AdminSettingController::class)
-    ->name('admin.settings.')
+    ->prefix('/admin/company')
+    ->controller(AdminCompanyController::class)
+    ->name('admin.companies.')
     ->group(function () {
-        Route::get('/edit', 'edit')->name('edit');
+        // Route::get('/edit/{id}', 'edit')->name('edit');
+        Route::put('/update/{id}', 'update')->name('update');
     });

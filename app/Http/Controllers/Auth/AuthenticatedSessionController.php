@@ -34,11 +34,9 @@ class AuthenticatedSessionController extends Controller
             // save settings to session
             $settings = Auth::user()->company->settings()
                 ->first();
-                dd($settings);
             $request->session()->put('settings', $settings);
+            $request->session()->put('company', Auth::user()->company);
         }
-
-        dd($request->session()->get('settings'));
 
         return redirect()->intended(route('dashboard', absolute: false));
     }

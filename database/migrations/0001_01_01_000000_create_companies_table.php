@@ -15,6 +15,7 @@ class CreateCompaniesTable extends Migration
             $table->string('email', 100)->nullable()->unique();
             $table->string('brela_reg_number', 50)->nullable()->unique();
             $table->string('tin_number', 50)->nullable()->unique();
+            $table->boolean('isActive')->default(true);
             $table->timestamps();
             $table->softDeletes();
         });

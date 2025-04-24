@@ -10,7 +10,7 @@ class Company extends Model
 
     protected $fillable = [
         'name', 'address', 'contact_number', 'email',
-        'brela_reg_number', 'tin_number'
+        'brela_reg_number', 'tin_number', 'isActive'
     ];
 
     public function departments()
