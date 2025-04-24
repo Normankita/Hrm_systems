@@ -34,10 +34,12 @@
         ——— CONTENT WRAPPER
         ===================================== -->
             <div class="content-wrapper">
+               
                 <div class="content"><!-- For Components documentaion -->
                     <x-system.success-and-error />
-                   @yield('content')
+                    @yield('content')
                 </div>
+                
             </div>
             <!-- Footer -->
             @include('_partials._footer')

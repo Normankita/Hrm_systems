@@ -10,10 +10,12 @@
         <x-system.fail-alert :message="session('error')">
         </x-system.fail-alert>
     @endif
+    
 
     @if(session('warning'))
         <x-system.warning-alert :message="session('warning')">
         </x-system.warning-alert>
 
     @endif
+   
 </div>
