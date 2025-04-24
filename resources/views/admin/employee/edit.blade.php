@@ -152,7 +152,7 @@
 
                             {{-- Submit Button --}}
                             <div class="col-md-12 text-end">
-                                <button type="submit" class="btn btn-success">
+                                <button type="submit" class="btn btn-primary">
                                     <i class="mdi mdi-content-save-edit"></i> Update Employee
                                 </button>
                             </div>

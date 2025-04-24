@@ -48,7 +48,7 @@
                 <li class="has-sub">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
                         data-target="#department_menu" aria-expanded="false" aria-controls="department_menu">
-                        <i class="mdi mdi-account-multiple"></i>
+                        <i class="mdi mdi-sitemap"></i>
                         <span class="nav-text">Departments</span>
                         <b class="caret"></b>
                     </a>
