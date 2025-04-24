@@ -19,9 +19,7 @@
 {{-- My links if exist --}}
 
 
-<link href="{{asset("bootstrap5.1.1/plugins/DataTables/DataTables-1.10.18/css/jquery.dataTables.min.css")}}" rel="stylesheet" />
-
-
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
 
 <link href="{{asset("bootstrap5.1.1/plugins/jvectormap/jquery-jvectormap-2.0.3.css")}}" rel="stylesheet" />
 

@@ -9,8 +9,6 @@ use Illuminate\Http\Request;
 class AdminSettingController extends Controller
 {
     public function edit($id) {
-        $settings = Setting::find($id)
-            ->first();
-        dd($settings);
+
     }
 }

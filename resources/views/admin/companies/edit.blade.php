@@ -34,6 +34,13 @@
                         </div>
                         <div class="col-sm-12 col-md-6">
                             <div class="mb-3">
+                                <label for="address" class="form-label">Address</label>
+                                <input type="text" class="form-control" id="address" name="address"
+                                    value="{{ $company->address }}" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="mb-3">
                                 <label for="brela_reg_number" class="form-label">BRELA Registration Number</label>
                                 <input type="text" class="form-control" id="brela_reg_number" name="brela_reg_number"
                                     value="{{ $company->brela_reg_number }}" required>

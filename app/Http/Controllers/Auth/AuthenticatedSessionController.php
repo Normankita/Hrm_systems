@@ -32,9 +32,9 @@ class AuthenticatedSessionController extends Controller
         if (Auth::user()->hasRole('OWNER')) {
         } else {
             // save settings to session
-            $settings = Auth::user()->company->settings()
-                ->first();
-            $request->session()->put('settings', $settings);
+            // $settings = Auth::user()->company->settings()
+                // ->first();
+            // $request->session()->put('settings', $settings);
             $request->session()->put('company', Auth::user()->company);
         }
 

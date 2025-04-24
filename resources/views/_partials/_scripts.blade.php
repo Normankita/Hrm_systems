@@ -8,7 +8,6 @@
 <script src="{{ asset('bootstrap5.1.1/js/map.js') }}"></script>
 <script src="{{ asset('bootstrap5.1.1/js/custom.js') }}"></script>
 <script src="{{ asset('bootstrap5.1.1/plugins/nprogress/nprogress.js') }}"></script>
-<script src="{{ asset('bootstrap5.1.1/plugins/DataTables/DataTables-1.10.18/js/jquery.dataTables.min.js') }}"></script>
-
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 

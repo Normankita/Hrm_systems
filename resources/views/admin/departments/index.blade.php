@@ -6,18 +6,20 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <x-system.success-and-error />
                     <div class="col-lg-6 col-xl-4">
-                        <button type="button" class="btn btn-info btn-pill mb-4" data-toggle="modal"
+                        <button type="button" class="btn btn-primary  mb-4" data-toggle="modal"
                             data-target="#exampleModalForm">
                             Add Department
                         </button>
                     </div>
                     <h4 class="card-title">Departments</h4>
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover align-middle text-nowrap">
+                        <table id="department_table"
+                            class="table table-bordered table-hover align-middle
+                         text-nowrap">
                             <thead class="table-light text-lime">
                                 <tr>
+                                    <th></th>
                                     <th>Name</th>
                                     <th>Code</th>
                                     <th>Description</th>
@@ -26,8 +28,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($departments as $department)
+                                @foreach ($departments as $key => $department)
                                     <tr>
+                                        <td>{{ ++$key }}</td>
                                         <td>{{ $department->name }}</td>
                                         <td>{{ $department->code }}</td>
                                         <td>{{ $department->description }}</td>
@@ -143,28 +146,10 @@
     @section('scripts')
         <script>
             /*======== 14. DATA TABLE ========*/
-            var productsTable = $("#productsTable");
-            if (productsTable.length != 0) {
-                productsTable.DataTable({
-                    info: false,
-                    lengthChange: false,
-                    lengthMenu: [
-                        [5, 10, 15, -1],
-                        [5, 10, 15, "All"],
-                    ],
-                    scrollX: true,
-                    order: [
-                        [2, "asc"]
-                    ],
-                    columnDefs: [{
-                        orderable: false,
-                        targets: [, 0, 6, -1],
-                    }, ],
-                    language: {
-                        search: "_INPUT_",
-                        searchPlaceholder: "Search...",
-                    },
-                });
-            }
+            var department_table = $("#department_table");
+            department_table.DataTable({
+                lengthChange: false,
+                pageLength: 10,
+            });
         </script>
     @endsection

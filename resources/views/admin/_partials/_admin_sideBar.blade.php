@@ -63,9 +63,9 @@
                     </ul>
                 </li>
                 <li>
-                    <a class="sidenav-item-link" href="">
+                    <a class="sidenav-item-link" href="{{ route('admin.companies.edit', auth()->user()->company_id) }}">
                         <i class="mdi mdi-settings"></i>
-                        <span class="nav-text">Company Setting</span>
+                        <span class="nav-text">Company Profile</span>
                     </a>
                 </li>
             </ul>
