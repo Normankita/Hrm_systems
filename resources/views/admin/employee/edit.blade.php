@@ -5,33 +5,26 @@
         <div class="col-sm-12 col-md-12">
             <div class="card">
                 <div class="card-body p-30">
-                    <form action="{{ route('admin.employees.store') }}" method="POST">
+                    <form action="{{ route('admin.employees.update', $employee->id) }}" method="POST">
                         @csrf
+                        @method('PUT')
                         <div class="row">
 
-                            {{-- Full Name --}}
                             {{-- First Name --}}
                             <div class="col-md-6 mb-4">
                                 <label class="text-dark font-weight-medium">First Name</label>
                                 <div class="input-group">
                                     <span class="input-group-text mdi mdi-account"></span>
-                                    <input type="text" name="first_name" class="form-control" placeholder="John"
-                                        value="{{ old('first_name') }}" required>
-                                    @error('first_name')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                    <input type="text" name="first_name" class="form-control" value="{{ old('first_name', $employee->first_name) }}" required>
                                 </div>
                             </div>
+
                             {{-- Last Name --}}
                             <div class="col-md-6 mb-4">
                                 <label class="text-dark font-weight-medium">Last Name</label>
                                 <div class="input-group">
                                     <span class="input-group-text mdi mdi-account"></span>
-                                    <input type="text" name="last_name" class="form-control" placeholder="Doe"
-                                        value="{{ old('last_name') }}" required>
-                                    @error('last_name')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+                                    <input type="text" name="last_name" class="form-control" value="{{ old('last_name', $employee->last_name) }}" required>
                                 </div>
                             </div>
 
@@ -41,15 +34,11 @@
                                 <div class="input-group">
                                     <span class="input-group-text mdi mdi-gender-male-female"></span>
                                     <select name="gender" class="form-control" required>
-                                        <option value="" disabled {{ old('gender') ? '' : 'selected' }}>Select Gender</option>
-                                        <option value="Male" {{ old('gender') == 'Male' ? 'selected' : '' }}>Male</option>
-                                        <option value="Female" {{ old('gender') == 'Female' ? 'selected' : '' }}>Female</option>
-                                        <option value="Other" {{ old('gender') == 'Other' ? 'selected' : '' }}>Other</option>
+                                        <option value="Male" {{ old('gender', $employee->gender) == 'Male' ? 'selected' : '' }}>Male</option>
+                                        <option value="Female" {{ old('gender', $employee->gender) == 'Female' ? 'selected' : '' }}>Female</option>
+                                        <option value="Other" {{ old('gender', $employee->gender) == 'Other' ? 'selected' : '' }}>Other</option>
                                     </select>
                                 </div>
-                                @error('gender')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
                             </div>
 
                             {{-- Date of Birth --}}
@@ -57,12 +46,8 @@
                                 <label class="text-dark font-weight-medium">Date of Birth</label>
                                 <div class="input-group">
                                     <span class="input-group-text mdi mdi-calendar"></span>
-                                    <input type="date" name="date_of_birth" class="form-control"
-                                        value="{{ old('date_of_birth') }}" required>
+                                    <input type="date" name="date_of_birth" class="form-control" value="{{ old('date_of_birth', $employee->date_of_birth) }}" required>
                                 </div>
-                                @error('date_of_birth')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
                             </div>
 
                             {{-- Email --}}
@@ -70,12 +55,8 @@
                                 <label class="text-dark font-weight-medium">Email</label>
                                 <div class="input-group">
                                     <span class="input-group-text mdi mdi-email"></span>
-                                    <input type="email" name="email" class="form-control" placeholder="john@example.com"
-                                        value="{{ old('email') }}" required>
+                                    <input type="email" name="email" class="form-control" value="{{ old('email', $employee->email) }}" required>
                                 </div>
-                                @error('email')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
                             </div>
 
                             {{-- Phone Number --}}
@@ -83,12 +64,8 @@
                                 <label class="text-dark font-weight-medium">Phone Number</label>
                                 <div class="input-group">
                                     <span class="input-group-text mdi mdi-phone"></span>
-                                    <input type="text" name="phone_number" class="form-control"
-                                        placeholder="+255712345678" value="{{ old('phone_number') }}" required>
+                                    <input type="text" name="phone_number" class="form-control" value="{{ old('phone_number', $employee->phone_number) }}" required>
                                 </div>
-                                @error('phone_number')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
                             </div>
 
                             {{-- National ID --}}
@@ -96,12 +73,8 @@
                                 <label class="text-dark font-weight-medium">National ID</label>
                                 <div class="input-group">
                                     <span class="input-group-text mdi mdi-card-account-details"></span>
-                                    <input type="text" name="national_id" class="form-control"
-                                        placeholder="1234567890123456" value="{{ old('national_id') }}" required>
+                                    <input type="text" name="national_id" class="form-control" value="{{ old('national_id', $employee->national_id) }}" required>
                                 </div>
-                                @error('national_id')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
                             </div>
 
                             {{-- TIN Number --}}
@@ -109,12 +82,8 @@
                                 <label class="text-dark font-weight-medium">TIN Number</label>
                                 <div class="input-group">
                                     <span class="input-group-text mdi mdi-currency-usd"></span>
-                                    <input type="text" name="tin_number" class="form-control" placeholder="Optional"
-                                        value="{{ old('tin_number') }}">
+                                    <input type="text" name="tin_number" class="form-control" value="{{ old('tin_number', $employee->tin_number) }}">
                                 </div>
-                                @error('tin_number')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
                             </div>
 
                             {{-- Marital Status --}}
@@ -122,12 +91,8 @@
                                 <label class="text-dark font-weight-medium">Marital Status</label>
                                 <div class="input-group">
                                     <span class="input-group-text mdi mdi-heart"></span>
-                                    <input type="text" name="marital_status" class="form-control"
-                                        placeholder="e.g., Single, Married" value="{{ old('marital_status') }}">
+                                    <input type="text" name="marital_status" class="form-control" value="{{ old('marital_status', $employee->marital_status) }}">
                                 </div>
-                                @error('marital_status')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
                             </div>
 
                             {{-- Residential Address --}}
@@ -135,8 +100,7 @@
                                 <label class="text-dark font-weight-medium">Residential Address</label>
                                 <div class="input-group">
                                     <span class="input-group-text mdi mdi-home-map-marker"></span>
-                                    <input type="text" name="residential_address" class="form-control"
-                                        placeholder="e.g., Sinza Mori, Dar es Salaam" value="{{ old('residential_address') }}">
+                                    <input type="text" name="residential_address" class="form-control" value="{{ old('residential_address', $employee->residential_address) }}">
                                 </div>
                             </div>
 
@@ -146,15 +110,11 @@
                                 <div class="input-group">
                                     <span class="input-group-text mdi mdi-account-box-outline"></span>
                                     <select name="employee_type" class="form-control" required>
-                                        <option value="" disabled {{ old('employee_type') ? '' : 'selected' }}>Select Type</option>
-                                        <option value="Permanent" {{ old('employee_type') == 'Permanent' ? 'selected' : '' }}>Permanent</option>
-                                        <option value="Contract" {{ old('employee_type') == 'Contract' ? 'selected' : '' }}>Contract</option>
-                                        <option value="Probation" {{ old('employee_type') == 'Probation' ? 'selected' : '' }}>Probation</option>
+                                        <option value="Permanent" {{ old('employee_type', $employee->employee_type) == 'Permanent' ? 'selected' : '' }}>Permanent</option>
+                                        <option value="Contract" {{ old('employee_type', $employee->employee_type) == 'Contract' ? 'selected' : '' }}>Contract</option>
+                                        <option value="Probation" {{ old('employee_type', $employee->employee_type) == 'Probation' ? 'selected' : '' }}>Probation</option>
                                     </select>
                                 </div>
-                                @error('employee_type')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
                             </div>
 
                             {{-- Date of Hire --}}
@@ -162,52 +122,38 @@
                                 <label class="text-dark font-weight-medium">Date of Hire</label>
                                 <div class="input-group">
                                     <span class="input-group-text mdi mdi-calendar-check"></span>
-                                    <input type="date" name="date_of_hire" class="form-control"
-                                        value="{{ old('date_of_hire') }}" required>
+                                    <input type="date" name="date_of_hire" class="form-control" value="{{ old('date_of_hire', $employee->date_of_hire) }}" required>
                                 </div>
-                                @error('date_of_hire')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
                             </div>
 
                             {{-- Department --}}
                             <div class="col-md-6 mb-4">
-                                <label for="department_id" class="text-dark font-weight-medium">Department</label>
-                                <select name="department_id" id="department_id" class="form-control" required>
-                                    <option value="" disabled {{ old('department_id') ? '' : 'selected' }}>-- Select Department --</option>
+                                <label class="text-dark font-weight-medium">Department</label>
+                                <select name="department_id" class="form-control" required>
                                     @foreach (App\Models\Department::all() as $department)
-                                        <option value="{{ $department->id }}"
-                                            {{ old('department_id') == $department->id ? 'selected' : '' }}>
+                                        <option value="{{ $department->id }}" {{ old('department_id', $employee->department_id) == $department->id ? 'selected' : '' }}>
                                             {{ $department->name }}
                                         </option>
                                     @endforeach
                                 </select>
-                                @error('department_id')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
                             </div>
 
                             {{-- Role --}}
                             <div class="col-md-6 mb-4">
-                                <label for="role_id" class="text-dark font-weight-medium">Designation (Role)</label>
-                                <select name="role_id" id="role_id" class="form-control" required>
-                                    <option value="" disabled {{ old('role_id') ? '' : 'selected' }}>Select designation</option>
+                                <label class="text-dark font-weight-medium">Designation (Role)</label>
+                                <select name="role_id" class="form-control" required>
                                     @foreach ($roles as $role)
-                                        <option value="{{ $role->id }}"
-                                            {{ old('role_id') == $role->id ? 'selected' : '' }}>
+                                        <option value="{{ $role->id }}" {{ old('role_id', $employee->role_id) == $role->id ? 'selected' : '' }}>
                                             {{ $role->name }}
                                         </option>
                                     @endforeach
                                 </select>
-                                @error('role_id')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
                             </div>
 
                             {{-- Submit Button --}}
                             <div class="col-md-12 text-end">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="mdi mdi-content-save"></i> Save Employee
+                                <button type="submit" class="btn btn-success">
+                                    <i class="mdi mdi-content-save-edit"></i> Update Employee
                                 </button>
                             </div>
 
