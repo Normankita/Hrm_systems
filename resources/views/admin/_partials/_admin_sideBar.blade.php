@@ -36,7 +36,7 @@
                                 {{-- <a class="sidenav-item-link" href="{{ route('admin.employees.index') }}">
                                     <span class="nav-text">View Employees</span>
                                 </a> --}}
-                                <a class="sidenav-item-link" href="">
+                                <a class="sidenav-item-link" href="{{route('admin.employees.index')}}">
                                     <span class="nav-text">View Employees</span>
                                 </a>
                             </li>

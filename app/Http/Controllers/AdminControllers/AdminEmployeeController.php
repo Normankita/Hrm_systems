@@ -16,7 +16,7 @@ class AdminEmployeeController extends Controller
         $employees = Auth::user()->company->employees()
             ->orderBy('created_at', 'desc')
             ->get();
-        dd($employees);
+        // dd($employees);
         return view('admin.employee.index')
             ->with('employees', $employees);
     }
