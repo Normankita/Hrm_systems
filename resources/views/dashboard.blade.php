@@ -12,5 +12,9 @@
     @role('EMPLOYEE')
         @include('employee.dashboard')
     @endrole
+
+    @role('HR')
+        @include('hr.dashboard')
+    @endrole
 @endsection
 

@@ -46,8 +46,11 @@ class hasCompanyProfile
                 ])) {
             // If the user is an employee, they can access all routes
             if (!$user->company || !$user->company->isActive) {
-                return redirect()->route('/login', $user->company->id)
-                    ->withErrors('Please Fill The Company Details To Continues.');
+                Auth::guard('web')->logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+                return redirect()->route('home', $user->company->id)
+                ->withErrors('Company Is In Deactivated Mode, Contact Your Admin For More Details.');
             }
 
             if (
@@ -55,9 +58,12 @@ class hasCompanyProfile
                 !$user->company->email || !$user->company->brela_reg_number ||
                 !$user->company->tin_number
             ) {
+                Auth::guard('web')->logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
                 // Redirect to the company edit page if the company details are not filled
-                return redirect()->route('/login', $user->company->id)
-                    ->withErrors('Please Fill The Company Details To Continues.');
+                return redirect()->route('home', $user->company->id)
+                    ->withErrors('Company Is In Deactivated Mode, Contact Your Admin For More Details.');
             }
         }
 

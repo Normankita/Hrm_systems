@@ -79,5 +79,41 @@ class UserSeeder extends Seeder
             'date_of_termination' => null,
             'salary' => 50000,
         ]);
+
+
+
+
+
+        $hr = array(
+            'name' => 'hr mafongo',
+            'company_id' => $company->id,
+            'email' => 'hr@example.com',
+            'password' => Hash::make('password'),
+            'email_verified_at' => now(),
+            'remember_token' => null,
+        );
+        // create the actual user
+        $emp = User::create($hr);
+        // assign role
+        $employeeRole = Role::findByName('HR_OFFICER');
+        $emp->assignRole($employeeRole);
+        Employee::create([
+            'user_id' => $emp->id,
+            'company_id' => $company->id,
+            'department_id' => 1,
+            'full_name' => 'hr User',
+            'gender' => 'male',
+            'date_of_birth' => '1990-01-01',
+            'phone_number' => '12349567890',
+            'email' => 'hr@gmail.co',
+            'national_id' => '12345678989',
+            'marital_status' => 'single',
+            'residential_address' => '123 Main St',
+            'tin_number' => '12345698789',
+            'employee_type' => 'Permanent',
+            'date_of_hire' => now(),
+            'date_of_termination' => null,
+            'salary' => 50000,
+        ]);
     }
 }

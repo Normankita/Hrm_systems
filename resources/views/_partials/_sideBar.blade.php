@@ -7,5 +7,5 @@
 @endrole
 
 @role('HR_OFFICER')
-
+    @include('hr._partials._hr_sideBar')
 @endrole
