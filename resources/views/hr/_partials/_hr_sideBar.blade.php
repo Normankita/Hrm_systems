@@ -21,27 +21,31 @@
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
                        data-target="#leave-menu" aria-expanded="false" aria-controls="leave-menu">
                         <i class="mdi mdi-calendar"></i>
-                        <span class="nav-text">Leave</span>
+                        <span class="nav-text">Leaves</span>
                         <b class="caret"></b>
                     </a>
                     <ul class="collapse" id="leave-menu" data-parent="#sidebar-menu">
                         <div class="sub-menu">
                             <li>
                                 <a class="sidenav-item-link" href="{{ route('employees.leave.request') }}">
-                                    <span class="nav-text">Request Leave</span>
+                                    <span class="nav-text">Leave Types</span>
                                 </a>
                             </li>
                             <li>
                                 <a class="sidenav-item-link" href="{{ route('employees.leave.status') }}">
-                                    <span class="nav-text">Leave Status</span>
+                                    <span class="nav-text">Leave Requests</span>
                                 </a>
                             </li>
                         </div>
                     </ul>
                 </li>
-
+            </ul>
+        </div>
+        <!-- Bottom Section -->
+        <div class="sidebar-footer" style="position: absolute; bottom: 0; width: 100%; padding: 15px;">
+            <ul class="nav">
                 <li>
-                    <a class="sidenav-item-link" href="{{ route('employees.profile.index') }}">
+                    <a class="sidenav-item-link" href="{{ route('employees.profile.index') }}" style="color: white; padding: 10px 15px;">
                         <i class="mdi mdi-account-circle"></i>
                         <span class="nav-text">My Profile</span>
                     </a>

@@ -14,9 +14,12 @@ return new class extends Migration
         Schema::create('leave_types', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
+            $table->string('code')->unique();
             $table->text('description')->nullable();
-            $table->boolean('is_annual_deducted');
-            $table->boolean('is_compensated');
+            $table->boolean('deducts_from_annual_leave');
+            $table->boolean('required_approval');
+            $table->text('eligibility_criteria')->nullable();
+            $table->boolean('is_compensated')->default(false);
             $table->foreignId('company_id')->constrained('companies')
                 ->onDelete('cascade');
 
