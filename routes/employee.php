@@ -24,6 +24,6 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/{employee}', 'show')->name('show');
-        Route::get('/{employee}/edit', 'edit')->name('edit');
+        Route::get('/{id}/edit', 'edit')->name('edit');
         Route::put('/{employee}', 'update')->name('update');
     });

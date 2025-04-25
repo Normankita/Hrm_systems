@@ -28,6 +28,7 @@ trait EmployeeTrait {
 
 
     public static function getEmployeeById($id): Employee {
+       
         // $employee = Employee::with([
         //     'company',
         //     'department',
@@ -35,6 +36,7 @@ trait EmployeeTrait {
         //     'employeeContract.supervisor'
         // ])->findOrFail($id);
         $employee = Employee::find($id);
+        dd($employee);
         return $employee;
     }
 
