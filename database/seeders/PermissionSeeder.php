@@ -17,18 +17,22 @@ class PermissionSeeder extends Seeder
             [
                 'name' => 'view_employees',
                 'guard_name' => 'web',
+                'group_name' => 'employees',
             ],
             [
                 'name' => 'create_employees',
                 'guard_name' => 'web',
+                'group_name' => 'employees',
             ],
             [
                 'name' => 'edit_employees',
                 'guard_name' => 'web',
+                'group_name' => 'employees',
             ],
             [
                 'name' => 'delete_employees',
                 'guard_name' => 'web',
+                'group_name' => 'employees',
             ],
         );
 
