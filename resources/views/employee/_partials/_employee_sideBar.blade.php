@@ -16,7 +16,7 @@
                         <span class="nav-text">Dashboard</span>
                     </a>
                 </li>
-    
+
                 <li class="has-sub">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
                        data-target="#leave-menu" aria-expanded="false" aria-controls="leave-menu">
@@ -39,7 +39,7 @@
                         </div>
                     </ul>
                 </li>
-    
+
                 <li>
                     <a class="sidenav-item-link" href="{{ route('employees.profile.index') }}">
                         <i class="mdi mdi-account-circle"></i>
@@ -48,7 +48,5 @@
                 </li>
             </ul>
         </div>
-    </div>
-    
     </div>
 </aside>

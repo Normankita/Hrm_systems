@@ -42,6 +42,24 @@ class hasCompanyProfile
                     ->withErrors('Please Fill The Company Details To Continues.');
             }
         }
+        if ($user->hasAnyRole(['EMPLOYEE', 'HR_OFFICER', 'PAYROLL_MANAGER',
+                ])) {
+            // If the user is an employee, they can access all routes
+            if (!$user->company || !$user->company->isActive) {
+                return redirect()->route('/login', $user->company->id)
+                    ->withErrors('Please Fill The Company Details To Continues.');
+            }
+
+            if (
+                !$user->company->address || !$user->company->contact_number ||
+                !$user->company->email || !$user->company->brela_reg_number ||
+                !$user->company->tin_number
+            ) {
+                // Redirect to the company edit page if the company details are not filled
+                return redirect()->route('/login', $user->company->id)
+                    ->withErrors('Please Fill The Company Details To Continues.');
+            }
+        }
 
         return $next($request);
     }

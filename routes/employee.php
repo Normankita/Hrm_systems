@@ -15,6 +15,8 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::post('/create', 'store')->name('store');
         Route::get('/{leave}', 'show')->name('show');
     });
+
+    
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('/employee/profile')
     ->controller(EmployeeProfileController::class)
