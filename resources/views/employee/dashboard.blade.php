@@ -1,144 +1,69 @@
+<div class="p-6 bg-gray-100 min-h-screen">
+    <h1 class="text-2xl font-bold text-gray-800 mb-4">Welcome, {{ Auth::user()->first_name }} 👋</h1>
 
-<div class="card card-default" >
-        <div class="px-6">
-        <!-- Top Statistics -->
-        <div class="row">
-            <!-- Payroll This Month -->
-            <div class="col-sm-6 col-md-3">
-                <div class="card card-default ">
-                    <div class="card-header">
-                        <h2>38,700,000 TZS</h2> <!-- Replace with dynamic total payroll value -->
-                        <div class="sub-title">
-                            <span>Payroll This Month</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Statutory Deductions -->
-            <div class="col-sm-6 col-md-3">
-                <div class="card card-default">
-                    <div class="card-header">
-                        <h2>8,200,000 TZS</h2> <!-- Replace with dynamic deductions value -->
-                        <div class="sub-title">
-                            <span>Total Deductions</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Employees on Leave -->
-            <div class="col-sm-6 col-md-3">
-                <div class="card card-default">
-                    <div class="card-header">
-                        <h2>12</h2> <!-- Replace with dynamic count -->
-                        <div class="sub-title">
-                            <span>Employees on Leave</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Total Employees -->
-            <div class="col-sm-6 col-md-3">
-                <div class="card card-default">
-                    <div class="card-header">
-                        <h2>152</h2> <!-- Replace with dynamic total employee count -->
-                        <div class="sub-title">
-                            <span>Total Employees</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Employee Status -->
+        <div class="bg-white shadow rounded-2xl p-4">
+            <h2 class="text-gray-600 text-sm mb-1">Status</h2>
+            <p class="text-xl font-semibold text-green-600">Active <!-- Replace with dynamic status --></p>
         </div>
-
-
-        <!-- Second Row: Charts and Insights -->
-        <div class="row ">
-            <!-- Attendance Chart -->
-            <div class="col-xl-8">
-                <div class="card card-default">
-                    <div class="card-header">
-                        <h2>Weekly Attendance Overview</h2>
-                    </div>
-                    <div class="card-body">
-                        <div id="attendanceChart"></div> <!-- Hook up JS chart here -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Payroll Alert / Approvals -->
-            <div class="col-xl-4">
-                <div class="card card-default">
-                    <div class="card-header">
-                        <h2>Payroll Alerts</h2>
-                    </div>
-                    <div class="card-body">
-                        <ul>
-                            <li>Payroll due in 3 days</li>
-                            <li>2 pending payroll approvals</li>
-                            <li>Last payroll run: March 30</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+    
+        <!-- Net Salary -->
+        <div class="bg-white shadow rounded-2xl p-4">
+            <h2 class="text-gray-600 text-sm mb-1">Net Salary (This Month)</h2>
+            <p class="text-xl font-semibold text-blue-600">TZS 1,200,000 <!-- Replace with dynamic salary --></p>
         </div>
-
-        <!-- Third Row: Employee Table -->
-        <div class="row mt-4">
-            <div class="col-xl-12">
-                <div class="card card-default">
-                    <div class="card-header">
-                        <h2>Recent Onboarded Employees</h2>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Department</th>
-                                    <th>Position</th>
-                                    <th>Date Joined</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Replace with dynamic content -->
-                                <tr>
-                                    <td>Jane Doe</td>
-                                    <td>Finance</td>
-                                    <td>Accountant</td>
-                                    <td>2025-04-01</td>
-                                </tr>
-                                <tr>
-                                    <td>John Smith</td>
-                                    <td>IT</td>
-                                    <td>Developer</td>
-                                    <td>2025-03-28</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+    
+        <!-- Today's Attendance -->
+        <div class="bg-white shadow rounded-2xl p-4">
+            <h2 class="text-gray-600 text-sm mb-1">Today’s Attendance</h2>
+            <p class="text-md text-gray-800">Clocked in at 08:30 AM <!-- Replace with dynamic attendance time --></p>
+        </div>
+    
+        <!-- Leave Balance -->
+        <div class="bg-white shadow rounded-2xl p-4">
+            <h2 class="text-gray-600 text-sm mb-1">Leave Balance</h2>
+            <p class="text-md text-gray-800">Annual: 10 days <!-- Replace with dynamic annual leave --></p>
+            <p class="text-md text-gray-800">Sick: 5 days <!-- Replace with dynamic sick leave --></p>
         </div>
     </div>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Recent Payslips -->
+        <div class="bg-white shadow rounded-2xl p-6">
+            <h3 class="text-lg font-semibold text-gray-700 mb-4">Recent Payslips</h3>
+            <ul>
+                <li class="border-b py-2 flex justify-between">
+                    <span>March 2025</span>
+                    <a href="#" class="text-blue-600 text-sm">Download</a> <!-- Replace with payslip route -->
+                </li>
+                <li class="border-b py-2 flex justify-between">
+                    <span>February 2025</span>
+                    <a href="#" class="text-blue-600 text-sm">Download</a>
+                </li>
+                <li class="border-b py-2 flex justify-between">
+                    <span>January 2025</span>
+                    <a href="#" class="text-blue-600 text-sm">Download</a>
+                </li>
+                <!-- Loop through dynamic payslips -->
+            </ul>
+        </div>
+    
+        <!-- Recent Leave Requests -->
+        <div class="bg-white shadow rounded-2xl p-6">
+            <h3 class="text-lg font-semibold text-gray-700 mb-4">Recent Leave Requests</h3>
+            <ul>
+                <li class="border-b py-2">
+                    <span class="text-sm">Annual Leave: 2025-03-10 to 2025-03-15</span>
+                    <span class="ml-2 text-xs text-green-500">(Approved)</span>
+                </li>
+                <li class="border-b py-2">
+                    <span class="text-sm">Sick Leave: 2025-02-20 to 2025-02-22</span>
+                    <span class="ml-2 text-xs text-yellow-500">(Pending)</span>
+                </li>
+                <!-- Loop through dynamic leave requests -->
+            </ul>
+        </div>
+    </div>
+    
 </div>
-
-
-<script>
-    // Example for dynamic attendance chart using ApexCharts (replace with real data)
-    var options = {
-        chart: {
-            type: 'bar',
-            height: 300
-        },
-        series: [{
-            name: 'Attendance',
-            data: [140, 135, 132, 138, 142, 145, 148] // Dummy data for 7 days
-        }],
-        xaxis: {
-            categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        }
-    };
-    new ApexCharts(document.querySelector("#attendanceChart"), options).render();
-</script>
