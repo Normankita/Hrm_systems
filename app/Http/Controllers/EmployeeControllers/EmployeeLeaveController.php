@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\EmployeeControllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Employee;
 use App\Models\Leave;
+use App\Models\LeaveType;
 use Illuminate\Http\Request;
 
 class EmployeeLeaveController extends Controller
@@ -30,7 +32,7 @@ class EmployeeLeaveController extends Controller
         $leaveTypes = LeaveType::all();
         $employees = Employee::all();
 
-        return view('employee.leave.create', compact('leaveTypes', 'employees'));
+        return view('employee.leave.request', compact('leaveTypes', 'employees'));
     }
 
     /**

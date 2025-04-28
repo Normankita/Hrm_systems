@@ -61,7 +61,7 @@
                         <p class="text-muted"><?php echo htmlspecialchars($employee->employee_type); ?></p>
                         <button class="btn btn-primary btn-custom me-2" data-bs-toggle="modal"
                             data-bs-target="#uploadImageModal">Update Profile Image</button>
-                        <a href="{{ route('admin.employees.index', $employee->id) }}" class="btn btn-outline-secondary btn-custom">BACK TO LIST</a>
+                        <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary btn-custom">BACK TO DASHBOARD</a>
                     </div>
                 </div>
 
