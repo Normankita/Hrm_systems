@@ -1,3 +1,10 @@
-<div>
-    <!-- Act only according to that maxim whereby you can, at the same time, will that it should become a universal law. - Immanuel Kant -->
-</div>
+@props(['text' => 'Delete', 'route'])
+
+<form action="{{ $route }}" method="POST" style="display:inline;">
+    @csrf
+    @method('DELETE')
+    <button type="submit"
+        class="btn btn-outline-danger btn-sm p-1
+                                            mdi mdi-close">&nbsp
+        {{ $text }}</button>
+</form>

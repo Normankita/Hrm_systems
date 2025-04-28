@@ -1,3 +1,5 @@
-<div>
-    <!-- People find pleasure in different ways. I find it in keeping my mind clear. - Marcus Aurelius -->
-</div>
+@props(['text' => 'view', 'route'])
+
+<a href="{{ $route }}" class="btn btn-outline-dark p-1  btn-sm mdi
+mdi-eye-outline">
+    {{ $text }} &nbsp </a>
