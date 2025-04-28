@@ -41,13 +41,9 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <a href="{{ route('admin.employees.show', $employee->id) }}" class="mdi mdi-pencil text-dark">&nbsp View &nbsp &nbsp &nbsp </a>
-                                        <a href="{{ route('admin.employees.edit', $employee->id) }}" class="mdi mdi-eye-outline text-dark">&nbsp Edit </a>
-                                        {{-- <form action="{{ route('admin.employees.destroy', $employee->id) }}" method="POST" style="display:inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                        </form> --}}
+                                      <x-system.btn-view :key="$key" :route="route('admin.employees.show', $employee->id)" />
+                                      <x-system.btn-edit :key="$key" :route="route('admin.employees.edit', $employee->id)" />
+                                       
                                 </tr>
                             @empty
                                 <tr>
