@@ -21,33 +21,6 @@ class EmployeeProfileController extends Controller
         return view('employee.profile.index', compact('employee'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Employee $employee)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id)
     {
         $employee = EmployeeTrait::getEmployeeById($id);
@@ -88,11 +61,9 @@ class EmployeeProfileController extends Controller
             ->withInput();
     }
 
-    // Prepare the data correctly
     $data = $request->all();
     $data['full_name'] = $request->input('first_name') . ' ' . $request->input('last_name');
 
-    // Use the trait here
     EmployeeTrait::updateEmployee($employee->id, $data);
 
     return redirect()->route('employees.profile.index')
@@ -112,12 +83,10 @@ public function updatePassword(Request $request, Employee $employee)
         'new_password' => ['required', 'min:8', 'confirmed'],
     ]);
 
-    // Verify that the provided current password matches the stored one
     if (!Hash::check($validated['current_password'], $employee->user->password)) {
         return back()->withErrors(['current_password' => 'The current password you entered is incorrect.'])->withInput();
     }
 
-    // Update the password securely
     $employee->user->update([
         'password' => Hash::make($validated['new_password']),
     ]);
