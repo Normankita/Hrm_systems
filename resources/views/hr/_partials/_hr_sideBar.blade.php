@@ -27,13 +27,8 @@
                     <ul class="collapse" id="leave-menu" data-parent="#sidebar-menu">
                         <div class="sub-menu">
                             <li>
-                                <a class="sidenav-item-link" href="{{ route('employees.leave.request') }}">
-                                    <span class="nav-text">Leave Types</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="sidenav-item-link" href="{{ route('employees.leave.status') }}">
-                                    <span class="nav-text">Leave Requests</span>
+                                <a class="sidenav-item-link" href="{{ route('hr.leave.index') }}">
+                                    <span class="nav-text">Manage Leaves</span>
                                 </a>
                             </li>
                         </div>
@@ -45,7 +40,7 @@
         <div class="sidebar-footer" style="position: absolute; bottom: 0; width: 100%; padding: 15px;">
             <ul class="nav">
                 <li>
-                    <a class="sidenav-item-link" href="{{ route('employees.profile.index') }}" style="color: white; padding: 10px 15px;">
+                    <a class="sidenav-item-link" href="#" style="color: white; padding: 10px 15px;">
                         <i class="mdi mdi-account-circle"></i>
                         <span class="nav-text">My Profile</span>
                     </a>

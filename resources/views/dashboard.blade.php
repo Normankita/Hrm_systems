@@ -7,15 +7,15 @@
 @section('content')
     @role('ADMIN')
         @include('admin.dashboard')
-        
+
     @endrole
 
     @role('EMPLOYEE')
         @include('employee.dashboard')
-     
+
     @endrole
 
-    @role('HR')
+    @role('HR_OFFICER')
         @include('hr.dashboard')
     @endrole
 @endsection

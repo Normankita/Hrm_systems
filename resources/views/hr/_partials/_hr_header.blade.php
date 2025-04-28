@@ -1,4 +1,4 @@
-<header class="main-header" style="border-bottom: 7px solid rgb(233, 243, 87);" id="header">
+<header class="main-header" id="header">
     <nav class="navbar navbar-expand-lg navbar-light" id="navbar">
         <!-- Sidebar toggle button -->
         <button id="sidebar-toggler" class="sidebar-toggle">

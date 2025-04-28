@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\AuthUserCompanyScope;
 use Illuminate\Database\Eloquent\Model;
 
 class Leave extends Model
 {
+
     protected $fillable = [
         'employee_id',
         'leave_type_id',

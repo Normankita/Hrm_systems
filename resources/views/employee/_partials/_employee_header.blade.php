@@ -1,4 +1,4 @@
-<header class="main-header" style="border-bottom: 7px solid rgb(243, 87, 87);" id="header">
+<header class="main-header" id="header">
     <nav class="navbar navbar-expand-lg navbar-light" id="navbar">
         <!-- Sidebar toggle button -->
         <button id="sidebar-toggler" class="sidebar-toggle">
@@ -8,7 +8,7 @@
 
         <div class="navbar-right ">
             <span>{{ \Carbon\Carbon::now()->format('d M') }}</span>
-            
+
             <ul class="nav navbar-nav">
                 <!-- Offcanvas -->
 
@@ -25,8 +25,8 @@
                                 <span class="nav-text">My Profile</span>
                             </a>
                         </li>
-                     
-                        
+
+
                         <li class="dropdown-footer">
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
