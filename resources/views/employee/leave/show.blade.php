@@ -1,5 +1,65 @@
 @extends('layouts.system')
 
 @section('content')
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="container py-5">
+                    <h2 class="mb-4">Leave Request Details</h2>
+                    
+                    @if(session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @endif
 
+                    <div class="mb-3">
+                        <strong>Employee:</strong> {{ $leave->employee->first_name }} {{ $leave->employee->last_name }}
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Leave Type:</strong> {{ $leave->leaveType->name }}
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Start Date:</strong> {{ \Carbon\Carbon::parse($leave->start_date)->toFormattedDateString() }}
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>End Date:</strong> {{ \Carbon\Carbon::parse($leave->end_date)->toFormattedDateString() }}
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Reason:</strong> {{ $leave->reason }}
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Status:</strong> 
+                        <span class="badge 
+                            @if($leave->status == 'approved') badge-success 
+                            @elseif($leave->status == 'pending') badge-warning 
+                            @elseif($leave->status == 'rejected') badge-danger
+                            @endif">
+                            {{ ucfirst($leave->status) }}
+                        </span>
+                    </div>
+
+                    <!-- Edit and Delete Buttons -->
+                    <div class="mb-3">
+                        <a href="{{ route('employees.leave.edit', $leave->id) }}" class="btn btn-sm btn-outline-warning p-1">Edit</a>
+
+                        <!-- Delete Form -->
+                        <form action="{{ route('employees.leave.destroy', $leave->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-outline-danger p-1" onclick="return confirm('Are you sure you want to delete this leave request?')">Delete </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
