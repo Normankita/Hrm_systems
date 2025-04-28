@@ -7,7 +7,7 @@ use App\Http\Utils\Traits\EmployeeTrait;
 use App\Models\Employee;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 
 class EmployeeProfileController extends Controller
 {
@@ -64,38 +64,40 @@ class EmployeeProfileController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, Employee $employee)
-    {
-        $rules = [
-            'first_name' => '',
-            'last_name' => '',
-            'email' => '',
-            'phone' => '',
-            'gender' => '',
-            'date_of_birth' => '',
-            'phone_number' => '',
-            'national_id' => '',
-            'marital_status' => '',
-            'residential_address' => '',
-            'tin_number' => ''
-        ];
-        $validate = Validator::make($request->all(), $rules);
-        if ($validate->fails()) {
-            return redirect()->back()
-                ->withErrors($validate)
-                ->withInput();
-        }
-        // adding company_id and department_id to the request
-        $request->merge([
-            'full_name' => $request->input('first_name') . ' ' . $request->input('last_name'),
-        ]);
-        $employee = EmployeeTrait::getEmployeeById($employee->id);
-        $employee->update($request->all());
+{
+    $rules = [
+        'first_name' => 'required|string|max:255',
+        'last_name' => 'required|string|max:255',
+        'email' => 'required|email|max:255',
+        'phone' => 'nullable|string|max:20',
+        'gender' => 'nullable|string|max:20',
+        'date_of_birth' => 'nullable|date',
+        'phone_number' => 'nullable|string|max:20',
+        'national_id' => 'nullable|string|max:50',
+        'marital_status' => 'nullable|string|max:50',
+        'residential_address' => 'nullable|string|max:255',
+        'tin_number' => 'nullable|string|max:50',
+    ];
 
+    $validate = Validator::make($request->all(), $rules);
 
-        return redirect()->route('employees.profile.index')
-                        ->with('success', 'Employee updated successfully');
-
+    if ($validate->fails()) {
+        return redirect()->back()
+            ->withErrors($validate)
+            ->withInput();
     }
+
+    // Prepare the data correctly
+    $data = $request->all();
+    $data['full_name'] = $request->input('first_name') . ' ' . $request->input('last_name');
+
+    // Use the trait here
+    EmployeeTrait::updateEmployee($employee->id, $data);
+
+    return redirect()->route('employees.profile.index')
+        ->with('success', 'Employee updated successfully');
+}
+
 
     /**
      * Remove the specified resource from storage.

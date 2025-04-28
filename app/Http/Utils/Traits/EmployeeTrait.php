@@ -39,4 +39,27 @@ trait EmployeeTrait {
         return $employee;
     }
 
+    public static function updateEmployee($id, $data)
+{
+    $employee = Employee::find($id);
+
+    if (!$employee) {
+        return null; // or throw exception
+    }
+
+    $user = User::find($employee->user_id);
+
+    if ($user) {
+        $user->update([
+            'name' => $data['full_name'] ?? ($data['first_name'] . ' ' . $data['last_name']),
+            'email' => $data['email'],
+        ]);
+    }
+
+    $employee->update($data);
+
+    return $employee;
+}
+
+
 }
