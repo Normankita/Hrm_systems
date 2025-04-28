@@ -14,6 +14,9 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::get('/request', 'create')->name('request');
         Route::post('/create', 'store')->name('store');
         Route::get('/{leave}', 'show')->name('show');
+        Route::get('/{leave}/edit', 'edit')->name('edit');
+        Route::put('/{leave}', 'update')->name('update');
+        Route::delete('/{leave}', 'destroy')->name('destroy');
     });
 
     
