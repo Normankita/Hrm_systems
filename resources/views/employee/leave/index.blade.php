@@ -49,12 +49,19 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <a href="{{ route('employees.leave.show', $leave->id) }}" class="mdi mdi-pencil text-dark">&nbsp View &nbsp &nbsp &nbsp </a>
-                                        <a href="{{ route('employees.leave.edit', $leave->id) }}" class="mdi mdi-eye-outline text-dark">&nbsp Edit &nbsp </a>
+                                        <a
+                                            href="{{ route('employees.leave.show', $leave->id) }}"
+                                            class="btn btn-outline-dark p-1  btn-sm mdi
+                                            mdi-pencil "> View &nbsp </a>
+                                        <a
+                                        href="{{ route('employees.leave.edit',
+                                         $leave->id) }}"
+                                          class="btn btn-outline-dark btn-sm p-1 mx-1 mdi mdi-eye-outline">&nbsp Edit &nbsp </a>
                                         <form action="{{ route('employees.leave.destroy', $leave) }}" method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="mdi mdi-close text-danger">&nbsp Cancel</button>
+                                            <button type="submit" class="btn btn-outline-danger btn-sm p-1
+                                            mdi mdi-close">&nbsp Cancel</button>
                                         </form>
                                 </tr>
                             @empty
