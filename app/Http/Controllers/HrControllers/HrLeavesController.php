@@ -30,31 +30,21 @@ class HrLeavesController extends Controller
     }
 
 
-    private function deductStatus($passed) {
-        switch ($passed) {
-            case 'approved':
-                
-                break;
-            
-            default:
-                # code...
-                break;
-        }
-    }
-
-
     public function inspect(Request $request, Leave $leave) {
         $status = $request->input('status');
         $comment = $request->input('comment');
+
+        $status = $status == 0 ? "rejected" : 'approved';
 
         LeaveApproval::create([
             'employee_id' => $leave->employee_id,
             'leave_id' => $leave->id,
             'inspector_id' => Auth::user()->id,
-            'status' => 'approved',
+            'status' => $status,
             'comment' => $comment,
             'inspected_at' => now()
         ]);
+        
         $leave->update(['status' => $status]);
         return redirect()->back()
             ->with(['status' => 'success', 'message' => 'operation was a successfull']);
