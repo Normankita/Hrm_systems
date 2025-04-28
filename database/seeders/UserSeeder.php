@@ -82,8 +82,6 @@ class UserSeeder extends Seeder
 
 
 
-
-
         $hr = array(
             'name' => 'hr mafongo',
             'company_id' => $company->id,
@@ -93,12 +91,12 @@ class UserSeeder extends Seeder
             'remember_token' => null,
         );
         // create the actual user
-        $emp = User::create($hr);
+        $hr = User::create($hr);
         // assign role
-        $employeeRole = Role::findByName('HR_OFFICER');
-        $emp->assignRole($employeeRole);
+        $hrRole = Role::findByName('HR_OFFICER');
+        $hr->assignRole($hrRole);
         Employee::create([
-            'user_id' => $emp->id,
+            'user_id' => $hr->id,
             'company_id' => $company->id,
             'department_id' => 1,
             'full_name' => 'hr User',

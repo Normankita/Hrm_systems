@@ -23,4 +23,5 @@ class Leave extends Model
     {
         return $this->belongsTo(LeaveType::class);
     }
+
 }

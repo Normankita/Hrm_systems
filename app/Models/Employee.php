@@ -72,4 +72,8 @@ class Employee extends Model
         return $this->hasMany(EmployeeDocument::class);
     }
 
+    public function leaves() {
+        return $this->hasMany(Leave::class);
+    }
+
 }
