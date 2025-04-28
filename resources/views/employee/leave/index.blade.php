@@ -15,7 +15,7 @@
                         <span>Total Leave Requests: {{ $leaves->count() }}</span>
                         <x-system.table>
                             <x-slot:head>
-                                <x-system.table-head class="table-light text-lime">
+                                <x-system.table-head>
                                     <tr>
                                         <th></th>
                                         <th>Leave Type</th>
@@ -63,7 +63,6 @@
                                 </x-system.table-body>
                             </x-slot:body>
                         </x-system.table>
-
                     </div>
                 </div>
             </div>

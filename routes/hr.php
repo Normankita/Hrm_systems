@@ -11,4 +11,6 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:HR_OFFICER'])
         Route::get('/index', 'index')
             ->name('index');
         Route::get('/{leave}', 'show')->name('show');
+        Route::post('/inspect/{leave}', 'inspect')->name('inspect');
     });
+

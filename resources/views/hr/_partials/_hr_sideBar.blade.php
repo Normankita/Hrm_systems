@@ -27,7 +27,8 @@
                     <ul class="collapse" id="leave-menu" data-parent="#sidebar-menu">
                         <div class="sub-menu">
                             <li>
-                                <a class="sidenav-item-link" href="{{ route('hr.leave.index') }}">
+                                <a class="sidenav-item-link"
+                                href="{{ route('hr.leave.index') }}">
                                     <span class="nav-text">Manage Leaves</span>
                                 </a>
                             </li>
