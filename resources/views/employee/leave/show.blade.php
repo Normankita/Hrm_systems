@@ -6,6 +6,9 @@
         <div class="card">
             <div class="card-body">
                 <div class="container py-5">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <a href="{{ route('employees.leave.status') }}" class="btn btn-primary">Back to Leave Requests</a>
+                    </div>
                     <h2 class="mb-4">Leave Request Details</h2>
                     
                     @if(session('success'))
