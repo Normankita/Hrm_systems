@@ -17,7 +17,7 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     });
 
     
-Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
+    Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('/employee/profile')
     ->controller(EmployeeProfileController::class)
     ->name('employees.profile.')
@@ -25,5 +25,7 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::get('/', 'index')->name('index');
         Route::get('/{employee}', 'show')->name('show');
         Route::get('/{id}/edit', 'edit')->name('edit');
+        Route::get('/{employee}/edit-password', 'editPassword')->name('edit_password');
         Route::put('/{employee}', 'update')->name('update');
+        Route::put('/{employee}/update-password', 'updatePassword')->name('update_password');
     });

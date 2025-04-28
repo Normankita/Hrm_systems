@@ -28,13 +28,7 @@ trait EmployeeTrait {
 
 
     public static function getEmployeeById($id): Employee {
-
-        // $employee = Employee::with([
-        //     'company',
-        //     'department',
-        //     'designation.designation', // Accessing nested DesignationRoleMapping -> Designation
-        //     'employeeContract.supervisor'
-        // ])->findOrFail($id);
+        // Find the employee by ID
         $employee = Employee::find($id);
         return $employee;
     }

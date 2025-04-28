@@ -8,6 +8,7 @@ use App\Models\Employee;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 class EmployeeProfileController extends Controller
 {
@@ -98,12 +99,30 @@ class EmployeeProfileController extends Controller
         ->with('success', 'Employee updated successfully');
 }
 
+public function editPassword($id)
+{
+    $employee = EmployeeTrait::getEmployeeById($id);
+    return view('employee.profile.edit_password', compact('employee'));
+}
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Employee $employee)
-    {
-        //
+public function updatePassword(Request $request, Employee $employee)
+{
+    $validated = $request->validate([
+        'current_password' => ['required'],
+        'new_password' => ['required', 'min:8', 'confirmed'],
+    ]);
+
+    // Verify that the provided current password matches the stored one
+    if (!Hash::check($validated['current_password'], $employee->user->password)) {
+        return back()->withErrors(['current_password' => 'The current password you entered is incorrect.'])->withInput();
     }
+
+    // Update the password securely
+    $employee->user->update([
+        'password' => Hash::make($validated['new_password']),
+    ]);
+
+    return redirect()->route('employees.profile.index')->with('success', 'Password updated successfully.');
+}
+
 }
