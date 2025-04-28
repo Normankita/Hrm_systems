@@ -52,16 +52,16 @@
                                         <a
                                             href="{{ route('employees.leave.show', $leave->id) }}"
                                             class="btn btn-outline-dark p-1  btn-sm mdi
-                                            mdi-pencil "> View &nbsp </a>
+                                             mdi-eye-outline"> View &nbsp </a>
                                         <a
                                         href="{{ route('employees.leave.edit',
                                          $leave->id) }}"
-                                          class="btn btn-outline-dark btn-sm p-1 mx-1 mdi mdi-eye-outline">&nbsp Edit &nbsp </a>
+                                          class="btn btn-outline-dark btn-sm p-1 mx-1 mdi mdi-pencil">&nbsp Edit &nbsp </a>
                                         <form action="{{ route('employees.leave.destroy', $leave) }}" method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-outline-danger btn-sm p-1
-                                            mdi mdi-close">&nbsp Cancel</button>
+                                            mdi mdi-close">&nbsp Delete</button>
                                         </form>
                                 </tr>
                             @empty
