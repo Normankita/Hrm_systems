@@ -44,7 +44,7 @@ class HrLeavesController extends Controller
             'comment' => $comment,
             'inspected_at' => now()
         ]);
-        $leave->update(['status' => $status]);
+        $leave->update(['status' => ]);
         return redirect()->back()
             ->with(['status' => 'success', 'message' => 'operation was a successfull']);
     }
