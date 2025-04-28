@@ -157,17 +157,14 @@
                         class="btn btn-primary">
                         <i class="bi bi-pencil-square"></i> Edit
                     </a>
+                    <a href="{{ route('employees.profile.edit_password', $employee->id) }}" class="btn btn-warning">
+                        <i class="bi bi-key-fill"></i> Change Password
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 @endsection
-
-
-
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">

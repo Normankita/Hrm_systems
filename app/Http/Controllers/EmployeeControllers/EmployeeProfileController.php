@@ -8,6 +8,7 @@ use App\Models\Employee;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 class EmployeeProfileController extends Controller
 {
@@ -20,33 +21,6 @@ class EmployeeProfileController extends Controller
         return view('employee.profile.index', compact('employee'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Employee $employee)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id)
     {
         $employee = EmployeeTrait::getEmployeeById($id);
@@ -87,23 +61,37 @@ class EmployeeProfileController extends Controller
             ->withInput();
     }
 
-    // Prepare the data correctly
     $data = $request->all();
     $data['full_name'] = $request->input('first_name') . ' ' . $request->input('last_name');
 
-    // Use the trait here
     EmployeeTrait::updateEmployee($employee->id, $data);
 
     return redirect()->route('employees.profile.index')
         ->with('success', 'Employee updated successfully');
 }
 
+public function editPassword($id)
+{
+    $employee = EmployeeTrait::getEmployeeById($id);
+    return view('employee.profile.edit_password', compact('employee'));
+}
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Employee $employee)
-    {
-        //
+public function updatePassword(Request $request, Employee $employee)
+{
+    $validated = $request->validate([
+        'current_password' => ['required'],
+        'new_password' => ['required', 'min:8', 'confirmed'],
+    ]);
+
+    if (!Hash::check($validated['current_password'], $employee->user->password)) {
+        return back()->withErrors(['current_password' => 'The current password you entered is incorrect.'])->withInput();
     }
+
+    $employee->user->update([
+        'password' => Hash::make($validated['new_password']),
+    ]);
+
+    return redirect()->route('employees.profile.index')->with('success', 'Password updated successfully.');
+}
+
 }
