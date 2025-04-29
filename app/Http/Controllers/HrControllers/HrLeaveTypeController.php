@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\hrControllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Leave;
 use App\Models\LeaveType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -18,7 +17,17 @@ class HrLeaveTypeController extends Controller
 
 
     public function store(Request $request) {
-        dd($request->all());
+        $rules = [
+            'name' => 'required|string|max:255|unique:leave_types,name',
+            'description' => 'nullable|string|max:255',
+            'deducts_from_annual_leave' => 'boolean',
+        ];
+        $request->request->add(
+            ['code' => str_replace(' ', '_', $request->name)]);
+        Validator::make($request->all(), $rules)->validate();
+        LeaveType::create($request->all());
+        return redirect()->back()
+        ->with('success', 'Leave Type created successfully');
     }
 
     public function update(Request $request, LeaveType $leaveType) {

@@ -1,9 +1,9 @@
-@props(['title' => '', 'id', 'form' => ''])
+@props(['title' => '', 'id', 'form' => '', 'size' => 'modal-md'])
 
 <div class="modal fade" id="{{ $id }}"
     tabindex="-1" role="dialog" aria-labelledby="exampleModalFormTitle"
     aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog {{ $size }}" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalFormTitle">{{$title}}</h5>
@@ -16,7 +16,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger btn-pill" data-dismiss="modal">Close</button>
-                <button form="{{ $form }}" type="submit" 
+                <button form="{{ $form }}" type="submit"
                     class="btn btn-primary btn-pill">Save Changes</button>
             </div>
         </div>
