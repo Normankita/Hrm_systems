@@ -120,11 +120,10 @@
                 <div class="col-sm-12">
                     <div class="card p-4">
                         <h5 class="card-title">Recent Leave Requests</h5>
-                        <div class="mb-3 float-right col-5">
-                            <a href="{{ route('hr.leave.index')}}"
-                            class="btn btn-primary btn-sm">
-                            manage leave requests
-                        </a>
+                        <div class="mb-3 col-5">
+                            <a href="{{ route('hr.leave.index') }}" class="btn btn-primary btn-sm">
+                                manage leave requests
+                            </a>
                         </div>
                         <table class="table table-hover">
                             <thead>
@@ -142,12 +141,10 @@
                                         <tr>
                                             <td>{{ $leave->employee->full_name }}</td>
                                             <td>{{ $leave->leaveType->name }}</td>
-                                            <td>{{ Carbon\Carbon::parse(
-                                                $leave->start_date)->format(
-                                                    'd M-Y') }}
+                                            <td>{{ Carbon\Carbon::parse($leave->start_date)->format('d M-Y') }}
                                             </td>
-                                            <td>{{ Carbon\Carbon::parse($leave->end_date)
-                                                ->format('d M-Y') }}</td>
+                                            <td>{{ Carbon\Carbon::parse($leave->end_date)->format('d M-Y') }}
+                                            </td>
                                             <td>
                                                 <span
                                                     class="
@@ -155,8 +152,7 @@
                                                 @elseif ($leave->status == 'rejected')
                                                     bg-danger
                                                 @else
-                                                    bg-warning
-                                                @endif
+                                                    bg-warning @endif
                                                 badge text-white">
                                                     {{ ucfirst($leave->status) }}
                                                 </span>
@@ -171,40 +167,38 @@
 
 
                 <div class="col-12">
-                    <div class="card p-4">
-                        <!-- Summary Table -->
-                        <div class="mt-4">
-                            <h6>Leave Credits Summary</h6>
-                            <div class="mb-3 float-right col-5">
-                                <a href="{{ route('hr.leave.index')}}"
-                                class="btn btn-primary btn-sm">
-                                manage leave requests
-                            </a>
-                            </div>
-                            <table class="table table-bordered leave-stats-table">
-                                <thead>
-                                    <tr>
-                                        <th>Leave Type</th>
-                                        <th>Deduct From Annual Days</th>
-                                        <th>Created In</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="leaveSummaryTable">
-                                    @foreach ($leaveTypes as $key => $leave)
+                    <div class="card">
+                        <div class="card-body">
+                            <!-- Summary Table -->
+                            <div class="mt-4">
+                                <h5 class="card-title">Leave Types Preview</h5>
+                                <div class="mb-3 col-5">
+                                    <a href="{{ route('hr.leave.type.index') }}" class="btn btn-primary btn-sm">
+                                        manage leave Types
+                                    </a>
+                                </div>
+                                <table class="table table-bordered leave-stats-table">
+                                    <thead>
                                         <tr>
-                                            <td>{{ $leave->name }}</td>
-                                            <td>{{
-                                            $leave->is_annual_deducted ? 'yes' : 'no' }}</td>
-                                            </td>
-                                            <td>
-                                                {{ Carbon\Carbon::parse(
-                                                    $leave->created_at)
-                                                        ->format('d M-Y') }}
-                                            </td>
+                                            <th>Leave Type</th>
+                                            <th>Deduct From Annual Days</th>
+                                            <th>Created In</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody id="leaveSummaryTable">
+                                        @foreach ($leaveTypes as $key => $leave)
+                                            <tr>
+                                                <td>{{ $leave->name }}</td>
+                                                <td>{{ $leave->is_annual_deducted ? 'yes' : 'no' }}</td>
+                                                </td>
+                                                <td>
+                                                    {{ Carbon\Carbon::parse($leave->created_at)->format('d M-Y') }}
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -246,7 +240,8 @@
                 <div class="col-xl-6">
                     <div class="card dashboard-card mb-4">
                         <div class="card-header">
-                            <h6 class="m-0 font-weight-bold"><i class="fas fa-list me-2"></i>Recent Activities</h6>
+                            <h6 class="m-0 font-weight-bold">
+                                <i class="fas fa-list me-2"></i>Recent Activities</h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">

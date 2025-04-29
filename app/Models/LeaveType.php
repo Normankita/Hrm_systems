@@ -33,8 +33,11 @@ class LeaveType extends Model
     protected $fillable = [
         'company_id',
         'name',
+        'code',
         'description',
-        'is_annual_deducted',
+        'deducts_from_annual_leave',
+        'required_approval',
+        'eligibility_criteria',
         'is_compensated',
     ];
 
