@@ -18,7 +18,8 @@ class EmployeeLeaveController extends Controller
         $leaves = Leave::with([
             'employee',
             'leaveType'
-        ])->get();
+        ])->where('employee_id', auth()->user()->employee->id)
+         ->get();
 
         return view('employee.leave.index', compact('leaves'));
     }

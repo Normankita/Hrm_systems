@@ -21,7 +21,7 @@ class hasCompanyProfile
         // You can adjust the check depending on how your user-company relation works
 
         if (!$user) {
-            // If the user is not authenticated, redirect to the login page
+        // If the user is not authenticated, redirect to the login page
             return redirect()->route('login');
         }
 

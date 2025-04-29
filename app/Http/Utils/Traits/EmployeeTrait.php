@@ -5,6 +5,7 @@ namespace App\Http\Utils\Traits;
 use App\Models\Employee;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 trait EmployeeTrait {
 
@@ -21,6 +22,8 @@ trait EmployeeTrait {
             'password' => Hash::make(strtolower($data['last_name'])),
             'company_id' => $data['company_id'],
         ]);
+        $employeeRole = Role::findById($data['role_id']);
+        $user->assignRole($employeeRole);
         $data['user_id'] = $user->id;
         $employee = Employee::create($data);
         return $employee;

@@ -43,7 +43,7 @@
                                                         <span class="badge bg-success text-dark">Approved</span>
                                                     @elseif($leave->status == 'pending')
                                                         <span class="badge bg-warning text-dark">Pending</span>
-                                                    @elseif($leave->status == 'rejected')
+                                                    @elseif($leave->status == 'denied')
                                                         <span class="badge bg-danger text-dark">Rejected</span>
                                                     @else
                                                         <span class="badge bg-secondary text-dark">Unknown</span>
@@ -52,8 +52,10 @@
                                             </td>
                                             <td>
                                                 <x-system.btn-view :key="$key" :route="route('employees.leave.show', $leave->id)" />
-                                                <x-system.btn-edit :key="$key" :route="route('employees.leave.edit', $leave->id)" />
-                                                <x-system.btn-delete :key="$key" :route="route('employees.leave.destroy', $leave)" />
+                                               @if ($leave->status!=='approved' && $leave->status!=='rejected')
+                                               <x-system.btn-edit :key="$key" :route="route('employees.leave.edit', $leave->id)" />
+                                                <x-system.btn-delete :key="$key" :route="route('employees.leave.destroy', $leave)" />                                                   
+                                               @endif
                                         </tr>
                                     @empty
                                         <tr>

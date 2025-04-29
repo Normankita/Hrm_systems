@@ -36,9 +36,7 @@
                                         <td>{{ $department->description }}</td>
                                         <td>{{ \Carbon\Carbon::parse($department->created_at)->format('d M Y') }}</td>
                                         <td>
-                                            <a data-toggle="modal" data-target="#editDepartment">
-                                                <i class="mdi mdi-pencil-off"></i>
-                                            </a>
+                                            <x-system.modal-button id="editDepartment" text="Edit"/>
                                         </td>
                                     </tr>
                                 @endforeach

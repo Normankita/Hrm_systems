@@ -19,8 +19,8 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::delete('/{leave}', 'destroy')->name('destroy');
     });
 
-    
-    Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
+
+    Route::middleware(['auth', 'HasCompanyProfile', 'HasDefaultConfigs' ,'role:EMPLOYEE'])
     ->prefix('/employee/profile')
     ->controller(EmployeeProfileController::class)
     ->name('employees.profile.')

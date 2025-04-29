@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->foreignId('company_id')
                 ->constrained('companies')->onDelete('cascade');
+            $table->boolean('is_default_configs')->default(true);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
