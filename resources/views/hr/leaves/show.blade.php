@@ -115,8 +115,8 @@
                                                             <label for="doYou">Approve / Denie</label>
                                                             <select required class="form-control" name="status" aria-label="Default select example">
                                                                 <option selected>Choose from selection</option>
-                                                                <option value="approve">APPROVE</option>
-                                                                <option value="denie">DENY</option>
+                                                                <option value="approved">APPROVE</option>
+                                                                <option value="denied">DENY</option>
                                                             </select>
                                                         </div>
                                                         <div class="form-group">

@@ -49,6 +49,7 @@
                     </div>
 
                     <!-- Edit and Delete Buttons -->
+                    @if ($leave->status!=='approved' && $leave->status!=='denied')
                     <div class="mb-3">
                         <a href="{{ route('employees.leave.edit', $leave->id) }}" class="btn btn-sm btn-outline-warning p-1">Edit</a>
 
@@ -59,6 +60,7 @@
                             <button type="submit" class="btn btn-sm btn-outline-danger p-1" onclick="return confirm('Are you sure you want to delete this leave request?')">Delete </button>
                         </form>
                     </div>
+                    @endif
 
                 </div>
             </div>
