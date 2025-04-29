@@ -35,6 +35,11 @@ class Company extends Model
             });
     }
 
+    public function leaveTypes()
+    {
+        return $this->hasMany(LeaveType::class);
+    }
+
     public function settings()
     {
         // return $this->hasOne(Setting::class);

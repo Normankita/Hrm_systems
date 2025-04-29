@@ -33,7 +33,7 @@
                             </li>
                             <li>
                                 <a class="sidenav-item-link" href="{{ route('employees.leave.status') }}">
-                                    <span class="nav-text">Leave Status</span>
+                                    <span class="nav-text">View Leaves</span>
                                 </a>
                             </li>
                         </div>

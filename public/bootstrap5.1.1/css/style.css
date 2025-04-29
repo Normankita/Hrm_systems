@@ -14411,7 +14411,7 @@ label {
 
 /* Produc Data Table */
 .table.table-hover tbody tr:hover {
-  background-color: #9e6de0;
+  background-color: #bbb1c8;
   box-shadow: 0px 10px 18px 0px rgba(55, 103, 208, 0.2);
 }
 .table.table-hover tbody tr:hover td {

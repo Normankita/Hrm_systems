@@ -1,3 +1,30 @@
+@php
+    use App\Models\Employee;
+    /**
+     * Fetching essential data for this page here to avoid logic to averllap with
+     * other dashboard pages.
+     */
+    $employeesCount = Employee::count();
+
+    // select all employee whose today date falls betwween their leave dates
+    $today = now();
+    $employeesOnLeaveCount = Employee::whereHas('leaves', function ($query) use ($today) {
+        $query->where('start_date', '<=', $today)->where('end_date', '>=', $today);
+    })->count();
+
+    // selection the last 10 leaves as the latest leave requests
+    $latestEmployeeLeaveRequests = Employee::with('leaves')
+        ->whereHas('leaves', function ($query) use ($today) {
+            $query->where('start_date', '<=', $today)->where('end_date', '>=', $today);
+        })
+        ->latest()
+        ->take(10)
+        ->get();
+
+    // fetching the leave types infos
+    $leaveTypes = \App\Models\LeaveType::all();
+@endphp
+
 <style>
     .dashboard-card {
         border-radius: 10px;
@@ -33,7 +60,9 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
                                     <h6 class="text-uppercase text-white mb-1">Total Employees</h6>
-                                    <h2 class="mb-0">150</h2>
+                                    <h2 class="mb-0">
+                                        {{ $employeesCount }}
+                                    </h2>
                                 </div>
                                 <i class="fas fa-users fa-2x opacity-50"></i>
                             </div>
@@ -61,7 +90,9 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
                                     <h6 class="text-uppercase text-white mb-1">On Leave</h6>
-                                    <h2 class="mb-0">8</h2>
+                                    <h2 class="mb-0">
+                                        {{ $employeesOnLeaveCount }}
+                                    </h2>
                                 </div>
                                 <i class="fas fa-calendar-minus fa-2x opacity-50"></i>
                             </div>
@@ -89,36 +120,52 @@
                 <div class="col-sm-12">
                     <div class="card p-4">
                         <h5 class="card-title">Recent Leave Requests</h5>
+                        <div class="mb-3 float-right col-5">
+                            <a href="{{ route('hr.leave.index')}}"
+                            class="btn btn-primary btn-sm">
+                            manage leave requests
+                        </a>
+                        </div>
                         <table class="table table-hover">
                             <thead>
                                 <tr>
                                     <th>Employee</th>
                                     <th>Leave Type</th>
-                                    <th>Date</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>John Doe</td>
-                                    <td>Vacation</td>
-                                    <td>2025-04-20</td>
-                                    <td><span class="badge bg-success">Approved</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Jane Smith</td>
-                                    <td>Sick Leave</td>
-                                    <td>2025-04-18</td>
-                                    <td><span class="badge bg-warning">Pending</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Mike Johnson</td>
-                                    <td>Personal Leave</td>
-                                    <td>2025-04-15</td>
-                                    <td><span class="badge bg-success">Approved</span></td>
-                                </tr>
+                                @foreach ($latestEmployeeLeaveRequests as $employee)
+                                    @foreach ($employee->leaves as $leave)
+                                        <tr>
+                                            <td>{{ $leave->employee->full_name }}</td>
+                                            <td>{{ $leave->leaveType->name }}</td>
+                                            <td>{{ Carbon\Carbon::parse(
+                                                $leave->start_date)->format(
+                                                    'd M-Y') }}
+                                            </td>
+                                            <td>{{ Carbon\Carbon::parse($leave->end_date)
+                                                ->format('d M-Y') }}</td>
+                                            <td>
+                                                <span
+                                                    class="
+                                                @if ($leave->status == 'approved') bg-success
+                                                @elseif ($leave->status == 'rejected')
+                                                    bg-danger
+                                                @else
+                                                    bg-warning
+                                                @endif
+                                                badge text-white">
+                                                    {{ ucfirst($leave->status) }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endforeach
                             </tbody>
-                        </table>
+                        </table>`
                     </div>
                 </div>
 
@@ -128,46 +175,34 @@
                         <!-- Summary Table -->
                         <div class="mt-4">
                             <h6>Leave Credits Summary</h6>
+                            <div class="mb-3 float-right col-5">
+                                <a href="{{ route('hr.leave.index')}}"
+                                class="btn btn-primary btn-sm">
+                                manage leave requests
+                            </a>
+                            </div>
                             <table class="table table-bordered leave-stats-table">
                                 <thead>
                                     <tr>
                                         <th>Leave Type</th>
-                                        <th>Total Hours</th>
-                                        <th>Used Hours</th>
-                                        <th>Remaining Hours</th>
+                                        <th>Deduct From Annual Days</th>
+                                        <th>Created In</th>
                                     </tr>
                                 </thead>
                                 <tbody id="leaveSummaryTable">
-                                    <tr>
-                                        <td>Vacation</td>
-                                        <td>600</td>
-                                        <td>100</td>
-                                        <td>500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Sick Leave</td>
-                                        <td>500</td>
-                                        <td>100</td>
-                                        <td>400</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Personal Leave</ Pollock>
-                                        <td>400</td>
-                                        <td>100</td>
-                                        <td>300</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Maternity Leave</td>
-                                        <td>200</td>
-                                        <td>50</td>
-                                        <td>150</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Paternity Leave</td>
-                                        <td>150</td>
-                                        <td>30</td>
-                                        <td>120</td>
-                                    </tr>
+                                    @foreach ($leaveTypes as $key => $leave)
+                                        <tr>
+                                            <td>{{ $leave->name }}</td>
+                                            <td>{{
+                                            $leave->is_annual_deducted ? 'yes' : 'no' }}</td>
+                                            </td>
+                                            <td>
+                                                {{ Carbon\Carbon::parse(
+                                                    $leave->created_at)
+                                                        ->format('d M-Y') }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
