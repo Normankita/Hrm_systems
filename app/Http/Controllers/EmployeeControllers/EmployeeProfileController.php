@@ -89,6 +89,7 @@ public function updatePassword(Request $request, Employee $employee)
 
     $employee->user->update([
         'password' => Hash::make($validated['new_password']),
+        'is_default_configs' => false,
     ]);
 
     return redirect()->route('employees.profile.index')->with('success', 'Password updated successfully.');
