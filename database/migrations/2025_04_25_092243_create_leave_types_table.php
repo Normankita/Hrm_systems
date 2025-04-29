@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('code')->unique();
             $table->text('description')->nullable();
             $table->boolean('deducts_from_annual_leave');
-            $table->boolean('required_approval');
+            $table->boolean('required_approval')->true();
             $table->text('eligibility_criteria')->nullable();
             $table->boolean('is_compensated')->default(false);
             $table->foreignId('company_id')->constrained('companies')
