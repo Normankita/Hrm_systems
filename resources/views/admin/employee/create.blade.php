@@ -122,15 +122,13 @@
                                 <label class="text-dark font-weight-medium">Marital Status</label>
                                 <div class="input-group">
                                     <span class="input-group-text mdi mdi-heart"></span>
-                                    <input type="text" name="marital_status" class="form-control"
-                                        placeholder="e.g., Single, Married" value="{{ old('marital_status') }}">
-                                        <select name="gender" class="form-control" required>
-                                            <option value="" disabled {{ old('gender') ? '' : 'selected' }}>Select Gender
+                                        <select name="marital_status" class="form-control" required>
+                                            <option value="" disabled {{ old('marital_status') ? '' : 'selected' }}>Marital Status
                                             </option>
-                                            <option value="Male" {{ old('gender') == 'Male' ? 'selected' : '' }}>Male</option>
-                                            <option value="Female" {{ old('gender') == 'Female' ? 'selected' : '' }}>Female
+                                            <option value="Married" {{ old('marital_status') == 'Married' ? 'selected' : '' }}>Married</option>
+                                            <option value="Single" {{ old('marital_status') == 'Single' ? 'selected' : '' }}>Single
                                             </option>
-                                            <option value="Other" {{ old('gender') == 'Other' ? 'selected' : '' }}>Other
+                                            <option value="Complicated" {{ old('marital_status') == 'Complicated' ? 'selected' : '' }}>Complicated
                                             </option>
                                         </select>
                                 </div>
