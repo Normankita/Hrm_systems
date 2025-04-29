@@ -110,7 +110,7 @@
                             <strong>Date of Termination:</strong> <?php echo $employee->date_of_termination ? htmlspecialchars($employee->date_of_termination) : 'N/A'; ?>
                         </div>
                         <div>
-                            <strong>Salary:</strong> $<?php echo number_format($employee->salary, 2); ?>
+                            <strong>Salary:</strong> <?php echo number_format($employee->salary, 2); ?> Tshs
                         </div>
                     </div>
                 </div>

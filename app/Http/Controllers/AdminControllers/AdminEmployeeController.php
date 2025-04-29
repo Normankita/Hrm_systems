@@ -57,6 +57,7 @@ class AdminEmployeeController extends Controller
             'company_id' => Auth::user()->company_id,
             'department_id' => $request->input('department_id'),
             'full_name' => $request->input('first_name') . ' ' . $request->input('last_name'),
+            
         ]);
         $employee = EmployeeTrait::createEmployee($request->all());
         return redirect()->route('admin.employees.show', $employee->id)
