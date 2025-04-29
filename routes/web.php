@@ -6,11 +6,8 @@ Route::get('/', function () {
     return view('welcome');
 })->middleware('guest')->name('home');
 
-// Route::get('/registera', function () {
-//     return view('registera');
-// })->name('registera');
 
-Route::middleware(['auth', 'HasCompanyProfile'])
+Route::middleware(['auth', 'HasCompanyProfile', 'HasDefaultConfigs'])
     ->get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');

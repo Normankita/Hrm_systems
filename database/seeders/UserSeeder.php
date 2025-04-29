@@ -54,6 +54,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('password'),
             'email_verified_at' => now(),
             'remember_token' => null,
+            'is_default_configs' => 1,
         );
         // create the actual user
         $emp = User::create($employeeUser);

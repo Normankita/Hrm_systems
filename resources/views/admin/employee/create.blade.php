@@ -124,7 +124,17 @@
                                     <span class="input-group-text mdi mdi-heart"></span>
                                     <input type="text" name="marital_status" class="form-control"
                                         placeholder="e.g., Single, Married" value="{{ old('marital_status') }}">
+                                        <select name="gender" class="form-control" required>
+                                            <option value="" disabled {{ old('gender') ? '' : 'selected' }}>Select Gender
+                                            </option>
+                                            <option value="Male" {{ old('gender') == 'Male' ? 'selected' : '' }}>Male</option>
+                                            <option value="Female" {{ old('gender') == 'Female' ? 'selected' : '' }}>Female
+                                            </option>
+                                            <option value="Other" {{ old('gender') == 'Other' ? 'selected' : '' }}>Other
+                                            </option>
+                                        </select>
                                 </div>
+                                
                                 @error('marital_status')
                                     <span class="text-danger d-block">{{ $message }}</span>
                                 @enderror

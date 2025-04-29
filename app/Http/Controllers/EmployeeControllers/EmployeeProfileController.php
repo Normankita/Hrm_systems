@@ -73,14 +73,24 @@ class EmployeeProfileController extends Controller
 public function editPassword($id)
 {
     $employee = EmployeeTrait::getEmployeeById($id);
+    if ($employee->user->id !== Auth::id()){
+        abort(403);
+    }
+
+    
     return view('employee.profile.edit_password', compact('employee'));
 }
 
 public function updatePassword(Request $request, Employee $employee)
 {
+    
+    if ($employee->user->id !== Auth::id()) {
+        abort(403);
+    }
+
     $validated = $request->validate([
         'current_password' => ['required'],
-        'new_password' => ['required', 'min:8', 'confirmed'],
+        'new_password' => ['required', 'string', 'min:8', 'confirmed'],
     ]);
 
     if (!Hash::check($validated['current_password'], $employee->user->password)) {
@@ -89,10 +99,9 @@ public function updatePassword(Request $request, Employee $employee)
 
     $employee->user->update([
         'password' => Hash::make($validated['new_password']),
-        'is_default_configs' => false,
+        'is_default_configs' => 0,
     ]);
 
     return redirect()->route('employees.profile.index')->with('success', 'Password updated successfully.');
 }
-
 }
