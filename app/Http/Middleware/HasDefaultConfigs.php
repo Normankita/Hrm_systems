@@ -18,7 +18,7 @@ class HasDefaultConfigs
     {
         if (Auth::check()) {
             if( Auth::user()->hasRole('EMPLOYEE')) {
-                if (!Auth::user()->is_default_configs) {
+                if (Auth::user()->is_default_configs) {
                     return redirect()->route('employees.profile.edit_password', Auth::user()->id)
                         ->withErrors('Please Fill The Default Configurations To Continue.');
                 }

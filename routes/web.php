@@ -10,7 +10,7 @@ Route::get('/', function () {
 //     return view('registera');
 // })->name('registera');
 
-Route::middleware(['auth', 'HasCompanyProfile'])
+Route::middleware(['auth', 'HasCompanyProfile', 'HasDefaultConfigs'])
     ->get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
