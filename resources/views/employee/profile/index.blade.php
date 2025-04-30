@@ -157,7 +157,7 @@
                         class="btn btn-primary">
                         <i class="bi bi-pencil-square"></i> Edit
                     </a>
-                    <a href="{{ route('employees.profile.edit_password', $employee->id) }}" class="btn btn-warning">
+                    <a href="{{ route('employees.profile.edit_password', $employee->id) }}" class="btn btn-dark ">
                         <i class="bi bi-key-fill"></i> Change Password
                     </a>
                 </div>
