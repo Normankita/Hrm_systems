@@ -32,7 +32,7 @@
                         <!-- Leave Balance -->
                         <div class="bg-white shadow rounded-2xl p-4">
                             <h2 class="text-gray-600 text-sm mb-1">Leave Balance</h2>
-                            <p class="text-md text-gray-800">Annual: 10 days <!-- Replace with dynamic annual leave -->
+                            <p class="text-md text-gray-800">Annual: 10 days <!-- Replace with dynamic annual leave for Employee -->
                             </p>
                             <p class="text-md text-gray-800">Sick: 5 days <!-- Replace with dynamic sick leave --></p>
                         </div>
