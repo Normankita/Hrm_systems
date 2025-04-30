@@ -43,7 +43,7 @@
                                                         <span class="badge bg-success text-dark">Approved</span>
                                                     @elseif($leave->status == 'pending')
                                                         <span class="badge bg-warning text-dark">Pending</span>
-                                                    @elseif($leave->status == 'denied')
+                                                    @elseif($leave->status == 'rejected')
                                                         <span class="badge bg-danger text-dark">Rejected</span>
                                                     @else
                                                         <span class="badge bg-secondary text-dark">Unknown</span>

@@ -49,7 +49,7 @@
                     </div>
 
                     <!-- Edit and Delete Buttons -->
-                    @if ($leave->status!=='approved' && $leave->status!=='denied')
+                    @if ($leave->status!=='approved' && $leave->status!=='rejected')
                     <div class="mb-3">
                         <a href="{{ route('employees.leave.edit', $leave->id) }}" class="btn btn-sm btn-outline-warning p-1">Edit</a>
 
