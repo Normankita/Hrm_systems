@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\HrControllers\HrLeavesController;
-use App\Http\Controllers\hrControllers\HrLeaveTypeController;
+use App\Http\Controllers\HrControllers\HrLeaveTypeController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'HasCompanyProfile', 'role:HR_OFFICER'])
