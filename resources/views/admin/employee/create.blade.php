@@ -132,7 +132,7 @@
                                             </option>
                                         </select>
                                 </div>
-                                
+
                                 @error('marital_status')
                                     <span class="text-danger d-block">{{ $message }}</span>
                                 @enderror
@@ -205,6 +205,11 @@
                                     <option value="" disabled {{ old('role_id') ? '' : 'selected' }}>Select
                                         designation</option>
                                     @foreach ($roles as $role)
+                                        @php
+                                            if ($role->name == 'OWNER' || $role->name == 'ADMIN') {
+                                                continue;
+                                            }
+                                        @endphp
                                         <option value="{{ $role->id }}"
                                             {{ old('role_id') == $role->id ? 'selected' : '' }}>
                                             {{ $role->name }}

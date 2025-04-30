@@ -182,17 +182,21 @@
                                         <tr>
                                             <th>Leave Type</th>
                                             <th>Deduct From Annual Days</th>
+                                            <th>Require Approval</th>
                                             <th>Created In</th>
                                         </tr>
                                     </thead>
                                     <tbody id="leaveSummaryTable">
-                                        @foreach ($leaveTypes as $key => $leave)
+                                        @foreach ($leaveTypes as $key => $leaveType)
                                             <tr>
-                                                <td>{{ $leave->name }}</td>
-                                                <td>{{ $leave->is_annual_deducted ? 'yes' : 'no' }}</td>
+                                                <td>{{ $leaveType->name }}</td>
+                                                <td>{{ $leaveType->deducts_from_annual_leave ? 'yes' : 'no' }}</td>
                                                 </td>
                                                 <td>
-                                                    {{ Carbon\Carbon::parse($leave->created_at)->format('d M-Y') }}
+                                                    {{ $leaveType->required_approval ? 'yes' : 'no' }}
+                                                </td>
+                                                <td>
+                                                    {{ Carbon\Carbon::parse($leaveType->created_at)->format('d M-Y') }}
                                                 </td>
                                             </tr>
                                         @endforeach

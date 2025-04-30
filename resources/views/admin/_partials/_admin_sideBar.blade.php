@@ -63,8 +63,9 @@
                                 {{-- <a class="sidenav-item-link" href="{{ route('admin.employees.index') }}">
                                     <span class="nav-text">View Employees</span>
                                 </a> --}}
-                                <a class="sidenav-item-link" href="{{route('admin.employees.index')}}">
-                                    <span class="nav-text">Manage Role</span>
+                                <a class="sidenav-item-link"
+                                    href="{{route('admin.employees.index')}}">
+                                    <span class="nav-text">Assign Role</span>
                                 </a>
                             </li>
                         </div>
