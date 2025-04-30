@@ -13,6 +13,7 @@ class HrLeaveTypeController extends Controller
         $leaveTypes = LeaveType::all();
         return view('hr.leave_type.index')
             ->with('leaveTypes', $leaveTypes);
+            
     }
 
 
