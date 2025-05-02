@@ -29,6 +29,7 @@ class AdminEmployeeController extends Controller
     }
 
 
+
     /**
      * Summary of create
      * @return \Illuminate\Contracts\View\View
@@ -39,6 +40,7 @@ class AdminEmployeeController extends Controller
         return view('admin.employee.create')
             ->with('roles', $roles);
     }
+
 
 
     /**
@@ -59,6 +61,7 @@ class AdminEmployeeController extends Controller
         return redirect()->route('admin.employees.show', $employee->id)
             ->with('success', 'Employee created successfully');
     }
+
 
 
 
@@ -91,6 +94,7 @@ class AdminEmployeeController extends Controller
         return view('admin.employee.edit', compact(
             'employee', 'roles'));
     }
+
 
 
     /**
