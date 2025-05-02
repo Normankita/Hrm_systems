@@ -7,8 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Employee;
 use App\Models\Leave;
 use App\Models\LeaveApproval;
-use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HrLeavesController extends Controller
 {
@@ -44,7 +44,7 @@ class HrLeavesController extends Controller
             'comment' => $comment,
             'inspected_at' => now()
         ]);
-        $leave->update(['status' =>$status]);   
+        $leave->update(['status' =>$status]);
         return redirect()->back()
             ->with(['status' => 'success', 'message' => 'operation was a successfull']);
     }
