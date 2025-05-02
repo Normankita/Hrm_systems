@@ -15,7 +15,8 @@
                                 <label class="text-dark font-weight-medium">First Name</label>
                                 <div class="input-group">
                                     <span class="input-group-text mdi mdi-account"></span>
-                                    <input type="text" name="first_name" class="form-control" value="{{ old('first_name', $employee->first_name) }}" required>
+                                    <input type="text" name="first_name" class="form-control"
+                                        value="{{ old('first_name', $employee->first_name) }}" required>
                                 </div>
                             </div>
 
@@ -24,7 +25,8 @@
                                 <label class="text-dark font-weight-medium">Last Name</label>
                                 <div class="input-group">
                                     <span class="input-group-text mdi mdi-account"></span>
-                                    <input type="text" name="last_name" class="form-control" value="{{ old('last_name', $employee->last_name) }}" required>
+                                    <input type="text" name="last_name" class="form-control"
+                                        value="{{ old('last_name', $employee->last_name) }}" required>
                                 </div>
                             </div>
 
@@ -34,9 +36,14 @@
                                 <div class="input-group">
                                     <span class="input-group-text mdi mdi-gender-male-female"></span>
                                     <select name="gender" class="form-control" required>
-                                        <option value="Male" {{ old('gender', $employee->gender) == 'Male' ? 'selected' : '' }}>Male</option>
-                                        <option value="Female" {{ old('gender', $employee->gender) == 'Female' ? 'selected' : '' }}>Female</option>
-                                        <option value="Other" {{ old('gender', $employee->gender) == 'Other' ? 'selected' : '' }}>Other</option>
+                                        <option value="Male"
+                                            {{ old('gender', $employee->gender) == 'Male' ? 'selected' : '' }}>Male</option>
+                                        <option value="Female"
+                                            {{ old('gender', $employee->gender) == 'Female' ? 'selected' : '' }}>Female
+                                        </option>
+                                        <option value="Other"
+                                            {{ old('gender', $employee->gender) == 'Other' ? 'selected' : '' }}>Other
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -46,7 +53,8 @@
                                 <label class="text-dark font-weight-medium">Date of Birth</label>
                                 <div class="input-group">
                                     <span class="input-group-text mdi mdi-calendar"></span>
-                                    <input type="date" name="date_of_birth" class="form-control" value="{{ old('date_of_birth', $employee->date_of_birth) }}" required>
+                                    <input type="date" name="date_of_birth" class="form-control"
+                                        value="{{ old('date_of_birth', $employee->date_of_birth) }}" required>
                                 </div>
                             </div>
 
@@ -55,7 +63,8 @@
                                 <label class="text-dark font-weight-medium">Email</label>
                                 <div class="input-group">
                                     <span class="input-group-text mdi mdi-email"></span>
-                                    <input type="email" name="email" class="form-control" value="{{ old('email', $employee->email) }}" required>
+                                    <input type="email" name="email" class="form-control"
+                                        value="{{ old('email', $employee->email) }}" required>
                                 </div>
                             </div>
 
@@ -64,7 +73,8 @@
                                 <label class="text-dark font-weight-medium">Phone Number</label>
                                 <div class="input-group">
                                     <span class="input-group-text mdi mdi-phone"></span>
-                                    <input type="text" name="phone_number" class="form-control" value="{{ old('phone_number', $employee->phone_number) }}" required>
+                                    <input type="text" name="phone_number" class="form-control"
+                                        value="{{ old('phone_number', $employee->phone_number) }}" required>
                                 </div>
                             </div>
 
@@ -73,7 +83,8 @@
                                 <label class="text-dark font-weight-medium">National ID</label>
                                 <div class="input-group">
                                     <span class="input-group-text mdi mdi-card-account-details"></span>
-                                    <input type="text" name="national_id" class="form-control" value="{{ old('national_id', $employee->national_id) }}" required>
+                                    <input type="text" name="national_id" class="form-control"
+                                        value="{{ old('national_id', $employee->national_id) }}" required>
                                 </div>
                             </div>
 
@@ -82,7 +93,8 @@
                                 <label class="text-dark font-weight-medium">TIN Number</label>
                                 <div class="input-group">
                                     <span class="input-group-text mdi mdi-currency-usd"></span>
-                                    <input type="text" name="tin_number" class="form-control" value="{{ old('tin_number', $employee->tin_number) }}">
+                                    <input type="text" name="tin_number" class="form-control"
+                                        value="{{ old('tin_number', $employee->tin_number) }}">
                                 </div>
                             </div>
 
@@ -91,7 +103,8 @@
                                 <label class="text-dark font-weight-medium">Marital Status</label>
                                 <div class="input-group">
                                     <span class="input-group-text mdi mdi-heart"></span>
-                                    <input type="text" name="marital_status" class="form-control" value="{{ old('marital_status', $employee->marital_status) }}">
+                                    <input type="text" name="marital_status" class="form-control"
+                                        value="{{ old('marital_status', $employee->marital_status) }}">
                                 </div>
                             </div>
 
@@ -100,7 +113,8 @@
                                 <label class="text-dark font-weight-medium">Residential Address</label>
                                 <div class="input-group">
                                     <span class="input-group-text mdi mdi-home-map-marker"></span>
-                                    <input type="text" name="residential_address" class="form-control" value="{{ old('residential_address', $employee->residential_address) }}">
+                                    <input type="text" name="residential_address" class="form-control"
+                                        value="{{ old('residential_address', $employee->residential_address) }}">
                                 </div>
                             </div>
 
@@ -110,9 +124,15 @@
                                 <div class="input-group">
                                     <span class="input-group-text mdi mdi-account-box-outline"></span>
                                     <select name="employee_type" class="form-control" required>
-                                        <option value="Permanent" {{ old('employee_type', $employee->employee_type) == 'Permanent' ? 'selected' : '' }}>Permanent</option>
-                                        <option value="Contract" {{ old('employee_type', $employee->employee_type) == 'Contract' ? 'selected' : '' }}>Contract</option>
-                                        <option value="Probation" {{ old('employee_type', $employee->employee_type) == 'Probation' ? 'selected' : '' }}>Probation</option>
+                                        <option value="Permanent"
+                                            {{ old('employee_type', $employee->employee_type) == 'Permanent' ? 'selected' : '' }}>
+                                            Permanent</option>
+                                        <option value="Contract"
+                                            {{ old('employee_type', $employee->employee_type) == 'Contract' ? 'selected' : '' }}>
+                                            Contract</option>
+                                        <option value="Probation"
+                                            {{ old('employee_type', $employee->employee_type) == 'Probation' ? 'selected' : '' }}>
+                                            Probation</option>
                                     </select>
                                 </div>
                             </div>
@@ -122,7 +142,8 @@
                                 <label class="text-dark font-weight-medium">Date of Hire</label>
                                 <div class="input-group">
                                     <span class="input-group-text mdi mdi-calendar-check"></span>
-                                    <input type="date" name="date_of_hire" class="form-control" value="{{ old('date_of_hire', $employee->date_of_hire) }}" required>
+                                    <input type="date" name="date_of_hire" class="form-control"
+                                        value="{{ old('date_of_hire', $employee->date_of_hire) }}" required>
                                 </div>
                             </div>
 
@@ -131,7 +152,8 @@
                                 <label class="text-dark font-weight-medium">Department</label>
                                 <select name="department_id" class="form-control" required>
                                     @foreach (App\Models\Department::all() as $department)
-                                        <option value="{{ $department->id }}" {{ old('department_id', $employee->department_id) == $department->id ? 'selected' : '' }}>
+                                        <option value="{{ $department->id }}"
+                                            {{ old('department_id', $employee->department_id) == $department->id ? 'selected' : '' }}>
                                             {{ $department->name }}
                                         </option>
                                     @endforeach
@@ -143,7 +165,8 @@
                                 <label class="text-dark font-weight-medium">Designation (Role)</label>
                                 <select name="role_id" class="form-control" required>
                                     @foreach ($roles as $role)
-                                        <option value="{{ $role->id }}" {{ old('role_id', $employee->role_id) == $role->id ? 'selected' : '' }}>
+                                        <option value="{{ $role->id }}"
+                                            {{ old('role_id', $employee->role_id) == $role->id ? 'selected' : '' }}>
                                             {{ $role->name }}
                                         </option>
                                     @endforeach
@@ -155,28 +178,27 @@
                                     <button type="submit" class="btn btn-primary ">
                                         <i class="mdi mdi-content-save-edit"></i> Update Employee
                                     </button>
-                            
+
                                     {{-- Change Password Button on the right --}}
-                                    <x-system.modal-button class="btn btn-secondary " text="Change Password" id="UpdatePassword" />
+                                    <x-system.modal-button class="btn btn-secondary " text="Change Password"
+                                        id="UpdatePassword" />
                                 </div>
                             </div>
-                            
-                            {{-- Modal for Changing Password --}}
-                            <x-system.modal id="UpdatePassword" form="updatePasswordForm" title="Change Password">
-                                <form id="updatePasswordForm" method="POST" 
-                                      action="{{ route('admin.employees.update.password', $employee->id) }}">
-                                    @csrf
-                                    <div class="form-group">
-                                        <label for="">New Password</label>
-                                        <input type="password" class="form-control" name="password" id="password"
-                                               placeholder="Enter new password">
-                                    </div>
-                                </form>
-                            </x-system.modal>
-                            
-
                         </div>
                     </form>
+
+                    {{-- Modal for Changing Password --}}
+                    <x-system.modal id="UpdatePassword" form="updatePasswordForm" title="ChangePassword">
+                        <form id="updatePasswordForm" method="POST"
+                            action="{{ route('admin.employees.update.password', $employee->id) }}">
+                            @csrf
+                            <div class="form-group">
+                                <label for="">New Password</label>
+                                <input type="password" class="form-control" name="password" id="password"
+                                    placeholder="Enter new password">
+                            </div>
+                        </form>
+                    </x-system.modal>
                 </div>
             </div>
         </div>
