@@ -149,13 +149,31 @@
                                     @endforeach
                                 </select>
                             </div>
-
-                            {{-- Submit Button --}}
-                            <div class="col-md-12 text-end">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="mdi mdi-content-save-edit"></i> Update Employee
-                                </button>
+                            <div class="row mt-4">
+                                <div class="col-12 d-flex justify-content-between">
+                                    {{-- Submit Button on the left --}}
+                                    <button type="submit" class="btn btn-primary ">
+                                        <i class="mdi mdi-content-save-edit"></i> Update Employee
+                                    </button>
+                            
+                                    {{-- Change Password Button on the right --}}
+                                    <x-system.modal-button class="btn btn-secondary " text="Change Password" id="UpdatePassword" />
+                                </div>
                             </div>
+                            
+                            {{-- Modal for Changing Password --}}
+                            <x-system.modal id="UpdatePassword" form="updatePasswordForm" title="Change Password">
+                                <form id="updatePasswordForm" method="POST" 
+                                      action="{{ route('admin.employees.update.password', $employee->id) }}">
+                                    @csrf
+                                    <div class="form-group">
+                                        <label for="">New Password</label>
+                                        <input type="password" class="form-control" name="password" id="password"
+                                               placeholder="Enter new password">
+                                    </div>
+                                </form>
+                            </x-system.modal>
+                            
 
                         </div>
                     </form>

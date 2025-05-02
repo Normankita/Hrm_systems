@@ -19,6 +19,8 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
         Route::get('/create', 'create')->name('create');
         Route::post('/store', 'store')->name('store');
         Route::get('/show/{id}', 'show')->name('show');
+        Route::post('/updatePassword/{id}', 'updatePassword')
+            ->name('update.password');
     });
 
 

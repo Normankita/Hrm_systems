@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
 use App\Http\Utils\Traits\EmployeeTrait;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 
@@ -117,4 +118,34 @@ class AdminEmployeeController extends Controller
         return redirect()->route('admin.employees.show', $employee->id)
             ->with('success', 'Employee updated successfully');
     }
+    
+/**
+ * Summary of updatePassword
+ * @param \Illuminate\Http\Request $request
+ * @param mixed $id
+ * @return \Illuminate\Http\RedirectResponse
+ */
+public function updatePassword(Request $request, $id)
+{
+    $request->validate([
+        'password' => ['required', 'string', 'min:8'], // Add more rules if needed
+    ]);
+
+    $employee = EmployeeTrait::getEmployeeById($id);
+
+    // Double check user record exists
+    if (!$employee || !$employee->user) {
+        return redirect()->back()
+            ->with(['status' => 'error', 'message' => 'User not found for the selected employee']);
+    }
+
+    $employee->user->update([
+        'password' => bcrypt($request->password),
+    ]);
+
+    return redirect()->back()
+        ->with(['status' => 'success', 'message' => 'Password updated successfully']);
+}
+
+    
 }

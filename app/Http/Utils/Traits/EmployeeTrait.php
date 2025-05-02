@@ -57,6 +57,7 @@ trait EmployeeTrait
         $employee->update($data);
         return $employee;
     }
+  
 
 
 
