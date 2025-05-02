@@ -18,7 +18,7 @@
                     @endif
 
                     <div class="mb-3">
-                        <strong>Employee:</strong> {{ $leave->employee->first_name }} {{ $leave->employee->last_name }}
+                        <strong>Employee:</strong> {{ $leave->employee->full_name }} {{ $leave->employee->last_name }}
                     </div>
 
                     <div class="mb-3">
@@ -51,13 +51,13 @@
                     <!-- Edit and Delete Buttons -->
                     @if ($leave->status!=='approved' && $leave->status!=='rejected')
                     <div class="mb-3">
-                        <a href="{{ route('employees.leave.edit', $leave->id) }}" class="btn btn-sm btn-outline-warning p-1">Edit</a>
+                        <a href="{{ route('employees.leave.edit', $leave->id) }}" class="mx-10 btn btn-lg btn-dark p-1 px-6">Edit</a>
 
                         <!-- Delete Form -->
                         <form action="{{ route('employees.leave.destroy', $leave->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-outline-danger p-1" onclick="return confirm('Are you sure you want to delete this leave request?')">Delete </button>
+                            <button type="submit" class="mx-10 btn btn-lg btn-danger p-1 px-6" onclick="return confirm('Are you sure you want to delete this leave request?')">Delete </button>
                         </form>
                     </div>
                     @endif

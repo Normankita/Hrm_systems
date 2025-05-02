@@ -113,8 +113,8 @@
                                                         @csrf
                                                         <div class="form-group">
                                                             <label for="doYou">Approve / Denie</label>
-                                                            <select required class="form-control" name="status" aria-label="Default select example">
-                                                                <option selected>Choose from selection</option>
+                                                            <select  class="form-control" name="status" aria-label="Default select example" required>
+                                                                <option selected disabled value="">Choose from selection</option>
                                                                 <option value="1">APPROVE</option>
                                                                 <option value="0">DENY</option>
                                                             </select>

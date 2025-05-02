@@ -36,7 +36,7 @@
                                             {{-- <td>{{ \Carbon\Carbon::parse($leave->date_of_birth)->format('d M Y') }}</td> --}}
                                             <td>{{ $leave->start_date }}</td>
                                             <td>{{ $leave->end_date }}</td>
-                                            <td>{{ $leave->reason ?? 'N/A' }}</td>
+                                            <td class="text-truncate" style="max-width: 500px;">{{ $leave->reason ?? 'N/A' }}</td>
                                             <td>
                                                 <span class="badge">
                                                     @if ($leave->status == 'approved')

@@ -48,7 +48,7 @@
                         </div>
                         <div class="col-sm-12 col-md-12">
                             <div class="mb-3">
-                                <label for="tin_number" class="form-label">BRELA Registration Number</label>
+                                <label for="tin_number" class="form-label">Company TIN Number</label>
                                 <input type="text" class="form-control" id="tin_number" name="tin_number"
                                     value="{{ $company->tin_number }}" required>
                             </div>
