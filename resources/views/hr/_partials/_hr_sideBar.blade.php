@@ -35,6 +35,28 @@
                         </div>
                     </ul>
                 </li>
+                <li class="has-sub">
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                        data-target="#employee-menu" aria-expanded="false" aria-controls="employee-menu">
+                        <i class="mdi mdi-account-multiple"></i>
+                        <span class="nav-text">Employees</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="collapse" id="employee-menu" data-parent="#sidebar-menu">
+                        <div class="sub-menu">
+                            <li>
+                                <a class="sidenav-item-link" href="{{ route('hr.employees.create') }}">
+                                    <span class="nav-text">Create Employee</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="sidenav-item-link" href="{{route('hr.employees.index')}}">
+                                    <span class="nav-text">View Employees</span>
+                                </a>
+                            </li>
+                        </div>
+                    </ul>
+                </li>
             </ul>
         </div>
         <!-- Bottom Section -->
