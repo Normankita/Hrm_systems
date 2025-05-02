@@ -28,7 +28,6 @@ class LeaveType extends Model
         });
     }
 
-
     protected $fillable = [
         'company_id',
         'name',
