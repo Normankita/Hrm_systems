@@ -55,8 +55,14 @@
 
                 <!-- Header with Profile Image -->
                 <div class="d-flex align-items-center mb-4">
-                    <img src="https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg" alt="Profile Image" class="profile-img me-3">
-                    <div>
+                    <img src="{{ $employee->profile_picture 
+                    ? asset('storage/attachments/employees/profile_photos/' . $employee->profile_picture) 
+                    : 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg' 
+                }}" 
+             alt="Profile Image" 
+             class="profile-img me-3">
+        <div>
+        
                         <h2 class="mb-0"><?php echo htmlspecialchars($employee->full_name); ?></h2>
                         <p class="text-muted"><?php echo htmlspecialchars($employee->employee_type); ?></p>
                         <button class="btn btn-primary btn-custom me-2" data-bs-toggle="modal"

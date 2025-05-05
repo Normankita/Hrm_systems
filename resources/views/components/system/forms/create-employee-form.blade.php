@@ -113,7 +113,7 @@
 
 <div class="card">
     <div class="card-body p-30">
-        <form action="{{ route($route) }}" method="POST">
+        <form action="{{ route($route) }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="row">
 

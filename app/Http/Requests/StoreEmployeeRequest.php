@@ -24,27 +24,24 @@ class StoreEmployeeRequest extends FormRequest
         return [
             'role_id' => '',
             'department_id' => '',
-            'company_id' => '',
             'first_name' => '',
             'last_name' => '',
             'email' => '',
-            'phone' => '',
+            'phone_number' => '',
             'gender' => '',
             'date_of_birth' => '',
-            'phone_number' => '',
             'national_id' => '',
             'marital_status' => '',
             'residential_address' => '',
             'tin_number' => '',
             'employee_type' => '',
             'date_of_hire' => '',
-            'passport_photo'=>'',
+            'passport_photo' => '',
             'tin_document'=>'',
             'national_id_document'=>'',
-            'cv_document' => 'nullable|file|mimes:pdf,doc,docx',
-            'certificates.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
-            'other_documents.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
-
+            'cv_document' => '',
+            'certificates.*' => '',
         ];
     }
+    
 }

@@ -19,9 +19,9 @@ class Employee extends Model
             if (auth()->check()) {
                 if (auth()->user()->hasRole('OWNER')) {
 
-                }else {
+                } else {
                     $company = Company::find(auth()->user()->company_id);
-                    if( $company) {
+                    if ($company) {
                         $item->company_id = auth()->user()->company_id;
                     }
                 }
@@ -45,40 +45,51 @@ class Employee extends Model
         'employee_type',
         'date_of_hire',
         'date_of_termination',
-        'salary'
+        'salary',
+        'profile_picture'
     ];
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function company() {
+    public function company()
+    {
         return $this->belongsTo(Company::class);
     }
 
-    public function department() {
+    public function department()
+    {
         return $this->belongsTo(Department::class);
     }
 
-    public function designation() {
+    public function designation()
+    {
         return $this->belongsTo(DesignationRoleMapping::class);
     }
 
-    public function contract() {
+    public function contract()
+    {
         return $this->hasOne(EmployeeContract::class);
     }
 
-    public function documents() {
+    public function documents()
+    {
         return $this->hasMany(EmployeeDocument::class);
     }
 
-    public function leaves() {
+    public function leaves()
+    {
         return $this->hasMany(Leave::class);
     }
 
-    public function attachments() {
+    public function attachments()
+    {
         return $this->morphMany(
-            Attachment::class, 'attachmentable');
+            Attachment::class,
+            'attachmentable'
+        );
     }
 
 }
