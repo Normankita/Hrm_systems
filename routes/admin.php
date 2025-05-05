@@ -21,6 +21,7 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
         Route::get('/show/{id}', 'show')->name('show');
         Route::post('/updatePassword/{id}', 'updatePassword')
             ->name('update.password');
+        Route::post('/updateProfile/{id}', 'updatePassportPhoto')->name('updateProfilePhoto');
     });
 
 
