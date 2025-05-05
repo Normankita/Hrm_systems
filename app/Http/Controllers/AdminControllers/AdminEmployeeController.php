@@ -9,6 +9,7 @@ use App\Http\Utils\Traits\EmployeeTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Log;
 use Spatie\Permission\Models\Role;
 
 class AdminEmployeeController extends Controller
@@ -46,6 +47,11 @@ class AdminEmployeeController extends Controller
                 'path' => $path,
                 'type' => 'passport_photo',
             ];
+
+            // Log the entire attachments array
+            Log::info('Attachments array:', $attachments);
+
+       
         }
 
         $request->merge([
@@ -154,11 +160,11 @@ class AdminEmployeeController extends Controller
                 ->where('type', 'passport_photo') // Assuming 'passport_photo' is in 'type'
                 ->first();
             if ($old) {
-                \Log::info('Deleting old attachment: ' . $old->path);
+                Log::info('Deleting old attachment: ' . $old->path);
                 Storage::disk('public')->delete($old->path);
                 $old->delete();
             } else {
-                \Log::warning('No old attachment found for type: ' . 'passport_photo');
+                Log::warning('No old attachment found for type: ' . 'passport_photo');
             }
 
             $photo = $request->file('passport_photo');
@@ -171,6 +177,10 @@ class AdminEmployeeController extends Controller
                 'path' => $path,
                 'type' => 'passport_photo',
             ];
+
+            // Log the entire attachments array
+            Log::info('Attachments array:', $attachments);
+           
         }
 
         // Replace existing single-file attachments
