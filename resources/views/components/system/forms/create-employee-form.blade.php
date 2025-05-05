@@ -421,13 +421,13 @@
                     </div>
                 </div>
 
+
                 {{-- Submit Button --}}
-                <div class="col-md-12 text-end">
+                <div class="col-md-12 text-end mt-6">
                     <button type="submit" class="btn btn-primary">
                         <i class="mdi mdi-content-save"></i> Save Employee
                     </button>
                 </div>
-
             </div>
         </form>
     </div>
