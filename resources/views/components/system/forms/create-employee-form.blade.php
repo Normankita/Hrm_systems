@@ -327,13 +327,6 @@
                     </select>
                 </div>
 
-                {{-- Submit Button --}}
-                <div class="col-md-12 text-end">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="mdi mdi-content-save"></i> Save Employee
-                    </button>
-                </div>
-
                 {{-- Documents Section --}}
                 <div class="col-12 mt-4">
                     <div class="card border">
@@ -342,6 +335,7 @@
                             <p class="text-muted mb-0">Upload required documents for the employee</p>
                         </div>
                         <div class="card-body">
+                            
                             <div class="row">
                                 {{-- Passport Photo --}}
                                 <div class="col-md-6 mb-4">
@@ -352,7 +346,7 @@
                                             <span>Drag & drop passport photo here or click to upload</span>
                                             <small class="d-block text-muted mt-1">Accepted formats: JPG, PNG, JPEG (Max: 2MB)</small>
                                         </div>
-                                        <input type="file" name="passport_photo" class="file-input" accept="image/jpeg,image/png,image/jpg" data-max-size="2">
+                                        <input type="file" name="passport_photo" class="file-input" accept="image/jpeg,image/png,image/jpg" data-max-size="2" required>
                                         <div class="file-preview mt-2 d-none">
                                             <div class="d-flex align-items-center" style="overflow: hidden;">
                                                 <i class="mdi mdi-file-image mdi-24px text-primary me-2"></i>
@@ -371,7 +365,7 @@
                                             <span>Drag & drop TIN document here or click to upload</span>
                                             <small class="d-block text-muted mt-1">Accepted format: PDF (Max: 5MB)</small>
                                         </div>
-                                        <input type="file" name="tin_document" class="file-input" accept="application/pdf" data-max-size="5">
+                                        <input type="file" name="tin_document" class="file-input" accept="application/pdf" data-max-size="5" required>
                                         <div class="file-preview mt-2 d-none">
                                             <div class="d-flex align-items-center" style="overflow: hidden;">
                                                 <i class="mdi mdi-file-pdf mdi-24px text-danger me-2"></i>
@@ -436,6 +430,14 @@
                             </div>
                         </div>
                     </div>
+                </div>
+
+
+                {{-- Submit Button --}}
+                <div class="col-md-12 text-end mt-6">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="mdi mdi-content-save"></i> Save Employee
+                    </button>
                 </div>
             </div>
         </form>

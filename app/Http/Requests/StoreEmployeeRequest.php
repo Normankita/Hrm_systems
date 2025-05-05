@@ -37,7 +37,14 @@ class StoreEmployeeRequest extends FormRequest
             'residential_address' => '',
             'tin_number' => '',
             'employee_type' => '',
-            'date_of_hire' => ''
+            'date_of_hire' => '',
+            'passport_photo'=>'',
+            'tin_document'=>'',
+            'national_id_document'=>'',
+            'resume' => 'nullable|file|mimes:pdf,doc,docx',
+            'certificates.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
+            'other_documents.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
+
         ];
     }
 }
