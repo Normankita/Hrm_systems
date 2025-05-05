@@ -41,7 +41,7 @@ class StoreEmployeeRequest extends FormRequest
             'passport_photo'=>'',
             'tin_document'=>'',
             'national_id_document'=>'',
-            'resume' => 'nullable|file|mimes:pdf,doc,docx',
+            'cv_document' => 'nullable|file|mimes:pdf,doc,docx',
             'certificates.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
             'other_documents.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png',
 
