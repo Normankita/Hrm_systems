@@ -50,6 +50,16 @@ class AdminEmployeeController extends Controller
      */
     public function store(StoreEmployeeRequest $request)
     {
+        
+        // uploading files that are comming from the request
+
+        if ($request->hasFile('passport_photo')) {
+            $file = $request->file('passport_photo');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('images'), $filename);
+            $request->merge(['profile_picture' => $filename]);
+        }
+
         // adding company_id and department_id to the request
         $request->merge([
             'company_id' => Auth::user()->company_id,
@@ -118,7 +128,7 @@ class AdminEmployeeController extends Controller
         return redirect()->route('admin.employees.show', $employee->id)
             ->with('success', 'Employee updated successfully');
     }
-    
+
 /**
  * Summary of updatePassword
  * @param \Illuminate\Http\Request $request
@@ -147,5 +157,5 @@ public function updatePassword(Request $request, $id)
         ->with(['status' => 'success', 'message' => 'Password updated successfully']);
 }
 
-    
+
 }
