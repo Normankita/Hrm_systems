@@ -1,4 +1,4 @@
-<link href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" 
+<link href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css"
     rel="stylesheet"
      type="text/css" />
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
@@ -104,7 +104,6 @@
         border-radius: 4px;
     }
 </style>
-
 
 
 @props([
@@ -327,6 +326,101 @@
                     </select>
                 </div>
 
+                <div class="row">
+                    {{-- Passport Photo --}}
+                    <div class="col-md-6 mb-4">
+                        <label class="text-dark font-weight-medium">Passport Photo</label>
+                        <div class="upload-area" id="passportPhotoArea">
+                            <div class="upload-area-content">
+                                <i class="mdi mdi-camera mdi-24px mb-2"></i>
+                                <span>Drag & drop passport photo here or click to upload</span>
+                                <small class="d-block text-muted mt-1">Accepted formats: JPG, PNG, JPEG (Max: 2MB)</small>
+                            </div>
+                            <input type="file" name="passport_photo" class="file-input" accept="image/jpeg,image/png,image/jpg" data-max-size="2">
+                            <div class="file-preview mt-2 d-none">
+                                <div class="d-flex align-items-center" style="overflow: hidden;">
+                                    <i class="mdi mdi-file-image mdi-24px text-primary me-2"></i>
+                                    <span class="file-name"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- TIN Document --}}
+                    <div class="col-md-6 mb-4">
+                        <label class="text-dark font-weight-medium">TIN Document</label>
+                        <div class="upload-area" id="tinDocumentArea">
+                            <div class="upload-area-content">
+                                <i class="mdi mdi-file-document mdi-24px mb-2"></i>
+                                <span>Drag & drop TIN document here or click to upload</span>
+                                <small class="d-block text-muted mt-1">Accepted format: PDF (Max: 5MB)</small>
+                            </div>
+                            <input type="file" name="tin_document" class="file-input" accept="application/pdf" data-max-size="5">
+                            <div class="file-preview mt-2 d-none">
+                                <div class="d-flex align-items-center" style="overflow: hidden;">
+                                    <i class="mdi mdi-file-pdf mdi-24px text-danger me-2"></i>
+                                    <span class="file-name"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- National ID Document --}}
+                    <div class="col-md-6 mb-4">
+                        <label class="text-dark font-weight-medium">National ID Document</label>
+                        <div class="upload-area" id="nationalIdArea">
+                            <div class="upload-area-content">
+                                <i class="mdi mdi-card-account-details mdi-24px mb-2"></i>
+                                <span>Drag & drop National ID document here or click to upload</span>
+                                <small class="d-block text-muted mt-1">Accepted format: PDF (Max: 5MB)</small>
+                            </div>
+                            <input type="file" name="national_id_document" class="file-input" accept="application/pdf" data-max-size="5">
+                            <div class="file-preview mt-2 d-none">
+                                <div class="d-flex align-items-center" style="overflow: hidden;">
+                                    <i class="mdi mdi-file-pdf mdi-24px text-danger me-2">
+                                    </i>
+                                    <span class="file-name"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- CV Document --}}
+                    <div class="col-md-6 mb-4">
+                        <label class="text-dark font-weight-medium">CV Document</label>
+                        <div class="upload-area" id="cvArea">
+                            <div class="upload-area-content">
+                                <i class="mdi mdi-file-document-outline mdi-24px mb-2"></i>
+                                <span>Drag & drop CV document here or click to upload</span>
+                                <small class="d-block text-muted mt-1">Accepted format: PDF (Max: 5MB)</small>
+                            </div>
+                            <input type="file" name="cv_document" class="file-input" accept="application/pdf" data-max-size="5">
+                            <div class="file-preview mt-2 d-none">
+                                <div class="d-flex align-items-center" style="overflow: hidden;">
+                                    <i class="mdi mdi-file-pdf mdi-24px text-danger me-2"></i>
+                                    <span class="file-name"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Certificates --}}
+                    <div class="col-md-12 mb-4">
+                        <label class="text-dark font-weight-medium">Certificates</label>
+                        <div class="upload-area" id="certificatesArea">
+                            <div class="upload-area-content">
+                                <i class="mdi mdi-certificate mdi-24px mb-2"></i>
+                                <span>Drag & drop certificates here or click to upload</span>
+                                <small class="d-block text-muted mt-1">Accepted format: PDF (Max: 5MB per file)</small>
+                            </div>
+                            <input type="file" name="certificates[]" class="file-input" accept="application/pdf" data-max-size="5" multiple>
+                            <div class="file-preview mt-2 d-none">
+                                <div class="certificates-list"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 {{-- Submit Button --}}
                 <div class="col-md-12 text-end">
                     <button type="submit" class="btn btn-primary">
@@ -334,109 +428,6 @@
                     </button>
                 </div>
 
-                {{-- Documents Section --}}
-                <div class="col-12 mt-4">
-                    <div class="card border">
-                        <div class="card-header bg-light">
-                            <h5 class="mb-0">Employee Documents</h5>
-                            <p class="text-muted mb-0">Upload required documents for the employee</p>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                {{-- Passport Photo --}}
-                                <div class="col-md-6 mb-4">
-                                    <label class="text-dark font-weight-medium">Passport Photo</label>
-                                    <div class="upload-area" id="passportPhotoArea">
-                                        <div class="upload-area-content">
-                                            <i class="mdi mdi-camera mdi-24px mb-2"></i>
-                                            <span>Drag & drop passport photo here or click to upload</span>
-                                            <small class="d-block text-muted mt-1">Accepted formats: JPG, PNG, JPEG (Max: 2MB)</small>
-                                        </div>
-                                        <input type="file" name="passport_photo" class="file-input" accept="image/jpeg,image/png,image/jpg" data-max-size="2">
-                                        <div class="file-preview mt-2 d-none">
-                                            <div class="d-flex align-items-center" style="overflow: hidden;">
-                                                <i class="mdi mdi-file-image mdi-24px text-primary me-2"></i>
-                                                <span class="file-name"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {{-- TIN Document --}}
-                                <div class="col-md-6 mb-4">
-                                    <label class="text-dark font-weight-medium">TIN Document</label>
-                                    <div class="upload-area" id="tinDocumentArea">
-                                        <div class="upload-area-content">
-                                            <i class="mdi mdi-file-document mdi-24px mb-2"></i>
-                                            <span>Drag & drop TIN document here or click to upload</span>
-                                            <small class="d-block text-muted mt-1">Accepted format: PDF (Max: 5MB)</small>
-                                        </div>
-                                        <input type="file" name="tin_document" class="file-input" accept="application/pdf" data-max-size="5">
-                                        <div class="file-preview mt-2 d-none">
-                                            <div class="d-flex align-items-center" style="overflow: hidden;">
-                                                <i class="mdi mdi-file-pdf mdi-24px text-danger me-2"></i>
-                                                <span class="file-name"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {{-- National ID Document --}}
-                                <div class="col-md-6 mb-4">
-                                    <label class="text-dark font-weight-medium">National ID Document</label>
-                                    <div class="upload-area" id="nationalIdArea">
-                                        <div class="upload-area-content">
-                                            <i class="mdi mdi-card-account-details mdi-24px mb-2"></i>
-                                            <span>Drag & drop National ID document here or click to upload</span>
-                                            <small class="d-block text-muted mt-1">Accepted format: PDF (Max: 5MB)</small>
-                                        </div>
-                                        <input type="file" name="national_id_document" class="file-input" accept="application/pdf" data-max-size="5">
-                                        <div class="file-preview mt-2 d-none">
-                                            <div class="d-flex align-items-center" style="overflow: hidden;">
-                                                <i class="mdi mdi-file-pdf mdi-24px text-danger me-2"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {{-- CV Document --}}
-                                <div class="col-md-6 mb-4">
-                                    <label class="text-dark font-weight-medium">CV Document</label>
-                                    <div class="upload-area" id="cvArea">
-                                        <div class="upload-area-content">
-                                            <i class="mdi mdi-file-document-outline mdi-24px mb-2"></i>
-                                            <span>Drag & drop CV document here or click to upload</span>
-                                            <small class="d-block text-muted mt-1">Accepted format: PDF (Max: 5MB)</small>
-                                        </div>
-                                        <input type="file" name="cv_document" class="file-input" accept="application/pdf" data-max-size="5">
-                                        <div class="file-preview mt-2 d-none">
-                                            <div class="d-flex align-items-center" style="overflow: hidden;">
-                                                <i class="mdi mdi-file-pdf mdi-24px text-danger me-2"></i>
-                                                <span class="file-name"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {{-- Certificates --}}
-                                <div class="col-md-12 mb-4">
-                                    <label class="text-dark font-weight-medium">Certificates</label>
-                                    <div class="upload-area" id="certificatesArea">
-                                        <div class="upload-area-content">
-                                            <i class="mdi mdi-certificate mdi-24px mb-2"></i>
-                                            <span>Drag & drop certificates here or click to upload</span>
-                                            <small class="d-block text-muted mt-1">Accepted format: PDF (Max: 5MB per file)</small>
-                                        </div>
-                                        <input type="file" name="certificates[]" class="file-input" accept="application/pdf" data-max-size="5" multiple>
-                                        <div class="file-preview mt-2 d-none">
-                                            <div class="certificates-list"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </form>
     </div>
@@ -450,7 +441,7 @@ $(document).ready(function() {
         const maxSize = $(this).data('max-size');
         const area = $(this).closest('.upload-area');
         const preview = area.find('.file-preview');
-        
+
         if (file) {
             // Check file size
             if (file.size > maxSize * 1024 * 1024) {
@@ -460,12 +451,12 @@ $(document).ready(function() {
 
             // Show preview
             preview.removeClass('d-none');
-            
+
             if ($(this).attr('multiple')) {
                 // Handle multiple files (certificates)
                 const list = preview.find('.certificates-list');
                 list.empty();
-                
+
                 Array.from(e.target.files).forEach(file => {
                     list.append(`
                         <div class="certificate-item">
@@ -491,7 +482,7 @@ $(document).ready(function() {
     }).on('drop', function(e) {
         e.preventDefault();
         $(this).removeClass('border-primary');
-        
+
         const input = $(this).find('.file-input');
         input.prop('files', e.originalEvent.dataTransfer.files);
         input.trigger('change');
@@ -502,7 +493,7 @@ $(document).ready(function() {
         const area = $(this).closest('.upload-area');
         const input = area.find('.file-input');
         const preview = area.find('.file-preview');
-        
+
         input.val('');
         preview.addClass('d-none');
         preview.find('.file-name').text('');

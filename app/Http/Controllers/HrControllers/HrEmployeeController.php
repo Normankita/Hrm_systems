@@ -91,6 +91,7 @@ class HrEmployeeController extends Controller
         ));
     }
 
+    
     /**
      * Summary of update
      * @param \Illuminate\Http\Request $request
@@ -112,6 +113,7 @@ class HrEmployeeController extends Controller
         return redirect()->route('hr.employees.show', $employee->id)
             ->with('success', 'Employee updated successfully');
     }
+
 
     /**
      * Summary of updatePassword
