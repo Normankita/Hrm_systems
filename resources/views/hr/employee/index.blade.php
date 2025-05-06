@@ -14,7 +14,7 @@
                 <div class="table-responsive">
                     <span>Total Employees: {{ $employees->count() }}</span>
                     <table class="table table-bordered table-hover align-middle text-nowrap">
-                        <thead class="table-light text-lime">
+                        <thead class="table-light text-dark">
 
                               <tr>
                                 <th></th>
@@ -26,9 +26,9 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody >
                             @forelse($employees as $key => $employee)
-                                <tr>
+                                <tr class="text-dark">
                                     <td>{{ ++$key }}</td>
                                     <td>{{ $employee->full_name }}</td>
                                     {{-- <td>{{ \Carbon\Carbon::parse($employee->date_of_birth)->format('d M Y') }}</td> --}}

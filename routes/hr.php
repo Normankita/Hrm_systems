@@ -45,4 +45,6 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:HR_OFFICER'])
         Route::get('/show/{id}', 'show')->name('show');
         Route::post('/updatePassword/{id}', 'updatePassword')
             ->name('update.password');
+        Route::post('/updateProfile/{id}', 'updatePassportPhoto')->name('updateProfilePhoto');
+
     });

@@ -15,6 +15,7 @@
 <link id="main-css-href" rel="stylesheet" href="{{ asset('bootstrap5.1.1/css/style.css') }}" />
 <!-- FAVICON -->
 <link href="{{ asset('bootstrap5.1.1/images/favicon.png') }}" rel="shortcut icon" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
 {{-- My links if exist --}}
 

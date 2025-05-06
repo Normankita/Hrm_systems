@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\HrControllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEmployeeRequest;
@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Log;
+use Spatie\Permission\Models\Role;
 
 class HrEmployeeController extends Controller
 {
@@ -22,6 +23,20 @@ class HrEmployeeController extends Controller
         'cv_document'         => 'cv',
         'certificate'         => 'certificate',
     ];
+    public function index()
+    {
+        $employees = Auth::user()->company->employees()
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('hr.employee.index', compact('employees'));
+    }
+
+    public function create()
+    {
+        $roles = Role::where('name', '!=', 'ADMIN')->get();
+        return view('hr.employee.create', compact('roles'));
+    }
 
     public function store(StoreEmployeeRequest $request)
     {
@@ -80,6 +95,15 @@ class HrEmployeeController extends Controller
         return redirect()->route('employees.show', $employee->id)
             ->with('success', 'Employee updated successfully');
     }
+
+    public function show($id)
+    {
+        $employee = EmployeeTrait::getEmployeeById($id);
+        $attachments = $employee->attachments()->get();
+
+        return view('hr.employee.show', compact('employee', 'attachments'));
+    }
+
 
     private function handlePassportPhotoUpload(Request $request, array &$attachments)
     {
@@ -187,6 +211,58 @@ class HrEmployeeController extends Controller
         return redirect()->back()->with([
             'status'  => 'success',
             'message' => 'Password updated successfully'
+        ]);
+    }
+
+    /**
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @param mixed $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updatePassportPhoto(Request $request, $id)
+    {
+        $request->validate([
+            'passport_photo' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:4096'],
+        ]);
+
+        $employee = EmployeeTrait::getEmployeeById($id);
+
+        if (!$employee) {
+            return redirect()->back()->with([
+                'status'  => 'error',
+                'message' => 'Employee not found'
+            ]);
+        }
+
+        if ($request->hasFile('passport_photo') && $request->file('passport_photo')->isValid()) {
+            // Delete the old passport photo if it exists.
+            $this->deleteOldAttachment($employee, self::ATTACHMENT_TYPES['passport_photo']);
+
+            // Upload the new passport photo.
+            $photo = $request->file('passport_photo');
+            $filename = 'passport_' . time() . '.' . $photo->getClientOriginalExtension();
+            $path = $photo->storeAs('attachments/employees/profile_photos', $filename, 'public');
+
+            // Update the employee's profile picture.
+            $employee->update(['profile_picture' => $filename]);
+
+            // Save the new attachment.
+            $employee->attachments()->create([
+                'filename' => $filename,
+                'path'     => $path,
+                'type'     => self::ATTACHMENT_TYPES['passport_photo'],
+            ]);
+
+            Log::info('Updated passport photo for employee ID ' . $id, ['filename' => $filename, 'path' => $path]);
+
+            return redirect()->route('hr.employees.show', $employee->id)
+                ->with('success', 'Passport photo updated successfully');
+        }
+
+        return redirect()->back()->with([
+            'status'  => 'error',
+            'message' => 'Invalid passport photo upload'
         ]);
     }
 }
