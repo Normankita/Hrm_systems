@@ -76,4 +76,3 @@ Route::middleware(['auth', 'role:ADMIN'])
         Route::put('/update/permissions/{id}', 'updatePermissions')
             ->name('permissions.update');
     });
-

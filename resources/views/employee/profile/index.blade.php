@@ -1,48 +1,16 @@
 @extends('layouts.system')
 
-@section('_links')
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
 
-        .profile-card {
-            max-width: 800px;
-            margin: 2rem auto;
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .profile-img {
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 3px solid #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .section-title {
-            border-bottom: 2px solid #007bff;
-            padding-bottom: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .btn-custom {
-            border-radius: 25px;
-            padding: 0.5rem 1.5rem;
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-        }
-    </style>
-@endsection
 
 @section('content')
+
+<x-system.displays.employee-profile
+:employee="$employee"
+:backLink="route('hr.employees.index')"
+:editLink="route('hr.employees.edit', $employee->id)"
+:updatePhotoRoute="route('hr.employees.updateProfilePhoto', $employee->id)"
+/>
+
     <div class="container mt-4">
         <div class="card shadow rounded">
             <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
@@ -165,37 +133,3 @@
         </div>
     </div>
 @endsection
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Profile</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
-    <style>
-
-    </style>
-</head>
-
-<body>
-
-
-    <!-- Bootstrap JS and Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-    <!-- Custom JS -->
-    <script>
-        document.getElementById('uploadImageForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            // Add your image upload logic here (e.g., AJAX call to server)
-            alert('Image upload functionality to be implemented');
-            bootstrap.Modal.getInstance(document.getElementById('uploadImageModal')).hide();
-        });
-    </script>
-</body>
-
-</html>
