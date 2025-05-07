@@ -45,6 +45,7 @@
 @endsection
 
 @props([
+    'prefix'=>null,
     'employee',
     'backLink' => null,
     'editLink' => null,
@@ -74,7 +75,7 @@
                         id="UpdateProfilePhoto" text="Update Profile Image" />
 
                     <x-system.modal id="UpdateProfilePhoto" form="updateProfilePhotoForm" title="New Profile photo">
-                        <form action="{{ $updatePhotoRoute }}" id="updateProfilePhotoForm" enctype="multipart/form-data" method="POST">
+                        <form action="{{ route($prefix.'.updateProfilePhoto', $employee->id)}}" id="updateProfilePhotoForm" enctype="multipart/form-data" method="POST">
                             @csrf
                             <div class="form-group">
                                 <div class="col-md-12 mb-4">
@@ -92,7 +93,7 @@
                     </x-system.modal>
 
                     @if ($backLink)
-                        <a href="{{ $backLink }}" class="btn btn-outline-secondary btn-custom">BACK TO LIST</a>
+                        <a href="{{ route($prefix.'.index') }}" class="btn btn-outline-secondary btn-custom">BACK TO LIST</a>
                     @endif
                 </div>
             </div>
@@ -129,7 +130,7 @@
             </div>
 
             <div class="text-end mt-4">
-                <a href="{{ $editLink }}" class="btn btn-primary">
+                <a href="{{ route($prefix.'.edit', $employee->id) }}" class="btn btn-primary">
                     <i class="bi bi-pencil-square"></i> Edit
                 </a>
             </div>
