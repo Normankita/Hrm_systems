@@ -47,9 +47,6 @@
 @props([
     'prefix'=>null,
     'employee',
-    'backLink' => null,
-    'editLink' => null,
-    'updatePhotoRoute' => null,
 ])
 
 <div class="container mt-4">
