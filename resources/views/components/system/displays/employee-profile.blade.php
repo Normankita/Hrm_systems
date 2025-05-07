@@ -89,9 +89,9 @@
                         </form>
                     </x-system.modal>
 
-                    @if ($backLink)
+                    @hasanyrole(['ADMIN', 'HR_OFFICER'])
                         <a href="{{ route($prefix.'.index') }}" class="btn btn-outline-secondary btn-custom">BACK TO LIST</a>
-                    @endif
+                    @endhasanyrole
                 </div>
             </div>
 

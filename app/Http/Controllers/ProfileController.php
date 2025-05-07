@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\Utils\Traits\EmployeeTrait;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +12,14 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
+public
+    protected const ATTACHMENT_TYPES = [
+        'passport_photo'      => 'passport_photo',
+        'tin_document'        => 'tin',
+        'national_id_document'=> 'national_id',
+        'cv_document'         => 'cv',
+        'certificate'         => 'certificate',
+    ];
     /**
      * Display the user's profile form.
      */
@@ -57,4 +66,11 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+        /**
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @param mixed $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+
 }

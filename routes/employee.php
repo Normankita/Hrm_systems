@@ -39,4 +39,5 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->group(function () {
         Route::get('/{employee}/edit-password', 'editPassword')->name('edit_password');
         Route::put('/{employee}/update-password', 'updatePassword')->name('update_password');
+        Route::post('/updateProfile/{id}', 'updatePassportPhoto')->name('updateProfilePhoto');
     });
