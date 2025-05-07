@@ -3,16 +3,16 @@
 
 {{-- Update Employee Form --}}
 
-<link href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css"
-    rel="stylesheet"
-     type="text/css" />
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<link href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" rel="stylesheet" type="text/css" />
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
 
 <style>
-        .dropzone-container {
+    .dropzone-container {
         position: relative;
     }
+
     .dropzone {
         border: 2px dashed #dee2e6;
         border-radius: 8px;
@@ -25,30 +25,38 @@
         cursor: pointer;
         transition: all 0.3s ease;
     }
+
     .dropzone:hover {
         border-color: #4e73df;
         background: #f1f3f9;
     }
+
     .dropzone .dz-message {
         text-align: center;
         color: #6c757d;
     }
+
     .dropzone .dz-message i {
         color: #4e73df;
         font-size: 2rem;
     }
+
     .dropzone .dz-preview {
         margin: 10px;
     }
+
     .dropzone .dz-preview .dz-image {
         border-radius: 8px;
     }
+
     .dropzone .dz-preview .dz-details {
         color: #495057;
     }
+
     .dropzone .dz-preview .dz-remove {
         color: #dc3545;
     }
+
     .dropzone .dz-preview .dz-remove:hover {
         text-decoration: none;
         color: #bd2130;
@@ -94,7 +102,7 @@
         background: #fff;
         border-radius: 4px;
         padding: 8px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .certificates-list {
@@ -129,6 +137,15 @@
                     </div>
                 </div>
 
+                {{-- Middle Name --}}
+                <div class="col-md-6 mb-4">
+                    <label class="text-dark font-weight-medium">Middle Name</label>
+                    <div class="input-group">
+                        <span class="input-group-text mdi mdi-account"></span>
+                        <input type="text" name="middle_name" class="form-control"
+                            value="{{ old('middle_name', $employee->middle_name) }}" required>
+                    </div>
+                </div>
                 {{-- Last Name --}}
                 <div class="col-md-6 mb-4">
                     <label class="text-dark font-weight-medium">Last Name</label>
@@ -140,18 +157,15 @@
                 </div>
 
                 {{-- Gender --}}
-                <div class="col-md-12 mb-4">
+                <div class="col-md-6 mb-4">
                     <label class="text-dark font-weight-medium">Gender</label>
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-gender-male-female"></span>
                         <select name="gender" class="form-control" required>
-                            <option value="Male"
-                                {{ old('gender', $employee->gender) == 'Male' ? 'selected' : '' }}>Male</option>
-                            <option value="Female"
-                                {{ old('gender', $employee->gender) == 'Female' ? 'selected' : '' }}>Female
-                            </option>
-                            <option value="Other"
-                                {{ old('gender', $employee->gender) == 'Other' ? 'selected' : '' }}>Other
+                            <option value="Male" {{ old('gender', $employee->gender) == 'Male' ? 'selected' : '' }}>
+                                Male</option>
+                            <option value="Female" {{ old('gender', $employee->gender) == 'Female' ? 'selected' : '' }}>
+                                Female
                             </option>
                         </select>
                     </div>
@@ -212,8 +226,18 @@
                     <label class="text-dark font-weight-medium">Marital Status</label>
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-heart"></span>
-                        <input type="text" name="marital_status" class="form-control"
-                            value="{{ old('marital_status', $employee->marital_status) }}">
+                        <select name="marital_status" class="form-control" required>
+                            <option value="" disabled {{ old('marital_status') ? '' : 'selected' }}>Marital
+                                Status
+                            </option>
+                            <option value="Married" {{ old('marital_status') == 'Married' ? 'selected' : '' }}>Married
+                            </option>
+                            <option value="Single" {{ old('marital_status') == 'Single' ? 'selected' : '' }}>Single
+                            </option>
+                            <option value="Complicated" {{ old('marital_status') == 'Complicated' ? 'selected' : '' }}>
+                                Complicated
+                            </option>
+                        </select>
                     </div>
                 </div>
 
@@ -289,9 +313,11 @@
                             <div class="upload-area-content">
                                 <i class="mdi mdi-camera mdi-24px mb-2"></i>
                                 <span>Drag & drop passport photo here or click to upload</span>
-                                <small class="d-block text-muted mt-1">Accepted formats: JPG, PNG, JPEG (Max: 2MB)</small>
+                                <small class="d-block text-muted mt-1">Accepted formats: JPG, PNG, JPEG (Max:
+                                    2MB)</small>
                             </div>
-                            <input type="file" name="passport_photo" class="file-input" accept="image/jpeg,image/png,image/jpg" data-max-size="2">
+                            <input type="file" name="passport_photo" class="file-input"
+                                accept="image/jpeg,image/png,image/jpg" data-max-size="2">
                             <div class="file-preview mt-2 d-none">
                                 <div class="d-flex align-items-center" style="overflow: hidden;">
                                     <i class="mdi mdi-file-image mdi-24px text-primary me-2"></i>
@@ -310,7 +336,8 @@
                                 <span>Drag & drop TIN document here or click to upload</span>
                                 <small class="d-block text-muted mt-1">Accepted format: PDF (Max: 5MB)</small>
                             </div>
-                            <input type="file" name="tin_document" class="file-input" accept="application/pdf" data-max-size="5">
+                            <input type="file" name="tin_document" class="file-input" accept="application/pdf"
+                                data-max-size="5">
                             <div class="file-preview mt-2 d-none">
                                 <div class="d-flex align-items-center" style="overflow: hidden;">
                                     <i class="mdi mdi-file-pdf mdi-24px text-danger me-2"></i>
@@ -329,7 +356,8 @@
                                 <span>Drag & drop National ID document here or click to upload</span>
                                 <small class="d-block text-muted mt-1">Accepted format: PDF (Max: 5MB)</small>
                             </div>
-                            <input type="file" name="national_id_document" class="file-input" accept="application/pdf" data-max-size="5">
+                            <input type="file" name="national_id_document" class="file-input"
+                                accept="application/pdf" data-max-size="5">
                             <div class="file-preview mt-2 d-none">
                                 <div class="d-flex align-items-center" style="overflow: hidden;">
                                     <i class="mdi mdi-file-pdf mdi-24px text-danger me-2">
@@ -349,7 +377,8 @@
                                 <span>Drag & drop CV document here or click to upload</span>
                                 <small class="d-block text-muted mt-1">Accepted format: PDF (Max: 5MB)</small>
                             </div>
-                            <input type="file" name="cv_document" class="file-input" accept="application/pdf" data-max-size="5">
+                            <input type="file" name="cv_document" class="file-input" accept="application/pdf"
+                                data-max-size="5">
                             <div class="file-preview mt-2 d-none">
                                 <div class="d-flex align-items-center" style="overflow: hidden;">
                                     <i class="mdi mdi-file-pdf mdi-24px text-danger me-2"></i>
@@ -368,36 +397,36 @@
                                 <span>Drag & drop certificates here or click to upload</span>
                                 <small class="d-block text-muted mt-1">Accepted format: PDF (Max: 5MB per file)</small>
                             </div>
-                            <input type="file" name="certificates[]" class="file-input" accept="application/pdf" data-max-size="5" multiple>
+                            <input type="file" name="certificates[]" class="file-input" accept="application/pdf"
+                                data-max-size="5" multiple>
                             <div class="file-preview mt-2 d-none">
                                 <div class="certificates-list"></div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row mt-4">
-                    <div class="col-12 d-flex justify-content-between">
+                <div class="row col-md-4 mt-4">
+                    <div class="col-md-12 d-flex justify-content-between">
                         {{-- Submit Button on the left --}}
                         <button type="submit" class="btn btn-primary ">
                             <i class="mdi mdi-content-save-edit"></i> Update Employee
                         </button>
                     </div>
                 </div>
-                <div class="row mx-4 mt-4">
-                     {{-- Change Password Button on the right --}}
-                     <div class="col-12 d-flex justify-content-between">
-                         <x-system.modal-button class="btn btn-secondary " text="Change Password"
-                     id="UpdatePassword" />
-                     </div>
+                <div class="col-md-4 mt-4">
+                    {{-- Change Password Button on the right --}}
+                    <div class="col-md-12 d-flex justify-content-between">
+                        <x-system.modal-button class="btn btn-secondary " text="Change Password"
+                            id="UpdatePassword" />
+                    </div>
                 </div>
-                
+
             </div>
         </form>
 
         {{-- Modal for Changing Password --}}
         <x-system.modal id="UpdatePassword" form="updatePasswordForm" title="ChangePassword">
-            <form id="updatePasswordForm" method="POST"
-                action="{{ route($internal_route, $employee->id) }}">
+            <form id="updatePasswordForm" method="POST" action="{{ route($internal_route, $employee->id) }}">
                 @csrf
                 <div class="form-group">
                     <label for="">New Password</label>
@@ -417,22 +446,22 @@
             const maxSize = $(this).data('max-size');
             const area = $(this).closest('.upload-area');
             const preview = area.find('.file-preview');
-    
+
             if (file) {
                 // Check file size
                 if (file.size > maxSize * 1024 * 1024) {
                     alert(`File size must be less than ${maxSize}MB`);
                     return;
                 }
-    
+
                 // Show preview
                 preview.removeClass('d-none');
-    
+
                 if ($(this).attr('multiple')) {
                     // Handle multiple files (certificates)
                     const list = preview.find('.certificates-list');
                     list.empty();
-    
+
                     Array.from(e.target.files).forEach(file => {
                         list.append(`
                             <div class="certificate-item">
@@ -447,7 +476,7 @@
                 }
             }
         });
-    
+
         // Handle drag and drop
         $('.upload-area').on('dragover', function(e) {
             e.preventDefault();
@@ -458,23 +487,22 @@
         }).on('drop', function(e) {
             e.preventDefault();
             $(this).removeClass('border-primary');
-    
+
             const input = $(this).find('.file-input');
             input.prop('files', e.originalEvent.dataTransfer.files);
             input.trigger('change');
         });
-    
+
         // Handle file removal
         $(document).on('click', '.remove-file', function() {
             const area = $(this).closest('.upload-area');
             const input = area.find('.file-input');
             const preview = area.find('.file-preview');
-    
+
             input.val('');
             preview.addClass('d-none');
             preview.find('.file-name').text('');
             preview.find('.certificates-list').empty();
         });
     });
-    </script>
-    
+</script>

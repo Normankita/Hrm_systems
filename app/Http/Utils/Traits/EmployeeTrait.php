@@ -36,7 +36,7 @@ trait EmployeeTrait
     public static function getEmployeeById($id): Employee
     {
         // Find the employee by ID
-        $employee = Employee::find($id);
+        $employee = Employee::where('id', $id)->first();
         return $employee;
     }
 
@@ -64,11 +64,14 @@ trait EmployeeTrait
     private function getNamesFromFullName($fullName): array
     {
         // Split full name
-        $nameParts = explode(' ', $fullName, 2); // Only split into 2 parts: first and last
+        $nameParts = explode(' ', $fullName, 3); // Only split into 3 parts: first and last
         $first_name = $nameParts[0];
-        $last_name = $nameParts[1] ?? '';
+        $middle_name = $nameParts[1] ?? '';
+        $last_name = $nameParts[2] ??'';
         $nameParts = [
+
             'first_name' => $first_name,
+            'middle_name'=> $middle_name,
             'last_name' => $last_name,
         ];
         return $nameParts;

@@ -53,7 +53,7 @@ class AdminEmployeeController extends Controller
         // Merge additional fields before creating the employee.
         $request->merge([
             'company_id' => Auth::user()->company_id,
-            'full_name'  => $request->input('first_name') . ' ' . $request->input('last_name'),
+            'full_name'  => $request->input('first_name') . ' '.$request->input('middle_name').' ' . $request->input('last_name'),
         ]);
 
         $employee = $this->createEmployee($request->all());
@@ -173,6 +173,7 @@ class AdminEmployeeController extends Controller
         $employee = self::getEmployeeById($id);
         $names = $this->getNamesFromFullName($employee->full_name);
         $employee->first_name = $names['first_name'];
+        $employee->middle_name= $names['middle_name'];
         $employee->last_name  = $names['last_name'];
         $roles = Role::where('name', '!=', 'ADMIN')->get();
 
@@ -186,7 +187,8 @@ class AdminEmployeeController extends Controller
     {
         $request->merge([
             'company_id' => Auth::user()->company_id,
-            'full_name'  => $request->input('first_name') . ' ' . $request->input('last_name'),
+            'full_name'  => $request->input('first_name') . ' '.$request->input('middle_name').' ' . $request->input('last_name'),
+
         ]);
 
         $employee = EmployeeTrait::getEmployeeById($id);

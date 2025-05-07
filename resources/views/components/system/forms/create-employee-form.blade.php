@@ -1,10 +1,4 @@
-
-
-
-@props([
-    'route',
-    'roles'
-])
+@props(['route', 'roles'])
 
 <div class="card">
     <div class="card-body p-30">
@@ -21,10 +15,22 @@
                             value="{{ old('first_name') }}" required>
                     </div>
                     @error('first_name')
-                        <span class="text-danger d-block">massanga</span>
+                        <span class="text-danger d-block">{{ $message }}</span>
                     @enderror
                 </div>
 
+                {{-- Middle Name --}}
+                <div class="col-md-6 mb-4">
+                    <label class="text-dark font-weight-medium">Middle Name</label>
+                    <div class="input-group">
+                        <span class="input-group-text mdi mdi-account"></span>
+                        <input type="text" name="middle_name" class="form-control" placeholder="Smith"
+                            value="{{ old('middle_name') }}" required>
+                    </div>
+                    @error('middle_name')
+                        <span class="text-danger d-block">{{ $message }}</span>
+                    @enderror
+                </div>
                 {{-- Last Name --}}
                 <div class="col-md-6 mb-4">
                     <label class="text-dark font-weight-medium">Last Name</label>
@@ -39,7 +45,7 @@
                 </div>
 
                 {{-- Gender --}}
-                <div class="col-md-12 mb-4">
+                <div class="col-md-6 mb-4">
                     <label class="text-dark font-weight-medium">Gender</label>
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-gender-male-female"></span>
@@ -85,8 +91,8 @@
                     <label class="text-dark font-weight-medium">Phone Number</label>
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-phone"></span>
-                        <input type="text" name="phone_number" class="form-control"
-                            placeholder="+255712345678" value="{{ old('phone_number') }}" required>
+                        <input type="text" name="phone_number" class="form-control" placeholder="+255712345678"
+                            value="{{ old('phone_number') }}" required>
                     </div>
                     @error('phone_number')
                         <span class="text-danger d-block">{{ $message }}</span>
@@ -98,8 +104,8 @@
                     <label class="text-dark font-weight-medium">National ID</label>
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-card-account-details"></span>
-                        <input type="text" name="national_id" class="form-control"
-                            placeholder="1234567890123456" value="{{ old('national_id') }}" required>
+                        <input type="text" name="national_id" class="form-control" placeholder="1234567890123456"
+                            value="{{ old('national_id') }}" required>
                     </div>
                     @error('national_id')
                         <span class="text-danger d-block">{{ $message }}</span>
@@ -124,15 +130,18 @@
                     <label class="text-dark font-weight-medium">Marital Status</label>
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-heart"></span>
-                            <select name="marital_status" class="form-control" required>
-                                <option value="" disabled {{ old('marital_status') ? '' : 'selected' }}>Marital Status
-                                </option>
-                                <option value="Married" {{ old('marital_status') == 'Married' ? 'selected' : '' }}>Married</option>
-                                <option value="Single" {{ old('marital_status') == 'Single' ? 'selected' : '' }}>Single
-                                </option>
-                                <option value="Complicated" {{ old('marital_status') == 'Complicated' ? 'selected' : '' }}>Complicated
-                                </option>
-                            </select>
+                        <select name="marital_status" class="form-control" required>
+                            <option value="" disabled {{ old('marital_status') ? '' : 'selected' }}>Marital
+                                Status
+                            </option>
+                            <option value="Married" {{ old('marital_status') == 'Married' ? 'selected' : '' }}>Married
+                            </option>
+                            <option value="Single" {{ old('marital_status') == 'Single' ? 'selected' : '' }}>Single
+                            </option>
+                            <option value="Complicated"
+                                {{ old('marital_status') == 'Complicated' ? 'selected' : '' }}>Complicated
+                            </option>
+                        </select>
                     </div>
 
                     @error('marital_status')
@@ -146,8 +155,7 @@
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-home-map-marker"></span>
                         <input type="text" name="residential_address" class="form-control"
-                            placeholder="e.g., Sinza Mori, Dar es Salaam"
-                            value="{{ old('residential_address') }}">>
+                            placeholder="e.g., Sinza Mori, Dar es Salaam" value="{{ old('residential_address') }}">>
                     </div>
                     @error('residential_address')
                         <span class="text-danger d-block">{{ $message }}</span>
@@ -162,12 +170,12 @@
                         <select name="employee_type" class="form-control" required>
                             <option value="" disabled {{ old('employee_type') ? '' : 'selected' }}>
                                 Select Type</option>
-                            <option value="Permanent"
-                                {{ old('employee_type') == 'Permanent' ? 'selected' : '' }}>Permanent</option>
-                            <option value="Contract"
-                                {{ old('employee_type') == 'Contract' ? 'selected' : '' }}>Contract</option>
-                            <option value="Probation"
-                                {{ old('employee_type') == 'Probation' ? 'selected' : '' }}>Probation</option>
+                            <option value="Permanent" {{ old('employee_type') == 'Permanent' ? 'selected' : '' }}>
+                                Permanent</option>
+                            <option value="Contract" {{ old('employee_type') == 'Contract' ? 'selected' : '' }}>
+                                Contract</option>
+                            <option value="Probation" {{ old('employee_type') == 'Probation' ? 'selected' : '' }}>
+                                Probation</option>
                         </select>
                     </div>
                 </div>
@@ -212,8 +220,7 @@
                                     continue;
                                 }
                             @endphp
-                            <option value="{{ $role->id }}"
-                                {{ old('role_id') == $role->id ? 'selected' : '' }}>
+                            <option value="{{ $role->id }}" {{ old('role_id') == $role->id ? 'selected' : '' }}>
                                 {{ $role->name }}
                             </option>
                         @endforeach
@@ -221,46 +228,20 @@
                 </div>
 
                 <div class="row">
-                    <x-system.form-inputs.file-upload
-    name="passport_photo"
-    label="Passport Photo"
-    accept="image/jpeg,image/png,image/jpg"
-    maxSize="2"
-    icon="mdi-camera"
-/>
+                    <x-system.form-inputs.file-upload name="passport_photo" label="Passport Photo"
+                        accept="image/jpeg,image/png,image/jpg" maxSize="2" icon="mdi-camera" />
 
-<x-system.form-inputs.file-upload
-    name="tin_document"
-    label="TIN Document"
-    accept="application/pdf"
-    maxSize="5"
-    icon="mdi-file-document"
-/>
+                    <x-system.form-inputs.file-upload name="tin_document" label="TIN Document"
+                        accept="application/pdf" maxSize="5" icon="mdi-file-document" />
 
-<x-system.form-inputs.file-upload
-    name="national_id_document"
-    label="National ID Document"
-    accept="application/pdf"
-    maxSize="5"
-    icon="mdi-card-account-details"
-/>
+                    <x-system.form-inputs.file-upload name="national_id_document" label="National ID Document"
+                        accept="application/pdf" maxSize="5" icon="mdi-card-account-details" />
 
-<x-system.form-inputs.file-upload
-    name="cv_document"
-    label="CV Document"
-    accept="application/pdf"
-    maxSize="5"
-    icon="mdi-file-document-outline"
-/>
+                    <x-system.form-inputs.file-upload name="cv_document" label="CV Document" accept="application/pdf"
+                        maxSize="5" icon="mdi-file-document-outline" />
 
-<x-system.form-inputs.file-upload
-    name="certificates[]"
-    label="Certificates"
-    accept="application/pdf"
-    maxSize="5"
-    icon="mdi-certificate"
-    multiple
-/>
+                    <x-system.form-inputs.file-upload name="certificates[]" label="Certificates"
+                        accept="application/pdf" maxSize="5" icon="mdi-certificate" multiple />
 
                 </div>
 
@@ -275,4 +256,3 @@
         </form>
     </div>
 </div>
-
