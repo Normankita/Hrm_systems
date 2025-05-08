@@ -78,6 +78,7 @@ class UserSeeder extends Seeder
             'date_of_hire' => now(),
             'date_of_termination' => null,
             'salary' => 50000,
+            'profile_picture'=>'',
         ]);
 
 

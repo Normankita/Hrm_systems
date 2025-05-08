@@ -114,9 +114,6 @@
                             </option>
                             <option value="Single" {{ old('marital_status') == 'Single' ? 'selected' : '' }}>Single
                             </option>
-                            <option value="Complicated" {{ old('marital_status') == 'Complicated' ? 'selected' : '' }}>
-                                Complicated
-                            </option>
                         </select>
                     </div>
                 </div>

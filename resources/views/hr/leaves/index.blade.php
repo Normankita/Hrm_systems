@@ -21,7 +21,8 @@
                                     <th>Starting In</th>
                                     <th>End In</th>
                                     <th>status</th>
-                                    <th></th>
+                                    <th>Action</th>
+                                    <th>Attachments</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -39,7 +40,20 @@
                                                 </span>
                                             </td>
                                             <td>
-                                                <x-system.btn-view :route="route('hr.leave.show', $leave)" :key="$key.'_'.$index"  />
+                                                <x-system.btn-view :route="route('hr.leave.show', $leave)" :key="$key . '_' . $index" />
+                                            </td>
+                                            <td>
+                                                @if ($leave->attachments)
+                                                    @foreach ($leave->attachments as $attachment)
+                                                        <x-system.modal-button class="btn btn-primary py-1 px-2 text-lg"
+                                                            data-bs-toggle="modal" id="DisplayAttachment"
+                                                             icon="mdi mdi-paperclip" />
+                                                            <x-system.modal size="modal-xl" id="DisplayAttachment"  title="{{$attachment->filename}}">
+                                                                <embed src="{{ asset('storage/' . $attachment->path) }}"
+                                                                    width="100%" height="100%" type="application/pdf">
+                                                            </x-system.modal>
+                                                    @endforeach
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

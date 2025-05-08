@@ -75,6 +75,7 @@ class AdminEmployeeController extends Controller
         $employee = self::getEmployeeById($id);
         $names = $this->getNamesFromFullName($employee->full_name);
         $employee->first_name = $names['first_name'];
+        $employee->middle_name = $names['middle_name'];
         $employee->last_name = $names['last_name'];
         $roles = Role::where('name', '!=', 'ADMIN')->get();
 

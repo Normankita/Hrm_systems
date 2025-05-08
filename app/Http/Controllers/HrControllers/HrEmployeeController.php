@@ -17,7 +17,9 @@ class HrEmployeeController extends Controller
 {
     use EmployeeTrait, UploadFileTrait;
 
-    public function __construct(private EmployeeService $employeeService){}
+    public function __construct(private EmployeeService $employeeService)
+    {
+    }
 
 
     public function index()
@@ -40,18 +42,30 @@ class HrEmployeeController extends Controller
         $outcome = $this->employeeService->storeEmployee(
             $request,
             self::ATTACHMENT_TYPES,
-            );
+        );
 
-        return redirect()->route('employees.show', $outcome['employee']->id)
+        return redirect()->route('hr.employees.show', $outcome['employee']->id)
             ->with('success', 'Employee created successfully');
+    }
+
+    public function edit($id)
+    {
+        $employee = self::getEmployeeById($id);
+        $names = $this->getNamesFromFullName($employee->full_name);
+        $employee->first_name = $names['first_name'];
+        $employee->middle_name = $names['middle_name'];
+        $employee->last_name = $names['last_name'];
+        $roles = Role::where('name', '!=', 'ADMIN')->get();
+
+        return view('hr.employee.edit', compact('employee', 'roles'));
     }
 
     public function update(UpdateEmployeeRequest $request, $id)
     {
-        
+
         $outcome = $this->employeeService->updateEmployee($request, $id);
 
-        return redirect()->route('employees.show', $outcome['employee']->id)
+        return redirect()->route('hr.employees.show', $outcome['employee']->id)
             ->with('success', 'Employee updated successfully');
     }
 
@@ -73,7 +87,7 @@ class HrEmployeeController extends Controller
 
         if (!$employee || !$employee->user) {
             return redirect()->back()->with([
-                'status'  => 'error',
+                'status' => 'error',
                 'message' => 'User not found for the selected employee'
             ]);
         }
@@ -83,7 +97,7 @@ class HrEmployeeController extends Controller
         ]);
 
         return redirect()->back()->with([
-            'status'  => 'success',
+            'status' => 'success',
             'message' => 'Password updated successfully'
         ]);
     }
@@ -96,14 +110,14 @@ class HrEmployeeController extends Controller
      */
     public function updatePassportPhoto(Request $request, $id)
     {
-        $outcome= $this->employeeService->updateProfilePhoto($request, $id);
-        if($outcome){
+        $outcome = $this->employeeService->updateProfilePhoto($request, $id);
+        if ($outcome) {
             return redirect()->route('hr.employees.show', $outcome['employee']->id)
                 ->with('success', 'Passport photo updated successfully');
         }
 
         return redirect()->back()->with([
-            'status'  => 'error',
+            'status' => 'error',
             'message' => 'Invalid passport photo upload'
         ]);
     }

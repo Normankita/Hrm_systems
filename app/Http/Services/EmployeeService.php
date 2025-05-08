@@ -38,7 +38,7 @@ class EmployeeService
         // Merge additional fields before creating the employee.
         $request->merge([
             'company_id' => Auth::user()->company_id,
-            'full_name' => $request->input('first_name') . ' ' . $request->input('last_name'),
+            'full_name' => $request->input('first_name') . ' '.$request->input('middle_name') .' ' . $request->input('last_name'),
         ]);
 
         $employee = $this->createEmployee($request->all());
@@ -68,7 +68,7 @@ class EmployeeService
     {
         $request->merge([
             'company_id' => Auth::user()->company_id,
-            'full_name' => $request->input('first_name') . ' ' . $request->input('last_name'),
+            'full_name' => $request->input('first_name') . ' '.$request->input('middle_name').' ' . $request->input('last_name'),
         ]);
 
         $employee = EmployeeTrait::getEmployeeById($id);

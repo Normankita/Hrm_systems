@@ -16,6 +16,7 @@ class HrLeavesController extends Controller
     {
         $employees = Employee::with('leaves')
             ->whereHas('leaves')
+            ->orderByDesc('created_at')
             ->paginate(20);
         return view('hr.leaves.index')
             ->with('employees', $employees);
