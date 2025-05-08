@@ -112,14 +112,14 @@
     'maxSize',
     'icon',
     'multiple' => false,
-    'updateProfile'=>false,
+    'col' => 6
 ])
 
 @php
     $inputId = Str::slug($name) . 'Area';
 @endphp
 
-<div class="col-md-{{ $multiple ? '12' : ($updateProfile? '12': '6') }} mb-4">
+<div class="col-md-{{ $col }} mb-4">
     <label class="text-dark font-weight-medium">{{ $label }}</label>
     <div class="upload-area" id="{{ $inputId }}">
         <div class="upload-area-content">
@@ -156,22 +156,22 @@
             const maxSize = $(this).data('max-size');
             const area = $(this).closest('.upload-area');
             const preview = area.find('.file-preview');
-    
+
             if (file) {
                 // Check file size
                 if (file.size > maxSize * 1024 * 1024) {
                     alert(`File size must be less than ${maxSize}MB`);
                     return;
                 }
-    
+
                 // Show preview
                 preview.removeClass('d-none');
-    
+
                 if ($(this).attr('multiple')) {
                     // Handle multiple files (certificates)
                     const list = preview.find('.certificates-list');
                     list.empty();
-    
+
                     Array.from(e.target.files).forEach(file => {
                         list.append(`
                             <div class="certificate-item">
@@ -186,7 +186,7 @@
                 }
             }
         });
-    
+
         // Handle drag and drop
         $('.upload-area').on('dragover', function(e) {
             e.preventDefault();
@@ -197,18 +197,18 @@
         }).on('drop', function(e) {
             e.preventDefault();
             $(this).removeClass('border-primary');
-    
+
             const input = $(this).find('.file-input');
             input.prop('files', e.originalEvent.dataTransfer.files);
             input.trigger('change');
         });
-    
+
         // Handle file removal
         $(document).on('click', '.remove-file', function() {
             const area = $(this).closest('.upload-area');
             const input = area.find('.file-input');
             const preview = area.find('.file-preview');
-    
+
             input.val('');
             preview.addClass('d-none');
             preview.find('.file-name').text('');
@@ -216,4 +216,4 @@
         });
     });
     </script>
-    
+

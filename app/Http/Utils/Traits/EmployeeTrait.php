@@ -4,6 +4,8 @@ namespace App\Http\Utils\Traits;
 
 use App\Models\Employee;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
@@ -33,6 +35,41 @@ trait EmployeeTrait
     }
 
 
+    public function storeEmployee(Request $request, $attachmentsNamesArray,
+         callable $handleDocumentUpload = null ) {
+        $attachments = [];
+
+        // Handle passport photo upload using our helper method.
+        $this->handlePassportToProfilePhotoUpload($request);
+
+        // Merge additional fields before creating the employee.
+        $request->merge([
+            'company_id' => Auth::user()->company_id,
+            'full_name' => $request->input('first_name') . ' ' . $request->input('last_name'),
+        ]);
+
+        $employee = $this->createEmployee($request->all());
+
+        foreach ($attachmentsNamesArray as $key => $value) {
+            $file = $request->file($key);
+            $handleDocumentUpload ? $handleDocumentUpload($file, $value, $attachments) : fn() => true;
+
+            // Delete the old document of this type if it exists.
+            $this->deleteOldAttachment($employee, $value);
+        }
+
+        // Save all attachments to the employee.
+        foreach ($attachments as $attachment) {
+            $employee->attachments()->create($attachment);
+        }
+
+        return [
+            'employee' => $employee,
+        ];
+
+    }
+
+
     public static function getEmployeeById($id): Employee
     {
         // Find the employee by ID
@@ -57,7 +94,7 @@ trait EmployeeTrait
         $employee->update($data);
         return $employee;
     }
-  
+
 
 
 

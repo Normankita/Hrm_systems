@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
 use App\Http\Utils\Traits\EmployeeTrait;
+use App\Http\Utils\Traits\UploadFileTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -14,7 +15,7 @@ use Spatie\Permission\Models\Role;
 
 class HrEmployeeController extends Controller
 {
-    use EmployeeTrait;
+    use EmployeeTrait, UploadFileTrait;
 
     protected const ATTACHMENT_TYPES = [
         'passport_photo'      => 'passport_photo',
@@ -40,28 +41,10 @@ class HrEmployeeController extends Controller
 
     public function store(StoreEmployeeRequest $request)
     {
-        $attachments = [];
+        $outcome = $this->storeEmployee($request, self::ATTACHMENT_TYPES,
+        fn($file, $value, &$attachments) =>   $this->handleDocumentUpload($file, $value, $attachments));
 
-        $this->handlePassportPhotoUpload($request, $attachments);
-
-        $request->merge([
-            'company_id' => Auth::user()->company_id,
-            'full_name'  => $request->input('first_name') . ' ' . $request->input('last_name'),
-        ]);
-
-        $employee = $this->createEmployee($request->all());
-
-        $this->handleDocumentUpload($request, $attachments, 'tin_document', self::ATTACHMENT_TYPES['tin_document'], $employee);
-        $this->handleDocumentUpload($request, $attachments, 'national_id_document', self::ATTACHMENT_TYPES['national_id_document'], $employee);
-        $this->handleDocumentUpload($request, $attachments, 'cv_document', self::ATTACHMENT_TYPES['cv_document'], $employee);
-
-        $this->handleCertificatesUpload($request, $attachments);
-
-        foreach ($attachments as $attachment) {
-            $employee->attachments()->create($attachment);
-        }
-
-        return redirect()->route('employees.show', $employee->id)
+        return redirect()->route('employees.show', $outcome['employee']->id)
             ->with('success', 'Employee created successfully');
     }
 
@@ -119,29 +102,9 @@ class HrEmployeeController extends Controller
                 'path'     => $path,
                 'type'     => self::ATTACHMENT_TYPES['passport_photo'],
             ];
-
-            Log::info('Passport photo uploaded', $attachments);
         }
     }
 
-    private function handleDocumentUpload(Request $request, array &$attachments, string $fieldName, string $type, $employee)
-    {
-        if ($request->hasFile($fieldName) && $request->file($fieldName)->isValid()) {
-            $this->deleteOldAttachment($employee, $type);
-
-            $file = $request->file($fieldName);
-            $filename = $type . '_' . time() . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('attachments/employees', $filename, 'public');
-
-            $attachments[] = [
-                'filename' => $filename,
-                'path'     => $path,
-                'type'     => $type,
-            ];
-
-            Log::info("Uploaded {$type}", ['filename' => $filename, 'path' => $path]);
-        }
-    }
 
     private function handleCertificatesUpload(Request $request, array &$attachments)
     {
@@ -215,7 +178,7 @@ class HrEmployeeController extends Controller
     }
 
     /**
-     * 
+     *
      * @param \Illuminate\Http\Request $request
      * @param mixed $id
      * @return \Illuminate\Http\RedirectResponse

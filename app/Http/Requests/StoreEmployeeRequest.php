@@ -22,18 +22,17 @@ class StoreEmployeeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'role_id' => '',
             'department_id' => '',
             'first_name' => '',
             'last_name' => '',
-            'email' => '',
+            'email' => 'unique:users,email',
             'phone_number' => '',
             'gender' => '',
             'date_of_birth' => '',
-            'national_id' => '',
+            'national_id' => 'unique:employees,national_id',
             'marital_status' => '',
             'residential_address' => '',
-            'tin_number' => '',
+            'tin_number' => 'unique:employees,tin_number',
             'employee_type' => '',
             'date_of_hire' => '',
             'passport_photo' => '',
@@ -43,5 +42,5 @@ class StoreEmployeeRequest extends FormRequest
             'certificates.*' => '',
         ];
     }
-    
+
 }

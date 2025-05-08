@@ -54,20 +54,20 @@
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
             <h4 class="mb-0 text-white">
                 <i class="bi bi-person-circle me-2"></i>
-                Employee Profile - {{ $employee->full_name }} 
+                Employee Profile - {{ $employee->full_name }}
             </h4>
         </div>
         <div class="card-body">
 
             <div class="d-flex align-items-center mb-4">
                 <img src="{{ $employee->profile_picture
-                    ? asset('storage/attachments/employees/profile_photos/' . $employee->profile_picture)
+                    ? asset('storage/' . $employee->profile_picture)
                     : 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg' }}"
                     alt="Profile Image" class="profile-img me-3">
                 <div>
                     <h2 class="mb-0">{{ $employee->full_name }}</h2>
                     <p class="text-muted">{{ $employee->employee_type }}</p>
-                    
+
                     <x-system.modal-button class="btn btn-primary btn-custom me-2" data-bs-toggle="modal"
                         id="UpdateProfilePhoto" text="Update Profile Image" />
 
@@ -77,12 +77,13 @@
                             <div class="form-group">
                                 <div class="col-md-12 mb-4">
                                     <x-system.form-inputs.file-upload
-                                        name="passport_photo"
-                                        label="Passport Photo"
+                                        name="profile_picture"
+                                        label="Profile Picture"
                                         accept="image/jpeg,image/png,image/jpg"
                                         maxSize="2"
                                         icon="mdi-camera"
-                                        :updateProfile="true"
+                                        col="12"
+                                        required
                                     />
                                 </div>
                             </div>
