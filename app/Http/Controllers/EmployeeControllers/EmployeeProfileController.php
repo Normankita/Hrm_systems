@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\EmployeeControllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\EmployeeService;
 use App\Http\Utils\Traits\EmployeeTrait;
 use App\Http\Utils\Traits\UploadFileTrait;
 use App\Models\Employee;
@@ -16,16 +17,10 @@ class EmployeeProfileController extends Controller
 {
 
     use UploadFileTrait;
-    protected const ATTACHMENT_TYPES = [
-        'passport_photo'      => 'passport_photo',
-        'tin_document'        => 'tin',
-        'national_id_document'=> 'national_id',
-        'cv_document'         => 'cv',
-        'certificate'         => 'certificate',
-    ];
-    /**
-     * Display a listing of the resource.
-     */
+
+    
+    public function __construct(private EmployeeService $employeeService){}
+
     public function index()
     {
         $employee = Auth::user()->employee;
@@ -116,57 +111,18 @@ public function updatePassword(Request $request, Employee $employee)
     return redirect()->route('employees.profile.index')->with('success', 'Password updated successfully.');
 }
 
-private function deleteOldAttachment($employee, string $type)
-{
-    $old = $employee->attachments()
-        ->where('attachmentable_type', 'App\Models\Employee')
-        ->where('attachmentable_id', $employee->id)
-        ->where('type', $type)
-        ->first();
-
-    if ($old) {
-        Storage::disk('public')->delete($old->path);
-        $old->delete();
-    }
-}
 public function updatePassportPhoto(Request $request, $id)
 {
-    $request->validate([
-        'profile_picture' => [
-            'required',
-            'mimes:jpeg,png,jpg',
-        ],
-    ]);
-
-    $employee = EmployeeTrait::getEmployeeById($id);
-    if (!$employee) {
-        return redirect()->back()->with([
-            'status' => 'error',
-            'message' => 'Employee not found'
-        ]);
-    }
-
-    if (
-        $request->hasFile('profile_picture') &&
-        $request->file('profile_picture')->isValid()
-    ) {
-        // Upload the new passport photo.
-        $photo = $request->file('profile_picture');
-        $filename = 'profile_picture_' . time() . '.' . $photo->getClientOriginalExtension();
-        $path = $photo->storeAs('attachments/employees/profile_photos', $filename, 'public');
-
-        // delete the existing profile if it exists.
-        $this->deleteFile($employee->profile_picture);
-
-        // Update the employee's profile picture.
-        $employee->update(['profile_picture' => $path]);
-
-            return redirect()->route('employees.profile.index', $employee->id)
+    $outcome= $this->employeeService->updateProfilePhoto($request, $id);
+      
+    if($outcome){
+            return redirect()->route('employees.profile.index', $outcome['employee']->id)
                ->with('success', __('Passport photo updated successfully'));
        }
 
    return redirect()->back()->withErrors([
-       'message' => __('Invalid passport photo upload'),
+       'message' => ('Invalid passport photo upload'),
+       'status'=>'error',
    ]);
 }
 }

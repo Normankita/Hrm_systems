@@ -96,4 +96,43 @@ class EmployeeService
         ];
     }
 
+    public function UpdateProfilePhoto(Request $request, $id){
+        $request->validate([
+            'profile_picture' => [
+                'required',
+                'mimes:jpeg,png,jpg',
+            ],
+        ]);
+
+        $employee = EmployeeTrait::getEmployeeById($id);
+        if (!$employee) {
+            return redirect()->back()->with([
+                'status' => 'error',
+                'message' => 'Employee not found'
+            ]);
+        }
+
+        if (
+            $request->hasFile('profile_picture') &&
+            $request->file('profile_picture')->isValid()
+        ) {
+            // Upload the new passport photo.
+            $photo = $request->file('profile_picture');
+            $filename = 'profile_picture_' . time() . '.' . $photo->getClientOriginalExtension();
+            $path = $photo->storeAs('attachments/employees/profile_photos', $filename, 'public');
+
+            // delete the existing profile if it exists.
+            $this->deleteFile($employee->profile_picture);
+
+            // Update the employee's profile picture.
+            $employee->update(['profile_picture' => $path]);
+            return [
+                'status'=> 'success',
+                'message'=> 'Profile photo updated Successfully',
+                'employee'=>$employee
+            ];            
+        }
+        return null;
+    }
+
 }
