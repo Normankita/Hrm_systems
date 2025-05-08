@@ -1,0 +1,99 @@
+<?php
+
+namespace App\Http\Services;
+
+use App\Http\Utils\Traits\EmployeeTrait;
+use App\Http\Utils\Traits\UploadFileTrait;
+use App\Models\Employee;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class EmployeeService
+{
+    use UploadFileTrait, EmployeeTrait;
+    public static function getEmployeeById($id): Employee
+    {
+        // Find the employee by ID
+        $employee = Employee::where('id', $id)->first();
+        return $employee;
+    }
+
+    /**
+     * Store a new employee along with attachments.
+     *
+     * @param Request $request
+     * @param array $attachmentsNamesArray
+     * @param callable|null $handleDocumentUpload
+     * @return array
+     */
+    public function storeEmployee(
+        Request $request,
+        $attachmentsNamesArray,
+    ) {
+        $attachments = [];
+
+        // Handle passport photo upload using our helper method.
+        $this->handlePassportToProfilePhotoUpload($request);
+
+        // Merge additional fields before creating the employee.
+        $request->merge([
+            'company_id' => Auth::user()->company_id,
+            'full_name' => $request->input('first_name') . ' ' . $request->input('last_name'),
+        ]);
+
+        $employee = $this->createEmployee($request->all());
+
+        foreach ($attachmentsNamesArray as $key => $value) {
+            $file = $request->file($key);
+            $this->handleDocumentUpload($file, $value, $attachments);
+
+            // Delete the old document of this type if it exists.
+            $this->deleteOldAttachment($employee, $value);
+        }
+
+        // Save all attachments to the employee.
+        foreach ($attachments as $attachment) {
+            $employee->attachments()->create($attachment);
+        }
+
+        return [
+            'status' => 'success',
+            'employee' => $employee,
+        ];
+
+    }
+
+
+    public function updateEmployee(Request $request, $id)
+    {
+        $request->merge([
+            'company_id' => Auth::user()->company_id,
+            'full_name' => $request->input('first_name') . ' ' . $request->input('last_name'),
+        ]);
+
+        $employee = EmployeeTrait::getEmployeeById($id);
+        $employee->update($request->all());
+
+        $attachments = [];
+
+        foreach (['certificates', ...self::ATTACHMENT_TYPES] as $key => $value) {
+            $file = $request->file($key);
+            $this->handleDocumentUpload(
+                $file,
+                $value,
+                $attachments
+            );
+            // Delete the old document of this type if it exists.
+            $this->deleteOldAttachment($employee, $value);
+        }
+        // Save all newly uploaded attachments.
+        foreach ($attachments as $attachment) {
+            $employee->attachments()->create($attachment);
+        }
+        return [
+            'status' => 'success',
+            'employee' => $employee,
+        ];
+    }
+
+}

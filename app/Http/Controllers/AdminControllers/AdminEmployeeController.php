@@ -5,16 +5,21 @@ namespace App\Http\Controllers\AdminControllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
+use App\Http\Services\EmployeeService;
 use App\Http\Utils\Traits\EmployeeTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 use App\Http\Utils\Traits\UploadFileTrait;
+use Illuminate\Support\Facades\Hash;
 
 class AdminEmployeeController extends Controller
 {
     use EmployeeTrait, UploadFileTrait;
+
+
+    public function __construct(private EmployeeService $employeeService){}
 
     /**
      * Summary of index
@@ -39,13 +44,19 @@ class AdminEmployeeController extends Controller
      */
     public function store(StoreEmployeeRequest $request)
     {
-        $outcome = $this->storeEmployee($request, self::ATTACHMENT_TYPES,
-            fn($file, $value, &$attachments) =>   $this->handleDocumentUpload($file, $value, $attachments));
+        $outcome = $this->employeeService->storeEmployee(
+            $request, self::ATTACHMENT_TYPES,
+            );
         return redirect()->route('admin.employees.show', $outcome['employee']->id)
             ->with('success', 'Employee created successfully');
     }
 
 
+    /**
+     * Summary of show
+     * @param mixed $id
+     * @return \Illuminate\Contracts\View\View
+     */
     public function show($id)
     {
         $employee = EmployeeTrait::getEmployeeById($id);
@@ -54,6 +65,12 @@ class AdminEmployeeController extends Controller
         return view('admin.employee.show', compact('employee', 'attachments'));
     }
 
+
+    /**
+     * Summary of edit
+     * @param mixed $id
+     * @return \Illuminate\Contracts\View\View
+     */
     public function edit($id)
     {
         $employee = self::getEmployeeById($id);
@@ -65,37 +82,15 @@ class AdminEmployeeController extends Controller
         return view('admin.employee.edit', compact('employee', 'roles'));
     }
 
+
     /**
      * Update an existing employee record and manage file replacement.
      */
     public function update(UpdateEmployeeRequest $request, $id)
     {
-        $request->merge([
-            'company_id' => Auth::user()->company_id,
-            'full_name' => $request->input('first_name') . ' ' . $request->input('last_name'),
-        ]);
-
-        $employee = EmployeeTrait::getEmployeeById($id);
-        $employee->update($request->all());
-
-        $attachments = [];
-
-        foreach ([ 'certificates' , ...self::ATTACHMENT_TYPES] as $key => $value) {
-            $file = $request->file($key);
-            $this->handleDocumentUpload(
-                $file,
-                $value,
-                $attachments
-            );
-            // Delete the old document of this type if it exists.
-            $this->deleteOldAttachment($employee, $value);
-        }
-        // Save all newly uploaded attachments.
-        foreach ($attachments as $attachment) {
-            $employee->attachments()->create($attachment);
-        }
-
-        return redirect()->route('admin.employees.show', $employee->id)
+        $outcome = $this->employeeService->updateEmployee($request, $id);
+        return redirect()->route('admin.employees.show',
+             $outcome['employee']->id)
             ->with('success', 'Employee updated successfully');
     }
 
@@ -114,16 +109,14 @@ class AdminEmployeeController extends Controller
         ]);
 
         $employee = EmployeeTrait::getEmployeeById($id);
-
         if (!$employee || !$employee->user) {
             return redirect()->back()->with([
                 'status' => 'error',
                 'message' => 'User not found for the selected employee'
             ]);
         }
-
         $employee->user->update([
-            'password' => bcrypt($request->password),
+            'password' => Hash::make($request->password),
         ]);
 
         return redirect()->back()->with([
@@ -131,6 +124,7 @@ class AdminEmployeeController extends Controller
             'message' => 'Password updated successfully'
         ]);
     }
+
 
 
     /**
