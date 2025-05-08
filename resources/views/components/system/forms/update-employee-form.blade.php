@@ -17,6 +17,15 @@
                     </div>
                 </div>
 
+                {{-- Middle Name --}}
+                <div class="col-md-6 mb-4">
+                    <label class="text-dark font-weight-medium">Middle Name</label>
+                    <div class="input-group">
+                        <span class="input-group-text mdi mdi-account"></span>
+                        <input type="text" name="middle_name" class="form-control"
+                            value="{{ old('middle_name', $employee->middle_name) }}" required>
+                    </div>
+                </div>
                 {{-- Last Name --}}
                 <div class="col-md-6 mb-4">
                     <label class="text-dark font-weight-medium">Last Name</label>
@@ -28,18 +37,15 @@
                 </div>
 
                 {{-- Gender --}}
-                <div class="col-md-12 mb-4">
+                <div class="col-md-6 mb-4">
                     <label class="text-dark font-weight-medium">Gender</label>
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-gender-male-female"></span>
                         <select name="gender" class="form-control" required>
-                            <option value="Male"
-                                {{ old('gender', $employee->gender) == 'Male' ? 'selected' : '' }}>Male</option>
-                            <option value="Female"
-                                {{ old('gender', $employee->gender) == 'Female' ? 'selected' : '' }}>Female
-                            </option>
-                            <option value="Other"
-                                {{ old('gender', $employee->gender) == 'Other' ? 'selected' : '' }}>Other
+                            <option value="Male" {{ old('gender', $employee->gender) == 'Male' ? 'selected' : '' }}>
+                                Male</option>
+                            <option value="Female" {{ old('gender', $employee->gender) == 'Female' ? 'selected' : '' }}>
+                                Female
                             </option>
                         </select>
                     </div>
@@ -100,8 +106,18 @@
                     <label class="text-dark font-weight-medium">Marital Status</label>
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-heart"></span>
-                        <input type="text" name="marital_status" class="form-control"
-                            value="{{ old('marital_status', $employee->marital_status) }}">
+                        <select name="marital_status" class="form-control" required>
+                            <option value="" disabled {{ old('marital_status') ? '' : 'selected' }}>Marital
+                                Status
+                            </option>
+                            <option value="Married" {{ old('marital_status') == 'Married' ? 'selected' : '' }}>Married
+                            </option>
+                            <option value="Single" {{ old('marital_status') == 'Single' ? 'selected' : '' }}>Single
+                            </option>
+                            <option value="Complicated" {{ old('marital_status') == 'Complicated' ? 'selected' : '' }}>
+                                Complicated
+                            </option>
+                        </select>
                     </div>
                 </div>
 
@@ -180,12 +196,12 @@
                         </button>
                     </div>
                 </div>
-                <div class="row mx-4 mt-4">
-                     {{-- Change Password Button on the right --}}
-                     <div class="col-12 d-flex justify-content-between">
-                         <x-system.modal-button class="btn btn-secondary " text="Change Password"
-                     id="UpdatePassword" />
-                     </div>
+                <div class="col-md-4 mt-4">
+                    {{-- Change Password Button on the right --}}
+                    <div class="col-md-12 d-flex justify-content-between">
+                        <x-system.modal-button class="btn btn-secondary " text="Change Password"
+                            id="UpdatePassword" />
+                    </div>
                 </div>
 
             </div>
@@ -193,8 +209,7 @@
 
         {{-- Modal for Changing Password --}}
         <x-system.modal id="UpdatePassword" form="updatePasswordForm" title="ChangePassword">
-            <form id="updatePasswordForm" method="POST"
-                action="{{ route($internal_route, $employee->id) }}">
+            <form id="updatePasswordForm" method="POST" action="{{ route($internal_route, $employee->id) }}">
                 @csrf
                 <div class="form-group">
                     <label for="">New Password</label>

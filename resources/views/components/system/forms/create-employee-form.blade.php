@@ -15,10 +15,22 @@
                             value="{{ old('first_name') }}" required>
                     </div>
                     @error('first_name')
-                        <span class="text-danger d-block">massanga</span>
+                        <span class="text-danger d-block">{{ $message }}</span>
                     @enderror
                 </div>
 
+                {{-- Middle Name --}}
+                <div class="col-md-6 mb-4">
+                    <label class="text-dark font-weight-medium">Middle Name</label>
+                    <div class="input-group">
+                        <span class="input-group-text mdi mdi-account"></span>
+                        <input type="text" name="middle_name" class="form-control" placeholder="Smith"
+                            value="{{ old('middle_name') }}" required>
+                    </div>
+                    @error('middle_name')
+                        <span class="text-danger d-block">{{ $message }}</span>
+                    @enderror
+                </div>
                 {{-- Last Name --}}
                 <div class="col-md-6 mb-4">
                     <label class="text-dark font-weight-medium">Last Name</label>
@@ -33,7 +45,7 @@
                 </div>
 
                 {{-- Gender --}}
-                <div class="col-md-12 mb-4">
+                <div class="col-md-6 mb-4">
                     <label class="text-dark font-weight-medium">Gender</label>
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-gender-male-female"></span>
