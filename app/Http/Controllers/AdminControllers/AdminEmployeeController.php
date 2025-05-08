@@ -9,7 +9,6 @@ use App\Http\Services\EmployeeService;
 use App\Http\Utils\Traits\EmployeeTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 use App\Http\Utils\Traits\UploadFileTrait;
 use Illuminate\Support\Facades\Hash;
