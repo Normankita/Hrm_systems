@@ -24,7 +24,7 @@
                         </div>
                     @endif
                 
-                    <form action="{{ route('employees.leave.store') }}" method="POST">
+                    <form action="{{ route('employees.leave.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                 
                         <div class="mb-3">
@@ -65,6 +65,9 @@
                                 <div class="text-danger mt-1">{{ $message }}</div>
                             @enderror
                         </div>
+                        <x-system.form-inputs.file-upload name="attachments[]"
+                        label="Attachments (if any)" accept="application/pdf" maxSize="1" col="12"
+                            icon="mdi-file-document-outline" multiple />
                 
                         <div class="mb-3">
                             <button type="submit" class="btn btn-primary">Submit Leave Request</button>

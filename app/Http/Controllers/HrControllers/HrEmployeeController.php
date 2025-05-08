@@ -96,38 +96,9 @@ class HrEmployeeController extends Controller
      */
     public function updatePassportPhoto(Request $request, $id)
     {
-        $request->validate([
-            'profile_picture' => [
-                'required',
-                'mimes:jpeg,png,jpg',
-            ],
-        ]);
-
-        $employee = EmployeeTrait::getEmployeeById($id);
-
-        if (!$employee) {
-            return redirect()->back()->with([
-                'status'  => 'error',
-                'message' => 'Employee not found'
-            ]);
-        }
-
-        if (
-            $request->hasFile('profile_picture') &&
-            $request->file('profile_picture')->isValid()
-        ) {
-            // Upload the new passport photo.
-            $photo = $request->file('profile_picture');
-            $filename = 'profile_picture_' . time() . '.' . $photo->getClientOriginalExtension();
-            $path = $photo->storeAs('attachments/employees/profile_photos', $filename, 'public');
-
-            // delete the existing profile if it exists.
-            $this->deleteFile($employee->profile_picture);
-
-            // Update the employee's profile picture.
-            $employee->update(['profile_picture' => $path]);
-
-            return redirect()->route('hr.employees.show', $employee->id)
+        $outcome= $this->employeeService->updateProfilePhoto($request, $id);
+        if($outcome){
+            return redirect()->route('hr.employees.show', $outcome['employee']->id)
                 ->with('success', 'Passport photo updated successfully');
         }
 

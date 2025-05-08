@@ -54,7 +54,7 @@
                                                 <x-system.btn-view :key="$key" :route="route('employees.leave.show', $leave->id)" />
                                                @if ($leave->status!=='approved' && $leave->status!=='rejected')
                                                <x-system.btn-edit :key="$key" :route="route('employees.leave.edit', $leave->id)" />
-                                                <x-system.btn-delete :key="$key" :route="route('employees.leave.destroy', $leave)" />                                                   
+                                                <x-system.btn-delete :key="$key" :route="route('employees.leave.destroy', $leave->id)" />                                                   
                                                @endif
                                         </tr>
                                     @empty

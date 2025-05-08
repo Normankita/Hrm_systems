@@ -3,23 +3,23 @@
 namespace App\Http\Controllers\EmployeeControllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Employee;
+use App\Http\Utils\Traits\UploadFileTrait;
 use App\Models\Leave;
 use App\Models\LeaveType;
 use Illuminate\Http\Request;
 
 class EmployeeLeaveController extends Controller
 {
+    use UploadFileTrait;
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $leaves = Leave::with([
-            'employee',
-            'leaveType'
-        ])->where('employee_id', auth()->user()->employee->id)
-         ->get();
+        $leaves = Leave::with(['employee', 'leaveType', 'attachments'])
+            ->where('employee_id', auth()->user()->employee->id)
+            ->get();
 
         return view('employee.leave.index', compact('leaves'));
     }
@@ -30,9 +30,8 @@ class EmployeeLeaveController extends Controller
     public function create()
     {
         $leaveTypes = LeaveType::all();
-        $employees = Employee::all();
 
-        return view('employee.leave.request', compact('leaveTypes', 'employees'));
+        return view('employee.leave.request', compact('leaveTypes'));
     }
 
     /**
@@ -40,16 +39,11 @@ class EmployeeLeaveController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'leave_type_id' => 'required|exists:leave_types,id',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-            'reason' => 'required|string|max:255',
-        ]);
-        $request->merge(['employee_id' => auth()->user()->employee->id]);
-        $request->merge(['status' => 'pending']); // Assuming 1 is the ID for 'Pending' status
+        $this->validateLeaveRequest($request);
 
-        Leave::create($request->all());
+        $leave = Leave::create($this->prepareLeaveData($request));
+
+        $this->handleAttachments($request, $leave);
 
         return redirect()->route('employees.leave.status')->with('success', 'Leave request submitted successfully.');
     }
@@ -57,41 +51,39 @@ class EmployeeLeaveController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Leave $leave)
+    public function show($id)
     {
+        $leave = Leave::with('attachments')->findOrFail($id);
+
         return view('employee.leave.show', compact('leave'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Leave $leave)
+    public function edit($id)
     {
-        // Retrieve all leave types to populate the dropdown
+        $leave = Leave::with('attachments')->findOrFail($id);
         $leaveTypes = LeaveType::all();
-    
-        // You can pass only the `leaveTypes` variable if the employees data isn't needed in the blade
-        // Since the blade doesn’t seem to require employees information in the form, we can omit that.
+
         return view('employee.leave.edit', compact('leave', 'leaveTypes'));
     }
-    
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Leave $leave)
     {
-        $request->validate([
-            'leave_type_id' => 'required|exists:leave_types,id',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-            'reason' => 'required|string|max:255',
-        ]);
+        $this->validateLeaveRequest($request);
 
-        $request->merge(['employee_id' => auth()->user()->employee->id]);
-        $request->merge(['status' => 'pending']); // Assuming 1 is the ID for 'Pending' status
+        // Delete existing attachments if new ones are provided
+        if ($request->hasFile('attachments')) {
+            $this->deleteExistingAttachments($leave);
+        }
 
-        $leave->update($request->all());
+        $leave->update($this->prepareLeaveData($request));
+
+        $this->handleAttachments($request, $leave);
 
         return redirect()->route('employees.leave.status')->with('success', 'Leave request updated successfully.');
     }
@@ -99,10 +91,76 @@ class EmployeeLeaveController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Leave $leave)
+    public function destroy($id)
     {
+        $leave = Leave::with('attachments')->findOrFail($id);
+
+        $this->deleteExistingAttachments($leave);
+
         $leave->delete();
 
         return redirect()->route('employees.leave.status')->with('success', 'Leave request canceled successfully.');
+    }
+
+    /**
+     * Validate the leave request.
+     */
+    private function validateLeaveRequest(Request $request)
+    {
+        $request->validate([
+            'leave_type_id' => 'required|exists:leave_types,id',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'reason' => 'required|string|max:255',
+            'attachments.*' => 'file|mimes:pdf,jpg,jpeg,png|max:2048',
+        ]);
+    }
+
+    /**
+     * Prepare leave data for storing or updating.
+     */
+    private function prepareLeaveData(Request $request)
+    {
+        return [
+            'employee_id' => auth()->user()->employee->id,
+            'leave_type_id' => $request->leave_type_id,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+            'reason' => $request->reason,
+            'status' => 'pending', // Assuming 'pending' is the default status
+        ];
+    }
+
+    /**
+     * Handle file attachments for a leave request.
+     */
+    private function handleAttachments(Request $request, Leave $leave)
+    {
+        if ($request->hasFile('attachments')) {
+            $attachments = [];
+            foreach ($request->file('attachments') as $file) {
+                $this->handleDocumentUpload(
+                    $file,
+                    'leave_attachment',
+                    $attachments,
+                    'attachments/leaves'
+                );
+            }
+
+            foreach ($attachments as $attachment) {
+                $leave->attachments()->create($attachment);
+            }
+        }
+    }
+
+    /**
+     * Delete existing attachments for a leave request.
+     */
+    private function deleteExistingAttachments(Leave $leave)
+    {
+        foreach ($leave->attachments as $attachment) {
+            $this->deleteFile($attachment->path);
+            $attachment->delete();
+        }
     }
 }
