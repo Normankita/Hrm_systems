@@ -43,12 +43,36 @@ class EmployeeService
 
         $employee = $this->createEmployee($request->all());
 
-        foreach ($attachmentsNamesArray as $key => $value) {
-            $file = $request->file($key);
-            $this->handleDocumentUpload($file, $value, $attachments);
+        // Employee Attachment creation
+        $isCertificatesUploaded = false;
 
-            // Delete the old document of this type if it exists.
-            $this->deleteOldAttachment($employee, $value);
+        foreach ($attachmentsNamesArray as $key => $value) {
+            $formCertificates = $request->certificates;
+            if (!$isCertificatesUploaded && $formCertificates) {
+                $isCertificatesUploaded = true;
+                foreach ($formCertificates as $index => $certificate) {
+                    $this->handleDocumentUpload(
+                        $certificate,
+                        'certificate',
+                        $attachments,
+                        ++$index
+                    );
+                    // Delete the old document of this type if it exists.
+                    $this->deleteOldAttachment($employee, 'certificate');
+                }
+            } else {
+                if (
+                    $request->hasFile($key)
+                ) {
+                    $this->handleDocumentUpload(
+                        $request->file($key),
+                        $value,
+                        $attachments,
+                    );
+                    // Delete the old document of this type if it exists.
+                    $this->deleteOldAttachment($employee, $value);
+                }
+            }
         }
 
         // Save all attachments to the employee.
