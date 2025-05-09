@@ -105,7 +105,7 @@
                 <div class="col-md-6 mb-4">
                     <label class="text-dark font-weight-medium">Marital Status</label>
                     <div class="input-group">
-                        <span class="input-group-text mdi mdi-heart">span</span>
+                        <span class="input-group-text mdi mdi-heart"></span>
                         <select name="marital_status" class="form-control" required>
                             <option value="" disabled>Marital
                                 Status
