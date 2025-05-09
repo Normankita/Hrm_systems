@@ -136,12 +136,9 @@
 
                         @if ($leave->attachments)
                         @foreach ($leave->attachments as $attachment)
-                            <x-system.modal-button class="btn btn-primary py-1 px-2 text-lg"
-                                data-bs-toggle="modal" id="DisplayAttachment{{$attachment->id}}"
-                                 icon="mdi mdi-paperclip" />
-                                <x-system.modal size="modal-fullscreen" id="DisplayAttachment{{$attachment->id}}" title="{{$attachment->filename}}">
-                                    <embed style="height: 100vh; width: 100%;" src="{{ asset('storage/' . $attachment->path) }}" type="application/pdf">
-                                </x-system.modal>
+
+                        {{-- Here goes the new model --}}
+                        <x-system.attachment-file-icon :path="$attachment->path" type="pdf" :attachmentName="$attachment->filename" />
                         @endforeach
                     @endif
 
