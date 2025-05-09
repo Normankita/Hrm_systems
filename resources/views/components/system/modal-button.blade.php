@@ -1,11 +1,11 @@
-@props(['text'=>'', 'icon'=>'', 'id'])
+@props(['text'=>'', 'icon'=>'', 'id', 'textColor' => 'text-white'])
 
 <button type="button"
     {{ $attributes->merge(
         ['class' => $attributes->has('class') ? $attributes->get('class') : 'btn btn-primary']) }}
     data-toggle="modal" data-target="#{{ $id }}">
     @if ($text)
-        <span class="text-dark">{{$text}}</span>
+        <span class="{{ $textColor }}">{{$text}}</span>
     @endif
     @if ($icon)
         <i class="{{$icon}}"></i>

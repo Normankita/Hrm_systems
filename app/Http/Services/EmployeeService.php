@@ -80,11 +80,12 @@ class EmployeeService
             $formCertificates = $request->certificates;
             if (!$isCertificatesUploaded && $formCertificates) {
                 $isCertificatesUploaded = true;
-                foreach ($formCertificates as $certificate) {
+                foreach ($formCertificates as $index => $certificate) {
                     $this->handleDocumentUpload(
                         $certificate,
                         'certificate',
                         $attachments,
+                        ++$index
                     );
                     // Delete the old document of this type if it exists.
                     $this->deleteOldAttachment($employee, 'certificate');

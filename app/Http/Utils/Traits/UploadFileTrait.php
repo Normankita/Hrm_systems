@@ -92,10 +92,11 @@ trait UploadFileTrait
         $file,
         string $type,
         array &$attachments,
+        int $itemCounter = 1,
         string $location = 'attachments/employees',
     ): array|null {
         try {
-            $filename = $type . '_' . time() . '.' . $file->getClientOriginalExtension();
+            $filename = $type . '_'. $itemCounter . time() . '.' . $file->getClientOriginalExtension();
             $path = $file->storeAs(
                 $location . '/',
                 $filename,

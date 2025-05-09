@@ -107,7 +107,7 @@
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-heart">span</span>
                         <select name="marital_status" class="form-control" required>
-                            <option value="" disabled >Marital
+                            <option value="" disabled>Marital
                                 Status
                             </option>
                             <option value="Married" {{ old('marital_status') == 'Married' ? 'selected' : '' }}>Married
@@ -184,20 +184,16 @@
                     </select>
                 </div>
 
-                <x-system.forms.update-employee-attachemnets  :attachments="$employee->attachments" />
+                <x-system.forms.update-employee-attachemnets :attachments="$employee->attachments" />
 
                 <div class="row mt-4">
-                    <div class="col-12 d-flex justify-content-between">
+                    <div class="col-12 d-flex justify-content-start">
                         {{-- Submit Button on the left --}}
-                        <button type="submit" class="btn btn-primary ">
+                        <button type="submit" class="btn btn-primary mx-2">
                             <i class="mdi mdi-content-save-edit"></i> Update Employee
                         </button>
-                    </div>
-                </div>
-                <div class="col-md-4 mt-4">
-                    {{-- Change Password Button on the right --}}
-                    <div class="col-md-12 d-flex justify-content-between">
-                        <x-system.modal-button class="btn btn-secondary " text="Change Password"
+                        {{-- Change Password Button on the right --}}
+                        <x-system.modal-button class="btn btn-secondary" text="Change Password"
                             id="UpdatePassword" />
                     </div>
                 </div>
