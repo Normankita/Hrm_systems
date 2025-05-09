@@ -108,7 +108,7 @@
                                             <div class="d-flex justify-content-end gap-2">
                                                 <x-system.modal-button class="btn btn-primary" text="Reject / Approve Leave" id="approveLeave" />
                                                 <x-system.modal id="approveLeave" form="approveRejectForm">
-                                                    <form id="approveRejectForm" method="POST" 
+                                                    <form id="approveRejectForm" method="POST"
                                                         action="{{ route('hr.leave.inspect', $leave->id) }}">
                                                         @csrf
                                                         <div class="form-group">
@@ -132,6 +132,20 @@
                                 </div>
                             </div>
                         </div>
+
+
+                        @if ($leave->attachments)
+                        @foreach ($leave->attachments as $attachment)
+                            <x-system.modal-button class="btn btn-primary py-1 px-2 text-lg"
+                                data-bs-toggle="modal" id="DisplayAttachment{{$attachment->id}}"
+                                 icon="mdi mdi-paperclip" />
+                                <x-system.modal size="modal-fullscreen" id="DisplayAttachment{{$attachment->id}}" title="{{$attachment->filename}}">
+                                    <embed style="height: 100vh; width: 100%;" src="{{ asset('storage/' . $attachment->path) }}" type="application/pdf">
+                                </x-system.modal>
+                        @endforeach
+                    @endif
+
+
                     </div>
                 </div>
             </div>

@@ -38,7 +38,7 @@ class EmployeeService
         // Merge additional fields before creating the employee.
         $request->merge([
             'company_id' => Auth::user()->company_id,
-            'full_name' => $request->input('first_name') . ' '.$request->input('middle_name') .' ' . $request->input('last_name'),
+            'full_name' => $request->input('first_name') . ' ' . $request->input('middle_name') . ' ' . $request->input('last_name'),
         ]);
 
         $employee = $this->createEmployee($request->all());
@@ -68,23 +68,40 @@ class EmployeeService
     {
         $request->merge([
             'company_id' => Auth::user()->company_id,
-            'full_name' => $request->input('first_name') . ' '.$request->input('middle_name').' ' . $request->input('last_name'),
+            'full_name' => $request->input('first_name') . ' ' . $request->input('middle_name') . ' ' . $request->input('last_name'),
         ]);
 
         $employee = EmployeeTrait::getEmployeeById($id);
-        $employee->update($request->all());
 
         $attachments = [];
 
-        foreach (['certificates', ...self::ATTACHMENT_TYPES] as $key => $value) {
-            $file = $request->file($key);
-            $this->handleDocumentUpload(
-                $file,
-                $value,
-                $attachments
-            );
-            // Delete the old document of this type if it exists.
-            $this->deleteOldAttachment($employee, $value);
+        $isCertificatesUploaded = false;
+        foreach (self::ATTACHMENT_TYPES as $key => $value) {
+            $formCertificates = $request->certificates;
+            if (!$isCertificatesUploaded && $formCertificates) {
+                $isCertificatesUploaded = true;
+                foreach ($formCertificates as $certificate) {
+                    $this->handleDocumentUpload(
+                        $certificate,
+                        'certificate',
+                        $attachments,
+                    );
+                    // Delete the old document of this type if it exists.
+                    $this->deleteOldAttachment($employee, 'certificate');
+                }
+            } else {
+                if (
+                    $request->hasFile($key)
+                ) {
+                    $this->handleDocumentUpload(
+                        $request->file($key),
+                        $value,
+                        $attachments,
+                    );
+                    // Delete the old document of this type if it exists.
+                    $this->deleteOldAttachment($employee, $value);
+                }
+            }
         }
         // Save all newly uploaded attachments.
         foreach ($attachments as $attachment) {
@@ -96,7 +113,8 @@ class EmployeeService
         ];
     }
 
-    public function UpdateProfilePhoto(Request $request, $id){
+    public function UpdateProfilePhoto(Request $request, $id)
+    {
         $request->validate([
             'profile_picture' => [
                 'required',
@@ -127,10 +145,10 @@ class EmployeeService
             // Update the employee's profile picture.
             $employee->update(['profile_picture' => $path]);
             return [
-                'status'=> 'success',
-                'message'=> 'Profile photo updated Successfully',
-                'employee'=>$employee
-            ];            
+                'status' => 'success',
+                'message' => 'Profile photo updated Successfully',
+                'employee' => $employee
+            ];
         }
         return null;
     }

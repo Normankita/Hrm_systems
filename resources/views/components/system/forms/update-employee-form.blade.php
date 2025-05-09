@@ -105,9 +105,9 @@
                 <div class="col-md-6 mb-4">
                     <label class="text-dark font-weight-medium">Marital Status</label>
                     <div class="input-group">
-                        <span class="input-group-text mdi mdi-heart"></span>
+                        <span class="input-group-text mdi mdi-heart">span</span>
                         <select name="marital_status" class="form-control" required>
-                            <option value="" disabled {{ old('marital_status') ? '' : 'selected' }}>Marital
+                            <option value="" disabled >Marital
                                 Status
                             </option>
                             <option value="Married" {{ old('marital_status') == 'Married' ? 'selected' : '' }}>Married
@@ -184,7 +184,7 @@
                     </select>
                 </div>
 
-                <x-system.forms.update-employee-attachemnets />
+                <x-system.forms.update-employee-attachemnets  :attachments="$employee->attachments" />
 
                 <div class="row mt-4">
                     <div class="col-12 d-flex justify-content-between">

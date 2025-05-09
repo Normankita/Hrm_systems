@@ -5,7 +5,7 @@
         ['class' => $attributes->has('class') ? $attributes->get('class') : 'btn btn-primary']) }}
     data-toggle="modal" data-target="#{{ $id }}">
     @if ($text)
-        {{$text}}
+        <span class="text-dark">{{$text}}</span>
     @endif
     @if ($icon)
         <i class="{{$icon}}"></i>

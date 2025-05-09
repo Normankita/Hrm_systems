@@ -20,7 +20,7 @@ trait UploadFileTrait
         'tin_document' => 'tin',
         'national_id_document' => 'national_id',
         'cv_document' => 'cv',
-        'certificate' => 'certificate',
+        'certificates' => 'certificate',
     ];
 
 
@@ -105,7 +105,6 @@ trait UploadFileTrait
                 'filename' => $filename,
                 'path' => $path,
                 'type' => $type
-
             ];
             return [
                 'status' => 'success',

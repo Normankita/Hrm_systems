@@ -1,11 +1,11 @@
-<link href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css"
-    rel="stylesheet"
-     type="text/css" />
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<link href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" rel="stylesheet" type="text/css" />
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <style>
     .dropzone-container {
         position: relative;
     }
+
     .dropzone {
         border: 2px dashed #dee2e6;
         border-radius: 8px;
@@ -18,30 +18,38 @@
         cursor: pointer;
         transition: all 0.3s ease;
     }
+
     .dropzone:hover {
         border-color: #4e73df;
         background: #f1f3f9;
     }
+
     .dropzone .dz-message {
         text-align: center;
         color: #6c757d;
     }
+
     .dropzone .dz-message i {
         color: #4e73df;
         font-size: 2rem;
     }
+
     .dropzone .dz-preview {
         margin: 10px;
     }
+
     .dropzone .dz-preview .dz-image {
         border-radius: 8px;
     }
+
     .dropzone .dz-preview .dz-details {
         color: #495057;
     }
+
     .dropzone .dz-preview .dz-remove {
         color: #dc3545;
     }
+
     .dropzone .dz-preview .dz-remove:hover {
         text-decoration: none;
         color: #bd2130;
@@ -87,7 +95,7 @@
         background: #fff;
         border-radius: 4px;
         padding: 8px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .certificates-list {
@@ -105,15 +113,8 @@
     }
 </style>
 
-@props([
-    'name',
-    'label',
-    'accept',
-    'maxSize',
-    'icon',
-    'multiple' => false,
-    'col' => 6
-])
+@props(['name', 'label', 'accept', 'maxSize', 'icon', 'multiple' => false,
+ 'col' => 6])
 
 @php
     $inputId = Str::slug($name) . 'Area';
@@ -121,26 +122,25 @@
 
 <div class="col-md-{{ $col }} mb-4">
     <label class="text-dark font-weight-medium">{{ $label }}</label>
+
+    {{ $slot }}
+
     <div class="upload-area" id="{{ $inputId }}">
         <div class="upload-area-content">
             <i class="mdi {{ $icon }} mdi-24px mb-2"></i>
             <span>Drag & drop {{ strtolower($label) }} here or click to upload</span>
-            <small class="d-block text-muted mt-1">Accepted format{{ $multiple ? 's' : '' }}: {{ $accept }} (Max: {{ $maxSize }}MB{{ $multiple ? ' per file' : '' }})</small>
+            <small class="d-block text-muted mt-1">Accepted format{{ $multiple ? 's' : '' }}: {{ $accept }} (Max:
+                {{ $maxSize }}MB{{ $multiple ? ' per file' : '' }})</small>
         </div>
-        <input
-            type="file"
-            name="{{ $name }}"
-            class="file-input"
-            accept="{{ $accept }}"
-            data-max-size="{{ $maxSize }}"
-            @if($multiple) multiple @endif
-        >
+        <input type="file" name="{{ $name }}" class="file-input" accept="{{ $accept }}"
+            data-max-size="{{ $maxSize }}" @if ($multiple) multiple @endif>
         <div class="file-preview mt-2 d-none">
-            @if($multiple)
+            @if ($multiple)
                 <div class="certificates-list"></div>
             @else
                 <div class="d-flex align-items-center" style="overflow: hidden;">
-                    <i class="mdi mdi-file-{{ Str::contains($accept, 'image') ? 'image text-primary' : 'pdf text-danger' }} mdi-24px me-2"></i>
+                    <i
+                        class="mdi mdi-file-{{ Str::contains($accept, 'image') ? 'image text-primary' : 'pdf text-danger' }} mdi-24px me-2"></i>
                     <span class="file-name"></span>
                 </div>
             @endif
@@ -215,5 +215,4 @@
             preview.find('.certificates-list').empty();
         });
     });
-    </script>
-
+</script>

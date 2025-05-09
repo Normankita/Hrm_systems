@@ -12,13 +12,18 @@
                 </button>
             </div>
             <div class="modal-body">
-               {{ $slot }}
+               <div class="row">
+                    <div class="col-md-12">
+                        {{ $slot }} 
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger btn-pill" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger btn-pill"
+                data-dismiss="modal">Close</button>
                @if ($form)
                <button form="{{ $form }}" type="submit"
-               class="btn btn-primary btn-pill">Save Changes</button>
+                class="btn btn-primary btn-pill">Save Changes</button>
                @endif
             </div>
         </div>
