@@ -1,7 +1,7 @@
 <footer class="footer mt-auto">
     <div class="copyright bg-white">
         <p>
-            &copy; <span id="copy-year"></span> Todaysky 
+            &copy; <span id="copy-year"></span> Todaysky v{{ config('info.version') }}
         </p>
     </div>
     <script>
