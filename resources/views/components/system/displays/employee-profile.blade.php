@@ -46,7 +46,7 @@
 
 @props([
     'prefix' => null,
-    'employee',
+    'employee','attachments',
 ])
 
 <div class="container mt-4">
@@ -132,28 +132,28 @@
                 <div class="info-grid">
                     <div>
                         <strong>National id:</strong> 
-                        <x-system.attachment-file-icon :path="$employee->attachments->where('type', 'national_id')->first()?->path" type="pdf" :attachmentName="$employee->attachments->where('type', 'national_id')->first()?->filename" />
+                        <x-system.attachment-file-icon :path="$attachments->where('type', 'national_id')->first()?->path" type="pdf" :attachmentName="$attachments->where('type', 'national_id')->first()?->filename" />
                     </div>
                     <div>
                         <strong>Local Government Letter:</strong> 
-                        <x-system.attachment-file-icon :path="$employee->attachments->where('type', 'letter')->first()?->path" type="pdf" :attachmentName="$employee->attachments->where('type', 'national_id')->first()?->filename" />
+                        <x-system.attachment-file-icon :path="$attachments->where('type', 'letter')->first()?->path" type="pdf" :attachmentName="$attachments->where('type', 'letter')->first()?->filename" />
                     </div>
                     <div>
                         <strong>Passport:</strong> 
-                        <x-system.attachment-file-icon :path="$employee->attachments->where('type', 'passwort_photo')->first()?->path" type="pdf" :attachmentName="$employee->attachments->where('type', 'passport_photo')->first()?->filename" />
+                        <x-system.attachment-file-icon :path="$attachments->where('type', 'passport_photo')->first()?->path" type="pdf" :attachmentName="$attachments->where('type', 'passport_photo')->first()?->filename" />
                     </div>
                     <div>
                         <strong>TIN:</strong> 
-                        <x-system.attachment-file-icon :path="$employee->attachments->where('type', 'tin')->first()?->path" type="pdf" :attachmentName="$employee->attachments->where('type', 'tin')->first()?->filename" />
+                        <x-system.attachment-file-icon :path="$attachments->where('type', 'tin')->first()?->path" type="pdf" :attachmentName="$attachments->where('type', 'tin')->first()?->filename" />
                     </div>
                     <div>
                         <strong>TIN:</strong> 
-                        <x-system.attachment-file-icon :path="$employee->attachments->where('type', 'cv')->first()?->path" type="pdf" :attachmentName="$employee->attachments->where('type', 'cv')->first()?->filename" />
+                        <x-system.attachment-file-icon :path="$attachments->where('type', 'cv')->first()?->path" type="pdf" :attachmentName="$attachments->where('type', 'cv')->first()?->filename" />
                     </div>
                      <div>
                         <strong>Certificates:</strong> <br>
                         @php
-                            $certificates = $employee->attachments->where('type', 'certificate');
+                            $certificates = $attachments->where('type', 'certificate');
                             $counter =1;
                         @endphp
                         @if ($certificates)
