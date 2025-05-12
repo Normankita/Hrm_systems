@@ -45,7 +45,7 @@
 @endsection
 
 @props([
-    'prefix'=>null,
+    'prefix' => null,
     'employee',
 ])
 
@@ -61,8 +61,8 @@
 
             <div class="d-flex align-items-center mb-4">
                 <img src="{{ $employee->profile_picture
-                    ? asset('storage/' . $employee->profile_picture)
-                    : 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg' }}"
+    ? asset('storage/' . $employee->profile_picture)
+    : 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg' }}"
                     alt="Profile Image" class="profile-img me-3">
                 <div>
                     <h2 class="mb-0">{{ $employee->full_name }}</h2>
@@ -72,7 +72,7 @@
                         id="UpdateProfilePhoto" text="Update Profile Image" />
 
                     <x-system.modal id="UpdateProfilePhoto" form="updateProfilePhotoForm" title="New Profile photo">
-                        <form action="{{ route($prefix.'.updateProfilePhoto', $employee->id)}}" id="updateProfilePhotoForm" enctype="multipart/form-data" method="POST">
+                        <form action="{{ route($prefix . '.updateProfilePhoto', $employee->id)}}" id="updateProfilePhotoForm" enctype="multipart/form-data" method="POST">
                             @csrf
                             <div class="form-group">
                                 <div class="col-md-12 mb-4">
@@ -91,7 +91,7 @@
                     </x-system.modal>
 
                     @hasanyrole(['ADMIN', 'HR_OFFICER'])
-                        <a href="{{ route($prefix.'.index') }}" class="btn btn-outline-secondary btn-custom">BACK TO LIST</a>
+                        <a href="{{ route($prefix . '.index') }}" class="btn btn-outline-secondary btn-custom">BACK TO LIST</a>
                     @endhasanyrole
                 </div>
             </div>
@@ -119,7 +119,7 @@
                 </div>
             </div>
 
-            <div>
+            <div class="mb-4"> 
                 <h4 class="section-title">Other Information</h4>
                 <div class="info-grid">
                     <div><strong>National ID:</strong> {{ $employee->national_id }}</div>
@@ -127,8 +127,48 @@
                 </div>
             </div>
 
+            <div class="mb-4">
+                <h4 class="section-title">Employment Attachments</h4>
+                <div class="info-grid">
+                    <div>
+                        <strong>National id:</strong> 
+                        <x-system.attachment-file-icon :path="$employee->attachments->where('type', 'national_id')->first()?->path" type="pdf" :attachmentName="$employee->attachments->where('type', 'national_id')->first()?->filename" />
+                    </div>
+                    <div>
+                        <strong>Local Government Letter:</strong> 
+                        <x-system.attachment-file-icon :path="$employee->attachments->where('type', 'letter')->first()?->path" type="pdf" :attachmentName="$employee->attachments->where('type', 'national_id')->first()?->filename" />
+                    </div>
+                    <div>
+                        <strong>Passport:</strong> 
+                        <x-system.attachment-file-icon :path="$employee->attachments->where('type', 'passwort_photo')->first()?->path" type="pdf" :attachmentName="$employee->attachments->where('type', 'passport_photo')->first()?->filename" />
+                    </div>
+                    <div>
+                        <strong>TIN:</strong> 
+                        <x-system.attachment-file-icon :path="$employee->attachments->where('type', 'tin')->first()?->path" type="pdf" :attachmentName="$employee->attachments->where('type', 'tin')->first()?->filename" />
+                    </div>
+                    <div>
+                        <strong>TIN:</strong> 
+                        <x-system.attachment-file-icon :path="$employee->attachments->where('type', 'cv')->first()?->path" type="pdf" :attachmentName="$employee->attachments->where('type', 'cv')->first()?->filename" />
+                    </div>
+                     <div>
+                        <strong>Certificates:</strong> <br>
+                        @php
+                            $certificates = $employee->attachments->where('type', 'certificate');
+                            $counter =1;
+                        @endphp
+                        @if ($certificates)
+                        @foreach ($certificates as $attachment)
+                            {{-- Here goes the new model --}}
+                        <p>{{$counter++;}}:</p>
+                            <x-system.attachment-file-icon :path="$attachment->path" type="pdf" :attachmentName="$attachment->filename" />
+                        @endforeach
+                    @endif
+                    </div>
+                </div>
+            </div>
+
             <div class="text-end mt-4">
-                <a href="{{ route($prefix.'.edit', $employee->id) }}" class="btn btn-primary">
+                <a href="{{ route($prefix . '.edit', $employee->id) }}" class="btn btn-primary">
                     <i class="bi bi-pencil-square"></i> Edit
                 </a>
             </div>
