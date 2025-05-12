@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\AdminController\AdminRoleController;
+use App\Http\Controllers\AdminControllers\AdminRoleController;
 use App\Http\Controllers\AdminControllers\AdminCompanyController;
 use App\Http\Controllers\AdminControllers\AdminDepartmentController;
 use App\Http\Controllers\AdminControllers\AdminEmployeeController;

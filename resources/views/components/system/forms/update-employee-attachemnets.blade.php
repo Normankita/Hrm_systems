@@ -55,6 +55,19 @@
         @endif
     </x-system.form-inputs.file-upload>
 
+    <x-system.form-inputs.file-upload name="letter" label="Local government letter" accept="application/pdf" maxSize="5"
+    col="12" icon="mdi-file-document-outline">
+    @if ($attachments)
+        @php
+            $attachment = $attachments->where('type', 'letter')->first();
+            $attachmentName = $attachment ? $attachment->filename : null;
+        @endphp
+        @if ($attachmentName)
+            <x-system.attachment-file-icon :path="$attachment->path" type="pdf" :attachmentName="$attachmentName" />
+        @endif
+    @endif
+</x-system.form-inputs.file-upload>
+
     <x-system.form-inputs.file-upload name="certificates[]" label="Certificates" accept="application/pdf" maxSize="5"
         col="12" icon="mdi-certificate" multiple>
         @if ($attachments)
