@@ -11,13 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('refunds', function (Blueprint $table) {
+        Schema::create('refunds', function
+        (Blueprint $table) {
             $table->id();
             $table->double('refund_amount');
-            $table->foreignId('loan_id')->constrained('loans')->onDelete('cascade');
-            $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
+            $table->foreignId('loan_id')
+                ->constrained('loans')
+                ->onDelete('cascade');
+            $table->foreignId('employee_id')
+                ->constrained('employees'
+                )->onDelete('cascade');
             $table->date('refund_date');
-            $table->fporeignId('payroll_id')->constrained('payrolls')->onDelete('cascade');
+            $table->foreignId('payroll_id')
+                ->constrained('payrolls')->onDelete('cascade');
             $table->timestamps();
         });
     }
