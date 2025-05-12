@@ -28,12 +28,7 @@
                     <ul class="collapse" id="employee-menu" data-parent="#sidebar-menu">
                         <div class="sub-menu">
                             <li>
-                                <a class="sidenav-item-link" href="{{ route('hr.employees.create') }}">
-                                    <span class="nav-text">Create Employee</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="sidenav-item-link" href="{{route('hr.employees.index')}}">
+                                <a class="sidenav-item-link" href="{{route('payroll.employees.index')}}">
                                     <span class="nav-text">View Employees</span>
                                 </a>
                             </li>
@@ -46,7 +41,7 @@
         <div class="sidebar-footer" style="position: absolute; bottom: 0; width: 100%; padding: 15px;">
             <ul class="nav">
                 <li>
-                    <a class="sidenav-item-link" href="#" style="color: white; padding: 10px 15px;">
+                    <a class="sidenav-itemadb-link" href="#" style="color: white; padding: 10px 15px;">
                         <i class="mdi mdi-account-circle"></i>
                         <span class="nav-text">My Profile</span>
                     </a>

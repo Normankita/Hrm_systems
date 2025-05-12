@@ -31,6 +31,7 @@ class HrEmployeeController extends Controller
         return view('hr.employee.index', compact('employees'));
     }
 
+
     public function create()
     {
         $roles = Role::where('name', '!=', 'ADMIN')->get();
