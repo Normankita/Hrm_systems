@@ -91,5 +91,8 @@ class Employee extends Model
             'attachmentable'
         );
     }
+    public function payrolls(){
+        return $this->hasMany(Payroll::class);
+    }
 
 }

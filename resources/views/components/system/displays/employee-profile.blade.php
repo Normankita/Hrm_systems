@@ -68,6 +68,7 @@
                     <h2 class="mb-0">{{ $employee->full_name }}</h2>
                     <p class="text-muted">{{ $employee->employee_type }}</p>
 
+                  @hasanyrole(['ADMIN', 'HR_OFFICER'])
                     <x-system.modal-button class="btn btn-primary btn-custom me-2" data-bs-toggle="modal"
                         id="UpdateProfilePhoto" text="Update Profile Image" />
 
@@ -89,8 +90,9 @@
                             </div>
                         </form>
                     </x-system.modal>
+                  @endhasanyrole
 
-                    @hasanyrole(['ADMIN', 'HR_OFFICER'])
+                    @hasanyrole(['ADMIN', 'HR_OFFICER', 'PAYROLL_MANAGER'])
                         <a href="{{ route($prefix . '.index') }}" class="btn btn-outline-secondary btn-custom">BACK TO LIST</a>
                     @endhasanyrole
                 </div>
@@ -126,6 +128,7 @@
                     <div><strong>TIN Number:</strong> {{ $employee->tin_number }}</div>
                 </div>
             </div>
+            @hasanyrole(['ADMIN', 'HR_OFFICER', 'EMPLOYEE'])
 
             <div class="mb-4">
                 <h4 class="section-title">Employment Attachments</h4>
@@ -166,12 +169,15 @@
                     </div>
                 </div>
             </div>
+            @endhasanyrole
 
-            <div class="text-end mt-4">
+            @hasanyrole(['ADMIN', 'HR_OFFICER', 'EMPLOYEE'])
+                        <div casyass="text-end mt-4">
                 <a href="{{ route($prefix . '.edit', $employee->id) }}" class="btn btn-primary">
                     <i class="bi bi-pencil-square"></i> Edit
                 </a>
             </div>
+            @endhasanyrole
         </div>
     </div>
 </div>
