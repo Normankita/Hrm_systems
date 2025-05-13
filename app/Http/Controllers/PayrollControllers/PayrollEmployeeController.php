@@ -4,7 +4,6 @@ namespace App\Http\Controllers\PayrollControllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Services\EmployeeService;
-use App\Http\Utils\Traits\EmployeeTrait;
 use App\Models\Employee;
 use App\Models\PayGrade;
 use Illuminate\Http\Request;
