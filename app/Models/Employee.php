@@ -95,7 +95,7 @@ class Employee extends Model
     public function payrolls(){
         return $this->hasMany(Payroll::class);
     }
-    public function paygrade(){
+    public function pay_grade(){
         return $this->belongsTo(PayGrade::class);
     }
 

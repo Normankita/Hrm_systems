@@ -5,6 +5,7 @@ namespace App\Http\Controllers\PayrollControllers;
 use App\Http\Controllers\Controller;
 use App\Http\Services\EmployeeService;
 use App\Http\Utils\Traits\EmployeeTrait;
+use App\Models\Employee;
 use App\Models\PayGrade;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,8 +27,8 @@ class PayrollEmployeeController extends Controller
 
         public function show($id)
     {
-        $employee = EmployeeTrait::getEmployeeById($id);
-        dd($employee);
+        $employee = Employee::find($id);
+        dd($employee->pay_grade);
         // $pay_grades=PayGrade::all();
         // $attachments = $employee->attachments()->get();
         // $payrolls = $employee->payrolls()->get();
