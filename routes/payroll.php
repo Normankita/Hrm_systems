@@ -12,7 +12,7 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:PAYROLL_MANAGER'])
     ->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/show/{id}', 'show')->name('show');
-        Route::patch('/UpdatePayGrade','UpdatePayGrade')->name('UpdatePayGrade');
+        Route::patch('/UpdatePayGrade/{employee}', 'UpdatePayGrade')->name('UpdatePayGrade');
     });
 
 // Payroll PayGrade Routes

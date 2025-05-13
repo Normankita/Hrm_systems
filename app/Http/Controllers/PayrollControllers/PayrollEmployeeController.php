@@ -28,14 +28,25 @@ class PayrollEmployeeController extends Controller
         public function show($id)
     {
         $employee = Employee::find($id);
-        dd($employee->pay_grade);
-        // $pay_grades=PayGrade::all();
-        // $attachments = $employee->attachments()->get();
-        // $payrolls = $employee->payrolls()->get();
+        $pay_grades=PayGrade::all();
+        $attachments = $employee->attachments()->get();
+        $payrolls = $employee->payrolls()->get();
 
         return view('payroll.employee.show', compact('employee', 'attachments', 'payrolls', 'pay_grades'));
     }
-    public function UpdatePayGrade(Request $request, PayGrade $payGrade){
-        $employee = EmployeeTrait::getEmployeeById($request->id);
-    }
+public function UpdatePayGrade(Request $request, Employee $employee)
+{
+    // Validate the request input
+    $request->validate([
+        'pay_grade_id' => 'required|exists:pay_grades,id',
+    ]);
+
+    // Update the pay grade
+    $employee->update([
+        'pay_grade_id' => $request->pay_grade_id
+    ]);
+
+    return back()->with('success', 'Pay grade updated successfully.');
+}
+
 }

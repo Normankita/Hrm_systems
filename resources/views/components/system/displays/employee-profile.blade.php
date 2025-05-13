@@ -67,7 +67,7 @@
                     alt="Profile Image" class="profile-img me-3">
                 <div>
                     <h2 class="mb-0">{{ $employee->full_name }}</h2>
-                    <p class="text-muted"><span>{{ $employee->employee_type }}</span><span>|</span> <span>{{$employee->paygrade?->name}}</span></p>
+                    <p class="text-muted"><span>{{ $employee->employee_type }}</span><span> | </span> <span>{{$employee->pay_grade?->name}}</span></p>
 
                   @hasanyrole(['ADMIN', 'HR_OFFICER'])
                     <x-system.modal-button class="btn btn-primary btn-custom me-2" data-bs-toggle="modal"
@@ -97,11 +97,13 @@
                         id="UpdatePayGrade" text="Update PayGrade" />
                                     <x-system.modal id="UpdatePayGrade" form="UpdatePayGradeForm" title="New Profile photo">
                         <form action="{{ route('payroll.employees.UpdatePayGrade', $employee)}}" id="UpdatePayGradeForm" enctype="multipart/form-data" method="POST">
+                            
                             @csrf
+                            @method('PATCH')
                             <div class="form-group">
                     <label for="pay_grade_id" class="text-dark font-weight-medium">PayGrade</label>
                     <select name="pay_grade_id" id="pay_grade_id" class="form-control" required>
-                        <option value="" disabled {{ old('pay_grade_id') ? '' : 'selected' }}>Select
+                        <option value="{{$employee->pay_grade->id}}" disabled {{ old('employee->pay_grade->id') ? '' : 'selected' }}>Select
                             PayGrade</option>
                         @foreach ($pay_grades as $pay_grade)
                             <option value="{{ $pay_grade->id }}" {{ old('pay_grade_id') == $pay_grade->id ? 'selected' : '' }}>
