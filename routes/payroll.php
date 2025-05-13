@@ -1,13 +1,30 @@
 <?php
-use App\Http\Controllers\PayrollControllers\PayrollEmployeeController;
+
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PayrollControllers\PayrollEmployeeController;
+use App\Http\Controllers\PayrollControllers\PayrollPayGradeController;
 
-
-    Route::middleware(['auth', 'HasCompanyProfile', 'role:PAYROLL_MANAGER'])
-    ->prefix('/payroll/employee')
-    ->controller(PayrollEmployeeController::class)
+// Payroll Employee Routes
+Route::middleware(['auth', 'HasCompanyProfile', 'role:PAYROLL_MANAGER'])
+    ->prefix('payroll/employee')
     ->name('payroll.employees.')
+    ->controller(PayrollEmployeeController::class)
     ->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/show/{id}', 'show')->name('show');
+        Route::patch('/UpdatePayGrade','UpdatePayGrade')->name('UpdatePayGrade');
+    });
+
+// Payroll PayGrade Routes
+Route::middleware(['auth', 'HasCompanyProfile', 'role:PAYROLL_MANAGER'])
+    ->prefix('payroll/paygrade')
+    ->name('payroll.paygrades.')
+    ->controller(PayrollPayGradeController::class)
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/show/{payGrade}', 'show')->name('show'); 
+        Route::post('/store', 'store')->name('store');
+        Route::patch('/update/{payGrade}', 'update')->name('update');
+        Route::delete('/delete/{payGrade}', 'destroy')->name('delete'); 
+        Route::get('/edit/{payGrade}', 'edit')->name('edit');
     });

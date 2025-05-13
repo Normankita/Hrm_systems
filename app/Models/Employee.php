@@ -45,8 +45,9 @@ class Employee extends Model
         'employee_type',
         'date_of_hire',
         'date_of_termination',
+        'profile_picture',
+        'pay_grade_id',
         'salary',
-        'profile_picture'
     ];
 
     public function user()
@@ -93,6 +94,9 @@ class Employee extends Model
     }
     public function payrolls(){
         return $this->hasMany(Payroll::class);
+    }
+    public function paygrade(){
+        return $this->belongsTo(PayGrade::class);
     }
 
 }

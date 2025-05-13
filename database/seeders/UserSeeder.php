@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Company;
 use App\Models\Department;
 use App\Models\Employee;
+use App\Models\PayGrade;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -30,6 +31,13 @@ class UserSeeder extends Seeder
             'description' => 'Default department for the company',
         ]);
 
+        $payGrade = PayGrade::create([
+    'name' => 'Default Grade',
+    'base_salary' => 50000,
+    'max_salary' => 70000,
+    'base_month_count' => 12,
+    'description' => 'Default pay grade for initial employees',
+]);
 
 
         $admin = array(
@@ -79,6 +87,7 @@ class UserSeeder extends Seeder
             'date_of_termination' => null,
             'salary' => 50000,
             'profile_picture'=>'',
+            'pay_grade_id'=> $payGrade->id,
         ]);
 
 
@@ -113,6 +122,7 @@ class UserSeeder extends Seeder
             'date_of_hire' => now(),
             'date_of_termination' => null,
             'salary' => 50000,
+            'pay_grade_id'=> $payGrade->id
         ]);
 
 
@@ -149,6 +159,7 @@ class UserSeeder extends Seeder
             'date_of_hire' => now(),
             'date_of_termination' => null,
             'salary' => 50000,
+            'pay_grade_id'=> $payGrade->id
         ]);
     }
 }

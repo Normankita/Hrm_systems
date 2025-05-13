@@ -29,6 +29,7 @@ return new class extends Migration
             $table->date('date_of_hire');
             $table->date('date_of_termination')->nullable();
             $table->double('salary')->nullable();
+            $table->foreignId('pay_grade_id')->constrained()->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -36,6 +36,25 @@
                         </div>
                     </ul>
                 </li>
+                                <li class="has-sub">
+                    <a class="sidenav-item-link" href="javascript:void(0)"
+                        data-toggle="collapse"
+                        data-target="#paygrade-menu" aria-expanded="false"
+                            aria-controls="employee-menu">
+                        <i class="mdi mdi-cash-multiple"></i>
+                        <span class="nav-text">PayGrade</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="collapse" id="paygrade-menu" data-parent="#sidebar-menu">
+                        <div class="sub-menu">
+                            <li>
+                                <a class="sidenav-item-link" href="{{route('payroll.paygrades.index')}}">
+                                    <span class="nav-text">View PayGrades</span>
+                                </a>
+                            </li>
+                        </div>
+                    </ul>
+                </li>
             </ul>
         </div>
         <!-- Bottom Section -->

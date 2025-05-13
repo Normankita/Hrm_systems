@@ -7,6 +7,7 @@ use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
 use App\Http\Services\EmployeeService;
 use App\Http\Utils\Traits\EmployeeTrait;
+use App\Models\PayGrade;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
@@ -35,7 +36,8 @@ class AdminEmployeeController extends Controller
     public function create()
     {
         $roles = Role::where('name', '!=', 'ADMIN')->get();
-        return view('admin.employee.create', compact('roles'));
+        $pay_grades= PayGrade::get();
+        return view('admin.employee.create', compact('roles', 'pay_grades'));
     }
 
     /**

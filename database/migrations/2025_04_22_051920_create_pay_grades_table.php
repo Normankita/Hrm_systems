@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->double('base_salary');
+            $table->double('max_salary');
             $table->integer('base_month_count');
             $table->text('description')->nullable();
             $table->timestamps();

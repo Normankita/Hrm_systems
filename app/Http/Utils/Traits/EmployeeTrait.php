@@ -36,7 +36,7 @@ trait EmployeeTrait
     public static function getEmployeeById($id): Employee
     {
         // Find the employee by ID
-        $employee = Employee::where('id', $id)->first();
+        $employee = Employee::with(['paygrade', 'attachments', 'payrolls'])->findOrFail($id);
         return $employee;
     }
 

@@ -47,6 +47,7 @@
 @props([
     'prefix' => null,
     'employee','attachments',
+    'pay_grades'
 ])
 
 <div class="container mt-4">
@@ -66,7 +67,7 @@
                     alt="Profile Image" class="profile-img me-3">
                 <div>
                     <h2 class="mb-0">{{ $employee->full_name }}</h2>
-                    <p class="text-muted">{{ $employee->employee_type }}</p>
+                    <p class="text-muted"><span>{{ $employee->employee_type }}</span><span>|</span> <span>{{$employee->paygrade?->name}}</span></p>
 
                   @hasanyrole(['ADMIN', 'HR_OFFICER'])
                     <x-system.modal-button class="btn btn-primary btn-custom me-2" data-bs-toggle="modal"
@@ -91,6 +92,28 @@
                         </form>
                     </x-system.modal>
                   @endhasanyrole
+                  @hasrole('PAYROLL_MANAGER')
+                  <x-system.modal-button class="btn btn-primary btn-custom me-2" data-bs-toggle="modal"
+                        id="UpdatePayGrade" text="Update PayGrade" />
+                                    <x-system.modal id="UpdatePayGrade" form="UpdatePayGradeForm" title="New Profile photo">
+                        <form action="{{ route('payroll.employees.UpdatePayGrade', $employee)}}" id="UpdatePayGradeForm" enctype="multipart/form-data" method="POST">
+                            @csrf
+                            <div class="form-group">
+                    <label for="pay_grade_id" class="text-dark font-weight-medium">PayGrade</label>
+                    <select name="pay_grade_id" id="pay_grade_id" class="form-control" required>
+                        <option value="" disabled {{ old('pay_grade_id') ? '' : 'selected' }}>Select
+                            PayGrade</option>
+                        @foreach ($pay_grades as $pay_grade)
+                            <option value="{{ $pay_grade->id }}" {{ old('pay_grade_id') == $pay_grade->id ? 'selected' : '' }}>
+                                {{ $pay_grade->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    
+                            </div>
+                        </form>
+                    </x-system.modal>
+                  @endhasrole
 
                     @hasanyrole(['ADMIN', 'HR_OFFICER', 'PAYROLL_MANAGER'])
                         <a href="{{ route($prefix . '.index') }}" class="btn btn-outline-secondary btn-custom">BACK TO LIST</a>
