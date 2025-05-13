@@ -130,15 +130,15 @@
                     <label class="text-dark font-weight-medium">Marital Status</label>
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-heart"></span>
-                        <select name="marital_status" class="form-control" required>
+                            <select name="marital_status" class="form-control" required>
                             <option value="" disabled {{ old('marital_status') ? '' : 'selected' }}>Marital
                                 Status
                             </option>
                             <option value="Married" {{ old('marital_status') == 'Married' ? 'selected' : '' }}>Married
-                            </option>
-                            <option value="Single" {{ old('marital_status') == 'Single' ? 'selected' : '' }}>Single
-                            </option>
-                        </select>
+                                </option>
+                                <option value="Single" {{ old('marital_status') == 'Single' ? 'selected' : '' }}>Single
+                                </option>
+                            </select>
                     </div>
 
                     @error('marital_status')

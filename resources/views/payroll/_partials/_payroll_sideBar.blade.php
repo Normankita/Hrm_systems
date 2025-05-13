@@ -1,5 +1,6 @@
 <aside class="left-sidebar sidebar-dark" id="left-sidebar">
     <div id="sidebar" class="sidebar sidebar-with-footer">
+        
         <!-- Application Brand -->
         <div class="app-brand">
             <a href="/dashboard">
