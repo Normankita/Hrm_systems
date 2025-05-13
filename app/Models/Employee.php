@@ -98,5 +98,4 @@ class Employee extends Model
     public function paygrade(){
         return $this->belongsTo(PayGrade::class);
     }
-
 }
