@@ -36,13 +36,7 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
         Route::patch('/update/{id}', 'update')->name('update');
     });
 
-// Route::middleware(['auth', 'role:ADMIN'])
-//     ->prefix('/admin/settings')
-//     ->controller(AdminSettingController::class)
-//     ->name('admin.settings.')
-//     ->group(function () {
-//         Route::get('/edit', 'edit')->name('edit');
-//     });
+
 
 Route::middleware(['auth', 'role:ADMIN'])
     ->prefix('/admin/company')
@@ -84,5 +78,7 @@ Route::middleware(['auth', 'role:ADMIN'])
     ->controller(AdminSettingController::class)
     ->name('admin.settings.')
     ->group(function () {
+        Route::post('/store', 'store')->name('store');
         Route::get('/', 'index')->name('index');
+        Route::put('/update/{id}', 'update')->name('update');
     });

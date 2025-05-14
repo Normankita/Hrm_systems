@@ -10,7 +10,6 @@
                 <div class="card-body">
                     <!-- create a create button right here -->
                     <x-system.modal-button class="btn btn-primary mb-3" id="createLeaveType" text="Create Leave Type" />
-
                     <x-system.modal size="modal-lg" id="createLeaveType" title="Create Leave Type"
                         form="createLeaveTypeForm">
                         <form id="createLeaveTypeForm" action="{{ route('hr.leave.type.store') }}" method="POST">
