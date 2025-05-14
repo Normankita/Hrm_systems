@@ -2,7 +2,7 @@
     <div id="sidebar" class="sidebar sidebar-with-footer">
         <!-- Application Brand -->
         <div class="app-brand">
-            <a href="/dashboard">
+            <a href="{{route('dashboard')}}">
                 <span class="brand-name">HRMS</span>
             </a>
         </div>
@@ -12,7 +12,7 @@
             <ul class="nav sidebar-inner" id="sidebar-menu">
 
                 <li>
-                    <a class="sidenav-item-link" href="/dashboard">
+                    <a class="sidenav-item-link" href="{{route('dashboard')}}">
                         <i class="mdi mdi-briefcase-account-outline"></i>
                         <span class="nav-text">Dashboard</span>
                     </a>

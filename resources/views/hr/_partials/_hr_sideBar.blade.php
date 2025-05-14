@@ -2,7 +2,7 @@
     <div id="sidebar" class="sidebar sidebar-with-footer">
         <!-- Application Brand -->
         <div class="app-brand">
-            <a href="/dashboard">
+            <a href="{{route('dashboard')}}">
                 <span class="brand-name">HRMS</span>
             </a>
         </div>
