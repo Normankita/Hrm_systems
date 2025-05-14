@@ -1,4 +1,4 @@
-@props(['route', 'roles', 'pay_grades'])
+@props(['route', 'roles'])
 
 <div class="card">
     <div class="card-body p-30">
@@ -114,7 +114,7 @@
 
                 {{-- TIN Number --}}
                 <div class="col-md-6 mb-4">
-                    <label class="text-dark font-weight-medium">TIN Number</label>
+                    <label class="text-dark font-weight-medium">TIN Number <span class="text-muted text-small font-weight-small">(optional)</span></label>
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-currency-usd"></span>
                         <input type="text" name="tin_number" class="form-control" placeholder="Optional"
@@ -130,15 +130,15 @@
                     <label class="text-dark font-weight-medium">Marital Status</label>
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-heart"></span>
-                            <select name="marital_status" class="form-control" required>
+                        <select name="marital_status" class="form-control" required>
                             <option value="" disabled {{ old('marital_status') ? '' : 'selected' }}>Marital
                                 Status
                             </option>
                             <option value="Married" {{ old('marital_status') == 'Married' ? 'selected' : '' }}>Married
-                                </option>
-                                <option value="Single" {{ old('marital_status') == 'Single' ? 'selected' : '' }}>Single
-                                </option>
-                            </select>
+                            </option>
+                            <option value="Single" {{ old('marital_status') == 'Single' ? 'selected' : '' }}>Single
+                            </option>
+                        </select>
                     </div>
 
                     @error('marital_status')
@@ -148,7 +148,7 @@
 
                 {{-- Residential Address --}}
                 <div class="col-md-12 mb-4">
-                    <label class="text-dark font-weight-medium">Residential Address</label>
+                    <label class="text-dark font-weight-medium">Residential Address <span class="text-muted text-small font-weight-small">(optional)</span></label>
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-home-map-marker"></span>
                         <input type="text" name="residential_address" class="form-control"
@@ -222,35 +222,7 @@
                             </option>
                         @endforeach
                     </select>
-
                 </div>
-                                {{-- Pay Grade --}}
-                <div class="col-md-6 mb-4">
-                    <label for="pay_grade_id" class="text-dark font-weight-medium">PayGrade</label>
-                    <select name="pay_grade_id" id="pay_grade_id" class="form-control" required>
-                        <option value="" disabled {{ old('pay_grade_id') ? '' : 'selected' }}>Select
-                            PayGrade</option>
-                        @foreach ($pay_grades as $pay_grade)
-                            <option value="{{ $pay_grade->id }}" {{ old('pay_grade_id') == $pay_grade->id ? 'selected' : '' }}>
-                                {{ $pay_grade->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                    
-                </div>
-                                {{-- Salary --}}
-                <div class="col-md-6 mb-4">
-                    <label class="text-dark font-weight-medium">Salary</label>
-                    <div class="input-group">
-                        <span class="input-group-text mdi mdi-cash-multiple"></span>
-                        <input type="number" name="salary" class="form-control"
-                            placeholder="e.g., 1200000" value="{{ old('salary') }}">>
-                    </div>
-                    @error('salary')
-                        <span class="text-danger d-block">{{ $message }}</span>
-                    @enderror
-                </div>
-
 
                 <x-system.forms.update-employee-attachemnets />
 
