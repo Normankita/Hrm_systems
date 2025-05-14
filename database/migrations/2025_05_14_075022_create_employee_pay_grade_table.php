@@ -15,6 +15,9 @@ return new class extends Migration
             $table->foreignId('employee_id')->constrained()->onDelete('cascade');
             $table->foreignId('pay_grade_id')->constrained()->onDelete('cascade');
             $table->boolean('status')->default(false);
+            $table->unsignedBigInteger('assigned_by')->nullable();
+            $table->date('effective_from');
+            $table->decimal('base_salary_override',8,2)->default(0);
             $table->timestamps();
 
         });

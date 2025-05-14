@@ -95,6 +95,6 @@ class Employee extends Model
         return $this->hasMany(Payroll::class);
     }
     public function pay_grades(){
-        return $this->belongsToMany(PayGrade::class)->withPivot('status')->withTimestamps();
+        return $this->belongsToMany(PayGrade::class)->withPivot(['status', 'assigned_by', 'effective_from', 'base_salary_override'])->withTimestamps();
     }
 }

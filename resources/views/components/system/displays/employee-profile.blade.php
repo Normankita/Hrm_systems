@@ -1,4 +1,3 @@
-
 @section('_links')
     <link href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" rel="stylesheet" type="text/css" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -46,8 +45,9 @@
 
 @props([
     'prefix' => null,
-    'employee','attachments',
-    'pay_grades'
+    'employee',
+    'attachments',
+    'pay_grades',
 ])
 
 <div class="container mt-4">
@@ -62,63 +62,65 @@
 
             <div class="d-flex align-items-center mb-4">
                 <img src="{{ $employee->profile_picture
-    ? asset('storage/' . $employee->profile_picture)
-    : 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg' }}"
+                    ? asset('storage/' . $employee->profile_picture)
+                    : 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg' }}"
                     alt="Profile Image" class="profile-img me-3">
                 <div>
                     <h2 class="mb-0">{{ $employee->full_name }}</h2>
-                    <p class="text-muted"><span>{{ $employee->employee_type }}</span><span> | </span> <span>{{$employee->pay_grade?->name}}</span></p>
+                    <p class="text-muted"><span>{{ $employee->employee_type }}</span><span> | </span>
+                        <span>
+                            {{ $employee->pay_grades->where('pivot.status', true)->first()?->name ?? 'No Active Paygrade' }}
+                        </span>
+                    </p>
 
-                  @hasanyrole(['ADMIN', 'HR_OFFICER'])
-                    <x-system.modal-button class="btn btn-primary btn-custom me-2" data-bs-toggle="modal"
-                        id="UpdateProfilePhoto" text="Update Profile Image" />
+                    @hasanyrole(['ADMIN', 'HR_OFFICER'])
+                        <x-system.modal-button class="btn btn-primary btn-custom me-2" data-bs-toggle="modal"
+                            id="UpdateProfilePhoto" text="Update Profile Image" />
 
-                    <x-system.modal id="UpdateProfilePhoto" form="updateProfilePhotoForm" title="New Profile photo">
-                        <form action="{{ route($prefix . '.updateProfilePhoto', $employee->id)}}" id="updateProfilePhotoForm" enctype="multipart/form-data" method="POST">
-                            @csrf
-                            <div class="form-group">
-                                <div class="col-md-12 mb-4">
-                                    <x-system.form-inputs.file-upload
-                                        name="profile_picture"
-                                        label="Profile Picture"
-                                        accept="image/jpeg,image/png,image/jpg"
-                                        maxSize="2"
-                                        icon="mdi-camera"
-                                        col="12"
-                                        required
-                                    />
+                        <x-system.modal id="UpdateProfilePhoto" form="updateProfilePhotoForm" title="New Profile photo">
+                            <form action="{{ route($prefix . '.updateProfilePhoto', $employee->id) }}"
+                                id="updateProfilePhotoForm" enctype="multipart/form-data" method="POST">
+                                @csrf
+                                <div class="form-group">
+                                    <div class="col-md-12 mb-4">
+                                        <x-system.form-inputs.file-upload name="profile_picture" label="Profile Picture"
+                                            accept="image/jpeg,image/png,image/jpg" maxSize="2" icon="mdi-camera"
+                                            col="12" required />
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
-                    </x-system.modal>
-                  @endhasanyrole
-                  @hasrole('PAYROLL_MANAGER')
-                  <x-system.modal-button class="btn btn-primary btn-custom me-2" data-bs-toggle="modal"
-                        id="UpdatePayGrade" text="Update PayGrade" />
-                                    <x-system.modal id="UpdatePayGrade" form="UpdatePayGradeForm" title="New Profile photo">
-                        <form action="{{ route('payroll.employees.UpdatePayGrade', $employee)}}" id="UpdatePayGradeForm" enctype="multipart/form-data" method="POST">
-                            
-                            @csrf
-                            @method('PATCH')
-                            <div class="form-group">
-                    <label for="pay_grade_id" class="text-dark font-weight-medium">PayGrade</label>
-                    <select name="pay_grade_id" id="pay_grade_id" class="form-control" required>
-                        <option value="{{$employee->pay_grade->id}}" disabled {{ old('employee->pay_grade->id') ? '' : 'selected' }}>Select
-                            PayGrade</option>
-                        @foreach ($pay_grades as $pay_grade)
-                            <option value="{{ $pay_grade->id }}" {{ old('pay_grade_id') == $pay_grade->id ? 'selected' : '' }}>
-                                {{ $pay_grade->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                    
-                            </div>
-                        </form>
-                    </x-system.modal>
-                  @endhasrole
+                            </form>
+                        </x-system.modal>
+                    @endhasanyrole
+                    @hasrole('PAYROLL_MANAGER')
+                        <x-system.modal-button class="btn btn-primary btn-custom me-2" data-bs-toggle="modal"
+                            id="UpdatePayGrade" text="Update PayGrade" />
+
+                        <x-system.modal id="UpdatePayGrade" form="UpdatePayGradeForm" title="Update PayGrade">
+                            <form action="{{ route('payroll.employees.UpdatePayGrade', $employee) }}"
+                                id="UpdatePayGradeForm" enctype="multipart/form-data" method="POST">
+
+                                @csrf
+                                @method('PATCH')
+
+                                <div class="form-group">
+                                    <label for="pay_grade_id" class="text-dark font-weight-medium">PayGrade</label>
+                                    <select name="pay_grade_id" id="pay_grade_id" class="form-control" required>
+                                        <option value="" disabled selected>Select PayGrade</option>
+                                        @foreach ($pay_grades as $pay_grade)
+                                            <option value="{{ $pay_grade->id }}"
+                                                {{ old('pay_grade_id', optional($employee->pay_grades->firstWhere('pivot.is_active', true))->id) == $pay_grade->id ? 'selected' : '' }}>
+                                                {{ $pay_grade->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </form>
+                        </x-system.modal>
+                    @endhasrole
 
                     @hasanyrole(['ADMIN', 'HR_OFFICER', 'PAYROLL_MANAGER'])
-                        <a href="{{ route($prefix . '.index') }}" class="btn btn-outline-secondary btn-custom">BACK TO LIST</a>
+                        <a href="{{ route($prefix . '.index') }}" class="btn btn-outline-secondary btn-custom">BACK TO
+                            LIST</a>
                     @endhasanyrole
                 </div>
             </div>
@@ -146,7 +148,7 @@
                 </div>
             </div>
 
-            <div class="mb-4"> 
+            <div class="mb-4">
                 <h4 class="section-title">Other Information</h4>
                 <div class="info-grid">
                     <div><strong>National ID:</strong> {{ $employee->national_id }}</div>
@@ -155,53 +157,53 @@
             </div>
             @hasanyrole(['ADMIN', 'HR_OFFICER', 'EMPLOYEE'])
 
-            <div class="mb-4">
-                <h4 class="section-title">Employment Attachments</h4>
-                <div class="info-grid">
-                    <div>
-                        <strong>National id:</strong> 
-                        <x-system.attachment-file-icon :path="$attachments->where('type', 'national_id')->first()?->path" type="pdf" :attachmentName="$attachments->where('type', 'national_id')->first()?->filename" />
-                    </div>
-                    <div>
-                        <strong>Local Government Letter:</strong> 
-                        <x-system.attachment-file-icon :path="$attachments->where('type', 'letter')->first()?->path" type="pdf" :attachmentName="$attachments->where('type', 'letter')->first()?->filename" />
-                    </div>
-                    <div>
-                        <strong>Passport:</strong> 
-                        <x-system.attachment-file-icon :path="$attachments->where('type', 'passport_photo')->first()?->path" type="pdf" :attachmentName="$attachments->where('type', 'passport_photo')->first()?->filename" />
-                    </div>
-                    <div>
-                        <strong>TIN:</strong> 
-                        <x-system.attachment-file-icon :path="$attachments->where('type', 'tin')->first()?->path" type="pdf" :attachmentName="$attachments->where('type', 'tin')->first()?->filename" />
-                    </div>
-                    <div>
-                        <strong>TIN:</strong> 
-                        <x-system.attachment-file-icon :path="$attachments->where('type', 'cv')->first()?->path" type="pdf" :attachmentName="$attachments->where('type', 'cv')->first()?->filename" />
-                    </div>
-                     <div>
-                        <strong>Certificates:</strong> <br>
-                        @php
-                            $certificates = $attachments->where('type', 'certificate');
-                            $counter =1;
-                        @endphp
-                        @if ($certificates)
-                        @foreach ($certificates as $attachment)
-                            {{-- Here goes the new model --}}
-                        <p>{{$counter++;}}:</p>
-                            <x-system.attachment-file-icon :path="$attachment->path" type="pdf" :attachmentName="$attachment->filename" />
-                        @endforeach
-                    @endif
+                <div class="mb-4">
+                    <h4 class="section-title">Employment Attachments</h4>
+                    <div class="info-grid">
+                        <div>
+                            <strong>National id:</strong>
+                            <x-system.attachment-file-icon :path="$attachments->where('type', 'national_id')->first()?->path" type="pdf" :attachmentName="$attachments->where('type', 'national_id')->first()?->filename" />
+                        </div>
+                        <div>
+                            <strong>Local Government Letter:</strong>
+                            <x-system.attachment-file-icon :path="$attachments->where('type', 'letter')->first()?->path" type="pdf" :attachmentName="$attachments->where('type', 'letter')->first()?->filename" />
+                        </div>
+                        <div>
+                            <strong>Passport:</strong>
+                            <x-system.attachment-file-icon :path="$attachments->where('type', 'passport_photo')->first()?->path" type="pdf" :attachmentName="$attachments->where('type', 'passport_photo')->first()?->filename" />
+                        </div>
+                        <div>
+                            <strong>TIN:</strong>
+                            <x-system.attachment-file-icon :path="$attachments->where('type', 'tin')->first()?->path" type="pdf" :attachmentName="$attachments->where('type', 'tin')->first()?->filename" />
+                        </div>
+                        <div>
+                            <strong>TIN:</strong>
+                            <x-system.attachment-file-icon :path="$attachments->where('type', 'cv')->first()?->path" type="pdf" :attachmentName="$attachments->where('type', 'cv')->first()?->filename" />
+                        </div>
+                        <div>
+                            <strong>Certificates:</strong> <br>
+                            @php
+                                $certificates = $attachments->where('type', 'certificate');
+                                $counter = 1;
+                            @endphp
+                            @if ($certificates)
+                                @foreach ($certificates as $attachment)
+                                    {{-- Here goes the new model --}}
+                                    <p>{{ $counter++ }}:</p>
+                                    <x-system.attachment-file-icon :path="$attachment->path" type="pdf" :attachmentName="$attachment->filename" />
+                                @endforeach
+                            @endif
+                        </div>
                     </div>
                 </div>
-            </div>
             @endhasanyrole
 
             @hasanyrole(['ADMIN', 'HR_OFFICER', 'EMPLOYEE'])
-                        <div casyass="text-end mt-4">
-                <a href="{{ route($prefix . '.edit', $employee->id) }}" class="btn btn-primary">
-                    <i class="bi bi-pencil-square"></i> Edit
-                </a>
-            </div>
+                <div casyass="text-end mt-4">
+                    <a href="{{ route($prefix . '.edit', $employee->id) }}" class="btn btn-primary">
+                        <i class="bi bi-pencil-square"></i> Edit
+                    </a>
+                </div>
             @endhasanyrole
         </div>
     </div>

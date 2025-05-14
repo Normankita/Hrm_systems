@@ -4,6 +4,7 @@ namespace App\Http\Utils\Traits;
 
 use App\Models\Employee;
 use App\Models\User;
+use Auth;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
@@ -37,7 +38,7 @@ trait EmployeeTrait
     public static function getEmployeeById($id): Employee
     {
         // Find the employee by ID
-        $employee = Employee::with(['paygrades', 'attachments', 'payrolls'])->findOrFail($id);
+        $employee = Employee::with(['pay_grades', 'attachments', 'payrolls'])->findOrFail($id);
         return $employee;
     }
 
@@ -77,30 +78,33 @@ trait EmployeeTrait
 
     /**
      * Assign a new active paygrade to an employee. First deactivate all current
-     * paygrades, then check if the new paygrade already exists, update or
+     * pay_grades, then check if the new paygrade already exists, update or
      * attach new.
      *
      * @param int $employeeId
      * @param int $paygradeId
      * @return void
      */
-    public static function assignActivePaygradeToEmployee($employeeId, $paygradeId)
+    public static function assignActivePaygradeToEmployee($employeeId, $paygradeId, array $extra = [])
     {
         $employee = Employee::findOrFail($employeeId);
 
-        // 1. Deactivate all current paygrades
-        $employee->paygrades()->updateExistingPivot(
-            $employee->paygrades->pluck('id')->toArray(),
+        // Deactivate all current paygrades
+        $employee->pay_grades()->updateExistingPivot(
+            $employee->pay_grades->pluck('id')->toArray(),
             ['status' => false]
         );
 
-        // 2. Check if already exists, update or attach new
-        if ($employee->paygrades->contains($paygradeId)) {
-            $employee->paygrades()->updateExistingPivot($paygradeId, ['status' => true]);
+        // Add the "status" to the extra pivot data
+        $pivotData = array_merge($extra, ['status' => true]);
+
+        if ($employee->pay_grades->contains($paygradeId)) {
+            $employee->pay_grades()->updateExistingPivot($paygradeId, $pivotData);
         } else {
-            $employee->paygrades()->attach($paygradeId, ['status' => true]);
+            $employee->pay_grades()->attach($paygradeId, $pivotData);
         }
     }
+
 
 
 

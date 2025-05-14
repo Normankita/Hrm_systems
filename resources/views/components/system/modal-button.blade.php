@@ -9,7 +9,7 @@
             @if (Str::contains($text, '_'))
                 {{ implode(' ', array_slice(explode('_', $text), 0, -1)) }}
             @else
-                {{ $text }}
+                &nbsp {{ $text }} &nbsp
             @endif
         </span>
     @endif

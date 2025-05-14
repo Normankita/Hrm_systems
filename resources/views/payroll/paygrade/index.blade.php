@@ -75,12 +75,12 @@
                                         <td>{{ $pay_grade->description ?? 'N/A' }} </td>
                                         <td class="d-flex p-1 gap-1">
                                             {{-- View Button --}}
-                                            <x-system.modal-button class="btn btn-outline-primary btn-sm"
-                                                id="viewPayGrade{{ $pay_grade->id }}" text="View" textColor="text-dark" />
+                                            <x-system.modal-button class="btn btn-outline-dark p-1  btn-sm mdi mdi-eye-outline"
+                                                id="viewPayGrade{{ $pay_grade->id }}" text="View" textColor="" />
 
                                             {{-- Edit Button --}}
-                                            <x-system.modal-button class="btn btn-outline-primary btn-sm"
-                                                id="editPayGrade{{ $pay_grade->id }}" text="Edit" textColor="text-dark" />
+                                            <x-system.modal-button class="btn btn-outline-dark btn-sm p-1 mx-1 mdi mdi-pencil"
+                                                id="editPayGrade{{ $pay_grade->id }}" text="Edit" textColor="" />
                                         </td>
 
                                     </tr>

@@ -121,7 +121,7 @@
 @endphp
 
 <div class="col-md-{{ $col }} mb-4">
-    <label class="text-dark font-weight-medium">{{ $label }} <span class="text-muted text-small font-weight-small">(optional)</span></label>
+    <label class="text-dark font-weight-medium">{{ $label }} <span class="text-muted font-weight-lighter text-sm">(optional)</span></label>
 
     {{ $slot }}
 
