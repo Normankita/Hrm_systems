@@ -30,7 +30,15 @@ trait EmployeeTrait
         $user->assignRole($employeeRole);
         $data['user_id'] = $user->id;
         $employee = Employee::create($data);
-        self::assignActivePaygradeToEmployee($employee->id, $data['pay_grade_id']);
+        self::assignActivePaygradeToEmployee(
+            $employee->id,
+            $data['pay_grade_id'],
+            [
+                'assigned_by' => auth()->id(),
+                'effective_from' => $data['effective_from'],
+                'base_salary_override' => $data['base_salary_override'],
+            ]
+        );
         return $employee;
     }
 
@@ -71,7 +79,15 @@ trait EmployeeTrait
 
         // If pay_grade_id is provided, assign a new active paygrade to the employee
         if (isset($data['pay_grade_id'])) {
-            self::assignActivePaygradeToEmployee($employee->id, $data['pay_grade_id']);
+            self::assignActivePaygradeToEmployee(
+                $employee->id,
+                $data['pay_grade_id'],
+                [
+                    'assigned_by' => auth()->id(),
+                    'effective_from' => $data['effective_from'],
+                    'base_salary_override' => $data['base_salary_override'],
+                ]
+            );
         }
         return $employee;
     }
@@ -104,10 +120,6 @@ trait EmployeeTrait
             $employee->pay_grades()->attach($paygradeId, $pivotData);
         }
     }
-
-
-
-
 
     private function getNamesFromFullName($fullName): array
     {
