@@ -35,7 +35,7 @@
                                     <td>{{ $employee->email }}</td>
                                     <td>{{ $employee->department->name ?? 'N/A' }}</td>
                                     <td>
-                                        <span class="badge">
+                                        <span class="badge text-dark">
                                             {{ $employee->employee_type }}
                                         </span>
                                     </td>

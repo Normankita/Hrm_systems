@@ -46,7 +46,6 @@ class Employee extends Model
         'date_of_hire',
         'date_of_termination',
         'profile_picture',
-        'pay_grade_id',
         'salary',
     ];
 
@@ -95,7 +94,7 @@ class Employee extends Model
     public function payrolls(){
         return $this->hasMany(Payroll::class);
     }
-    public function pay_grade(){
-        return $this->belongsTo(PayGrade::class);
+    public function pay_grades(){
+        return $this->belongsToMany(PayGrade::class)->withPivot('status')->withTimestamps();
     }
 }

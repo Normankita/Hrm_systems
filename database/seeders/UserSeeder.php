@@ -87,7 +87,6 @@ class UserSeeder extends Seeder
             'date_of_termination' => null,
             'salary' => 50000,
             'profile_picture'=>'',
-            'pay_grade_id'=> $payGrade->id,
         ]);
 
 
@@ -122,7 +121,7 @@ class UserSeeder extends Seeder
             'date_of_hire' => now(),
             'date_of_termination' => null,
             'salary' => 50000,
-            'pay_grade_id'=> $payGrade->id
+            'profile_picture'=>'',
         ]);
 
 
@@ -159,7 +158,7 @@ class UserSeeder extends Seeder
             'date_of_hire' => now(),
             'date_of_termination' => null,
             'salary' => 50000,
-            'pay_grade_id'=> $payGrade->id
+            'profile_picture'=>'',
         ]);
     }
 }

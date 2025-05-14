@@ -43,7 +43,7 @@ prefix="payroll.employees"
                                     <td>{{ $payroll->gross_salary }}</td>
                                     <td>{{ $payroll->net_salary }}</td>
                                     <td>
-                                        <span class="badge">
+                                        <span class="badge text-dark">
                                             {{ $payroll->status }}
                                         </span>
                                     </td>

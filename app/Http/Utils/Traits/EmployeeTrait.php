@@ -29,6 +29,7 @@ trait EmployeeTrait
         $user->assignRole($employeeRole);
         $data['user_id'] = $user->id;
         $employee = Employee::create($data);
+        self::assignActivePaygradeToEmployee($employee->id, $data['pay_grade_id']);
         return $employee;
     }
 
@@ -36,27 +37,71 @@ trait EmployeeTrait
     public static function getEmployeeById($id): Employee
     {
         // Find the employee by ID
-        $employee = Employee::with(['paygrade', 'attachments', 'payrolls'])->findOrFail($id);
+        $employee = Employee::with(['paygrades', 'attachments', 'payrolls'])->findOrFail($id);
         return $employee;
     }
 
+    /**
+     * Updates an existing employee.
+     *
+     * @param int $id
+     * @param array $data
+     * @return Employee|null
+     */
     public static function updateEmployee($id, $data)
     {
+        // Find the employee by ID
         $employee = Employee::find($id);
         if (!$employee) {
             return null; // or throw exception
         }
-        $user = User::find($employee->user_id);
 
+        // Update user record
+        $user = User::find($employee->user_id);
         if ($user) {
             $user->update([
                 'name' => $data['full_name'] ?? ($data['first_name'] . ' ' . $data['last_name']),
                 'email' => $data['email'],
             ]);
         }
+
+        // Update employee record
         $employee->update($data);
+
+        // If pay_grade_id is provided, assign a new active paygrade to the employee
+        if (isset($data['pay_grade_id'])) {
+            self::assignActivePaygradeToEmployee($employee->id, $data['pay_grade_id']);
+        }
         return $employee;
     }
+
+    /**
+     * Assign a new active paygrade to an employee. First deactivate all current
+     * paygrades, then check if the new paygrade already exists, update or
+     * attach new.
+     *
+     * @param int $employeeId
+     * @param int $paygradeId
+     * @return void
+     */
+    public static function assignActivePaygradeToEmployee($employeeId, $paygradeId)
+    {
+        $employee = Employee::findOrFail($employeeId);
+
+        // 1. Deactivate all current paygrades
+        $employee->paygrades()->updateExistingPivot(
+            $employee->paygrades->pluck('id')->toArray(),
+            ['status' => false]
+        );
+
+        // 2. Check if already exists, update or attach new
+        if ($employee->paygrades->contains($paygradeId)) {
+            $employee->paygrades()->updateExistingPivot($paygradeId, ['status' => true]);
+        } else {
+            $employee->paygrades()->attach($paygradeId, ['status' => true]);
+        }
+    }
+
 
 
 
@@ -66,11 +111,11 @@ trait EmployeeTrait
         $nameParts = explode(' ', $fullName, 3); // Only split into 3 parts: first and last
         $first_name = $nameParts[0];
         $middle_name = $nameParts[1] ?? '';
-        $last_name = $nameParts[2] ??'';
+        $last_name = $nameParts[2] ?? '';
         $nameParts = [
 
             'first_name' => $first_name,
-            'middle_name'=> $middle_name,
+            'middle_name' => $middle_name,
             'last_name' => $last_name,
         ];
         return $nameParts;

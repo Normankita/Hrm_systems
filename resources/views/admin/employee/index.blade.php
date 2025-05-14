@@ -31,12 +31,11 @@
                                 <tr>
                                     <td>{{ ++$key }}</td>
                                     <td>{{ $employee->full_name }}</td>
-                                    {{-- <td>{{ \Carbon\Carbon::parse($employee->date_of_birth)->format('d M Y') }}</td> --}}
                                     <td>{{ $employee->phone_number }}</td>
                                     <td>{{ $employee->email }}</td>
                                     <td>{{ $employee->department->name ?? 'N/A' }}</td>
                                     <td>
-                                        <span class="badge">
+                                        <span class="badge text-dark">
                                             {{ $employee->employee_type }}
                                         </span>
                                     </td>

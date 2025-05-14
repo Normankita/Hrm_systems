@@ -11345,6 +11345,7 @@ h3 {
   }
   .badge {
     border: 1px solid #000;
+    color:black;
   }
   .table {
     border-collapse: collapse !important;

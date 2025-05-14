@@ -4,6 +4,7 @@ namespace App\Http\Controllers\PayrollControllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Services\EmployeeService;
+use App\Http\Utils\Traits\EmployeeTrait;
 use App\Models\Employee;
 use App\Models\PayGrade;
 use Illuminate\Http\Request;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 class PayrollEmployeeController extends Controller
 {
+    use EmployeeTrait;
         public function __construct(private EmployeeService $employeeService)
     {
     }
@@ -41,9 +43,7 @@ public function UpdatePayGrade(Request $request, Employee $employee)
     ]);
 
     // Update the pay grade
-    $employee->update([
-        'pay_grade_id' => $request->pay_grade_id
-    ]);
+    self::assignActivePaygradeToEmployee($employee->id, $request->pay_grade_id);
 
     return back()->with('success', 'Pay grade updated successfully.');
 }
