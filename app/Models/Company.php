@@ -48,7 +48,7 @@ class Company extends Model
 
     public function settings()
     {
-        // return $this->hasOne(Setting::class);
+        return $this->hasMany(Setting::class);
     }
 
 }

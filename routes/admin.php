@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminControllers\AdminRoleController;
 use App\Http\Controllers\AdminControllers\AdminCompanyController;
 use App\Http\Controllers\AdminControllers\AdminDepartmentController;
 use App\Http\Controllers\AdminControllers\AdminEmployeeController;
+use App\Http\Controllers\AdminControllers\AdminSettingController;
 use App\Http\Controllers\Api\ApiRolesController;
 use Illuminate\Support\Facades\Route;
 
@@ -75,4 +76,13 @@ Route::middleware(['auth', 'role:ADMIN'])
     ->group(function () {
         Route::put('/update/permissions/{id}', 'updatePermissions')
             ->name('permissions.update');
+    });
+
+
+Route::middleware(['auth', 'role:ADMIN'])
+    ->prefix('/admin/settings')
+    ->controller(AdminSettingController::class)
+    ->name('admin.settings.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
     });
