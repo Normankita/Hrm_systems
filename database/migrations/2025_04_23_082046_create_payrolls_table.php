@@ -6,34 +6,35 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('payrolls', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
+            $table->foreignId('employee_id')->constrained()->onDelete('cascade');
+            $table->foreignId('pay_grade_id')->nullable()->constrained()->onDelete('set null');
+
             $table->date('payroll_date');
+            $table->string('period'); // Format: 'YYYY-MM'
+
             $table->double('basic_salary')->nullable();
-            $table->double('allowances')->nullable();
-            $table->double('deductions')->nullable();
+            $table->double('gross_salary')->nullable();
             $table->double('net_salary')->nullable();
-            $table->double('paye');
+            $table->double('paye')->nullable();
             $table->double('nssf')->nullable();
             $table->double('psssf')->nullable();
             $table->double('sdl')->nullable();
             $table->double('wcf')->nullable();
-            $table->double('gross_salary')->nullable();
+            $table->double('allowances')->nullable();
+            $table->double('deductions')->nullable();
             $table->string('payslip_path')->nullable();
+
             $table->enum('status', ['Pending', 'Paid'])->default('Pending');
             $table->timestamps();
+
+            $table->unique(['employee_id', 'period']); // prevent duplicate payrolls per employee per month
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('payrolls');

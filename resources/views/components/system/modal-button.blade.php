@@ -5,7 +5,13 @@
         ['class' => $attributes->has('class') ? $attributes->get('class') : 'btn btn-primary']) }}
     data-toggle="modal" data-target="#{{ $id }}">
     @if ($text)
-        <span class="{{ $textColor }}">{{$text}}</span>
+        <span class="{{ $textColor }} text-capitalize ">
+            @if (Str::contains($text, '_'))
+                {{ implode(' ', array_slice(explode('_', $text), 0, -1)) }}
+            @else
+                &nbsp {{ $text }} &nbsp
+            @endif
+        </span>
     @endif
     @if ($icon)
         <i class="{{$icon}}"></i>

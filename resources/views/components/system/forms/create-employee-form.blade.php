@@ -1,4 +1,4 @@
-@props(['route', 'roles'])
+@props(['route', 'roles', 'pay_grades'])
 
 <div class="card">
     <div class="card-body p-30">
@@ -130,15 +130,15 @@
                     <label class="text-dark font-weight-medium">Marital Status</label>
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-heart"></span>
-                        <select name="marital_status" class="form-control" required>
+                            <select name="marital_status" class="form-control" required>
                             <option value="" disabled {{ old('marital_status') ? '' : 'selected' }}>Marital
                                 Status
                             </option>
                             <option value="Married" {{ old('marital_status') == 'Married' ? 'selected' : '' }}>Married
-                            </option>
-                            <option value="Single" {{ old('marital_status') == 'Single' ? 'selected' : '' }}>Single
-                            </option>
-                        </select>
+                                </option>
+                                <option value="Single" {{ old('marital_status') == 'Single' ? 'selected' : '' }}>Single
+                                </option>
+                            </select>
                     </div>
 
                     @error('marital_status')
@@ -148,11 +148,11 @@
 
                 {{-- Residential Address --}}
                 <div class="col-md-12 mb-4">
-                    <label class="text-dark font-weight-medium">Residential Address</label>
+                    <label class="text-dark font-weight-medium">Residential Address <span class="text-muted font-weight-lighter text-sm">(optional)</span> </label>
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-home-map-marker"></span>
                         <input type="text" name="residential_address" class="form-control"
-                            placeholder="e.g., Sinza Mori, Dar es Salaam" value="{{ old('residential_address') }}">
+                            placeholder="e.g., Sinza Mori, Dar es Salaam" value="{{ old('residential_address') }}">>
                     </div>
                     @error('residential_address')
                         <span class="text-danger d-block">{{ $message }}</span>
@@ -223,6 +223,32 @@
                         @endforeach
                     </select>
                 </div>
+                                                {{-- Pay Grade --}}
+                <div class="col-md-6 mb-4">
+                    <label for="pay_grade_id" class="text-dark font-weight-medium">PayGrade</label>
+                    <select name="pay_grade_id" id="pay_grade_id" class="form-control" required>
+                        <option value="" disabled {{ old('pay_grade_id') ? '' : 'selected' }}>Select
+                            PayGrade</option>
+                        @foreach ($pay_grades as $pay_grade)
+                            <option value="{{ $pay_grade->id }}" {{ old('pay_grade_id') == $pay_grade->id ? 'selected' : '' }}>
+                                {{ $pay_grade->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                                {{-- Salary --}}
+                <div class="col-md-6 mb-4">
+                    <label class="text-dark font-weight-medium">Base Salary Override  <span class="text-muted font-weight-lighter text-sm">(optional)</span> </label>
+                    <div class="input-group">
+                        <span class="input-group-text mdi mdi-cash-multiple"></span>
+                        <input type="number" name="base_salary_override" class="form-control"
+                            placeholder="e.g., 1200000" value="{{ old('base_salary_override') }}">
+                    </div>
+                    @error('base_salary_override')
+                        <span class="text-danger d-block">{{ $message }}</span>
+                    @enderror
+                </div>
+
 
                 <x-system.forms.update-employee-attachemnets />
 

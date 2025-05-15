@@ -4,6 +4,7 @@ namespace App\Http\Utils\Traits;
 
 use App\Models\Employee;
 use App\Models\User;
+use Auth;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
@@ -29,6 +30,15 @@ trait EmployeeTrait
         $user->assignRole($employeeRole);
         $data['user_id'] = $user->id;
         $employee = Employee::create($data);
+        self::assignActivePaygradeToEmployee(
+            $employee->id,
+            $data['pay_grade_id'],
+            [
+                'assigned_by' => auth()->id(),
+                'effective_from' => now(),
+                'base_salary_override' => $data['base_salary_override']? $data['base_salary_override'] : 0,
+            ]
+        );
         return $employee;
     }
 
@@ -36,29 +46,80 @@ trait EmployeeTrait
     public static function getEmployeeById($id): Employee
     {
         // Find the employee by ID
-        $employee = Employee::where('id', $id)->first();
+        $employee = Employee::with(['pay_grades', 'attachments', 'payrolls'])->findOrFail($id);
         return $employee;
     }
 
+    /**
+     * Updates an existing employee.
+     *
+     * @param int $id
+     * @param array $data
+     * @return Employee|null
+     */
     public static function updateEmployee($id, $data)
     {
+        // Find the employee by ID
         $employee = Employee::find($id);
         if (!$employee) {
             return null; // or throw exception
         }
-        $user = User::find($employee->user_id);
 
+        // Update user record
+        $user = User::find($employee->user_id);
         if ($user) {
             $user->update([
                 'name' => $data['full_name'] ?? ($data['first_name'] . ' ' . $data['last_name']),
                 'email' => $data['email'],
             ]);
         }
+
+        // Update employee record
         $employee->update($data);
+
+        // If pay_grade_id is provided, assign a new active paygrade to the employee
+        if (isset($data['pay_grade_id'])) {
+            self::assignActivePaygradeToEmployee(
+                $employee->id,
+                $data['pay_grade_id'],
+                [
+                    'assigned_by' => auth()->id(),
+                    'effective_from' => $data['effective_from'],
+                    'base_salary_override' => $data['base_salary_override'],
+                ]
+            );
+        }
         return $employee;
     }
 
+    /**
+     * Assign a new active paygrade to an employee. First deactivate all current
+     * pay_grades, then check if the new paygrade already exists, update or
+     * attach new.
+     *
+     * @param int $employeeId
+     * @param int $paygradeId
+     * @return void
+     */
+    public static function assignActivePaygradeToEmployee($employeeId, $paygradeId, array $extra = [])
+    {
+        $employee = Employee::findOrFail($employeeId);
 
+        // Deactivate all current paygrades
+        $employee->pay_grades()->updateExistingPivot(
+            $employee->pay_grades->pluck('id')->toArray(),
+            ['status' => false]
+        );
+
+        // Add the "status" to the extra pivot data
+        $pivotData = array_merge($extra, ['status' => true]);
+
+        if ($employee->pay_grades->contains($paygradeId)) {
+            $employee->pay_grades()->updateExistingPivot($paygradeId, $pivotData);
+        } else {
+            $employee->pay_grades()->attach($paygradeId, $pivotData);
+        }
+    }
 
     private function getNamesFromFullName($fullName): array
     {
@@ -66,11 +127,11 @@ trait EmployeeTrait
         $nameParts = explode(' ', $fullName, 3); // Only split into 3 parts: first and last
         $first_name = $nameParts[0];
         $middle_name = $nameParts[1] ?? '';
-        $last_name = $nameParts[2] ??'';
+        $last_name = $nameParts[2] ?? '';
         $nameParts = [
 
             'first_name' => $first_name,
-            'middle_name'=> $middle_name,
+            'middle_name' => $middle_name,
             'last_name' => $last_name,
         ];
         return $nameParts;

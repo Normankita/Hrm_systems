@@ -2,7 +2,6 @@
 
 namespace App\Http\Utils\Traits;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -21,6 +20,7 @@ trait UploadFileTrait
         'national_id_document' => 'national_id',
         'cv_document' => 'cv',
         'certificates' => 'certificate',
+        'letter'=>'letter',
     ];
 
 

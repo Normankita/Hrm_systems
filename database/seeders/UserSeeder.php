@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Company;
 use App\Models\Department;
 use App\Models\Employee;
+use App\Models\PayGrade;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -30,6 +31,13 @@ class UserSeeder extends Seeder
             'description' => 'Default department for the company',
         ]);
 
+        $payGrade = PayGrade::create([
+    'name' => 'Default Grade',
+    'base_salary' => 50000,
+    'max_salary' => 70000,
+    'base_month_count' => 12,
+    'description' => 'Default pay grade for initial employees',
+]);
 
 
         $admin = array(
@@ -113,6 +121,44 @@ class UserSeeder extends Seeder
             'date_of_hire' => now(),
             'date_of_termination' => null,
             'salary' => 50000,
+            'profile_picture'=>'',
+        ]);
+
+
+
+
+
+        $payroll = array(
+            'name' => 'payroll mafongo',
+            'company_id' => $company->id,
+            'email' => 'payroll@example.com',
+            'password' => Hash::make('password'),
+            'email_verified_at' => now(),
+            'remember_token' => null,
+        );
+        // create the actual user
+        $payroll = User::create($payroll);
+        // assign role
+        $payrollRole = Role::findByName('PAYROLL_MANAGER');
+        $payroll->assignRole($payrollRole);
+        Employee::create([
+            'user_id' => $payroll->id,
+            'company_id' => $company->id,
+            'department_id' => 1,
+            'full_name' => 'payroll User',
+            'gender' => 'male',
+            'date_of_birth' => '1990-01-01',
+            'phone_number' => '1234956780',
+            'email' => 'payroll@gmail.co',
+            'national_id' => '1234578989',
+            'marital_status' => 'Single',
+            'residential_address' => '123 Main St',
+            'tin_number' => '1234569789',
+            'employee_type' => 'Permanent',
+            'date_of_hire' => now(),
+            'date_of_termination' => null,
+            'salary' => 50000,
+            'profile_picture'=>'',
         ]);
     }
 }
