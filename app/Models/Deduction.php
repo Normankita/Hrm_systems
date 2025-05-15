@@ -8,7 +8,10 @@ class Deduction extends Model
 {
     protected $fillable = [
         'name',
-        'percentage',
-        'company_id'
+        'amount',
+        'employee_id'
     ];
+    public function employee(){
+        return $this->belongsTo(Employee::class);
+    }
 }

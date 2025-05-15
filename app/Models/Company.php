@@ -33,6 +33,10 @@ class Company extends Model
         return $this->hasMany(Employee::class);
     }
 
+    public function contributions(){
+        return $this->hasMany(Contribution::class);
+    }
+
     public function admin()
     {
         return $this->hasOne(User::class, 'company_id', 'id')
