@@ -35,8 +35,8 @@ trait EmployeeTrait
             $data['pay_grade_id'],
             [
                 'assigned_by' => auth()->id(),
-                'effective_from' => $data['effective_from'],
-                'base_salary_override' => $data['base_salary_override'],
+                'effective_from' => now(),
+                'base_salary_override' => $data['base_salary_override']? $data['base_salary_override'] : 0,
             ]
         );
         return $employee;

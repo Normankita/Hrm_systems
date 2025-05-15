@@ -102,17 +102,46 @@
                                 @csrf
                                 @method('PATCH')
 
-                                <div class="form-group">
-                                    <label for="pay_grade_id" class="text-dark font-weight-medium">PayGrade</label>
-                                    <select name="pay_grade_id" id="pay_grade_id" class="form-control" required>
-                                        <option value="" disabled selected>Select PayGrade</option>
-                                        @foreach ($pay_grades as $pay_grade)
-                                            <option value="{{ $pay_grade->id }}"
-                                                {{ old('pay_grade_id', optional($employee->pay_grades->firstWhere('pivot.is_active', true))->id) == $pay_grade->id ? 'selected' : '' }}>
-                                                {{ $pay_grade->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                                <div class="form-group row">
+                                    <div class="col-md-6 mb-4">
+                                        <label for="pay_grade_id" class="text-dark font-weight-medium">PayGrade</label>
+                                        <select name="pay_grade_id" id="pay_grade_id" class="form-control" required>
+                                            <option value="" disabled {{ !old('pay_grade_id') && !optional($employee->pay_grades->firstWhere('pivot.status', true)) ? 'selected' : '' }}>Select PayGrade</option>
+                                            @foreach ($pay_grades as $pay_grade)
+                                                <option value="{{ $pay_grade->id }}"
+                                                    {{ old('pay_grade_id', optional($employee->pay_grades->firstWhere('pivot.status', true))->id) == $pay_grade->id ? 'selected' : '' }}>
+                                                    {{ $pay_grade->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    {{-- Effective from date --}}
+                                    <div class="col-md-6 mb-4">
+                                        <label class="text-dark font-weight-medium">Effective From</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text mdi mdi-calendar"></span>
+                                            <input type="date" name="effective_from" class="form-control"
+                                                value="{{ old('effective_from', optional($employee->pay_grades->firstWhere('pivot.status', true))->pivot->effective_from ?? '') }}" required>
+                                        </div>
+                                        @error('effective_from')
+                                            <span class="text-danger d-block">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    {{-- Salary --}}
+                                    <div class="col-md-12 mb-4">
+                                        <label class="text-dark font-weight-medium">Base Salary Override <span
+                                                class="text-muted font-weight-lighter text-sm">(optional)</span> </label>
+                                        <div class="input-group">
+                                            <span class="input-group-text mdi mdi-cash-multiple"></span>
+                                            <input type="number" name="base_salary_override" class="form-control"
+                                                placeholder="e.g., 1200000"
+                                                value="{{ old('base_salary_override', optional($employee->pay_grades->firstWhere('pivot.status', true))->pivot->base_salary_override ?? '') }}">
+                                        </div>
+                                        @error('base_salary_override')
+                                            <span class="text-danger d-block">{{ $message }}</span>
+                                        @enderror
+                                    </div>
                                 </div>
                             </form>
                         </x-system.modal>
