@@ -24,6 +24,7 @@ class UserSeeder extends Seeder
         );
 
         $company = Company::create($company);
+
         Department::create([
             'company_id' => $company->id,
             'name' => 'Default Department',
@@ -31,13 +32,14 @@ class UserSeeder extends Seeder
             'description' => 'Default department for the company',
         ]);
 
+
         $payGrade = PayGrade::create([
-    'name' => 'Default Grade',
-    'base_salary' => 50000,
-    'max_salary' => 70000,
-    'base_month_count' => 12,
-    'description' => 'Default pay grade for initial employees',
-]);
+            'name' => 'Default Grade',
+            'base_salary' => 50000,
+            'max_salary' => 70000,
+            'base_month_count' => 12,
+            'description' => 'Default pay grade for initial employees',
+        ]);
 
 
         $admin = array(
@@ -86,7 +88,7 @@ class UserSeeder extends Seeder
             'date_of_hire' => now(),
             'date_of_termination' => null,
             'salary' => 50000,
-            'profile_picture'=>'',
+            'profile_picture' => '',
         ]);
 
 
@@ -121,7 +123,7 @@ class UserSeeder extends Seeder
             'date_of_hire' => now(),
             'date_of_termination' => null,
             'salary' => 50000,
-            'profile_picture'=>'',
+            'profile_picture' => '',
         ]);
 
 
@@ -158,7 +160,7 @@ class UserSeeder extends Seeder
             'date_of_hire' => now(),
             'date_of_termination' => null,
             'salary' => 50000,
-            'profile_picture'=>'',
+            'profile_picture' => '',
         ]);
     }
 }
