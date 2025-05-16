@@ -19,4 +19,20 @@ class AdminSettingController extends Controller
         return view('admin.settings.index')
             ->with('settings', $settings);
     }
+ public function store(Request $request){
+    $request->validate( [
+        'name' => 'required',
+        'value'=>'required',
+    ]);
+    Setting::create($request->all());
+    return redirect()->route('admin.settings.index')->with('success','Setting created successfully');
+ }
+ public function update(Request $request, $id) {
+    $request->validate( [
+        'name' => 'required',
+        'value'=>'required',
+    ]);
+    Setting::where('id', $id)->update($request->only(['name','value']));
+    return redirect()->route('admin.settings.index')->with('success','Setting updated successfully');
+ }
 }

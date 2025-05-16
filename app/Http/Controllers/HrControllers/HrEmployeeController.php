@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateEmployeeRequest;
 use App\Http\Services\EmployeeService;
 use App\Http\Utils\Traits\EmployeeTrait;
 use App\Http\Utils\Traits\UploadFileTrait;
+use App\Models\PayGrade;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -35,7 +36,8 @@ class HrEmployeeController extends Controller
     public function create()
     {
         $roles = Role::where('name', '!=', 'ADMIN')->get();
-        return view('hr.employee.create', compact('roles'));
+        $pay_grades = PayGrade::get();
+        return view('hr.employee.create', compact('roles', 'pay_grades'));
     }
 
     public function store(StoreEmployeeRequest $request)
@@ -57,8 +59,9 @@ class HrEmployeeController extends Controller
         $employee->middle_name = $names['middle_name'];
         $employee->last_name = $names['last_name'];
         $roles = Role::where('name', '!=', 'ADMIN')->get();
+        $pay_grades = PayGrade::get();
 
-        return view('hr.employee.edit', compact('employee', 'roles'));
+        return view('hr.employee.edit', compact('employee', 'roles', 'pay_grades'));
     }
 
     public function update(UpdateEmployeeRequest $request, $id)

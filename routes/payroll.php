@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PayrollControllers\PayrollController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PayrollControllers\PayrollEmployeeController;
 use App\Http\Controllers\PayrollControllers\PayrollPayGradeController;
@@ -22,9 +23,21 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:PAYROLL_MANAGER'])
     ->controller(PayrollPayGradeController::class)
     ->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::get('/show/{payGrade}', 'show')->name('show'); 
+        Route::get('/show/{payGrade}', 'show')->name('show');
         Route::post('/store', 'store')->name('store');
         Route::patch('/update/{payGrade}', 'update')->name('update');
-        Route::delete('/delete/{payGrade}', 'destroy')->name('delete'); 
+        Route::delete('/delete/{payGrade}', 'destroy')->name('delete');
         Route::get('/edit/{payGrade}', 'edit')->name('edit');
     });
+
+Route::middleware(['auth', 'HasCompanyProfile', 'role:PAYROLL_MANAGER'])
+    ->prefix('payrolls')
+    ->name('payrolls.')
+    ->controller(PayrollController::class)
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/generate-all', 'generateAll')->name('generateAll');
+        Route::get('/show/{payroll}', 'show')->name('show');
+
+    });
+

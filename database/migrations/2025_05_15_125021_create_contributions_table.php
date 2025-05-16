@@ -10,15 +10,12 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('deductions', function (Blueprint $table) {
+        Schema::create('contributions', function (Blueprint $table) {
             $table->id();
             $table->string('name'); 
+            $table->double('percent'); 
             $table->text('description')->nullable();
-            $table->foreignId('employee_id')->constrained()->onDelete('cascade');
-            $table->double('total_amount'); 
-            $table->integer('installments'); 
-            $table->double('installment_amount'); 
-            $table->date('start_date')->nullable();
+            $table->foreignId('company_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -28,6 +25,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('deductions');
+        Schema::dropIfExists('contributions');
     }
 };

@@ -80,8 +80,9 @@ class AdminEmployeeController extends Controller
         $employee->middle_name = $names['middle_name'];
         $employee->last_name = $names['last_name'];
         $roles = Role::where('name', '!=', 'ADMIN')->get();
+        $pay_grades = PayGrade::get();
 
-        return view('admin.employee.edit', compact('employee', 'roles'));
+        return view('admin.employee.edit', compact('employee', 'roles', 'pay_grades'));
     }
 
 
