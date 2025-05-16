@@ -2,7 +2,7 @@
     <div id="sidebar" class="sidebar sidebar-with-footer">
         <!-- Application Brand -->
         <div class="app-brand">
-            <a href="{{route('dashboard')}}">
+            <a href="{{ route('dashboard') }}">
                 <span class="brand-name">HRMS</span>
             </a>
         </div>
@@ -19,7 +19,7 @@
 
                 <li class="has-sub">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                       data-target="#leave-menu" aria-expanded="false" aria-controls="leave-menu">
+                        data-target="#leave-menu" aria-expanded="false" aria-controls="leave-menu">
                         <i class="mdi mdi-calendar"></i>
                         <span class="nav-text">Leaves</span>
                         <b class="caret"></b>
@@ -27,8 +27,7 @@
                     <ul class="collapse" id="leave-menu" data-parent="#sidebar-menu">
                         <div class="sub-menu">
                             <li>
-                                <a class="sidenav-item-link"
-                                href="{{ route('hr.leave.index') }}">
+                                <a class="sidenav-item-link" href="{{ route('hr.leave.index') }}">
                                     <span class="nav-text">Manage Leaves</span>
                                 </a>
                             </li>
@@ -50,13 +49,50 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="sidenav-item-link" href="{{route('hr.employees.index')}}">
+                                <a class="sidenav-item-link" href="{{ route('hr.employees.index') }}">
                                     <span class="nav-text">View Employees</span>
                                 </a>
                             </li>
                         </div>
                     </ul>
                 </li>
+                <li class="has-sub">
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                        data-target="#payrolls-menu" aria-expanded="false" aria-controls="payrolls-menu">
+                        <i class="mdi mdi-cash-multiple"></i>
+                        <span class="nav-text">Payrolls</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="collapse" id="payrolls-menu" data-parent="#sidebar-menu">
+                        <div class="sub-menu">
+                            <li>
+                                <a class="sidenav-item-link" href="{{ route('hr.payrolls.index') }}">
+                                    <i class="mdi mdi-eye-outline mr-1"></i>
+                                    <span class="nav-text">View All payrolls</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="sidenav-item-link" href="{{ route('hr.payrolls.pending') }}">
+                                    <i class="mdi mdi-clock-outline mr-1"></i>
+                                    <span class="nav-text">Pending payrolls</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="sidenav-item-link" href="{{ route('hr.payrolls.approved') }}">
+                                    <i class="mdi mdi-check-circle-outline mr-1"></i>
+                                    <span class="nav-text">Approved payrolls</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="sidenav-item-link" href="{{ route('hr.payrolls.rejected') }}">
+                                    <i class="mdi mdi-close-circle-outline mr-1"></i>
+                                    <span class="nav-text">Rejected payrolls</span>
+                                </a>
+                            </li>
+                        </div>
+                    </ul>
+                </li>
+
             </ul>
         </div>
         <!-- Bottom Section -->

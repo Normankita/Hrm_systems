@@ -4,70 +4,57 @@ namespace App\Http\Controllers\HrControllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Payroll;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class HrPayrollController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * This method is responsible for displaying a list of all payrolls in the
-     * system. It is used by the view located at resources/views/hr/payroll/index.blade.php
-     */
     public function index()
     {
-        // Get all payrolls from the database
-        $payrolls = Payroll::all();
-
-        // Return the view with the payrolls
+        $payrolls = Payroll::latest()->get();
         return view('hr.payroll.index', compact('payrolls'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function pending()
     {
-        //
+        $payrolls = Payroll::where('status', 'pending')->get();
+        return view('hr.payroll.pending', compact('payrolls'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function approved()
     {
-        //
+        $payrolls = Payroll::where('status', 'approved')->get();
+        return view('hr.payroll.approved', compact('payrolls'));
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Payroll $payroll)
+    public function rejected()
     {
-        //
+        $payrolls = Payroll::where('status', 'rejected')->get();
+        return view('hr.payroll.rejected', compact('payrolls'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Payroll $payroll)
+    public function reject(Request $request, Payroll $payroll)
     {
-        //
+        $request->validate([
+            'reason' => 'required|string|max:1000',
+        ]);
+
+        $payroll->update([
+            'status' => 'rejected',
+            'rejection_reason' => $request->reason,
+        ]);
+
+        return back()->with('message', 'Payroll rejected successfully.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Payroll $payroll)
+    public function approveAll()
     {
-        //
-    }
+        DB::transaction(function () {
+            Payroll::where('status', 'pending')->update([
+                'status' => 'approved'
+            ]);
+        });
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Payroll $payroll)
-    {
-        //
+        return back()->with('message', 'All pending payrolls approved (excluding rejections).');
     }
 }
