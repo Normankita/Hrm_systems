@@ -1,4 +1,10 @@
-@props(['employee', 'roles', 'route', 'internal_route', 'pay_grades'])
+@props(['employee','route', 'internal_route'])
+
+@php
+$departments= App\Models\Department::all();
+$roles = App\Models\Role::where('name', '!=', 'ADMIN')->get();
+$pay_grades = App\Models\PayGrade::all();
+@endphp
 
 <div class="card">
     <div class="card-body p-30">
@@ -162,7 +168,7 @@
                 <div class="col-md-6 mb-4">
                     <label class="text-dark font-weight-medium">Department</label>
                     <select name="department_id" class="form-control" required>
-                        @foreach (App\Models\Department::all() as $department)
+                        @foreach ($departments as $department)
                             <option value="{{ $department->id }}"
                                 {{ old('department_id', $employee->department_id) == $department->id ? 'selected' : '' }}>
                                 {{ $department->name }}
