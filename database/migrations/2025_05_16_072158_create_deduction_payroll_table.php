@@ -10,12 +10,11 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('contributions', function (Blueprint $table) {
+        Schema::create('deduction_payroll', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); 
-            $table->double('percent'); 
-            $table->text('description')->nullable();
-            $table->foreignId('company_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('payroll_id')->constrained()->onDelete('cascade');
+            $table->foreignId('deduction_id')->constrained()->onDelete('cascade');
+            $table->double('amount'); // amount applied in this payroll
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('contributions');
+        Schema::dropIfExists('deduction_payroll');
     }
 };

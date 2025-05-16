@@ -34,4 +34,11 @@ class Payroll extends Model
     {
         return $this->belongsTo(PayGrade::class);
     }
+    public function deductions()
+{
+    return $this->belongsToMany(Deduction::class)
+        ->withPivot('amount')
+        ->withTimestamps();
+}
+
 }
