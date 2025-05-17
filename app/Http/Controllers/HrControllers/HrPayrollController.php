@@ -15,6 +15,11 @@ class HrPayrollController extends Controller
         return view('hr.payroll.index', compact('payrolls'));
     }
 
+    /**
+     * Get all pending payrolls
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
     public function pending()
     {
         $payrolls = Payroll::where('status', 'pending')->get();

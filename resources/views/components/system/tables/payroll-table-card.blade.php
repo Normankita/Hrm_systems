@@ -1,19 +1,17 @@
 @props(['payrolls', 'title'])
 <div class="card">
     <div class="card-body ">
-
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3 class="mb-0">{{$title??""}} Payroll List</h3>
-            @if ($title==='Pending'||$title==='All')
+            <h3 class="mb-0">{{ $title ?? '' }} Payroll List</h3>
+            @if ($title === 'Pending' || $title === 'All')
                 <form action="{{ route('hr.payrolls.approveAll') }}" method="POST" class="mb-0">
-                @csrf
-                <button type="submit" class="btn btn-primary">
-                    <i class="mdi mdi-cash-multiple"></i> Approve all Pending Payrolls
-                </button>
-            </form>
+                    @csrf
+                    <button type="submit" class="btn btn-primary">
+                        <i class="mdi mdi-cash-multiple"></i> Approve all Pending Payrolls
+                    </button>
+                </form>
             @endif
         </div>
-
         <div class="table-responsive">
             <span>Total Payrolls: {{ $payrolls->count() }}</span>
             <table class="table table-bordered table-hover align-middle text-nowrap">
@@ -39,7 +37,7 @@
                             <td>{{ $payroll->period ?? 'N/A' }}</td>
                             <td>
                                 <span
-                                    class="badge {{ $payroll->status === 'approved' ? 'bg-success' : $payroll->status === 'rejected' ? 'bg-danger' : 'bg-warning text-dark' }}">
+                                    class="badge {{ ($payroll->status === 'approved' ? 'bg-success' : $payroll->status === 'rejected') ? 'bg-danger' : 'bg-warning text-dark' }}">
                                     {{ ucfirst($payroll->status) }}
                                 </span>
                             </td>
@@ -57,20 +55,17 @@
                                         <div class="col-md-4 font-weight-bold">Employee Name:</div>
                                         <div class="col-md-8">{{ $payroll->employee->full_name }}</div>
                                     </div>
-
                                     {{-- Payroll Period --}}
                                     <div class="row mb-3">
                                         <div class="col-md-4 font-weight-bold">Payroll Period:</div>
                                         <div class="col-md-8">{{ $payroll->period ?? 'N/A' }}</div>
                                     </div>
-
                                     {{-- Basic Salary --}}
                                     <div class="row mb-3">
                                         <div class="col-md-4 font-weight-bold">Basic Salary:</div>
                                         <div class="col-md-8">{{ number_format($payroll->basic_salary, 2) }}
                                         </div>
                                     </div>
-
                                     {{-- Allowances --}}
                                     <div class="row mb-3">
                                         <div class="col-md-4 font-weight-bold">Allowances:</div>

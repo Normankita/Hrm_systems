@@ -26,8 +26,9 @@ return new class extends Migration {
             $table->double('allowances')->nullable();
             $table->double('deductions')->nullable();
             $table->string('payslip_path')->nullable();
-
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->foreignId('approved_by')->nullable()->constrained('users')->nullOnDelete();
+             $table->timestamp('approved_at')->nullable();
             $table->text('rejection_reason')->nullable();
 
             $table->timestamps();

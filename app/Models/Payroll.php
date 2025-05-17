@@ -23,7 +23,19 @@ class Payroll extends Model
         'payslip_path',
         'period',
         'status',
+        'approved_by',
+        'approved_at',
+        'rejection_reason',
     ];
+    protected $casts = [
+        'approved_at' => 'datetime',
+        'payroll_date' => 'date',
+    ];
+    public function approvedBy()
+    {
+        return $this->belongsTo(User::class, 'approved_by');
+    }
+
 
     public function employee()
     {
@@ -35,10 +47,10 @@ class Payroll extends Model
         return $this->belongsTo(PayGrade::class);
     }
     public function deductions()
-{
-    return $this->belongsToMany(Deduction::class)
-        ->withPivot('amount')
-        ->withTimestamps();
-}
+    {
+        return $this->belongsToMany(Deduction::class)
+            ->withPivot('amount')
+            ->withTimestamps();
+    }
 
 }
