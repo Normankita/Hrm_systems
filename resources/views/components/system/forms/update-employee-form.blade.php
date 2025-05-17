@@ -192,7 +192,7 @@ $pay_grades = App\Models\PayGrade::all();
                                                                 {{-- Pay Grade --}}
                 <div class="col-md-3 mb-4">
                     <label for="pay_grade_id" class="text-dark font-weight-medium">PayGrade</label>
-                    <select name="pay_grade_id" id="pay_grade_id" class="form-control" required>
+                    <select name="pay_grade_id" id="pay_grade_id" class="form-control">
                         <option value="" disabled {{ old('pay_grade_id') ? '' : 'selected' }}>Select
                             PayGrade</option>
                         @foreach ($pay_grades as $pay_grade)
@@ -208,7 +208,7 @@ $pay_grades = App\Models\PayGrade::all();
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-calendar"></span>
                         <input type="date" name="effective_from" class="form-control"
-                            value="{{ old('effective_from') }}" required>
+                            value="{{ old('effective_from') }}">
                     </div>
                     @error('effective_from')
                         <span class="text-danger d-block">{{ $message }}</span>

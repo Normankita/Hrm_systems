@@ -50,8 +50,7 @@
                                             <x-system.modal-button
                                                 class="btn btn-outline-dark p-1  btn-sm mdi mdi-eye-outline"
                                                 id="viewPayroll{{ $payroll->id }}" text="View" textColor="" />
-                                            <x-system.modal-button class="btn btn-outline-danger p-1 btn-sm mdi mdi-close"
-                                                id="rejectPayroll{{ $payroll->id }}" text="Reject" />
+                                          
 
 
                                         </td>
@@ -153,22 +152,7 @@
                                             </div>
                                         </div>
                                     </x-system.modal>
-                                    <x-system.modal id="rejectPayroll{{ $payroll->id }}" title="Reject Payroll">
                                     
-                                        <form action="{{ route('hr.payrolls.reject', $payroll) }}" method="POST">
-                                            @csrf
-                                            <div class="mb-3">
-                                                <label for="reason{{ $payroll->id }}" class="form-label">Reason for
-                                                    Rejection</label>
-                                                <textarea class="form-control" name="reason" id="reason{{ $payroll->id }}" rows="4" required></textarea>
-                                            </div>
-                                            <div class="d-flex justify-content-end">
-                                                <button type="button" class="btn btn-secondary me-2"
-                                                    data-bs-dismiss="modal">Cancel</button>
-                                                <button type="submit" class="btn btn-danger">Submit Rejection</button>
-                                            </div>
-                                        </form>
-                                    </x-system.modal>
 
                                 @empty
                                     <tr>
