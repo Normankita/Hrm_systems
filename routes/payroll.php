@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EmployeeControllers\EmployeeProfileController;
 use App\Http\Controllers\PayrollControllers\PayrollController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PayrollControllers\PayrollEmployeeController;
@@ -15,6 +16,10 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:PAYROLL_MANAGER'])
         Route::get('/show/{id}', 'show')->name('show');
         Route::patch('/UpdatePayGrade/{employee}', 'UpdatePayGrade')->name('UpdatePayGrade');
     });
+
+   Route::get('/employees/{employee}/payrolls/{payroll}', [PayrollController::class, 'show'])->name('payroll.show');
+
+
 
 // Payroll PayGrade Routes
 Route::middleware(['auth', 'HasCompanyProfile', 'role:PAYROLL_MANAGER'])

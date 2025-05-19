@@ -6,40 +6,56 @@ use App\Models\Contribution;
 use App\Models\Employee;
 use App\Models\Payroll;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Log;
 
 class PayrollService
 {
-    public static function generatePayrollForAllEmployees()
+    /**
+     * Generate payrolls for all employees.
+     *
+     * @param bool $force If true, existing payrolls for the current period will be deleted and regenerated.
+     * @return array List of generated payrolls
+     */
+    public static function generatePayrollForAllEmployees(bool $force = false): array
     {
         $today = Carbon::today();
         $period = $today->format('Y-m');
 
+        // Fetch employees with active pay grades and deductions
         $employees = Employee::with([
             'pay_grades' => fn($q) => $q->wherePivot('status', true),
             'deductions'
         ])->get();
 
+        // Load statutory contribution rates
+        $contributions = Contribution::pluck('percent', 'name');
         $generated = [];
 
         foreach ($employees as $employee) {
             $activePayGrade = $employee->pay_grades->first();
-            if (!$activePayGrade)
-                continue;
 
+            if (!$activePayGrade) {
+                continue;
+            }
+
+            // Determine base salary
             $basic = $activePayGrade->pivot->base_salary_override > 0
                 ? $activePayGrade->pivot->base_salary_override
                 : $activePayGrade->base_salary;
 
             $allowances = 0;
 
-            // Skip if payroll for this employee and period already exists
-            if (Payroll::where('employee_id', $employee->id)->where('period', $period)->exists()) {
-                continue;
+            // Handle regeneration: delete existing payroll if $force = true
+            if ($force) {
+                Payroll::where('employee_id', $employee->id)->where('period', $period)->delete();
+            } else {
+                if (Payroll::where('employee_id', $employee->id)->where('period', $period)->exists()) {
+                    continue;
+                }
             }
 
-            // Get statutory contribution percentages
-            $contributions = Contribution::pluck('percent', 'name');
-
+            // Calculate statutory deductions
             $paye = $basic * ($contributions['PAYE'] ?? 0) / 100;
             $nssf = $basic * ($contributions['NSSF'] ?? 0) / 100;
             $psssf = $basic * ($contributions['PSSSF'] ?? 0) / 100;
@@ -48,7 +64,7 @@ class PayrollService
 
             $statutory = $paye + $nssf + $psssf + $sdl + $wcf;
 
-            // Handle custom deductions (loans, penalties, etc.)
+            // Handle custom deductions (e.g. loans)
             $customDeductions = 0;
             $deductionsToAttach = [];
 
@@ -61,7 +77,7 @@ class PayrollService
                     $customDeductions += $deduction->installment_amount;
                     $deductionsToAttach[] = [
                         'id' => $deduction->id,
-                        'amount' => $deduction->installment_amount,
+                        'total_amount' => $deduction->installment_amount,
                     ];
                 }
             }
@@ -70,32 +86,41 @@ class PayrollService
             $gross = $basic + $allowances;
             $net = $gross - $totalDeductions;
 
-            // Create payroll record
-            $payroll = Payroll::create([
-                'employee_id' => $employee->id,
-                'pay_grade_id' => $activePayGrade->id,
-                'payroll_date' => $today,
-                'period' => $period,
-                'basic_salary' => $basic,
-                'allowances' => $allowances,
-                'deductions' => $customDeductions,
-                'gross_salary' => $gross,
-                'net_salary' => $net,
-                'paye' => $paye,
-                'nssf' => $nssf,
-                'psssf' => $psssf,
-                'sdl' => $sdl,
-                'wcf' => $wcf,
-            ]);
+            DB::beginTransaction();
 
-            // Attach applicable deductions with amount to pivot table
-            foreach ($deductionsToAttach as $item) {
-                $payroll->deductions()->attach($item['id'], [
-                    'amount' => $item['amount']
+            try {
+                // Create payroll record
+                $payroll = Payroll::create([
+                    'employee_id'    => $employee->id,
+                    'pay_grade_id'   => $activePayGrade->id,
+                    'payroll_date'   => $today,
+                    'period'         => $period,
+                    'basic_salary'   => $basic,
+                    'allowances'     => $allowances,
+                    'deductions'     => $customDeductions,
+                    'gross_salary'   => $gross,
+                    'net_salary'     => $net,
+                    'paye'           => $paye,
+                    'nssf'           => $nssf,
+                    'psssf'          => $psssf,
+                    'sdl'            => $sdl,
+                    'wcf'            => $wcf,
                 ]);
-            }
 
-            $generated[] = $payroll;
+                // Attach deductions
+                foreach ($deductionsToAttach as $item) {
+                    $payroll->deductions()->attach($item['id'], [
+                        'total_amount' => $item['total_amount']
+                    ]);
+                }
+
+                DB::commit();
+                $generated[] = $payroll;
+            } catch (\Throwable $e) {
+                DB::rollBack();
+                
+                Log::error('Payroll generation failed', ['employee_id' => $employee->id, 'error' => $e->getMessage()]);
+            }
         }
 
         return $generated;

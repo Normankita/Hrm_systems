@@ -95,8 +95,7 @@ class EmployeeService
             'full_name' => $request->input('first_name') . ' ' . $request->input('middle_name') . ' ' . $request->input('last_name'),
         ]);
 
-        $employee = EmployeeTrait::getEmployeeById($id);
-
+        $employee = EmployeeTrait::updateEmployee($id, $request->all());
         $attachments = [];
 
         $isCertificatesUploaded = false;

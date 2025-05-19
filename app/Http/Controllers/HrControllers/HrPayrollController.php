@@ -62,4 +62,5 @@ class HrPayrollController extends Controller
 
         return back()->with('message', 'All pending payrolls approved (excluding rejections).');
     }
+ 
 }

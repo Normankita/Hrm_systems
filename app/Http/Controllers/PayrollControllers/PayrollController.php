@@ -4,6 +4,7 @@ namespace App\Http\Controllers\PayrollControllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Services\PayrollService;
+use App\Models\Employee;
 use App\Models\Payroll;
 use Illuminate\Http\Request;
 
@@ -36,22 +37,18 @@ class PayrollController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
+  public function show(Employee $employee, Payroll $payroll)
+{
+    // Make sure the payroll belongs to the employee
+    if ($payroll->employee_id !== $employee->id) {
+        abort(403, 'Unauthorized access to payroll.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Payroll $payroll)
-    {
-        //
-    }
+    $deductions = $payroll->deductions()->get(); // or however you're storing them
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+    return view('hr.payroll.show', compact('employee', 'payroll', 'deductions'));
+}
+
     public function edit(Payroll $payroll)
     {
         //
