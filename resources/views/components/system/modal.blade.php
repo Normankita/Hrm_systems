@@ -1,4 +1,4 @@
-@props(['title' => '', 'id', 'form' => '', 'size' => 'modal-md'])
+@props(['title' => '', 'id', 'form' => '', 'size' => 'modal-md', 'inside' => false])
 
 <div class="modal fade" id="{{ $id }}"
     tabindex="-1" role="dialog" aria-labelledby="exampleModalFormTitle"
@@ -19,9 +19,11 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger btn-pill"
+                @if (!($inside))
+                    <button type="button" class="btn btn-danger btn-pill"
                 data-dismiss="modal">Close</button>
-               @if ($form)
+                @endif
+               @if ($form && !($inside))
                <button form="{{ $form }}" type="submit"
                 class="btn btn-primary btn-pill">Save Changes</button>
                @endif

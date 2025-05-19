@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('payroll_id')->constrained()->onDelete('cascade');
             $table->foreignId('deduction_id')->constrained()->onDelete('cascade');
-            $table->double('amount'); // amount applied in this payroll
+            $table->double('total_amount'); // amount applied in this payroll
             $table->timestamps();
         });
     }

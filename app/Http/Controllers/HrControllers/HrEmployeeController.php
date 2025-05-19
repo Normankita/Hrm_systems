@@ -77,6 +77,7 @@ class HrEmployeeController extends Controller
     {
         $employee = EmployeeTrait::getEmployeeById($id);
         $attachments = $employee->attachments()->get();
+        $deductions = $employee->deductions()->get();
 
         return view('hr.employee.show', compact('employee', 'attachments'));
     }

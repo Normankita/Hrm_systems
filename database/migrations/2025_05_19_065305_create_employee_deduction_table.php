@@ -15,7 +15,7 @@ public function up()
         $table->id();
         $table->foreignId('employee_id')->constrained()->onDelete('cascade');
         $table->foreignId('deduction_id')->constrained()->onDelete('cascade');
-        $table->decimal('amount', 10, 2);
+        $table->decimal('total_amount', 10, 2);
         $table->integer('cycles');
         $table->date('start_date');
         $table->date('end_date')->nullable();

@@ -3,13 +3,17 @@
 namespace App\Http\Controllers\HrControllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\DeductionService;
 use App\Models\Deduction;
 use App\Models\Employee;
 use Illuminate\Http\Request;
-use App\Services\DeductionService;
 
 class HrDeductionController extends Controller
+
 {
+    public function __construct(private DeductionService $DeductionService)
+    {
+    }
     // List deductions for a given employee
     public function index(Employee $employee)
     {
@@ -24,22 +28,27 @@ class HrDeductionController extends Controller
     }
 
     // Store a deduction for the given employee
-    public function store(Request $request, Employee $employee)
-    {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'amount' => 'required|numeric|min:0',
-            'installments' => 'required|integer|min:1',
-            'installment_amount' => 'required|numeric|min:0',
-        ]);
+public function store(Request $request, Employee $employee)
+{
+    // Remove this after verifying your inputs
+    // dd($request->all());
 
-        $validated['employee_id'] = $employee->id;
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'total_amount' => 'required|numeric|min:0',
+        'installments' => 'required|integer|min:1',
+        'description' => 'nullable|string',
+    ]);
 
-        DeductionService::createDeduction($validated);
+    $validated['employee_id'] = $employee->id;
+    $validated['installment_amount'] = $validated['total_amount'] / $validated['installments'];
 
-        return redirect()->route('hr.deductions.index', $employee->id)
-            ->with('message', 'Deduction created successfully.');
-    }
+    DeductionService::createDeduction($validated);
+
+    return redirect()->back()->with('success', 'Deduction created successfully.');
+}
+
+
 
     // Show a specific deduction (employee context optional if deduction has employee relation)
     public function show(Employee $employee, Deduction $deduction)
@@ -59,18 +68,20 @@ class HrDeductionController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'amount' => 'required|numeric|min:0',
+            'total_amount' => 'required|numeric|min:0',
             'installments' => 'required|integer|min:1',
-            'installment_amount' => 'required|numeric|min:0',
+            'description' => 'nullable|string',
         ]);
+
+    $validated['installment_amount'] = $validated['total_amount'] / $validated['installments'];
+
 
         // Ensure employee_id is consistent with the URL employee
         $validated['employee_id'] = $employee->id;
 
         DeductionService::updateDeduction($deduction, $validated);
 
-        return redirect()->route('hr.deductions.index', $employee->id)
-            ->with('message', 'Deduction updated successfully.');
+        return redirect()->back()->with('success', 'Deduction updated successfully.');
     }
 
     // Delete a deduction for the given employee
@@ -78,7 +89,7 @@ class HrDeductionController extends Controller
     {
         DeductionService::deleteDeduction($deduction);
 
-        return redirect()->route('hr.deductions.index', $employee->id)
-            ->with('message', 'Deduction deleted successfully.');
+        return redirect()->back()
+            ->with('success', 'Deduction deleted successfully.');
     }
 }

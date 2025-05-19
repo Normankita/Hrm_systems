@@ -11,7 +11,8 @@ class Deduction extends Model
     protected $fillable = [
         'employee_id',
         'name',
-        'amount',
+        'description',
+        'total_amount',
         'installments',
         'installment_amount',
     ];
@@ -24,7 +25,7 @@ class Deduction extends Model
     public function payrolls()
     {
         return $this->belongsToMany(Payroll::class)
-                    ->withPivot('amount')
+                    ->withPivot('total_amount')
                     ->withTimestamps();
     }
 }

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('loans', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employee_id');
-            $table->double('amount');
+            $table->double('total_amount');
             $table->integer('repayment_months');
             $table->double('monthly_deduction');
             $table->enum('status',

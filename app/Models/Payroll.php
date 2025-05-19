@@ -49,7 +49,7 @@ class Payroll extends Model
     public function deductions()
     {
         return $this->belongsToMany(Deduction::class)
-            ->withPivot('amount')
+            ->withPivot('total_amount')
             ->withTimestamps();
     }
 
