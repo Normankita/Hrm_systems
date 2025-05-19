@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HrControllers\HrDeductionController;
 use App\Http\Controllers\HrControllers\HrEmployeeController;
 use App\Http\Controllers\HrControllers\HrLeavesController;
 use App\Http\Controllers\HrControllers\HrLeaveTypeController;
@@ -65,3 +66,17 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:HR_OFFICER'])
     Route::post('/approve-all', 'approveAll')->name('approveAll');
 });
 
+
+Route::middleware(['auth', 'HasCompanyProfile', 'role:HR_OFFICER'])
+    ->prefix('/hr/employees/{employee}/deductions')
+    ->controller(HrDeductionController::class)
+    ->name('hr.deductions.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');                     // List deductions for employee
+        Route::get('/create', 'create')->name('create');             // Show form to create a deduction for employee
+        Route::post('/', 'store')->name('store');                    // Store new deduction for employee
+        Route::get('/{deduction}', 'show')->name('show');            // Show a single deduction
+        Route::get('/{deduction}/edit', 'edit')->name('edit');       // Edit a deduction
+        Route::put('/{deduction}', 'update')->name('update');        // Update deduction
+        Route::delete('/{deduction}', 'destroy')->name('destroy');   // Delete deduction
+    });
