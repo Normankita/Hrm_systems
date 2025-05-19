@@ -78,6 +78,7 @@ trait EmployeeTrait
 
 
                 if (!$user->hasRole($newRole->name)) {
+
                     $user->syncRoles([$newRole]);
                 }
             }

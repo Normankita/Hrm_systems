@@ -375,3 +375,6 @@
         </div>
     </div>
 </div>
+    <div class="col-12 mt-5">
+        <x-system.displays.employee-payrolls :employee="$employee" />
+    </div>
