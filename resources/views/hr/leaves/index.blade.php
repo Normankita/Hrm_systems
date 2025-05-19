@@ -34,7 +34,7 @@
                                             <td>{{ $leave->start_date }}</td>
                                             <td>{{ $leave->end_date }}</td>
                                             <td>
-                                                <span class="badge">
+                                                <span class="badge text-dark">
                                                     {{ $leave->status }}
                                                 </span>
                                             </td>

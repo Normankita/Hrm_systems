@@ -19,5 +19,9 @@
     @role('HR_OFFICER')
         @include('hr.dashboard')
     @endrole
+
+    @role('PAYROLL_MANAGER')
+        @include('payroll.dashboard')
+    @endrole
 @endsection
 

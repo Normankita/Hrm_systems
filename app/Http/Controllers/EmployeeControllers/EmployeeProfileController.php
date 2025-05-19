@@ -24,20 +24,25 @@ class EmployeeProfileController extends Controller
     public function index()
     {
         $employee = Auth::user()->employee;
-        return view('employee.profile.index', compact('employee'));
+
+        $attachments = $employee->attachments()->get();
+        return view('employee.profile.index', compact('employee', 'attachments'));
     }
 
     public function edit($id)
     {
-        $employee = EmployeeTrait::getEmployeeById($id);
-        // Split full name
+        // $employee = EmployeeTrait::getEmployeeById($id);
+        $employee = Employee::find($id);
+
+        $attachments = $employee->attachments()->get();
+        // // Split full name
         $fullName = $employee->full_name;
         $nameParts = explode(' ', $fullName, 2);
         // Only split into 2 parts: first and last
         $employee->first_name = $nameParts[0];
         $employee->last_name = $nameParts[1] ?? '';
         return view('employee.profile.edit',
-        compact('employee'));
+        compact('employee', 'attachments'));
     }
 
     /**

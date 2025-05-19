@@ -104,6 +104,7 @@
                                     <div class="card-body">
                                         <h5 class="card-title mb-3">Leave Reason</h5>
                                         <p class="mb-4">{{ $leave->reason }}</p>
+                                        {{-- model pop for approving leave or reject --}}
                                         @if ($leave->status === 'pending')
                                             <div class="d-flex justify-content-end gap-2">
                                                 <x-system.modal-button class="btn btn-primary" text="Reject / Approve Leave" id="approveLeave" />
@@ -135,12 +136,12 @@
 
 
                         @if ($leave->attachments)
-                        @foreach ($leave->attachments as $attachment)
+                            @foreach ($leave->attachments as $attachment)
 
-                        {{-- Here goes the new model --}}
-                        <x-system.attachment-file-icon :path="$attachment->path" type="pdf" :attachmentName="$attachment->filename" />
-                        @endforeach
-                    @endif
+                                {{-- Here goes the new model --}}
+                                <x-system.attachment-file-icon :path="$attachment->path" type="pdf" :attachmentName="$attachment->filename" />
+                            @endforeach
+                        @endif
 
 
                     </div>

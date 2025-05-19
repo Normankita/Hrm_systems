@@ -5,6 +5,7 @@
 <x-system.displays.employee-profile
 :employee="$employee"
 prefix="hr.employees"
+:attachments="$attachments"
 
 />
 

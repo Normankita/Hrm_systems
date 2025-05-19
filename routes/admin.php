@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\AdminController\AdminRoleController;
+use App\Http\Controllers\AdminControllers\AdminRoleController;
 use App\Http\Controllers\AdminControllers\AdminCompanyController;
 use App\Http\Controllers\AdminControllers\AdminDepartmentController;
 use App\Http\Controllers\AdminControllers\AdminEmployeeController;
+use App\Http\Controllers\AdminControllers\AdminSettingController;
 use App\Http\Controllers\Api\ApiRolesController;
 use Illuminate\Support\Facades\Route;
 
@@ -35,13 +36,7 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
         Route::patch('/update/{id}', 'update')->name('update');
     });
 
-// Route::middleware(['auth', 'role:ADMIN'])
-//     ->prefix('/admin/settings')
-//     ->controller(AdminSettingController::class)
-//     ->name('admin.settings.')
-//     ->group(function () {
-//         Route::get('/edit', 'edit')->name('edit');
-//     });
+
 
 Route::middleware(['auth', 'role:ADMIN'])
     ->prefix('/admin/company')
@@ -75,4 +70,15 @@ Route::middleware(['auth', 'role:ADMIN'])
     ->group(function () {
         Route::put('/update/permissions/{id}', 'updatePermissions')
             ->name('permissions.update');
+    });
+
+
+Route::middleware(['auth', 'role:ADMIN'])
+    ->prefix('/admin/settings')
+    ->controller(AdminSettingController::class)
+    ->name('admin.settings.')
+    ->group(function () {
+        Route::post('/store', 'store')->name('store');
+        Route::get('/', 'index')->name('index');
+        Route::put('/update/{id}', 'update')->name('update');
     });

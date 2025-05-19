@@ -9,8 +9,13 @@ class Company extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'name', 'address', 'contact_number', 'email',
-        'brela_reg_number', 'tin_number', 'isActive'
+        'name',
+        'address',
+        'contact_number',
+        'email',
+        'brela_reg_number',
+        'tin_number',
+        'isActive'
     ];
 
     public function departments()
@@ -28,9 +33,14 @@ class Company extends Model
         return $this->hasMany(Employee::class);
     }
 
-    public function admin() {
+    public function contributions(){
+        return $this->hasMany(Contribution::class);
+    }
+
+    public function admin()
+    {
         return $this->hasOne(User::class, 'company_id', 'id')
-            ->whereHas('roles', function($query) {
+            ->whereHas('roles', function ($query) {
                 $query->where('name', 'ADMIN');
             });
     }
@@ -42,7 +52,7 @@ class Company extends Model
 
     public function settings()
     {
-        // return $this->hasOne(Setting::class);
+        return $this->hasMany(Setting::class);
     }
 
 }

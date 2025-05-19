@@ -1,4 +1,10 @@
-@props(['employee', 'roles', 'route', 'internal_route'])
+@props(['employee','route', 'internal_route'])
+
+@php
+$departments= App\Models\Department::all();
+$roles = App\Models\Role::where('name', '!=', 'ADMIN')->get();
+$pay_grades = App\Models\PayGrade::all();
+@endphp
 
 <div class="card">
     <div class="card-body p-30">
@@ -162,7 +168,7 @@
                 <div class="col-md-6 mb-4">
                     <label class="text-dark font-weight-medium">Department</label>
                     <select name="department_id" class="form-control" required>
-                        @foreach (App\Models\Department::all() as $department)
+                        @foreach ($departments as $department)
                             <option value="{{ $department->id }}"
                                 {{ old('department_id', $employee->department_id) == $department->id ? 'selected' : '' }}>
                                 {{ $department->name }}
@@ -182,6 +188,43 @@
                             </option>
                         @endforeach
                     </select>
+                </div>
+                                                                {{-- Pay Grade --}}
+                <div class="col-md-3 mb-4">
+                    <label for="pay_grade_id" class="text-dark font-weight-medium">PayGrade</label>
+                    <select name="pay_grade_id" id="pay_grade_id" class="form-control">
+                        <option value="" disabled {{ old('pay_grade_id') ? '' : 'selected' }}>Select
+                            PayGrade</option>
+                        @foreach ($pay_grades as $pay_grade)
+                            <option value="{{ $pay_grade->id }}" {{ old('pay_grade_id') == $pay_grade->id ? 'selected' : '' }}>
+                                {{ $pay_grade->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                                {{-- Effective from date --}}
+                <div class="col-md-3 mb-4">
+                    <label class="text-dark font-weight-medium">Effective From</label>
+                    <div class="input-group">
+                        <span class="input-group-text mdi mdi-calendar"></span>
+                        <input type="date" name="effective_from" class="form-control"
+                            value="{{ old('effective_from') }}">
+                    </div>
+                    @error('effective_from')
+                        <span class="text-danger d-block">{{ $message }}</span>
+                    @enderror
+                </div>
+                                {{-- Salary --}}
+                <div class="col-md-6 mb-4">
+                    <label class="text-dark font-weight-medium">Base Salary Override  <span class="text-muted font-weight-lighter text-sm">(optional)</span> </label>
+                    <div class="input-group">
+                        <span class="input-group-text mdi mdi-cash-multiple"></span>
+                        <input type="number" name="base_salary_override" class="form-control"
+                            placeholder="e.g., 1200000" value="{{ old('base_salary_override') }}">>
+                    </div>
+                    @error('base_salary_override')
+                        <span class="text-danger d-block">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <x-system.forms.update-employee-attachemnets :attachments="$employee->attachments" />

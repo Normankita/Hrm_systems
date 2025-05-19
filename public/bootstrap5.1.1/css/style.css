@@ -11345,6 +11345,7 @@ h3 {
   }
   .badge {
     border: 1px solid #000;
+    color:black;
   }
   .table {
     border-collapse: collapse !important;
@@ -14415,7 +14416,7 @@ label {
   box-shadow: 0px 10px 18px 0px rgba(55, 103, 208, 0.2);
 }
 .table.table-hover tbody tr:hover td {
-  color: #ffffff;
+  color: black;
 }
 .table.table-hover tbody tr:hover .custom-control-input:checked ~ .custom-control-label::before {
   background-color: #ffffff;

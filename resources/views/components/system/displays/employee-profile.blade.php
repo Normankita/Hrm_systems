@@ -1,4 +1,3 @@
-
 @section('_links')
     <link href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" rel="stylesheet" type="text/css" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -45,8 +44,10 @@
 @endsection
 
 @props([
-    'prefix'=>null,
+    'prefix' => null,
     'employee',
+    'attachments',
+    'pay_grades',
 ])
 
 <div class="container mt-4">
@@ -66,33 +67,228 @@
                     alt="Profile Image" class="profile-img me-3">
                 <div>
                     <h2 class="mb-0">{{ $employee->full_name }}</h2>
-                    <p class="text-muted">{{ $employee->employee_type }}</p>
-
-                    <x-system.modal-button class="btn btn-primary btn-custom me-2" data-bs-toggle="modal"
-                        id="UpdateProfilePhoto" text="Update Profile Image" />
-
-                    <x-system.modal id="UpdateProfilePhoto" form="updateProfilePhotoForm" title="New Profile photo">
-                        <form action="{{ route($prefix.'.updateProfilePhoto', $employee->id)}}" id="updateProfilePhotoForm" enctype="multipart/form-data" method="POST">
-                            @csrf
-                            <div class="form-group">
-                                <div class="col-md-12 mb-4">
-                                    <x-system.form-inputs.file-upload
-                                        name="profile_picture"
-                                        label="Profile Picture"
-                                        accept="image/jpeg,image/png,image/jpg"
-                                        maxSize="2"
-                                        icon="mdi-camera"
-                                        col="12"
-                                        required
-                                    />
-                                </div>
-                            </div>
-                        </form>
-                    </x-system.modal>
+                    <p class="text-muted"><span>{{ $employee->employee_type }}</span><span> | </span>
+                        <span>
+                            {{ $employee->pay_grades->where('pivot.status', true)->first()?->name ?? 'No Active Paygrade' }}
+                        </span>
+                    </p>
 
                     @hasanyrole(['ADMIN', 'HR_OFFICER'])
-                        <a href="{{ route($prefix.'.index') }}" class="btn btn-outline-secondary btn-custom">BACK TO LIST</a>
+                        <x-system.modal-button class="btn btn-primary btn-custom me-2" data-bs-toggle="modal"
+                            id="UpdateProfilePhoto" text="Update Profile Image" />
+
+                        <x-system.modal id="UpdateProfilePhoto" form="updateProfilePhotoForm" title="New Profile photo">
+                            <form action="{{ route($prefix . '.updateProfilePhoto', $employee->id) }}"
+                                id="updateProfilePhotoForm" enctype="multipart/form-data" method="POST">
+                                @csrf
+                                <div class="form-group">
+                                    <div class="col-md-12 mb-4">
+                                        <x-system.form-inputs.file-upload name="profile_picture" label="Profile Picture"
+                                            accept="image/jpeg,image/png,image/jpg" maxSize="2" icon="mdi-camera"
+                                            col="12" required />
+                                    </div>
+                                </div>
+                            </form>
+                        </x-system.modal>
                     @endhasanyrole
+                    @hasrole('PAYROLL_MANAGER')
+                        <x-system.modal-button class="btn btn-primary btn-custom me-2" data-bs-toggle="modal"
+                            id="UpdatePayGrade" text="Update PayGrade" />
+
+                        <x-system.modal id="UpdatePayGrade" form="UpdatePayGradeForm" title="Update PayGrade">
+                            <form action="{{ route('payroll.employees.UpdatePayGrade', $employee) }}" id="UpdatePayGradeForm"
+                                enctype="multipart/form-data" method="POST">
+
+                                @csrf
+                                @method('PATCH')
+
+                                <div class="form-group row">
+                                    <div class="col-md-6 mb-4">
+                                        <label for="pay_grade_id" class="text-dark font-weight-medium">PayGrade</label>
+                                        <select name="pay_grade_id" id="pay_grade_id" class="form-control" required>
+                                            <option value="" disabled
+                                                {{ !old('pay_grade_id') && !optional($employee->pay_grades->firstWhere('pivot.status', true)) ? 'selected' : '' }}>
+                                                Select PayGrade</option>
+                                            @foreach ($pay_grades as $pay_grade)
+                                                <option value="{{ $pay_grade->id }}"
+                                                    {{ old('pay_grade_id', optional($employee->pay_grades->firstWhere('pivot.status', true))->id) == $pay_grade->id ? 'selected' : '' }}>
+                                                    {{ $pay_grade->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    {{-- Effective from date --}}
+                                    <div class="col-md-6 mb-4">
+                                        <label class="text-dark font-weight-medium">Effective From</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text mdi mdi-calendar"></span>
+                                            <input type="date" name="effective_from" class="form-control"
+                                                value="{{ old('effective_from', optional($employee->pay_grades->firstWhere('pivot.status', true))->pivot->effective_from ?? '') }}"
+                                                required>
+                                        </div>
+                                        @error('effective_from')
+                                            <span class="text-danger d-block">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    {{-- Salary --}}
+                                    <div class="col-md-12 mb-4">
+                                        <label class="text-dark font-weight-medium">Base Salary Override <span
+                                                class="text-muted font-weight-lighter text-sm">(optional)</span> </label>
+                                        <div class="input-group">
+                                            <span class="input-group-text mdi mdi-cash-multiple"></span>
+                                            <input type="number" name="base_salary_override" class="form-control"
+                                                placeholder="e.g., 1200000"
+                                                value="{{ old('base_salary_override', optional($employee->pay_grades->firstWhere('pivot.status', true))->pivot->base_salary_override ?? '') }}">
+                                        </div>
+                                        @error('base_salary_override')
+                                            <span class="text-danger d-block">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </form>
+                        </x-system.modal>
+                    @endhasrole
+                    @hasrole('HR_OFFICER')
+                        <x-system.modal id="ManageDeductions" form="addDeductionForm" title="Manage Employee Deductions">
+                            {{-- Existing Deductions Table --}}
+                            <div class="table-responsive mt-4">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Deduction</th>
+                                            <th>Amount</th>
+                                            <th>Cycles</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse ($employee->deductions as $deduction)
+                                            <tr>
+                                                <td>{{ $deduction->name }}</td>
+                                                <td>{{ number_format($deduction->total_amount, 2) }}</td>
+                                                <td>{{ $deduction->installments }}</td>
+                                                <td>
+                                                    <form
+                                                        action="{{ route('hr.deductions.destroy', [$employee->id, $deduction->id]) }}"
+                                                        method="POST" onsubmit="return confirm('Delete this deduction?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit"
+                                                            class="btn btn-sm btn-outline-danger btn-sm p-1 mx-1 mdi mdi-trash">Delete</button>
+                                                    </form>
+
+                                                    <!-- Edit button -->
+                                                    <x-system.modal-button class="btn btn-outline-dark btn-sm p-1 m-1 mdi mdi-pencil"
+                                                        id="editDeductionModal-{{ $deduction->id }}" data-bs-toggle="modal"
+                                                        text="Edit" textColor="" />
+
+                                                </td>
+
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="4" class="text-center text-muted">No deductions found.</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                                @foreach ($employee->deductions as $deduction)
+                                    <x-system.modal id="editDeductionModal-{{ $deduction->id }}"
+                                        form="editDeductionForm-{{ $deduction->id }}"
+                                        title="Edit Deduction - {{ $deduction->name }}" size="md"
+                                        :inside="true">
+                                        <form action="{{ route('hr.deductions.update', [$employee->id, $deduction->id]) }}"
+                                            method="POST" id="editDeductionForm-{{ $deduction->id }}">
+                                            @csrf
+                                            @method('PUT')
+
+                                            <div class="mb-3">
+                                                <label for="name-{{ $deduction->id }}" class="form-label">Deduction
+                                                    Name</label>
+                                                <input type="text" name="name" id="name-{{ $deduction->id }}"
+                                                    class="form-control" value="{{ $deduction->name }}" required>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="total_amount-{{ $deduction->id }}" class="form-label">Total
+                                                    Amount</label>
+                                                <input type="number" step="0.01" name="total_amount"
+                                                    id="total_amount-{{ $deduction->id }}" class="form-control"
+                                                    value="{{ $deduction->total_amount }}" required>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="installments-{{ $deduction->id }}"
+                                                    class="form-label">Installments</label>
+                                                <input type="number" name="installments"
+                                                    id="installments-{{ $deduction->id }}" class="form-control"
+                                                    value="{{ $deduction->installments }}" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="description">
+                                                    <span class="text-muted">Description</span>
+                                                    <textarea name="description" id="description"
+                                                        class="form-control">{{ $deduction->description }}</textarea>
+                                                </label>
+                                            </div>
+
+                                            <div class="text-end">
+                                                <button type="submit" class="btn btn-primary">Update Deduction</button>
+                                            </div>
+                                        </form>
+                                    </x-system.modal>
+                                @endforeach
+
+
+                            </div>
+
+                            {{-- Create New Deduction Form --}}
+                            <form action="{{ route('hr.deductions.store', $employee->id) }}" method="POST">
+                                @csrf
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="name" class="form-label">Deduction Name</label>
+                                        <input type="text" name="name" id="name" class="form-control"
+                                            required>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="total_amount" class="form-label">Amount</label>
+                                        <input type="number" step="0.01" name="total_amount" id="total_amount"
+                                            class="form-control" required>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="installments" class="form-label">Installments</label>
+                                        <input type="number" name="installments" id="installments" class="form-control"
+                                            required>
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <label for="description">
+                                            <span class="text-muted">Description</span>
+                                            <textarea name="description" id="description"
+                                                class="form-control"></textarea>
+                                        </label>
+                                    </div>
+                                    <div class="col-12 text-end">
+                                        <button type="submit" class="btn btn-primary">Add Deduction</button>
+                                    </div>
+                                </div>
+                            </form>
+
+
+                            <hr>
+
+                        </x-system.modal>
+                    @endhasrole
+
+                    @hasanyrole(['ADMIN', 'HR_OFFICER', 'PAYROLL_MANAGER'])
+                        <a href="{{ route($prefix . '.index') }}" class="btn btn-outline-secondary btn-custom">BACK TO
+                            LIST</a>
+                    @endhasanyrole
+                    @role('HR_OFFICER')
+                        <x-system.modal-button class="btn btn-danger btn-custom me-2" data-bs-toggle="modal"
+                            id="ManageDeductions" text="Manage Deductions" />
+                    @endrole
                 </div>
             </div>
 
@@ -119,19 +315,63 @@
                 </div>
             </div>
 
-            <div>
+            <div class="mb-4">
                 <h4 class="section-title">Other Information</h4>
                 <div class="info-grid">
                     <div><strong>National ID:</strong> {{ $employee->national_id }}</div>
                     <div><strong>TIN Number:</strong> {{ $employee->tin_number }}</div>
                 </div>
             </div>
+            @hasanyrole(['ADMIN', 'HR_OFFICER', 'EMPLOYEE'])
 
-            <div class="text-end mt-4">
-                <a href="{{ route($prefix.'.edit', $employee->id) }}" class="btn btn-primary">
-                    <i class="bi bi-pencil-square"></i> Edit
-                </a>
-            </div>
+                <div class="mb-4">
+                    <h4 class="section-title">Employment Attachments</h4>
+                    <div class="info-grid">
+                        <div>
+                            <strong>National id:</strong>
+                            <x-system.attachment-file-icon :path="$attachments->where('type', 'national_id')->first()?->path" type="pdf" :attachmentName="$attachments->where('type', 'national_id')->first()?->filename" />
+                        </div>
+                        <div>
+                            <strong>Local Government Letter:</strong>
+                            <x-system.attachment-file-icon :path="$attachments->where('type', 'letter')->first()?->path" type="pdf" :attachmentName="$attachments->where('type', 'letter')->first()?->filename" />
+                        </div>
+                        <div>
+                            <strong>Passport:</strong>
+                            <x-system.attachment-file-icon :path="$attachments->where('type', 'passport_photo')->first()?->path" type="pdf" :attachmentName="$attachments->where('type', 'passport_photo')->first()?->filename" />
+                        </div>
+                        <div>
+                            <strong>TIN:</strong>
+                            <x-system.attachment-file-icon :path="$attachments->where('type', 'tin')->first()?->path" type="pdf" :attachmentName="$attachments->where('type', 'tin')->first()?->filename" />
+                        </div>
+                        <div>
+                            <strong>TIN:</strong>
+                            <x-system.attachment-file-icon :path="$attachments->where('type', 'cv')->first()?->path" type="pdf" :attachmentName="$attachments->where('type', 'cv')->first()?->filename" />
+                        </div>
+                        <div>
+                            <strong>Certificates:</strong> <br>
+                            @php
+                                $certificates = $attachments->where('type', 'certificate');
+                                $counter = 1;
+                            @endphp
+                            @if ($certificates)
+                                @foreach ($certificates as $attachment)
+                                    {{-- Here goes the new model --}}
+                                    <p>{{ $counter++ }}:</p>
+                                    <x-system.attachment-file-icon :path="$attachment->path" type="pdf" :attachmentName="$attachment->filename" />
+                                @endforeach
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            @endhasanyrole
+
+            @hasanyrole(['ADMIN', 'HR_OFFICER', 'EMPLOYEE'])
+                <div casyass="text-end mt-4">
+                    <a href="{{ route($prefix . '.edit', $employee->id) }}" class="btn btn-primary">
+                        <i class="bi bi-pencil-square"></i> Edit
+                    </a>
+                </div>
+            @endhasanyrole
         </div>
     </div>
 </div>

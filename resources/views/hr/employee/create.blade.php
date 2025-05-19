@@ -2,6 +2,6 @@
 
 @section('content')
 <div class="col-sm-12 col-md-12">
-    <x-system.forms.create-employee-form route="hr.employees.store" :roles="$roles" />
+    <x-system.forms.create-employee-form route="hr.employees.store"  />
 </div>
 @endsection
