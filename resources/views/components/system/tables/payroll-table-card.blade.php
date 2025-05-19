@@ -52,8 +52,11 @@
                                 <x-system.modal-button class="btn btn-outline-dark p-1  btn-sm mdi mdi-eye-outline"
                                     id="viewPayroll{{ $payroll->id }}" text="View" textColor="" />
                                 @role('HR_OFFICER')
+                                @if ($payroll->status !== 'approved' && $payroll->status !== 'rejected')
                                     <x-system.modal-button class="btn btn-outline-danger p-1 btn-sm mdi mdi-close"
                                         id="rejectPayroll{{ $payroll->id }}" text="Reject" textColor="" />
+                                @endif
+                                    
                                 @endrole
                             </td>
                         </tr>
@@ -150,7 +153,8 @@
                                 </div>
                             </div>
                         </x-system.modal>
-                        <x-system.modal id="rejectPayroll{{ $payroll->id }}" title="Reject Payroll">
+                        @if ($payroll->status !== 'approved' && $payroll->status !== 'rejected')
+                            <x-system.modal id="rejectPayroll{{ $payroll->id }}" title="Reject Payroll">
 
                             <form action="{{ route('hr.payrolls.reject', $payroll) }}" method="POST">
                                 @csrf
@@ -166,6 +170,7 @@
                                 </div>
                             </form>
                         </x-system.modal>
+                        @endif
                     @empty
                         <tr>
                             <td colspan="8" class="text-center text-muted">No payrolls found.</td>

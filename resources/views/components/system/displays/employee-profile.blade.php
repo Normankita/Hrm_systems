@@ -96,7 +96,7 @@
                             id="UpdatePayGrade" text="Update PayGrade" />
 
                         <x-system.modal id="UpdatePayGrade" form="UpdatePayGradeForm" title="Update PayGrade">
-                            <form action="{{ route('hr.UpdatePayGrade', $employee) }}" id="UpdatePayGradeForm"
+                            <form action="{{ route('payroll.employees.UpdatePayGrade', $employee) }}" id="UpdatePayGradeForm"
                                 enctype="multipart/form-data" method="POST">
 
                                 @csrf
