@@ -36,7 +36,7 @@ trait EmployeeTrait
             [
                 'assigned_by' => auth()->id(),
                 'effective_from' => now(),
-                'base_salary_override' => $data['base_salary_override']? $data['base_salary_override'] : 0,
+                'base_salary_override' => $data['base_salary_override'] ? $data['base_salary_override'] : 0,
             ]
         );
         return $employee;
@@ -59,10 +59,9 @@ trait EmployeeTrait
      */
     public static function updateEmployee($id, $data)
     {
-        // Find the employee by ID
         $employee = Employee::find($id);
         if (!$employee) {
-            return null; // or throw exception
+            return null;
         }
 
         // Update user record
@@ -72,12 +71,20 @@ trait EmployeeTrait
                 'name' => $data['full_name'] ?? ($data['first_name'] . ' ' . $data['last_name']),
                 'email' => $data['email'],
             ]);
+
+
+            if (isset($data['role_id'])) {
+                $newRole = Role::findById($data['role_id']);
+
+
+                if (!$user->hasRole($newRole->name)) {
+                    $user->syncRoles([$newRole]);
+                }
+            }
         }
 
-        // Update employee record
         $employee->update($data);
 
-        // If pay_grade_id is provided, assign a new active paygrade to the employee
         if (isset($data['pay_grade_id'])) {
             self::assignActivePaygradeToEmployee(
                 $employee->id,
@@ -89,8 +96,10 @@ trait EmployeeTrait
                 ]
             );
         }
+
         return $employee;
     }
+
 
     /**
      * Assign a new active paygrade to an employee. First deactivate all current
