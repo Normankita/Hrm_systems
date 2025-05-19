@@ -66,9 +66,7 @@ class HrEmployeeController extends Controller
 
     public function update(UpdateEmployeeRequest $request, $id)
     {
-
         $outcome = $this->employeeService->updateEmployee($request, $id);
-
         return redirect()->route('hr.employees.show', $outcome['employee']->id)
             ->with('success', 'Employee updated successfully');
     }

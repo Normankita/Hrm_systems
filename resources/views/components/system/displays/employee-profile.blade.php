@@ -96,8 +96,8 @@
                             id="UpdatePayGrade" text="Update PayGrade" />
 
                         <x-system.modal id="UpdatePayGrade" form="UpdatePayGradeForm" title="Update PayGrade">
-                            <form action="{{ route('payroll.employees.UpdatePayGrade', $employee) }}" id="UpdatePayGradeForm"
-                                enctype="multipart/form-data" method="POST">
+                            <form action="{{ route('payroll.employees.UpdatePayGrade', $employee) }}"
+                                id="UpdatePayGradeForm" enctype="multipart/form-data" method="POST">
 
                                 @csrf
                                 @method('PATCH')
@@ -179,7 +179,8 @@
                                                     </form>
 
                                                     <!-- Edit button -->
-                                                    <x-system.modal-button class="btn btn-outline-dark btn-sm p-1 m-1 mdi mdi-pencil"
+                                                    <x-system.modal-button
+                                                        class="btn btn-outline-dark btn-sm p-1 m-1 mdi mdi-pencil"
                                                         id="editDeductionModal-{{ $deduction->id }}" data-bs-toggle="modal"
                                                         text="Edit" textColor="" />
 
@@ -196,8 +197,7 @@
                                 @foreach ($employee->deductions as $deduction)
                                     <x-system.modal id="editDeductionModal-{{ $deduction->id }}"
                                         form="editDeductionForm-{{ $deduction->id }}"
-                                        title="Edit Deduction - {{ $deduction->name }}" size="md"
-                                        :inside="true">
+                                        title="Edit Deduction - {{ $deduction->name }}" size="md" :inside="true">
                                         <form action="{{ route('hr.deductions.update', [$employee->id, $deduction->id]) }}"
                                             method="POST" id="editDeductionForm-{{ $deduction->id }}">
                                             @csrf
@@ -228,8 +228,7 @@
                                             <div class="mb-3">
                                                 <label for="description">
                                                     <span class="text-muted">Description</span>
-                                                    <textarea name="description" id="description"
-                                                        class="form-control">{{ $deduction->description }}</textarea>
+                                                    <textarea name="description" id="description" class="form-control">{{ $deduction->description }}</textarea>
                                                 </label>
                                             </div>
 
@@ -265,8 +264,7 @@
                                     <div class="col-md-12 mb-3">
                                         <label for="description">
                                             <span class="text-muted">Description</span>
-                                            <textarea name="description" id="description"
-                                                class="form-control"></textarea>
+                                            <textarea name="description" id="description" class="form-control"></textarea>
                                         </label>
                                     </div>
                                     <div class="col-12 text-end">
@@ -329,23 +327,43 @@
                     <div class="info-grid">
                         <div>
                             <strong>National id:</strong>
-                            <x-system.attachment-file-icon :path="$attachments->where('type', 'national_id')->first()?->path" type="pdf" :attachmentName="$attachments->where('type', 'national_id')->first()?->filename" />
+                            @if ($attachments->where('type', 'national_id')->first())
+                                <x-system.attachment-file-icon :path="$attachments->where('type', 'national_id')->first()?->path" type="pdf" :attachmentName="$attachments->where('type', 'national_id')->first()?->filename" />
+                            @else
+                                <h1>---------------</h1>
+                            @endif
                         </div>
                         <div>
                             <strong>Local Government Letter:</strong>
-                            <x-system.attachment-file-icon :path="$attachments->where('type', 'letter')->first()?->path" type="pdf" :attachmentName="$attachments->where('type', 'letter')->first()?->filename" />
+                            @if ($attachments->where('type', 'letter')->first())
+                                <x-system.attachment-file-icon :path="$attachments->where('type', 'letter')->first()?->path" type="pdf" :attachmentName="$attachments->where('type', 'letter')->first()?->filename" />
+                            @else
+                                <h1>---------------</h1>
+                            @endif
                         </div>
                         <div>
                             <strong>Passport:</strong>
-                            <x-system.attachment-file-icon :path="$attachments->where('type', 'passport_photo')->first()?->path" type="pdf" :attachmentName="$attachments->where('type', 'passport_photo')->first()?->filename" />
+                            @if ($attachments->where('type', 'passport_photo')->first())
+                                <x-system.attachment-file-icon :path="$attachments->where('type', 'passport_photo')->first()?->path" type="pdf" :attachmentName="$attachments->where('type', 'passport_photo')->first()?->filename" />
+                            @else
+                                <h1>---------------</h1>
+                            @endif
                         </div>
                         <div>
                             <strong>TIN:</strong>
-                            <x-system.attachment-file-icon :path="$attachments->where('type', 'tin')->first()?->path" type="pdf" :attachmentName="$attachments->where('type', 'tin')->first()?->filename" />
+                            @if ($attachments->where('type', 'tin')->first())
+                                <x-system.attachment-file-icon :path="$attachments->where('type', 'tin')->first()?->path" type="pdf" :attachmentName="$attachments->where('type', 'tin')->first()?->filename" />
+                            @else
+                                <h1>---------------</h1>
+                            @endif
                         </div>
                         <div>
                             <strong>TIN:</strong>
-                            <x-system.attachment-file-icon :path="$attachments->where('type', 'cv')->first()?->path" type="pdf" :attachmentName="$attachments->where('type', 'cv')->first()?->filename" />
+                            @if ($attachments->where('type', 'cv')->first())
+                                <x-system.attachment-file-icon :path="$attachments->where('type', 'cv')->first()?->path" type="pdf" :attachmentName="$attachments->where('type', 'cv')->first()?->filename" />
+                            @else
+                                <h1>---------------</h1>
+                            @endif
                         </div>
                         <div>
                             <strong>Certificates:</strong> <br>

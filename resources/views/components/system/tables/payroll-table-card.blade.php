@@ -6,7 +6,7 @@
             @if ($title === 'Pending' || $title === 'All')
                 <form action="{{ route('hr.payrolls.approveAll') }}" method="POST" class="mb-0">
                     @csrf
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-primary" @if($payrolls->count() < 1) disabled  @endif>
                         <i class="mdi mdi-cash-multiple"></i> Approve all Pending Payrolls
                     </button>
                 </form>
@@ -37,7 +37,7 @@
                             <td>{{ $payroll->period ?? 'N/A' }}</td>
                             <td>
                                 <span
-                                    class="badge 
+                                    class="badge
         {{ $payroll->status === 'approved'
             ? 'bg-success'
             : ($payroll->status === 'rejected'
@@ -56,7 +56,7 @@
                                     <x-system.modal-button class="btn btn-outline-danger p-1 btn-sm mdi mdi-close"
                                         id="rejectPayroll{{ $payroll->id }}" text="Reject" textColor="" />
                                 @endif
-                                    
+
                                 @endrole
                             </td>
                         </tr>
