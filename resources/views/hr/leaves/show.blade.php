@@ -96,7 +96,7 @@
                                                             <p class="text-muted mb-0">Rejection Reason</p>
                                                         </div>
                                                         <div class="col-sm-8">
-                                                            <p class="mb-0">{{ $leave->reason }}</p>
+                                                            <p class="mb-0">{{ $leave->rejection_reason }}</p>
                                                         </div>
                                                     </div>
                                                 @endif
