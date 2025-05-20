@@ -14,22 +14,20 @@ class EmployeeManageLeavesController extends Controller
 {
     public function index()
     {
-        dd("index to me");
         $employees = Employee::with('leaves')
             ->whereHas('leaves')
             ->orderByDesc('created_at')
             ->paginate(20);
-        return view('employee.leaves.index')
+        return view('employee.manage.leaves.index')
             ->with('employees', $employees);
     }
 
 
     public function show($leave)
     {
-        dd($leave);
         $leave = Leave::find($leave);
 
-        return view('employee.leaves.show')
+        return view('employee.manage.leaves.show')
             ->with('leave', $leave);
     }
 
