@@ -13,7 +13,7 @@
                                 <p class="text-muted">Review and manage leave request</p>
                             </div>
                             <div>
-                                <a href="{{ route('hr.leave.index') }}" class="btn btn-light">
+                                <a href="{{ route('employee.leave.index') }}" class="btn btn-light">
                                     <i class="mdi mdi-arrow-left me-1"></i> Back to List
                                 </a>
                             </div>
@@ -110,7 +110,7 @@
                                                 <x-system.modal-button class="btn btn-primary" text="Reject / Approve Leave" id="approveLeave" />
                                                 <x-system.modal id="approveLeave" form="approveRejectForm">
                                                     <form id="approveRejectForm" method="POST"
-                                                        action="{{ route('hr.leave.inspect', $leave->id) }}">
+                                                        action="{{ route('employee.leave.inspect', $leave->id) }}">
                                                         @csrf
                                                         <div class="form-group">
                                                             <label for="doYou">Approve / Denie</label>
