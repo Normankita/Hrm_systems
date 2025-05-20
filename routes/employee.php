@@ -44,7 +44,7 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::post('/updateProfile/{id}', 'updatePassportPhoto')->name('updateProfilePhoto');
     });
 
-Route::middleware(['auth', 'HasCompanyProfile'])
+Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('/employee/leave')
     ->controller(EmployeeLeavesController::class)
     ->name('employee.leave.')
@@ -55,7 +55,7 @@ Route::middleware(['auth', 'HasCompanyProfile'])
         Route::post('/inspect/{leave}', 'inspect')->name('inspect');
     });
 
-Route::middleware(['auth', 'HasCompanyProfile'])
+Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('/employee/leave/type')
     ->controller(EmployeeLeaveTypeController::class)
     ->name('employee.leave.type.')
