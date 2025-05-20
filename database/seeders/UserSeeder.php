@@ -8,6 +8,7 @@ use App\Models\Deduction;
 use App\Models\Department;
 use App\Models\Employee;
 use App\Models\PayGrade;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -19,6 +20,15 @@ class UserSeeder extends Seeder
     {
         // 1. Create company
         $company = Company::create(['name' => 'Default Company']);
+
+        // 1.5 create company payment date
+        $settings = [
+            ['name' => 'payment_date', 'value' => 27]
+        ];
+        foreach($settings as $setting) {
+            $setting = array_merge(['company_id' => $company->id], $setting);
+            Setting::create($setting);
+        }
 
         // 2. Create department
         $department = Department::create([

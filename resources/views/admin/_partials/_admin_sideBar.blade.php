@@ -89,20 +89,29 @@
                         </div>
                     </ul>
                 </li>
+            </ul>
+        </div>
+
+        <!-- Bottom Section -->
+        <div class="sidebar-footer" style="position: absolute; bottom: 0; width: 100%; padding: 15px;">
+            <ul class="nav">
+
                 <li>
-                    <a class="sidenav-item-link" href="{{ route('admin.companies.edit', auth()->user()->company_id) }}">
+                    <a class="sidenav-item-link" href="{{ route('admin.companies.edit', auth()->user()->company_id) }}"
+                        style="color: white; padding: 10px 15px;">
                         <i class="mdi mdi-settings"></i>
                         <span class="nav-text">Company Profile</span>
                     </a>
                 </li>
                 <li>
-                    <a class="sidenav-item-link"
-                    href="{{ route('admin.settings.index', auth()->user()->company_id) }}">
+                    <a class="sidenav-item-link" href="{{ route('admin.settings.index', auth()->user()->company_id) }}"
+                        style="color: white; padding: 10px 15px;">
                         <i class="mdi mdi-settings"></i>
                         <span class="nav-text">Company Settins</span>
                     </a>
                 </li>
             </ul>
         </div>
+
     </div>
 </aside>
