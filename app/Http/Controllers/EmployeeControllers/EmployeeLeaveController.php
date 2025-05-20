@@ -138,11 +138,13 @@ class EmployeeLeaveController extends Controller
     {
         if ($request->hasFile('attachments')) {
             $attachments = [];
+            $counter=1;
             foreach ($request->file('attachments') as $file) {
                 $this->handleDocumentUpload(
                     $file,
                     'leave_attachment',
                     $attachments,
+                    $counter,
                     'attachments/leaves'
                 );
             }

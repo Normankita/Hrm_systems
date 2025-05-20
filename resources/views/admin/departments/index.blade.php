@@ -36,7 +36,7 @@
                                         <td>{{ $department->description }}</td>
                                         <td>{{ \Carbon\Carbon::parse($department->created_at)->format('d M Y') }}</td>
                                         <td>
-                                            <x-system.modal-button id="editDepartment" text="Edit"/>
+                                            <x-system.modal-button id="editDepartment-{{ $department->id }}" text="Edit" />
                                         </td>
                                     </tr>
                                 @endforeach
@@ -90,7 +90,7 @@
 
         @foreach ($departments as $department)
             <!-- Form Modal -->
-            <div class="modal fade" id="editDepartment" tabindex="-1" role="dialog"
+            <div class="modal fade" id="editDepartment-{{ $department->id }}" tabindex="-1" role="dialog"
                 aria-labelledby="exampleModalFormTitle" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
