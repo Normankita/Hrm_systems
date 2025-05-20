@@ -7,7 +7,7 @@ use App\Models\LeaveType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class EmployeeLeaveTypeController extends Controller
+class EmployeeManageLeaveTypeController extends Controller
 {
     public function index() {
         $leaveTypes = LeaveType::all();

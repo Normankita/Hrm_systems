@@ -3,6 +3,8 @@
 use App\Http\Controllers\EmployeeControllers\EmployeeLeaveController;
 use App\Http\Controllers\EmployeeControllers\EmployeeLeavesController;
 use App\Http\Controllers\EmployeeControllers\EmployeeLeaveTypeController;
+use App\Http\Controllers\EmployeeControllers\EmployeeManageLeavesController;
+use App\Http\Controllers\EmployeeControllers\EmployeeManageLeaveTypeController;
 use App\Http\Controllers\EmployeeControllers\EmployeeProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -46,7 +48,7 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
 
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('/employee/leave')
-    ->controller(EmployeeLeavesController::class)
+    ->controller(EmployeeManageLeavesController::class)
     ->name('employee.leave.')
     ->group(function () {
         Route::get('/index', 'index')
@@ -56,9 +58,9 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     });
 
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
-    ->prefix('/employee/leave/type')
-    ->controller(EmployeeLeaveTypeController::class)
-    ->name('employee.leave.type.')
+    ->prefix('/employee/manage/leave/type')
+    ->controller(EmployeeManageLeaveTypeController::class)
+    ->name('employee.manage.leave.type.')
     ->group(function () {
         Route::get('/index', 'index')
             ->name('index');

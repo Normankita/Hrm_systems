@@ -10,7 +10,7 @@ use App\Models\LeaveApproval;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class EmployeeLeavesController extends Controller
+class EmployeeManageLeavesController extends Controller
 {
     public function index()
     {
