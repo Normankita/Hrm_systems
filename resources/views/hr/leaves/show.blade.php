@@ -90,6 +90,16 @@
                                                     class="badge bg-{{ $leave->status === 'approved' ? 'success' : ($leave->status === 'rejected' ? 'danger' : 'warning') }}">
                                                     {{ ucfirst($leave->status) }}
                                                 </span>
+                                                @if ($leave->status === 'rejected')
+                                                    <div class="row mb-3">
+                                                        <div class="col-sm-4">
+                                                            <p class="text-muted mb-0">Rejection Reason</p>
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <p class="mb-0">{{ $leave->reason }}</p>
+                                                        </div>
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
