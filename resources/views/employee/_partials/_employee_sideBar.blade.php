@@ -64,7 +64,7 @@
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
                         data-target="#leaves-menu" aria-expanded="false" aria-controls="leave-menu">
                         <i class="mdi mdi-calendar"></i>
-                        <span class="nav-text">Leaves</span>
+                        <span class="nav-text">Leaves Management</span>
                         <b class="caret"></b>
                     </a>
                     <ul class="collapse" id="leaves-menu" data-parent="#sidebar-menu">

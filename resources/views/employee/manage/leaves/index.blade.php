@@ -39,7 +39,7 @@
                                                 </span>
                                             </td>
                                             <td>
-                                                <x-system.btn-view :route="route('employee.leave.show', $leave)" :key="$key . '_' . $index" />
+                                                <x-system.btn-view :route="route('employee.manage.leave.show', $leave)" :key="$key . '_' . $index" />
                                             </td>
                                         </tr>
                                     @endforeach
