@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\EmployeeControllers\EmployeeLeaveController;
 use App\Http\Controllers\EmployeeControllers\EmployeeLeavesController;
+use App\Http\Controllers\EmployeeControllers\EmployeeLeaveTypeController;
 use App\Http\Controllers\EmployeeControllers\EmployeeProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -53,4 +54,19 @@ Route::middleware(['auth', 'HasCompanyProfile'])
         Route::get('/{leave}', 'show')->name('show');
         Route::post('/inspect/{leave}', 'inspect')->name('inspect');
     });
+
+Route::middleware(['auth', 'HasCompanyProfile'])
+    ->prefix('/employee/leave/type')
+    ->controller(EmployeeLeaveTypeController::class)
+    ->name('employee.leave.type.')
+    ->group(function () {
+        Route::get('/index', 'index')
+            ->name('index');
+        Route::post('/store', 'store')
+            ->name('store');
+        Route::put('/update/{leaveType}', 'update')
+            ->name('update');
+        Route::delete('/destroy/{leaveType}', 'destroy')->name('destroy');
+    });
+
 

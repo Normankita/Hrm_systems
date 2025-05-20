@@ -58,6 +58,29 @@
                     </ul>
                 </li>
 
+                {{-- LEave management starts here  --}}
+
+                <li class="has-sub">
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                        data-target="#leave-menu" aria-expanded="false" aria-controls="leave-menu">
+                        <i class="mdi mdi-calendar"></i>
+                        <span class="nav-text">Leaves</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="collapse" id="leave-menu" data-parent="#sidebar-menu">
+                        <div class="sub-menu">
+                            <li>
+                                <a class="sidenav-item-link" href="{{ route('hr.leave.index') }}">
+                                    <span class="nav-text">Manage Leaves</span>
+                                </a>
+                            </li>
+                        </div>
+                    </ul>
+                </li>
+
+                {{-- Leave management ends here --}}
+
+
                 <li class="has-sub">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
                         data-target="#leave-menu" aria-expanded="false" aria-controls="leave-menu">
