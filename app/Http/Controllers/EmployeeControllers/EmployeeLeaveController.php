@@ -113,6 +113,7 @@ class EmployeeLeaveController extends Controller
             'end_date' => 'required|date|after_or_equal:start_date',
             'reason' => 'required|string|max:255',
             'attachments.*' => 'file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'comment'=> '',
         ]);
     }
 
@@ -121,13 +122,15 @@ class EmployeeLeaveController extends Controller
      */
     private function prepareLeaveData(Request $request)
     {
+        $require_approval= LeaveType::where('id', $request->leave_type_id)->first()->require_approval;
         return [
             'employee_id' => auth()->user()->employee->id,
             'leave_type_id' => $request->leave_type_id,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
             'reason' => $request->reason,
-            'status' => 'pending', // Assuming 'pending' is the default status
+            'comment' => $request->comment,
+            'status' => $request->$require_approval? "pending":"approved", // Assuming 'pending' is the default status
         ];
     }
 

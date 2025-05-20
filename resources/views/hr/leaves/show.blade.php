@@ -67,6 +67,14 @@
                                         </div>
                                         <div class="row mb-3">
                                             <div class="col-sm-4">
+                                                <p class="text-muted mb-0">Description</p>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <p class="mb-0">{{ $leave->leaveType->description }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-sm-4">
                                                 <p class="text-muted mb-0">Start Date</p>
                                             </div>
                                             <div class="col-sm-8">
@@ -90,13 +98,13 @@
                                                     class="badge bg-{{ $leave->status === 'approved' ? 'success' : ($leave->status === 'rejected' ? 'danger' : 'warning') }}">
                                                     {{ ucfirst($leave->status) }}
                                                 </span>
-                                                @if ($leave->status === 'rejected')
+                                                @if ($leave->status === 'rejected' || $leave->status === 'approved')
                                                     <div class="row mb-3">
                                                         <div class="col-sm-4">
-                                                            <p class="text-muted mb-0">Rejection Reason</p>
+                                                            <p class="text-muted mb-0">Comment</p>
                                                         </div>
                                                         <div class="col-sm-8">
-                                                            <p class="mb-0">{{ $leave->rejection_reason }}</p>
+                                                            <p class="mb-0">{{ $leave->comment }}</p>
                                                         </div>
                                                     </div>
                                                 @endif

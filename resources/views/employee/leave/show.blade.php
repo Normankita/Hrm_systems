@@ -24,6 +24,9 @@
                     <div class="mb-3">
                         <strong>Leave Type:</strong> {{ $leave->leaveType->name }}
                     </div>
+                     <div class="mb-3">
+                        <strong>Leave Type Description:</strong> {{ $leave->leaveType->description }}
+                    </div>
 
                     <div class="mb-3">
                         <strong>Start Date:</strong> {{ \Carbon\Carbon::parse($leave->start_date)->toFormattedDateString() }}
