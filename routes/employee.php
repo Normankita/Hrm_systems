@@ -47,13 +47,13 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     });
 
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
-    ->prefix('/employee/leave')
+    ->prefix('/employee/manage/leave')
     ->controller(EmployeeLeavesController::class)
-    ->name('employee.leave.')
+    ->name('employee.manage.leave.')
     ->group(function () {
+        Route::get('/show/{leave}', 'show')->name('show');
         Route::get('/index', 'index')
             ->name('index');
-        Route::get('/{leave}', 'show')->name('show');
         Route::post('/inspect/{leave}', 'inspect')->name('inspect');
     });
 
