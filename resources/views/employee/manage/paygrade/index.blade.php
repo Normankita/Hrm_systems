@@ -13,7 +13,7 @@
                     <x-system.modal-button class="btn btn-primary mb-3" id="createPayGrade" text="Create PayGrade" />
 
                     <x-system.modal size="modal-lg" id="createPayGrade" title="Create PayGrade" form="createPayGradeForm">
-                        <form id="createPayGradeForm" action="{{ route('employee.paygrades.store') }}" method="POST">
+                        <form id="createPayGradeForm" action="{{ route('employee.manage.paygrades.store') }}" method="POST">
                             @csrf
                             <div class="modal-body">
                                 <div class="form-group">
@@ -116,7 +116,7 @@
                                     <x-system.modal size="modal-lg" id="editPayGrade{{ $pay_grade->id }}" title="Edit Pay Grade"
                                         form="editPayGradeForm{{ $pay_grade->id }}">
                                         <form id="editPayGradeForm{{ $pay_grade->id }}"
-                                            action="{{ route('employee.paygrades.update', $pay_grade) }}" method="POST">
+                                            action="{{ route('employee.manage.paygrades.update', $pay_grade) }}" method="POST">
                                             @csrf
                                             @method('PATCH')
                                             <div class="modal-body">

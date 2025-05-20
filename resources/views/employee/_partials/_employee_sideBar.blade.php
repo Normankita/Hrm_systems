@@ -21,18 +21,18 @@
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
                         data-target="#employee-menu" aria-expanded="false" aria-controls="employee-menu">
                         <i class="mdi mdi-cash-register"></i>
-                        <span class="nav-text">Payrolls</span>
+                        <span class="nav-text">Manage Payrolls</span>
                         <b class="caret"></b>
                     </a>
                     <ul class="collapse" id="employee-menu" data-parent="#sidebar-menu">
                         <div class="sub-menu">
                             <li>
-                                <a class="sidenav-item-link" href="{{ route('payroll.employees.index') }}">
+                                <a class="sidenav-item-link" href="{{ route('employee.manage.payrolls.index') }}">
                                     <span class="nav-text">View Employees</span>
                                 </a>
                             </li>
                             <li>
-                                <a class="sidenav-item-link" href="{{ route('payrolls.index') }}">
+                                <a class="sidenav-item-link" href="{{ route('employee.manage.payrolls.index') }}">
                                     <span class="nav-text">View Payrolls</span>
                                 </a>
                             </li>
@@ -44,13 +44,13 @@
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
                         data-target="#paygrade-menu" aria-expanded="false" aria-controls="employee-menu">
                         <i class="mdi mdi-cash-multiple"></i>
-                        <span class="nav-text">PayGrade</span>
+                        <span class="nav-text">Manage PayGrade</span>
                         <b class="caret"></b>
                     </a>
                     <ul class="collapse" id="paygrade-menu" data-parent="#sidebar-menu">
                         <div class="sub-menu">
                             <li>
-                                <a class="sidenav-item-link" href="{{ route('payroll.paygrades.index') }}">
+                                <a class="sidenav-item-link" href="{{ route('employee.manage.paygrades.index') }}">
                                     <span class="nav-text">View PayGrades</span>
                                 </a>
                             </li>

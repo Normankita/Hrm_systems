@@ -76,8 +76,8 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
 
 // Employee PayGrade Routes
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
-    ->prefix('employee/paygrade')
-    ->name('employee.paygrades.')
+    ->prefix('employee/manage/paygrade')
+    ->name('employee.manage.paygrades.')
     ->controller(EmployeePayGradeController::class)
     ->group(function () {
         Route::get('/', 'index')->name('index');
@@ -89,8 +89,8 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     });
 
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
-    ->prefix('employees')
-    ->name('employees.')
+    ->prefix('employee/manage/payrolls')
+    ->name('employee.manage.payrolls.')
     ->controller(EmployeePayrollController::class)
     ->group(function () {
         Route::get('/', 'index')->name('index');

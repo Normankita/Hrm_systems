@@ -17,7 +17,7 @@ class EmployeePayrollController extends Controller
     public function index()
     {
        $payrolls = Payroll::with(['employee', 'pay_grade'])->latest()->get();
-        return view('employee.payroll.index', compact('payrolls'));
+        return view('employee.manage.payroll.index', compact('payrolls'));
 
     }
     public function generateAll()
@@ -47,7 +47,7 @@ class EmployeePayrollController extends Controller
 
     $deductions = $payroll->deductions()->get(); // or however you're storing them
 
-    return view('employee.payroll.show', compact('employee', 'payroll', 'deductions'));
+    return view('employee.manage.payroll.show', compact('employee', 'payroll', 'deductions'));
 }
 
     public function edit(Payroll $payroll)

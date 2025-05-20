@@ -17,7 +17,7 @@ class EmployeePayGradeController extends Controller
     public function index()
     {
         $pay_grades = PayGrade::orderBy("created_at", "desc")->paginate(10);
-        return view('employee.paygrade.index', compact('pay_grades'));
+        return view('employee.manage.paygrade.index', compact('pay_grades'));
     }
 
     /**
@@ -28,7 +28,7 @@ class EmployeePayGradeController extends Controller
         $this->validatePayGrade($request);
         $this->createPayGrade($request);
 
-        return redirect()->route('employee.paygrades.index')->with('success', 'Pay Grade created successfully');
+        return redirect()->route('employee.manage.paygrades.index')->with('success', 'Pay Grade created successfully');
     }
 
     /**
@@ -37,7 +37,7 @@ class EmployeePayGradeController extends Controller
     public function show(PayGrade $payGrade)
     {
         // Assuming you will later show the view
-        return view('employee.paygrade.show', compact('payGrade'));
+        return view('employee.manage.paygrade.show', compact('payGrade'));
     }
 
     /**
@@ -45,7 +45,7 @@ class EmployeePayGradeController extends Controller
      */
     public function edit(PayGrade $payGrade)
     {
-        return view('employee.paygrade.edit', compact('payGrade'));
+        return view('employee.manage.paygrade.edit', compact('payGrade'));
     }
 
     /**
@@ -56,7 +56,7 @@ class EmployeePayGradeController extends Controller
         $this->validatePayGrade($request, $payGrade->id);
         $this->updatePayGrade($request, $payGrade);
 
-        return redirect()->route('employee.paygrades.index')->with('success', 'Pay Grade updated successfully');
+        return redirect()->route('employee.manage.paygrades.index')->with('success', 'Pay Grade updated successfully');
     }
 
     /**
@@ -65,6 +65,6 @@ class EmployeePayGradeController extends Controller
     public function destroy(PayGrade $payGrade)
     {
         $payGrade->delete();
-        return redirect()->route('employee.paygrades.index')->with('success', 'Pay Grade deleted successfully');
+        return redirect()->route('employee.manage.paygrades.index')->with('success', 'Pay Grade deleted successfully');
     }
 }

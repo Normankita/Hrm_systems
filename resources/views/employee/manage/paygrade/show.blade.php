@@ -34,8 +34,8 @@
         </div>
 
         <div class="card-footer text-end">
-            <a href="{{ route('employee.paygrades.edit', $payGrade->id) }}" class="btn btn-warning">Edit</a>
-            <a href="{{ route('employee.paygrades.index') }}" class="btn btn-secondary">Back</a>
+            <a href="{{ route('employee.manage.paygrades.edit', $payGrade->id) }}" class="btn btn-warning">Edit</a>
+            <a href="{{ route('employee.manage.paygrades.index') }}" class="btn btn-secondary">Back</a>
         </div>
     </div>
 </div>
