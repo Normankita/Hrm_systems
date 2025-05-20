@@ -14,6 +14,7 @@ class EmployeeManageLeavesController extends Controller
 {
     public function index()
     {
+        dd("index to me");
         $employees = Employee::with('leaves')
             ->whereHas('leaves')
             ->orderByDesc('created_at')
@@ -27,7 +28,7 @@ class EmployeeManageLeavesController extends Controller
     {
         dd($leave);
         $leave = Leave::find($leave);
-        
+
         return view('employee.leaves.show')
             ->with('leave', $leave);
     }
