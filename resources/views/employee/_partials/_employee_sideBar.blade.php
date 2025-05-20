@@ -62,15 +62,15 @@
 
                 <li class="has-sub">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                        data-target="#leave-menu" aria-expanded="false" aria-controls="leave-menu">
+                        data-target="#leaves-menu" aria-expanded="false" aria-controls="leave-menu">
                         <i class="mdi mdi-calendar"></i>
                         <span class="nav-text">Leaves</span>
                         <b class="caret"></b>
                     </a>
-                    <ul class="collapse" id="leave-menu" data-parent="#sidebar-menu">
+                    <ul class="collapse" id="leaves-menu" data-parent="#sidebar-menu">
                         <div class="sub-menu">
                             <li>
-                                <a class="sidenav-item-link" href="{{ route('hr.leave.index') }}">
+                                <a class="sidenav-item-link" href="{{ route('employee.leave.index') }}">
                                     <span class="nav-text">Manage Leaves</span>
                                 </a>
                             </li>

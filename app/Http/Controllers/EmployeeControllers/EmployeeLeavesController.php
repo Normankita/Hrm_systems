@@ -25,7 +25,9 @@ class EmployeeLeavesController extends Controller
 
     public function show($leave)
     {
+        dd($leave);
         $leave = Leave::find($leave);
+        
         return view('employee.leaves.show')
             ->with('leave', $leave);
     }
