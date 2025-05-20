@@ -3,6 +3,8 @@
 use App\Http\Controllers\EmployeeControllers\EmployeeLeaveController;
 use App\Http\Controllers\EmployeeControllers\EmployeeLeavesController;
 use App\Http\Controllers\EmployeeControllers\EmployeeLeaveTypeController;
+use App\Http\Controllers\EmployeeControllers\EmployeePayGradeController;
+use App\Http\Controllers\EmployeeControllers\EmployeePayrollController;
 use App\Http\Controllers\EmployeeControllers\EmployeeProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -68,5 +70,33 @@ Route::middleware(['auth', 'HasCompanyProfile'])
             ->name('update');
         Route::delete('/destroy/{leaveType}', 'destroy')->name('destroy');
     });
+
+
+
+
+// Employee PayGrade Routes
+Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
+    ->prefix('employee/paygrade')
+    ->name('employee.paygrades.')
+    ->controller(EmployeePayGradeController::class)
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/show/{payGrade}', 'show')->name('show');
+        Route::post('/store', 'store')->name('store');
+        Route::patch('/update/{payGrade}', 'update')->name('update');
+        Route::delete('/delete/{payGrade}', 'destroy')->name('delete');
+        Route::get('/edit/{payGrade}', 'edit')->name('edit');
+    });
+
+Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
+    ->prefix('employees')
+    ->name('employees.')
+    ->controller(EmployeePayrollController::class)
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/generate-all', 'generateAll')->name('generateAll');
+        Route::get('/show/{payroll}', 'show')->name('show');
+    });
+
 
 
