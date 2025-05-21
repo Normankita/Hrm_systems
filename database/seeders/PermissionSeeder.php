@@ -17,23 +17,95 @@ class PermissionSeeder extends Seeder
             [
                 'name' => 'view_employees',
                 'guard_name' => 'web',
-                'group_name' => 'employees',
+                'group_name' => 'employees'
             ],
             [
                 'name' => 'create_employees',
                 'guard_name' => 'web',
-                'group_name' => 'employees',
+                'group_name' => 'employees'
             ],
             [
                 'name' => 'edit_employees',
                 'guard_name' => 'web',
-                'group_name' => 'employees',
+                'group_name' => 'employees'
             ],
             [
                 'name' => 'delete_employees',
                 'guard_name' => 'web',
-                'group_name' => 'employees',
+                'group_name' => 'employees'
             ],
+
+
+
+            [
+                'name' => 'view_payroll',
+                'guard_name' => 'web',
+                'group_name' => 'payroll'
+            ],
+            [
+                'name' => 'create_payroll',
+                'guard_name' => 'web',
+                'group_name' => 'payroll'
+            ],
+            [
+                'name' => 'edit_payroll',
+                'guard_name' => 'web',
+                'group_name' => 'payroll'
+            ],
+            [
+                'name' => 'delete_payroll',
+                'guard_name' => 'web',
+                'group_name' => 'payroll'
+            ],
+
+
+
+
+            [
+                'name' => 'view_paygrade',
+                'guard_name' => 'web',
+                'group_name' => 'paygrade'
+            ],
+            [
+                'name' => 'create_paygrade',
+                'guard_name' => 'web',
+                'group_name' => 'paygrade'
+            ],
+            [
+                'name' => 'edit_paygrade',
+                'guard_name' => 'web',
+                'group_name' => 'paygrade'
+            ],
+            [
+                'name' => 'delete_paygrade',
+                'guard_name' => 'web',
+                'group_name' => 'paygrade'
+            ],
+
+
+
+
+            [
+                'name' => 'view_leave',
+                'guard_name' => 'web',
+                'group_name' => 'leave'
+            ],
+            [
+                'name' => 'create_leave',
+                'guard_name' => 'web',
+                'group_name' => 'leave'
+            ],
+            [
+                'name' => 'edit_leave',
+                'guard_name' => 'web',
+                'group_name' => 'leave'
+            ],
+            [
+                'name' => 'delete_leave',
+                'guard_name' => 'web',
+                'group_name' => 'leave'
+            ],
+
         );
 
         // Assign permissions to roles
