@@ -1,4 +1,3 @@
-```blade
 @extends('layouts.system')
 
 @section('_links')
@@ -9,21 +8,25 @@
         body {
             background-color: #f5f7fa;
         }
+
         .card {
             border: none;
             border-radius: 15px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
         .permission-group {
             background: white;
             padding: 20px;
             border-radius: 10px;
             margin-bottom: 20px;
         }
+
         .permission-group h5 {
             color: #2c3e50;
             margin-bottom: 20px;
         }
+
         .permission-box {
             display: inline-flex;
             align-items: center;
@@ -37,23 +40,28 @@
             user-select: none;
             position: relative;
         }
+
         .permission-box input {
             display: none;
         }
+
         .permission-box.selected {
             background-color: #85299c;
             color: white;
             border-color: #007bff;
             box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
         }
+
         .permission-box:hover {
             border-color: #007bff;
             background-color: #e9ecef;
         }
+
         .permission-box.selected:hover {
             background-color: #0056b3;
             border-color: #0056b3;
         }
+
         .permission-box .check-icon {
             display: none;
             position: absolute;
@@ -68,14 +76,17 @@
             line-height: 20px;
             text-align: center;
         }
+
         .permission-box.selected .check-icon {
             display: block;
         }
+
         .btn-save {
             background: linear-gradient(45deg, #007bff, #00d4ff);
             border: none;
             transition: all 0.3s ease;
         }
+
         .btn-save:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
@@ -93,14 +104,14 @@
                     </div>
                     <h2 class="card-title mb-2">Role Permissions Management</h2>
                     <p class="text-muted mb-0">Configure access rights for: <span class="badge bg-primary"
-                        style="background-color: #85299c !important; color: white;">{{ $role->name }}</span></p>
+                            style="background-color: #85299c !important; color: white;">{{ $role->name }}</span></p>
                     <div class="role-description mt-3">
-                        <p class="text-muted small">Select the permissions you want to grant to this role. Permissions are grouped by their functionality for easier management.</p>
+                        <p class="text-muted small">Select the permissions you want to grant to this role. Permissions are
+                            grouped by their functionality for easier management.</p>
                     </div>
                 </div>
 
-                <form id="permissionsForm"
-                    action="{{ route('admin.permissions.role.update', $role->id) }}" method="POST">
+                <form id="permissionsForm" action="{{ route('admin.permissions.role.update', $role->id) }}" method="POST">
                     @csrf
                     @method('PUT')
                     <div id="permissionsContainer">
@@ -121,13 +132,17 @@
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <h5 class="mb-0">{{ ucfirst($groupName) }}</h5>
                                     <div class="form-check">
-                                        <input type="checkbox" class="form-check-input group-select-all" id="select-all-{{ $groupName }}" data-group="{{ $groupName }}">
-                                        <label class="form-check-label" for="select-all-{{ $groupName }}">Select All</label>
+                                        <input type="checkbox" class="form-check-input group-select-all"
+                                            id="select-all-{{ $groupName }}" data-group="{{ $groupName }}">
+                                        <label class="form-check-label" for="select-all-{{ $groupName }}">Select
+                                            All</label>
                                     </div>
                                 </div>
                                 @foreach ($perms as $permission)
-                                    <label class="permission-box {{ $role->hasPermissionTo($permission->name) ? 'selected' : '' }}">
-                                        <input type="checkbox" name="permissions[]" value="{{ $permission->id }}" {{ $role->hasPermissionTo($permission->name) ? 'checked' : '' }}>
+                                    <label
+                                        class="permission-box {{ $role->hasPermissionTo($permission->name) ? 'selected' : '' }}">
+                                        <input type="checkbox" name="permissions[]" value="{{ $permission->id }}"
+                                            {{ $role->hasPermissionTo($permission->name) ? 'checked' : '' }}>
                                         {{ $permission->name }}
                                         <i class="bi bi-check-circle check-icon"></i>
                                     </label>
@@ -187,6 +202,9 @@
                     data: form.serialize(),
                     success: function(response) {
                         alert('Permissions updated successfully!');
+                        window.location.href =
+                            "{{ route('admin.roles.edit.permissions', $role->id) }}";
+
                     },
                     error: function(xhr) {
                         alert('Error updating permissions: ' + xhr.responseJSON.message);
@@ -196,4 +214,4 @@
         });
     </script>
 @endsection
-```
+
