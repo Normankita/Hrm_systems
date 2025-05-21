@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EmployeeControllers\EmployeeLeaveController;
+use App\Http\Controllers\EmployeeControllers\EmployeeManageEmployeeController;
 use App\Http\Controllers\EmployeeControllers\EmployeeManageLeavesController;
 use App\Http\Controllers\EmployeeControllers\EmployeeManageLeaveTypeController;
 use App\Http\Controllers\EmployeeControllers\EmployeePayGradeController;
@@ -100,3 +101,19 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
 
 
 
+Route::middleware(['auth', 'HasCompanyProfile','role:EMPLOYEE'])
+    ->prefix('/employee/manage/employee')
+    ->controller(EmployeeManageEmployeeController::class)
+    ->name('employee.manage.employees.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('edit/{id}', 'edit')->name('edit');
+        Route::put('update/{id}', 'update')->name('update');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/show/{id}', 'show')->name('show');
+        Route::post('/updatePassword/{id}', 'updatePassword')
+            ->name('update.password');
+        Route::post('/updateProfile/{id}', 'updatePassportPhoto')->name('updateProfilePhoto');
+
+    });
