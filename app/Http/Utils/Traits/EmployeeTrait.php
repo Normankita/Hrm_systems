@@ -4,7 +4,7 @@ namespace App\Http\Utils\Traits;
 
 use App\Models\Employee;
 use App\Models\User;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
@@ -26,15 +26,17 @@ trait EmployeeTrait
             'password' => Hash::make(strtolower($data['last_name'])),
             'company_id' => $data['company_id'],
         ]);
-        $employeeRole = Role::findById($data['role_id']);
-        $user->assignRole($employeeRole);
+        $employeeRole = Role::where('name', 'EMPLOYEE')->first();
+        $extraRole = Role::findById($data['role_id']);
+        $roles = [$employeeRole, $extraRole];
+        $user->assignRole($roles);
         $data['user_id'] = $user->id;
         $employee = Employee::create($data);
         self::assignActivePaygradeToEmployee(
             $employee->id,
             $data['pay_grade_id'],
             [
-                'assigned_by' => auth()->id(),
+                'assigned_by' => Auth::user()->id,
                 'effective_from' => now(),
                 'base_salary_override' => $data['base_salary_override'] ? $data['base_salary_override'] : 0,
             ]
@@ -71,16 +73,10 @@ trait EmployeeTrait
                 'name' => $data['full_name'] ?? ($data['first_name'] . ' ' . $data['last_name']),
                 'email' => $data['email'],
             ]);
-
-
             if (isset($data['role_id'])) {
                 $newRole = Role::findById($data['role_id']);
-
-
-                if (!$user->hasRole($newRole->name)) {
-
-                    $user->syncRoles([$newRole]);
-                }
+                $employeeRole = Role::where('name', 'EMPLOYEE')->first();
+                $user->syncRoles([$newRole, $employeeRole]);
             }
         }
 
@@ -91,7 +87,7 @@ trait EmployeeTrait
                 $employee->id,
                 $data['pay_grade_id'],
                 [
-                    'assigned_by' => auth()->id(),
+                    'assigned_by' => Auth::user()->id,
                     'effective_from' => $data['effective_from'],
                     'base_salary_override' => $data['base_salary_override'],
                 ]

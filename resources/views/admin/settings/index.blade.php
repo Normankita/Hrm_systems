@@ -8,7 +8,8 @@
 
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h3 class="mb-0">Employee Directory</h3>
-                        <x-system.modal-button class="btn btn-primary mb-3" id="CreateSetting" text="Add New Setting" />
+                        <x-system.modal-button class="btn btn-primary mb-3"
+                        id="CreateSetting" text="Add New Setting" />
 
                     <x-system.modal size="modal-lg" id="CreateSetting" title="Create New Setting"
                         form="CreateSettingForm">
@@ -53,7 +54,7 @@
                                             <td>{{ $setting->name }}</td>
                                             <td>{{ $setting->value }}</td>
                                             <td class="d-flex p-1 gap-1">
-                                            
+
                                             {{-- Edit Button --}}
                                             <x-system.modal-button class="btn btn-outline-dark btn-sm p-1 mx-1 mdi mdi-pencil"
                                                 id="editSetting{{ $setting->id }}" text="Edit" textColor="" />
@@ -67,11 +68,11 @@
                                             @csrf
                                             @method('put')
                                             <div class="modal-body">
-                                                <div class="form-group">
+                                                {{-- <div class="form-group">
                                                     <label for="name">Setting Name</label>
                                                     <input type="text" value="{{ $setting->name }}" class="form-control"
                                                         name="name" required>
-                                                </div>
+                                                </div> --}}
                                                 <div class="form-group">
                                                     <label for="value">value</label>
                                                     <textarea class="form-control"

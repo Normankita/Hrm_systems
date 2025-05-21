@@ -32,7 +32,8 @@ class AdminSettingController extends Controller
         'name' => 'required',
         'value'=>'required',
     ]);
-    Setting::where('id', $id)->update($request->only(['name','value']));
+    Setting::where('id', $id)
+        ->update($request->only(['value']));
     return redirect()->route('admin.settings.index')->with('success','Setting updated successfully');
  }
 }

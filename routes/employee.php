@@ -5,7 +5,9 @@ use App\Http\Controllers\EmployeeControllers\EmployeeProfileController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
+Route::middleware(['auth','HasCompanyProfile', 'role:EMPLOYEE',
+    'can:has-any-permission,delete-user,edit-user'
+])
     ->prefix('/employee/leave')
     ->controller(EmployeeLeaveController::class)
     ->name('employees.leave.')
