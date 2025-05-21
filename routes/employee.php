@@ -9,7 +9,7 @@ use App\Http\Controllers\EmployeeControllers\EmployeePayrollController;
 use App\Http\Controllers\EmployeeControllers\EmployeeProfileController;
 use Illuminate\Support\Facades\Route;
 
-
+// Leave Request Routes
 Route::middleware(['auth','HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('/employee/leave')
     ->controller(EmployeeLeaveController::class)
@@ -19,12 +19,12 @@ Route::middleware(['auth','HasCompanyProfile', 'role:EMPLOYEE'])
         Route::get('/request', 'create')->name('request')->middleware(['can:create_leave']);
         Route::post('/create', 'store')->name('store')->middleware(['can:create_leave']);
         Route::get('/{leave}', 'show')->name('show')->middleware(['can:view_leave']);
-        Route::get('/{leave}/edit', 'edit')->name('edit')->middleware(['can:edit_leave']); 
+        Route::get('/{leave}/edit', 'edit')->name('edit')->middleware(['can:edit_leave']);
         Route::put('/{leave}', 'update')->name('update')->middleware(['can:edit_leave']);
         Route::delete('/{leave}', 'destroy')->name('destroy')->middleware(['can:delete_leave']);
     });
 
-
+// Profile Routes
 Route::middleware(['auth', 'HasCompanyProfile', 'HasDefaultConfigs', 'role:EMPLOYEE'])
     ->prefix('/employee/profile')
     ->controller(EmployeeProfileController::class)
@@ -36,7 +36,6 @@ Route::middleware(['auth', 'HasCompanyProfile', 'HasDefaultConfigs', 'role:EMPLO
         Route::put('/{employee}', 'update')->name('update');
     });
 
-
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('/employee/profile')
     ->controller(EmployeeProfileController::class)
@@ -47,73 +46,66 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::post('/updateProfile/{id}', 'updatePassportPhoto')->name('updateProfilePhoto');
     });
 
+// Manage Leave Response
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('/employee/manage/leave')
     ->controller(EmployeeManageLeavesController::class)
     ->name('employee.manage.leave.')
     ->group(function () {
-        Route::get('/show/{leave}', 'show')->name('show');
-        Route::get('/index', 'index')
-            ->name('index');
-        Route::post('/inspect/{leave}', 'inspect')->name('inspect');
+        Route::get('/show/{leave}', 'show')->name('show')->middleware(['can:view_leave_response']);
+        Route::get('/index', 'index')->name('index')->middleware(['can:view_leave_response']);
+        Route::post('/inspect/{leave}', 'inspect')->name('inspect')->middleware(['can:edit_leave_response']);
     });
 
+// Leave Types
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('/employee/manage/leave/type')
     ->controller(EmployeeManageLeaveTypeController::class)
     ->name('employee.manage.leave.type.')
     ->group(function () {
-        Route::get('/index', 'index')
-            ->name('index');
-        Route::post('/store', 'store')
-            ->name('store');
-        Route::put('/update/{leaveType}', 'update')
-            ->name('update');
-        Route::delete('/destroy/{leaveType}', 'destroy')->name('destroy');
+        Route::get('/index', 'index')->name('index')->middleware(['can:view_leaveType']);
+        Route::post('/store', 'store')->name('store')->middleware(['can:create_leaveType']);
+        Route::put('/update/{leaveType}', 'update')->name('update')->middleware(['can:edit_leaveType']);
+        Route::delete('/destroy/{leaveType}', 'destroy')->name('destroy')->middleware(['can:delete_leaveType']);
     });
 
-
-
-
-// Employee PayGrade Routes
+// PayGrade Routes
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('employee/manage/paygrade')
     ->name('employee.manage.paygrades.')
     ->controller(EmployeePayGradeController::class)
     ->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('/show/{payGrade}', 'show')->name('show');
-        Route::post('/store', 'store')->name('store');
-        Route::patch('/update/{payGrade}', 'update')->name('update');
-        Route::delete('/delete/{payGrade}', 'destroy')->name('delete');
-        Route::get('/edit/{payGrade}', 'edit')->name('edit');
+        Route::get('/', 'index')->name('index')->middleware(['can:view_paygrade']);
+        Route::get('/show/{payGrade}', 'show')->name('show')->middleware(['can:view_paygrade']);
+        Route::post('/store', 'store')->name('store')->middleware(['can:create_paygrade']);
+        Route::patch('/update/{payGrade}', 'update')->name('update')->middleware(['can:edit_paygrade']);
+        Route::delete('/delete/{payGrade}', 'destroy')->name('delete')->middleware(['can:delete_paygrade']);
+        Route::get('/edit/{payGrade}', 'edit')->name('edit')->middleware(['can:edit_paygrade']);
     });
 
+// Payroll Routes
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('employee/manage/payrolls')
     ->name('employee.manage.payrolls.')
     ->controller(EmployeePayrollController::class)
     ->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::post('/generate-all', 'generateAll')->name('generateAll');
-        Route::get('/show/{payroll}', 'show')->name('show');
+        Route::get('/', 'index')->name('index')->middleware(['can:view_payroll']);
+        Route::post('/generate-all', 'generateAll')->name('generateAll')->middleware(['can:create_payroll']);
+        Route::get('/show/{payroll}', 'show')->name('show')->middleware(['can:view_payroll']);
     });
 
-
-
+// Employee Management
 Route::middleware(['auth', 'HasCompanyProfile','role:EMPLOYEE'])
     ->prefix('/employee/manage/employee')
     ->controller(EmployeeManageEmployeeController::class)
     ->name('employee.manage.employees.')
     ->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('edit/{id}', 'edit')->name('edit');
-        Route::put('update/{id}', 'update')->name('update');
-        Route::get('/create', 'create')->name('create');
-        Route::post('/store', 'store')->name('store');
-        Route::get('/show/{id}', 'show')->name('show');
-        Route::post('/updatePassword/{id}', 'updatePassword')
-            ->name('update.password');
-        Route::post('/updateProfile/{id}', 'updatePassportPhoto')->name('updateProfilePhoto');
-
+        Route::get('/', 'index')->name('index')->middleware(['can:view_employees']);
+        Route::get('edit/{id}', 'edit')->name('edit')->middleware(['can:edit_employees']);
+        Route::put('update/{id}', 'update')->name('update')->middleware(['can:edit_employees']);
+        Route::get('/create', 'create')->name('create')->middleware(['can:create_employees']);
+        Route::post('/store', 'store')->name('store')->middleware(['can:create_employees']);
+        Route::get('/show/{id}', 'show')->name('show')->middleware(['can:view_employees']);
+        Route::post('/updatePassword/{id}', 'updatePassword')->name('update.password')->middleware(['can:edit_employees']);
+        Route::post('/updateProfile/{id}', 'updatePassportPhoto')->name('updateProfilePhoto')->middleware(['can:edit_employees']);
     });

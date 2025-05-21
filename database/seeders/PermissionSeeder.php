@@ -106,6 +106,50 @@ class PermissionSeeder extends Seeder
                 'group_name' => 'leave'
             ],
 
+
+            [
+                'name' => 'view_leave_response',
+                'guard_name' => 'web',
+                'group_name' => 'leave_response'
+            ],
+            [
+                'name' => 'create_leave_response',
+                'guard_name' => 'web',
+                'group_name' => 'leave_response'
+            ],
+            [
+                'name' => 'edit_leave_response',
+                'guard_name' => 'web',
+                'group_name' => 'leave_response'
+            ],
+            [
+                'name' => 'delete_leave_response',
+                'guard_name' => 'web',
+                'group_name' => 'leave_response'
+            ],
+
+
+            [
+                'name' => 'view_leaveType',
+                'guard_name' => 'web',
+                'group_name' => 'leaveType'
+            ],
+            [
+                'name' => 'create_leaveType',
+                'guard_name' => 'web',
+                'group_name' => 'leaveType'
+            ],
+            [
+                'name' => 'edit_leaveType',
+                'guard_name' => 'web',
+                'group_name' => 'leaveType'
+            ],
+            [
+                'name' => 'delete_leaveType',
+                'guard_name' => 'web',
+                'group_name' => 'leaveType'
+            ],
+
         );
 
         // Assign permissions to roles
