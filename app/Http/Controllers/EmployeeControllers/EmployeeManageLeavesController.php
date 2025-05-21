@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Http\Controllers\HrControllers;
+namespace App\Http\Controllers\EmployeeControllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Employee;
@@ -10,7 +10,7 @@ use App\Models\LeaveApproval;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class HrLeavesController extends Controller
+class EmployeeManageLeavesController extends Controller
 {
     public function index()
     {
@@ -18,7 +18,7 @@ class HrLeavesController extends Controller
             ->whereHas('leaves')
             ->orderByDesc('created_at')
             ->paginate(20);
-        return view('hr.leaves.index')
+        return view('employee.manage.leaves.index')
             ->with('employees', $employees);
     }
 
@@ -26,7 +26,8 @@ class HrLeavesController extends Controller
     public function show($leave)
     {
         $leave = Leave::find($leave);
-        return view('hr.leaves.show')
+
+        return view('employee.manage.leaves.show')
             ->with('leave', $leave);
     }
 

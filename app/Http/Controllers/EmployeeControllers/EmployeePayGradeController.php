@@ -1,0 +1,70 @@
+<?php
+
+namespace App\Http\Controllers\EmployeeControllers;
+
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Utils\Traits\PayGradeTrait;
+use App\Models\PayGrade;
+
+class EmployeePayGradeController extends Controller
+{
+    use PayGradeTrait;
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $pay_grades = PayGrade::orderBy("created_at", "desc")->paginate(10);
+        return view('employee.manage.paygrade.index', compact('pay_grades'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $this->validatePayGrade($request);
+        $this->createPayGrade($request);
+
+        return redirect()->route('employee.manage.paygrades.index')->with('success', 'Pay Grade created successfully');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(PayGrade $payGrade)
+    {
+        // Assuming you will later show the view
+        return view('employee.manage.paygrade.show', compact('payGrade'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(PayGrade $payGrade)
+    {
+        return view('employee.manage.paygrade.edit', compact('payGrade'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, PayGrade $payGrade)
+    {
+        $this->validatePayGrade($request, $payGrade->id);
+        $this->updatePayGrade($request, $payGrade);
+
+        return redirect()->route('employee.manage.paygrades.index')->with('success', 'Pay Grade updated successfully');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(PayGrade $payGrade)
+    {
+        $payGrade->delete();
+        return redirect()->route('employee.manage.paygrades.index')->with('success', 'Pay Grade deleted successfully');
+    }
+}
