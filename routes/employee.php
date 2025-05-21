@@ -10,13 +10,18 @@ use App\Http\Controllers\EmployeeControllers\EmployeeProfileController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::middleware(['auth', 'can:view_leave' , 'HasCompanyProfile', 'role:EMPLOYEE'])
+Route::middleware(['auth',
+ 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('/employee/leave')
     ->controller(EmployeeLeaveController::class)
     ->name('employees.leave.')
     ->group(function () {
-        Route::get('/status', 'index')->name('status');
-        Route::get('/request', 'create')->name('request');
+        Route::get('/status', 'index')->name('status')
+            ->middleware('can:view_leave');
+
+        Route::get('/request', 'create')->name('request')
+            ->middleware('can:create_leave');
+            
         Route::post('/create', 'store')->name('store');
         Route::get('/{leave}', 'show')->name('show');
         Route::get('/{leave}/edit', 'edit')->name('edit');

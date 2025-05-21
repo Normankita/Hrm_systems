@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 use App\Http\Utils\Traits\UploadFileTrait;
+use App\Models\Employee;
 use Illuminate\Support\Facades\Hash;
 
 class AdminEmployeeController extends Controller
@@ -139,7 +140,7 @@ class AdminEmployeeController extends Controller
     public function updatePassportPhoto(Request $request, $id)
     {
         $outcome= $this->employeeService->updateProfilePhoto($request, $id);
-      
+
         if($outcome){
             return redirect()->route('admin.employees.show', parameters: $outcome['employee']->id)
                 ->with('success', 'Passport photo updated successfully');
@@ -149,4 +150,5 @@ class AdminEmployeeController extends Controller
             'message' => 'Invalid passport photo upload'
         ]);
     }
+
 }

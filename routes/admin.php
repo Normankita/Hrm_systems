@@ -55,10 +55,22 @@ Route::middleware(['auth', 'role:ADMIN'])
     ->group(function () {
         Route::put('/update/{id}', 'update')
             ->name('update');
+
         Route::get('index', 'index')->name('index');
         Route::post('store', 'store')->name('store');
+
         Route::get('/edit/permissions/{id}', 'editPermissions')
             ->name('edit.permissions');
+
+        Route::get('/get/employees', 'getEmployeesPage')
+            ->name('get.employees.page');
+
+        Route::get('/get/employees/{id}/permissions/page', 'assignPermissionsPage')
+            ->name('get.assign.permissions.page');
+
+        Route::post('/assign/permissions/{id}', 'assignPermissions')
+            ->name('assign.permissions');
+
     });
 
 
