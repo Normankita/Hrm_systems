@@ -33,11 +33,13 @@
                                 </a>
                             </li>
                             <li>
-                                {{-- <a class="sidenav-item-link" href="{{ route('admin.employees.index') }}">
-                                    <span class="nav-text">View Employees</span>
-                                </a> --}}
                                 <a class="sidenav-item-link" href="{{ route('admin.employees.index') }}">
                                     <span class="nav-text">View Employees</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="sidenav-item-link" href="{{ route('admin.employees.permissions.all') }}">
+                                    <span class="nav-text">Manage Employee permissions</span>
                                 </a>
                             </li>
                         </div>
@@ -57,15 +59,7 @@
                                 <a class="sidenav-item-link"
                                     href="
                                     {{ route('admin.roles.index') }}">
-                                    <span class="nav-text">Create Role</span>
-                                </a>
-                            </li>
-                            <li>
-                                {{-- <a class="sidenav-item-link" href="{{ route('admin.employees.index') }}">
-                                    <span class="nav-text">View Employees</span>
-                                </a> --}}
-                                <a class="sidenav-item-link" href="{{ route('admin.employees.index') }}">
-                                    <span class="nav-text">Assign Role</span>
+                                    <span class="nav-text">Manage roles</span>
                                 </a>
                             </li>
                         </div>

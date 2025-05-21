@@ -32,6 +32,12 @@ class AdminEmployeeController extends Controller
             ->get();
         return view('admin.employee.index', compact('employees'));
     }
+    public function permissionsAll(){
+        $employees = Auth::user()->company->employees()
+            ->orderBy('created_at', 'desc')
+            ->get();
+        return view('admin.employee.index', compact('employees'));
+    }
 
     public function create()
     {
@@ -149,4 +155,5 @@ class AdminEmployeeController extends Controller
             'message' => 'Invalid passport photo upload'
         ]);
     }
+    
 }

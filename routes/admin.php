@@ -15,6 +15,7 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
     ->name('admin.employees.')
     ->group(function () {
         Route::get('/', 'index')->name('index');
+        Route::get('permissions/all','permissionsAll')->name('permissions.all')->name('permissions.all');
         Route::get('edit/{id}', 'edit')->name('edit');
         Route::put('update/{id}', 'update')->name('update');
         Route::get('/create', 'create')->name('create');
@@ -64,12 +65,14 @@ Route::middleware(['auth', 'role:ADMIN'])
 
 
 Route::middleware(['auth', 'role:ADMIN'])
-    ->prefix('/admin/role')
+    ->prefix('/admin/permission')
     ->controller(ApiRolesController::class)
-    ->name('admin.roles.')
+    ->name('admin.permissions.')
     ->group(function () {
-        Route::put('/update/permissions/{id}', 'updatePermissions')
-            ->name('permissions.update');
+        Route::put('/role/update/{id}', 'updateRolePermissions')
+            ->name('role.update');
+        Route::put('/user/update/{id}', 'updateUserPermissions')
+            ->name('user.update');
     });
 
 

@@ -88,7 +88,7 @@ trait EmployeeTrait
                 $data['pay_grade_id'],
                 [
                     'assigned_by' => Auth::user()->id,
-                    'effective_from' => $data['effective_from'],
+                    'effective_from' => $data['effective_from']?? now(),
                     'base_salary_override' => $data['base_salary_override'],
                 ]
             );

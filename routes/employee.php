@@ -10,20 +10,18 @@ use App\Http\Controllers\EmployeeControllers\EmployeeProfileController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::middleware(['auth','HasCompanyProfile', 'role:EMPLOYEE',
-    'can:has-any-permission,delete-user,edit-user'
-])
+Route::middleware(['auth','HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('/employee/leave')
     ->controller(EmployeeLeaveController::class)
     ->name('employees.leave.')
     ->group(function () {
-        Route::get('/status', 'index')->name('status');
-        Route::get('/request', 'create')->name('request');
-        Route::post('/create', 'store')->name('store');
-        Route::get('/{leave}', 'show')->name('show');
-        Route::get('/{leave}/edit', 'edit')->name('edit');
-        Route::put('/{leave}', 'update')->name('update');
-        Route::delete('/{leave}', 'destroy')->name('destroy');
+        Route::get('/status', 'index')->name('status')->middleware(['can:view_leave']);
+        Route::get('/request', 'create')->name('request')->middleware(['can:create_leave']);
+        Route::post('/create', 'store')->name('store')->middleware(['can:create_leave']);
+        Route::get('/{leave}', 'show')->name('show')->middleware(['can:view_leave']);
+        Route::get('/{leave}/edit', 'edit')->name('edit')->middleware(['can:edit_leave']); 
+        Route::put('/{leave}', 'update')->name('update')->middleware(['can:edit_leave']);
+        Route::delete('/{leave}', 'destroy')->name('destroy')->middleware(['can:delete_leave']);
     });
 
 

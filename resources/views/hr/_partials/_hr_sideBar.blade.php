@@ -2,7 +2,7 @@
     <div id="sidebar" class="sidebar sidebar-with-footer">
         <!-- Application Brand -->
         <div class="app-brand">
-            <a href="{{ route('dashboard') }}">
+            <a href="#">
                 <span class="brand-name">HRMS</span>
             </a>
         </div>
@@ -11,7 +11,7 @@
         <div class="sidebar-left" data-simplebar style="height: 100%;">
             <ul class="nav sidebar-inner" id="sidebar-menu">
                 <li>
-                    <a class="sidenav-item-link" href="{{ route('dashboard') }}">
+                    <a class="sidenav-item-link" href="#">
                         <i class="mdi mdi-view-dashboard"></i>
                         <span class="nav-text">Dashboard</span>
                     </a>
@@ -27,7 +27,7 @@
                     <ul class="collapse" id="leave-menu" data-parent="#sidebar-menu">
                         <div class="sub-menu">
                             <li>
-                                <a class="sidenav-item-link" href="{{ route('hr.leave.index') }}">
+                                <a class="sidenav-item-link" href="#">
                                     <span class="nav-text">Manage Leaves</span>
                                 </a>
                             </li>
@@ -44,12 +44,12 @@
                     <ul class="collapse" id="employee-menu" data-parent="#sidebar-menu">
                         <div class="sub-menu">
                             <li>
-                                <a class="sidenav-item-link" href="{{ route('hr.employees.create') }}">
+                                <a class="sidenav-item-link" href="#">
                                     <span class="nav-text">Create Employee</span>
                                 </a>
                             </li>
                             <li>
-                                <a class="sidenav-item-link" href="{{ route('hr.employees.index') }}">
+                                <a class="sidenav-item-link" href="#">
                                     <span class="nav-text">View Employees</span>
                                 </a>
                             </li>
@@ -66,25 +66,25 @@
                     <ul class="collapse" id="payrolls-menu" data-parent="#sidebar-menu">
                         <div class="sub-menu">
                             <li>
-                                <a class="sidenav-item-link" href="{{ route('hr.payrolls.index') }}">
+                                <a class="sidenav-item-link" href="#') }}">
                                     <i class="mdi mdi-eye-outline mr-1"></i>
                                     <span class="nav-text">View All payrolls</span>
                                 </a>
                             </li>
                             <li>
-                                <a class="sidenav-item-link" href="{{ route('hr.payrolls.pending') }}">
+                                <a class="sidenav-item-link" href="#">
                                     <i class="mdi mdi-clock-outline mr-1"></i>
                                     <span class="nav-text">Pending payrolls</span>
                                 </a>
                             </li>
                             <li>
-                                <a class="sidenav-item-link" href="{{ route('hr.payrolls.approved') }}">
+                                <a class="sidenav-item-link" href="#">
                                     <i class="mdi mdi-check-circle-outline mr-1"></i>
                                     <span class="nav-text">Approved payrolls</span>
                                 </a>
                             </li>
                             <li>
-                                <a class="sidenav-item-link" href="{{ route('hr.payrolls.rejected') }}">
+                                <a class="sidenav-item-link" href="#">
                                     <i class="mdi mdi-close-circle-outline mr-1"></i>
                                     <span class="nav-text">Rejected payrolls</span>
                                 </a>
