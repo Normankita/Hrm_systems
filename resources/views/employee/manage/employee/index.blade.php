@@ -8,7 +8,7 @@
 
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h3 class="mb-0">Employee Directory</h3>
-                    <a href="{{ route('hr.employees.create') }}" class="btn btn-primary">Add Employee</a>
+                    <a href="{{ route('employee.manage.employees.create') }}" class="btn btn-primary">Add Employee</a>
                 </div>
 
                 <div class="table-responsive">
@@ -41,8 +41,8 @@
                                         </span>
                                     </td>
                                     <td>
-                                      <x-system.btn-view :key="$key" :route="route('hr.employees.show', $employee->id)" />
-                                      <x-system.btn-edit :key="$key" :route="route('hr.employees.edit', $employee->id)" />
+                                      <x-system.btn-view :key="$key" :route="route('employee.manage.employees.show', $employee->id)" />
+                                      <x-system.btn-edit :key="$key" :route="route('employee.manage.employees.edit', $employee->id)" />
                                        
                                 </tr>
                             @empty

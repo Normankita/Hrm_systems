@@ -7,22 +7,6 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::middleware(['auth', 'HasCompanyProfile', 'role:HR_OFFICER'])
-    ->prefix('/hr/employee')
-    ->controller(HrEmployeeController::class)
-    ->name('hr.employees.')
-    ->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('edit/{id}', 'edit')->name('edit');
-        Route::put('update/{id}', 'update')->name('update');
-        Route::get('/create', 'create')->name('create');
-        Route::post('/store', 'store')->name('store');
-        Route::get('/show/{id}', 'show')->name('show');
-        Route::post('/updatePassword/{id}', 'updatePassword')
-            ->name('update.password');
-        Route::post('/updateProfile/{id}', 'updatePassportPhoto')->name('updateProfilePhoto');
-
-    });
 
 
 Route::middleware(['auth', 'HasCompanyProfile', 'role:HR_OFFICER'])

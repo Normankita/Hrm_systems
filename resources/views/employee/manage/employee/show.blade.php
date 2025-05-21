@@ -4,7 +4,7 @@
 
 <x-system.displays.employee-profile
 :employee="$employee"
-prefix="hr.employees"
+prefix="employee.manage.employees"
 :attachments="$attachments"
 
 />
