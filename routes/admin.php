@@ -15,7 +15,7 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
     ->name('admin.employees.')
     ->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::get('permissions/all','permissionsAll')->name('permissions.all')->name('permissions.all');
+        Route::get('permissions/all','permissionsAll')->name('permissions.all');
         Route::get('edit/{id}', 'edit')->name('edit');
         Route::put('update/{id}', 'update')->name('update');
         Route::get('/create', 'create')->name('create');
@@ -24,6 +24,8 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
         Route::post('/updatePassword/{id}', 'updatePassword')
             ->name('update.password');
         Route::post('/updateProfile/{id}', 'updatePassportPhoto')->name('updateProfilePhoto');
+        Route::get('/edit/permissions/{id}', 'editPermissions')
+            ->name('edit.permissions');
     });
 
 
@@ -56,10 +58,22 @@ Route::middleware(['auth', 'role:ADMIN'])
     ->group(function () {
         Route::put('/update/{id}', 'update')
             ->name('update');
+
         Route::get('index', 'index')->name('index');
         Route::post('store', 'store')->name('store');
+
         Route::get('/edit/permissions/{id}', 'editPermissions')
             ->name('edit.permissions');
+
+        Route::get('/get/employees', 'getEmployeesPage')
+            ->name('get.employees.page');
+
+        Route::get('/get/employees/{id}/permissions/page', 'assignPermissionsPage')
+            ->name('get.assign.permissions.page');
+
+        Route::post('/assign/permissions/{id}', 'assignPermissions')
+            ->name('assign.permissions');
+
     });
 
 

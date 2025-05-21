@@ -91,16 +91,16 @@
                     <div class="role-icon mb-3">
                         <i class="bi bi-shield-lock-fill" style="font-size: 3rem; color: #85299c;"></i>
                     </div>
-                    <h2 class="card-title mb-2">Role Permissions Management</h2>
+                    <h2 class="card-title mb-2">User Permissions Management</h2>
                     <p class="text-muted mb-0">Configure access rights for: <span class="badge bg-primary"
-                        style="background-color: #85299c !important; color: white;">{{ $role->name }}</span></p>
+                        style="background-color: #85299c !important; color: white;">{{ $employee->full_name }}</span></p>
                     <div class="role-description mt-3">
-                        <p class="text-muted small">Select the permissions you want to grant to this role. Permissions are grouped by their functionality for easier management.</p>
+                        <p class="text-muted small">Select the permissions you want to grant to this user. Permissions are grouped by their functionality for easier management.</p>
                     </div>
                 </div>
 
                 <form id="permissionsForm"
-                    action="{{ route('admin.permissions.role.update', $role->id) }}" method="POST">
+                    action="{{ route('admin.permissions.user.update', $employee->user->id) }}" method="POST">
                     @csrf
                     @method('PUT')
                     <div id="permissionsContainer">
@@ -126,8 +126,8 @@
                                     </div>
                                 </div>
                                 @foreach ($perms as $permission)
-                                    <label class="permission-box {{ $role->hasPermissionTo($permission->name) ? 'selected' : '' }}">
-                                        <input type="checkbox" name="permissions[]" value="{{ $permission->id }}" {{ $role->hasPermissionTo($permission->name) ? 'checked' : '' }}>
+                                    <label class="permission-box {{ $employee->user->hasPermissionTo($permission->name) ? 'selected' : '' }}">
+                                        <input type="checkbox" name="permissions[]" value="{{ $permission->id }}" {{ $employee->user->hasPermissionTo($permission->name) ? 'checked' : '' }}>
                                         {{ $permission->name }}
                                         <i class="bi bi-check-circle check-icon"></i>
                                     </label>

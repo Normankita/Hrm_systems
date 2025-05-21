@@ -10,7 +10,7 @@
     @endrole
 
     @role('EMPLOYEE')
-    {{-- @if (Auth::user()->created_at===Auth::user()->updated_at)
+        {{-- @if (Auth::user()->created_at === Auth::user()->updated_at)
         <h1>Hello I am new</h1>
     @endif --}}
         @include('employee.dashboard')
@@ -24,4 +24,3 @@
         @include('payroll.dashboard')
     @endrole
 @endsection
-

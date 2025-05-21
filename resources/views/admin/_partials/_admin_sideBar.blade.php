@@ -39,7 +39,7 @@
                             </li>
                             <li>
                                 <a class="sidenav-item-link" href="{{ route('admin.employees.permissions.all') }}">
-                                    <span class="nav-text">Manage Employee permissions</span>
+                                    <span class="nav-text">Employee permissions</span>
                                 </a>
                             </li>
                         </div>
