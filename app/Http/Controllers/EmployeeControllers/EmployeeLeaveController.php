@@ -122,7 +122,7 @@ class EmployeeLeaveController extends Controller
      */
     private function prepareLeaveData(Request $request)
     {
-        $require_approval= LeaveType::where('id', $request->leave_type_id)->first()->require_approval;
+        $require_approval= LeaveType::where('id', $request->leave_type_id)->first()->required_approval;
         return [
             'employee_id' => auth()->user()->employee->id,
             'leave_type_id' => $request->leave_type_id,
