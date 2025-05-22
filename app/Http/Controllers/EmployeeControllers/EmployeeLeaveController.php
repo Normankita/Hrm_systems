@@ -122,7 +122,10 @@ class EmployeeLeaveController extends Controller
      */
     private function prepareLeaveData(Request $request)
     {
-        $require_approval= LeaveType::where('id', $request->leave_type_id)->first()->required_approval;
+        $leaveType = LeaveType::findOrFail($request->leave_type_id);
+
+        $status = $leaveType->required_approval ? 'pending' : 'approved';
+
         return [
             'employee_id' => auth()->user()->employee->id,
             'leave_type_id' => $request->leave_type_id,
@@ -130,7 +133,7 @@ class EmployeeLeaveController extends Controller
             'end_date' => $request->end_date,
             'reason' => $request->reason,
             'comment' => $request->comment,
-            'status' => $request->$require_approval? "pending":"approved", // Assuming 'pending' is the default status
+            'status' => $status,
         ];
     }
 
