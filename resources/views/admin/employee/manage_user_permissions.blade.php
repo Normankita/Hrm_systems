@@ -127,16 +127,26 @@
                         @php
                             // Group permissions by group_name
                             $grouped = [];
-                            foreach ($permissions->where('division', 'individual') as $permission) {
+                            foreach ($permissions->where('division', 'group') as $permission) {
                                 $groupName = $permission->group_name ?? 'Other';
-                                if (!isset($grouped[$groupName])) {
-                                    $grouped[$groupName] = [];
-                                }
                                 $grouped[$groupName][] = $permission;
+                            }
+                            $individual = [];
+                            foreach ($permissions->where('division', 'individual') as $permission) {
+                                $individualName = $permission->group_name ?? 'Other';
+                                $individual[$individualName][] = $permission;
                             }
                         @endphp
 
-                        <x-system.forms.permissions-list-form :grouped="$grouped" :employee="$employee" />
+                        <div class="mb-5">
+                            <h2>Generic Permissions</h2>
+                            <x-system.forms.permissions-list-form :grouped="$grouped" :employee="$employee" />
+                        </div>
+
+                        <div class="mt-5 pt-5">
+                            <h2>Individual Account Permissions</h2>
+                            <x-system.forms.permissions-list-form :grouped="$individual" :employee="$employee" />
+                        </div>
                     </div>
 
                     <div class="text-center mt-4">

@@ -72,7 +72,7 @@ class UserSeeder extends Seeder
             'user_id' => $emp->id,
             'company_id' => $company->id,
             'department_id' => $department->id,
-            'full_name' => 'employee User',
+            'full_name' => 'employee User Mkota',
             'gender' => 'male',
             'date_of_birth' => '1990-01-01',
             'phone_number' => '1234567890',

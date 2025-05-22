@@ -25,7 +25,7 @@
                 <div>
                     <input type="checkbox" name="permissions[]" value="{{ $permission->id }}"
                         {{ $class ? 'checked' : '' }}>
-                    {{ $permission->name }}
+                    {{ $permission->slug }}
                     <i class="bi bi-check-circle check-icon"></i>
                 </div>
 

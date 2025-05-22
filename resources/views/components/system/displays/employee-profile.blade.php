@@ -67,6 +67,9 @@
                     alt="Profile Image" class="profile-img me-3">
                 <div>
                     <h2 class="mb-0">{{ $employee->full_name }}</h2>
+                    <span class="lead">Registered AS: <b>
+                        {{ $employee->user->roles->where('name', '!=', 'EMPLOYEE')->first()->name }}
+                    </b></span>
                     <p class="text-muted"><span>{{ $employee->employee_type }}</span><span> | </span>
                         <span>
                             {{ $employee->pay_grades->where('pivot.status', true)->first()?->name ?? 'No Active Paygrade' }}
