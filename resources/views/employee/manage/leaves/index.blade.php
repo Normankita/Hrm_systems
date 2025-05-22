@@ -2,7 +2,8 @@
 
 
 @section('content')
-    <div class="row">
+    @can('view_leave_response')
+        <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-body ">
@@ -51,4 +52,5 @@
             </div>
         </div>
     </div>
+    @endcan
 @endsection
