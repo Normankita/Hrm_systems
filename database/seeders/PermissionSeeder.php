@@ -17,22 +17,30 @@ class PermissionSeeder extends Seeder
             [
                 'name' => 'view_employees',
                 'guard_name' => 'web',
-                'group_name' => 'employees'
+                'group_name' => 'employees',
+                'slug' => 'view-all-employees',
+                'division' => 'group'
             ],
             [
                 'name' => 'create_employees',
                 'guard_name' => 'web',
-                'group_name' => 'employees'
+                'group_name' => 'employees',
+                'slug' => 'create-any-employee',
+                'division' => 'group'
             ],
             [
                 'name' => 'edit_employees',
                 'guard_name' => 'web',
-                'group_name' => 'employees'
+                'group_name' => 'employees',
+                'slug' => 'edit-any-employee',
+                'division' => 'group'
             ],
             [
                 'name' => 'delete_employees',
                 'guard_name' => 'web',
-                'group_name' => 'employees'
+                'group_name' => 'employees',
+                'slug' => 'delete-any-employee',
+                'division' => 'group'
             ],
 
 
@@ -40,22 +48,30 @@ class PermissionSeeder extends Seeder
             [
                 'name' => 'view_payroll',
                 'guard_name' => 'web',
-                'group_name' => 'payroll'
+                'group_name' => 'payroll',
+                'slug' => 'view-all-payroll',
+                'division' => 'group'
             ],
             [
                 'name' => 'create_payroll',
                 'guard_name' => 'web',
-                'group_name' => 'payroll'
+                'group_name' => 'payroll',
+                'slug' => 'create-any-payroll',
+                'division' => 'group'
             ],
             [
                 'name' => 'edit_payroll',
                 'guard_name' => 'web',
-                'group_name' => 'payroll'
+                'group_name' => 'payroll',
+                'slug' => 'edit-any-payroll',
+                'division' => 'group'
             ],
             [
                 'name' => 'delete_payroll',
                 'guard_name' => 'web',
-                'group_name' => 'payroll'
+                'group_name' => 'payroll',
+                'slug' => 'delete-any-payroll',
+                'division' => 'group'
             ],
 
 
@@ -64,22 +80,30 @@ class PermissionSeeder extends Seeder
             [
                 'name' => 'view_paygrade',
                 'guard_name' => 'web',
-                'group_name' => 'paygrade'
+                'group_name' => 'paygrade',
+                'slug' => 'view-all-paygrade',
+                'division' => 'group'
             ],
             [
                 'name' => 'create_paygrade',
                 'guard_name' => 'web',
-                'group_name' => 'paygrade'
+                'group_name' => 'paygrade',
+                'slug' => 'create-any-paygrade',
+                'division' => 'group'
             ],
             [
                 'name' => 'edit_paygrade',
                 'guard_name' => 'web',
-                'group_name' => 'paygrade'
+                'group_name' => 'paygrade',
+                'slug' => 'edit-any-paygrade',
+                'division' => 'group'
             ],
             [
                 'name' => 'delete_paygrade',
                 'guard_name' => 'web',
-                'group_name' => 'paygrade'
+                'group_name' => 'paygrade',
+                'slug' => 'delete-any-paygrade',
+                'division' => 'group'
             ],
 
 
@@ -88,66 +112,90 @@ class PermissionSeeder extends Seeder
             [
                 'name' => 'view_leave',
                 'guard_name' => 'web',
-                'group_name' => 'leave'
+                'group_name' => 'leave',
+                'slug' => 'view-leave',
+                'division' => 'individual'
             ],
             [
-                'name' => 'create_leave',
+                'name' => 'request_leave',
                 'guard_name' => 'web',
-                'group_name' => 'leave'
+                'group_name' => 'leave',
+                'slug' => 'request-leave',
+                'division' => 'individual'
             ],
             [
                 'name' => 'edit_leave',
                 'guard_name' => 'web',
-                'group_name' => 'leave'
+                'group_name' => 'leave',
+                'slug' => 'edit-leave',
+                'division' => 'individual'
             ],
             [
                 'name' => 'delete_leave',
                 'guard_name' => 'web',
-                'group_name' => 'leave'
+                'group_name' => 'leave',
+                'slug' => 'delete-leave',
+                'division' => 'individual'
             ],
 
 
             [
-                'name' => 'view_leave_response',
+                'name' => 'view_leave_requests',
                 'guard_name' => 'web',
-                'group_name' => 'leave_response'
+                'group_name' => 'leave_response',
+                'slug' => 'view-all-leave-requests',
+                'division' => 'group'
             ],
             [
-                'name' => 'create_leave_response',
+                'name' => 'respond_leave_request',
                 'guard_name' => 'web',
-                'group_name' => 'leave_response'
+                'group_name' => 'leave_response',
+                'slug' => 'respond-any-leave-request',
+                'division' => 'group'
             ],
-            [
-                'name' => 'edit_leave_response',
-                'guard_name' => 'web',
-                'group_name' => 'leave_response'
-            ],
-            [
-                'name' => 'delete_leave_response',
-                'guard_name' => 'web',
-                'group_name' => 'leave_response'
-            ],
+            // [
+            //     'name' => 'edit_leave_response',
+            //     'guard_name' => 'web',
+            //     'group_name' => 'leave_response',
+            //     'slug' => 'edit-any-leave-response',
+            //     'division' => 'group'
+            // ],
+            // [
+            //     'name' => 'delete_leave_response',
+            //     'guard_name' => 'web',
+            //     'group_name' => 'leave_response',
+            //     'slug' => 'delete-any-leave-response',
+            //     'division' => 'group'
+            // ],
 
 
             [
-                'name' => 'view_leaveType',
+                'name' => 'view_leaveTypes',
                 'guard_name' => 'web',
-                'group_name' => 'leaveType'
+                'group_name' => 'leaveType',
+                'slug' => 'view-all-leaveTypes',
+                'division' => 'group'
             ],
             [
                 'name' => 'create_leaveType',
                 'guard_name' => 'web',
-                'group_name' => 'leaveType'
+                'group_name' => 'leaveType',
+                'slug' => 'create-any-leaveType',
+                'division' => 'group'
             ],
             [
                 'name' => 'edit_leaveType',
                 'guard_name' => 'web',
-                'group_name' => 'leaveType'
+                'group_name' => 'leaveType',
+                'slug' => 'edit-any-leaveType',
+                'division' => 'group'
             ],
             [
                 'name' => 'delete_leaveType',
                 'guard_name' => 'web',
-                'group_name' => 'leaveType'
+                'group_name' => 'leaveType',
+                'slug' => 'delete-any-leaveType',
+                'division' => 'group'
             ],
 
         );

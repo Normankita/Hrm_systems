@@ -17,9 +17,9 @@
 
         .permission-group {
             background: white;
-            padding: 20px;
+            padding: 10px;
             border-radius: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 0px;
         }
 
         .permission-group h5 {
@@ -118,7 +118,7 @@
                         @php
                             // Group permissions by group_name
                             $grouped = [];
-                            foreach ($permissions as $permission) {
+                            foreach ($permissions->where('division', 'group') as $permission) {
                                 $groupName = $permission->group_name ?? 'Other';
                                 if (!isset($grouped[$groupName])) {
                                     $grouped[$groupName] = [];
@@ -127,28 +127,7 @@
                             }
                         @endphp
 
-                        @foreach ($grouped as $groupName => $perms)
-                            <div class="permission-group">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <h5 class="mb-0">{{ ucfirst($groupName) }}</h5>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input group-select-all"
-                                            id="select-all-{{ $groupName }}" data-group="{{ $groupName }}">
-                                        <label class="form-check-label" for="select-all-{{ $groupName }}">Select
-                                            All</label>
-                                    </div>
-                                </div>
-                                @foreach ($perms as $permission)
-                                    <label
-                                        class="permission-box {{ $role->hasPermissionTo($permission->name) ? 'selected' : '' }}">
-                                        <input type="checkbox" name="permissions[]" value="{{ $permission->id }}"
-                                            {{ $role->hasPermissionTo($permission->name) ? 'checked' : '' }}>
-                                        {{ $permission->name }}
-                                        <i class="bi bi-check-circle check-icon"></i>
-                                    </label>
-                                @endforeach
-                            </div>
-                        @endforeach
+                        <x-system.forms.permissions-list-form :grouped="$grouped" :role="$role" />
                     </div>
 
                     <div class="text-center mt-4">

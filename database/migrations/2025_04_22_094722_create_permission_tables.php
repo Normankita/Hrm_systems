@@ -31,6 +31,7 @@ return new class extends Migration
             $table->string('group_name')->nullable(); // For MyISAM use string('group_name', 225); // (or 166 for InnoDB with Redundant/Compact row format)
             $table->string('guard_name'); // For MyISAM use string('guard_name', 25);
             $table->string('slug');       // For MyISAM use string('slug', 225);
+            $table->string('division');
             $table->timestamps();
 
             $table->unique(['name', 'guard_name']);
