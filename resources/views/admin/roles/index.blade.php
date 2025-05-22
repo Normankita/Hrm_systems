@@ -24,19 +24,22 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($roles as $key => $role)
+                                @forelse($roles->whereNotIn('name', ['OWNER', 'EMPLOYEE', 'ADMIN']) as $key => $role)
                                     <tr>
                                         <td>{{ ++$key }}</td>
                                         <td>{{ $role->name }}</td>
                                         <td>
-                                            <a class="dropdown-item" mb-4" data-toggle="modal"
-                                                data-target="#roles_update-{{ $role->id }}">
-                                                edit</a>
+                                            <x-system.modal-button text="Edit"
+                                                icon="bi bi-pencil-square"
+                                                class="btn btn-primary btn-block"
+                                                id="roles_update-{{ $role->id }}" />
                                         </td>
                                         <td>
                                             <a class="dropdown-item"
                                                 href="{{ route('admin.roles.edit.permissions',
-                                                 $role->id) }}">Manage</a>
+                                                 $role->id) }}">
+                                        <button class="btn btn-dark btn-block">Manage</button>
+                                        </a>
                                         </td>
                                     </tr>
                                 @empty
