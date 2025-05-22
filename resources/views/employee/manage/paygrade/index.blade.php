@@ -1,11 +1,11 @@
 @extends("layouts.system")
 
 @section('content')
-    <div class="row">
+    @can('view_paygrade')
+        <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-body ">
-
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h3 class="mb-0">PayGrades</h3>
                     </div>
@@ -167,6 +167,5 @@
             </div>
         </div>
     </div>
-
-
+    @endcan
 @endsection

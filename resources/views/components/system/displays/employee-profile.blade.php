@@ -60,7 +60,7 @@
         </div>
         <div class="card-body">
 
-            <div class="d-flex align-items-center mb-4">
+            <div canss="d-flex align-items-center mb-4">
                 <img src="{{ $employee->profile_picture
                     ? asset('storage/' . $employee->profile_picture)
                     : 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg' }}"
@@ -94,7 +94,8 @@
                             </form>
                         </x-system.modal>
                     @endhasanyrole
-                    @hasrole('PAYROLL_MANAGER')
+                    @canany(['edit_employees', 'edit_paygrade'])
+                        
                         <x-system.modal-button class="btn btn-primary btn-custom me-2" data-bs-toggle="modal"
                             id="UpdatePayGrade" text="Update PayGrade" />
 
@@ -151,8 +152,8 @@
                                 </div>
                             </form>
                         </x-system.modal>
-                    @endhasrole
-                    @hasrole('HR_OFFICER')
+                    @endcanany
+                    @canany(['create_deductions','view_deductions','edit_deductions' ])
                         <x-system.modal id="ManageDeductions" form="addDeductionForm" title="Manage Employee Deductions">
                             {{-- Existing Deductions Table --}}
                             <div class="table-responsive mt-4">
@@ -182,10 +183,12 @@
                                                     </form>
 
                                                     <!-- Edit button -->
-                                                    <x-system.modal-button
+                                                    @can('edit_deductions')
+                                                        <x-system.modal-button
                                                         class="btn btn-outline-dark btn-sm p-1 m-1 mdi mdi-pencil"
                                                         id="editDeductionModal-{{ $deduction->id }}" data-bs-toggle="modal"
                                                         text="Edit" textColor="" />
+                                                    @endcan
 
                                                 </td>
 
@@ -198,7 +201,8 @@
                                     </tbody>
                                 </table>
                                 @foreach ($employee->deductions as $deduction)
-                                    <x-system.modal id="editDeductionModal-{{ $deduction->id }}"
+                                    @can('edit_deductions')
+                                        <x-system.modal id="editDeductionModal-{{ $deduction->id }}"
                                         form="editDeductionForm-{{ $deduction->id }}"
                                         title="Edit Deduction - {{ $deduction->name }}" size="md" :inside="true">
                                         <form action="{{ route('hr.deductions.update', [$employee->id, $deduction->id]) }}"
@@ -240,13 +244,15 @@
                                             </div>
                                         </form>
                                     </x-system.modal>
+                                    @endcan
                                 @endforeach
 
 
                             </div>
 
                             {{-- Create New Deduction Form --}}
-                            <form action="{{ route('hr.deductions.store', $employee->id) }}" method="POST">
+                            @can('create_deductions')
+                                <form action="{{ route('hr.deductions.store', $employee->id) }}" method="POST">
                                 @csrf
                                 <div class="row">
                                     <div class="col-md-4 mb-3">
@@ -275,21 +281,20 @@
                                     </div>
                                 </div>
                             </form>
-
-
+                            @endcan
                             <hr>
 
                         </x-system.modal>
-                    @endhasrole
+                    @endcanany
 
-                    @hasanyrole(['ADMIN', 'HR_OFFICER', 'PAYROLL_MANAGER'])
-                        <a href="{{ route($prefix . '.index') }}" class="btn btn-outline-secondary btn-custom">BACK TO
+                 @can('view_employees')
+                     <a href="{{ route($prefix . '.index') }}" class="btn btn-outline-secondary btn-custom">BACK TO
                             LIST</a>
-                    @endhasanyrole
-                    @role('HR_OFFICER')
+                 @endcan
+                    @canany(['view_deductions', 'create_deductions', 'edit_deductions'])
                         <x-system.modal-button class="btn btn-danger btn-custom me-2" data-bs-toggle="modal"
                             id="ManageDeductions" text="Manage Deductions" />
-                    @endrole
+                    @endcanany
                 </div>
             </div>
 
@@ -322,9 +327,10 @@
                     <div><strong>National ID:</strong> {{ $employee->national_id }}</div>
                     <div><strong>TIN Number:</strong> {{ $employee->tin_number }}</div>
                 </div>
-            </div>
-            @hasanyrole(['ADMIN', 'HR_OFFICER', 'EMPLOYEE'])
+            </div>hm
 
+            {{-- Attahmhments section --}}
+            @can('view_attachments')
                 <div class="mb-4">
                     <h4 class="section-title">Employment Attachments</h4>
                     <div class="info-grid">
@@ -384,18 +390,21 @@
                         </div>
                     </div>
                 </div>
-            @endhasanyrole
 
-            @hasanyrole(['ADMIN', 'HR_OFFICER', 'EMPLOYEE'])
-                <div casyass="text-end mt-4">
+            @endcan
+                        {{-- Attachments section ends here --}}
+            @canany(['edit_employees', 'edit_own_employees'])
+             <div casyass="text-end mt-4">
                     <a href="{{ route($prefix . '.edit', $employee->id) }}" class="btn btn-primary">
                         <i class="bi bi-pencil-square"></i> Edit
                     </a>
-                </div>
-            @endhasanyrole
+                </div>   
+            @endcanany
         </div>
     </div>
 </div>
-    <div class="col-12 mt-5">
+    @canany(['view_own_payrolls', 'view_payroll'], $post)
+        <div class="col-12 mt-5">
         <x-system.displays.employee-payrolls :employee="$employee" />
     </div>
+    @endcanany
