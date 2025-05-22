@@ -1,7 +1,8 @@
 @extends('layouts.system')
 
 @section('content')
-    <div class="container-fluid">
+    @can('view_leave_response')
+        <div class="container-fluid">
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -10,7 +11,7 @@
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <div>
                                 <h4 class="card-title mb-1">Leave Request Details</h4>
-                                <p class="text-muted">Review and manage leave request</p>
+                                <p class="text-muted">Review @can()and manage @endcan leave request</p>
                             </div>
                             <div>
                                 <a href="{{ route('employee.manage.leave.index') }}" class="btn btn-light">
@@ -105,7 +106,8 @@
                                         <h5 class="card-title mb-3">Leave Reason</h5>
                                         <p class="mb-4">{{ $leave->reason }}</p>
                                         {{-- model pop for approving leave or reject --}}
-                                        @if ($leave->status === 'pending')
+                                       @canany(['edit_leave_response', 'create_leave_response'])
+                                            @if ($leave->status === 'pending')
                                             <div class="d-flex justify-content-end gap-2">
                                                 <x-system.modal-button class="btn btn-primary" text="Reject / Approve Leave" id="approveLeave" />
                                                 <x-system.modal id="approveLeave" form="approveRejectForm">
@@ -129,6 +131,7 @@
                                                 </x-system.modal>
                                             </div>
                                         @endif
+                                       @endcanany
                                     </div>
                                 </div>
                             </div>
@@ -149,4 +152,5 @@
             </div>
         </div>
     </div>
+    @endcan
 @endsection

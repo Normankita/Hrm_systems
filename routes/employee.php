@@ -54,7 +54,7 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->group(function () {
         Route::get('/show/{leave}', 'show')->name('show')->middleware(['can:view_leave_response']);
         Route::get('/index', 'index')->name('index')->middleware(['can:view_leave_response']);
-        Route::post('/inspect/{leave}', 'inspect')->name('inspect')->middleware(['can:edit_leave_response']);
+        Route::post('/inspect/{leave}', 'inspect')->name('inspect')->middleware(['can:edit_leave_response,create_leave_response']);
     });
 
 // Leave Types

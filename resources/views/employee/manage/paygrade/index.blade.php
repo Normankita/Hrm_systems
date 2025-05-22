@@ -10,6 +10,7 @@
                         <h3 class="mb-0">PayGrades</h3>
                     </div>
                     <!-- create a create button right here -->
+                   @can('create_paygrade')
                     <x-system.modal-button class="btn btn-primary mb-3" id="createPayGrade" text="Create PayGrade" />
 
                     <x-system.modal size="modal-lg" id="createPayGrade" title="Create PayGrade" form="createPayGradeForm">
@@ -46,7 +47,9 @@
                             </div>
                         </form>
                     </x-system.modal>
+                   @endcan
 
+                   @can('view_paygrade')
                     <div class="table-responsive">
                         <span>Total PayGrades: {{ $pay_grades->count() }}</span>
                         <table class="table table-bordered table-hover align-middle text-nowrap">
@@ -79,8 +82,10 @@
                                                 id="viewPayGrade{{ $pay_grade->id }}" text="View" textColor="" />
 
                                             {{-- Edit Button --}}
+                                            @can('edit_paygrade')
                                             <x-system.modal-button class="btn btn-outline-dark btn-sm p-1 mx-1 mdi mdi-pencil"
                                                 id="editPayGrade{{ $pay_grade->id }}" text="Edit" textColor="" />
+                                            @endcan
                                         </td>
 
                                     </tr>
@@ -113,7 +118,8 @@
                                         </div>
                                     </x-system.modal>
 
-                                    <x-system.modal size="modal-lg" id="editPayGrade{{ $pay_grade->id }}" title="Edit Pay Grade"
+                                  @can('edit_paygrade')
+                                    <xs-ystem.modal size="modal-lg" id="editPayGrade{{ $pay_grade->id }}" title="Edit Pay Grade"
                                         form="editPayGradeForm{{ $pay_grade->id }}">
                                         <form id="editPayGradeForm{{ $pay_grade->id }}"
                                             action="{{ route('employee.manage.paygrades.update', $pay_grade) }}" method="POST">
@@ -148,6 +154,7 @@
                                             </div>
                                         </form>
                                     </x-system.modal>
+                                  @endcan
 
 
                                 @empty
@@ -158,6 +165,7 @@
                             </tbody>
                         </table>
                     </div>
+                    @endcan
                 </div>
             </div>
         </div>
