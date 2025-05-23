@@ -18,7 +18,7 @@ class EmployeeDeductionController extends Controller
     public function index(Employee $employee)
     {
         $deductions = $employee->deductions()->latest()->paginate(20);
-        return view('hr.deductions.index', compact('employee', 'deductions'));
+        return view('employee.manage.employee.deductions', compact('employee', 'deductions'));
     }
 
     // Show form to create deduction for a given employee
@@ -51,10 +51,9 @@ public function store(Request $request, Employee $employee)
 
 
     // Show a specific deduction (employee context optional if deduction has employee relation)
-    public function show(Employee $employee, Deduction $deduction)
+    public function show(Employee $employee)
     {
-        // Optional: confirm $deduction->employee_id === $employee->id for safety
-        return view('hr.deductions.show', compact('employee', 'deduction'));
+        return view('employee.manage.employee.deductions', compact('employee'));
     }
 
     // Show form to edit deduction for a given employee

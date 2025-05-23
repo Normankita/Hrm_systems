@@ -127,7 +127,7 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::get('/', 'index')->name('index')->middleware(['can:view_deductions']);                     // List deductions for employee
         Route::get('/create', 'create')->name('create')->middleware(['can:create_deductions']);             // Show form to create a deduction for employee
         Route::post('/', 'store')->name('store')->middleware(['can:create_deductions']);                    // Store new deduction for employee
-        Route::get('/{deduction}', 'show')->name('show')->middleware(['can:view_deductions']);            // Show a single deduction
+        Route::get('/{employee}', 'show')->name('show')->middleware(['can:view_deductions']);            // Show a single deduction
         Route::get('/{deduction}/edit', 'edit')->name('edit')->middleware(['can:edit_deductions']);       // Edit a deduction
         Route::put('/{deduction}', 'update')->name('update')->middleware(['can:edit_deductions']);        // Update deduction
         Route::delete('/{deduction}', 'destroy')->name('destroy')->middleware(['can:delete_deductions']);   // Delete deduction
