@@ -1,13 +1,7 @@
 @extends('layouts.system')
 
 @section('content')
-
-<x-system.displays.employee-profile
-:employee="$employee"
-prefix="employee.manage.employees"
-:attachments="$attachments"
-
-/>
-
-
+    @can('view_employees')
+        <x-system.displays.employee-profile :employee="$employee" prefix="employee.manage.employees" :attachments="$attachments" />
+    @endcan
 @endsection

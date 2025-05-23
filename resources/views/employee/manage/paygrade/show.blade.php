@@ -35,7 +35,9 @@
                 </div>
 
                 <div class="card-footer text-end">
-                    <a href="{{ route('employee.manage.paygrades.edit', $payGrade->id) }}" class="btn btn-warning">Edit</a>
+                    @can('edit_paygrade')
+                        <a href="{{ route('employee.manage.paygrades.edit', $payGrade->id) }}" class="btn btn-warning">Edit</a>
+                    @endcan
                     <a href="{{ route('employee.manage.paygrades.index') }}" class="btn btn-secondary">Back</a>
                 </div>
             </div>

@@ -52,9 +52,6 @@
                                             <x-system.modal-button
                                                 class="btn btn-outline-dark p-1  btn-sm mdi mdi-eye-outline"
                                                 id="viewPayroll{{ $payroll->id }}" text="View" textColor="" />
-
-
-
                                         </td>
                                     </tr>
                                     <x-system.modal size="modal-lg" id="viewPayroll{{ $payroll->id }}"

@@ -1,4 +1,5 @@
 @props(['employee'])
+@canany(['view_payroll', 'view_own_payrolls'])
 <div class="card">
     <div class="card-body ">
 
@@ -63,3 +64,4 @@
         </div>
     </div>
 </div>
+@endcanany

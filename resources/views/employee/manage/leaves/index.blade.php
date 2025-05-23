@@ -2,7 +2,7 @@
 
 
 @section('content')
-    @can('view_leave_response')
+    @can('view_leave_requests')
         <div class="row">
         <div class="col-12">
             <div class="card">

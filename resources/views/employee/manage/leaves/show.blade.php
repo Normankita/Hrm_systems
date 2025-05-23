@@ -1,7 +1,7 @@
 @extends('layouts.system')
 
 @section('content')
-    @can('view_leave_response')
+    @can('view_leave_requests')
         <div class="container-fluid">
         <div class="row">
             <div class="col-12">
@@ -11,7 +11,7 @@
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <div>
                                 <h4 class="card-title mb-1">Leave Request Details</h4>
-                                <p class="text-muted">Review @can()and manage @endcan leave request</p>
+                                <p class="text-muted">Review @can('respond_leave_request')and manage @endcan leave request</p>
                             </div>
                             <div>
                                 <a href="{{ route('employee.manage.leave.index') }}" class="btn btn-light">
@@ -106,7 +106,7 @@
                                         <h5 class="card-title mb-3">Leave Reason</h5>
                                         <p class="mb-4">{{ $leave->reason }}</p>
                                         {{-- model pop for approving leave or reject --}}
-                                       @canany(['edit_leave_response', 'create_leave_response'])
+                                       @can('respond_leave_request')
                                             @if ($leave->status === 'pending')
                                             <div class="d-flex justify-content-end gap-2">
                                                 <x-system.modal-button class="btn btn-primary" text="Reject / Approve Leave" id="approveLeave" />
@@ -131,7 +131,7 @@
                                                 </x-system.modal>
                                             </div>
                                         @endif
-                                       @endcanany
+                                       @endcan
                                     </div>
                                 </div>
                             </div>
