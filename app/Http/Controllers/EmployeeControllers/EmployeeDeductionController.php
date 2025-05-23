@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\HrControllers;
+namespace App\Http\Controllers\EmployeeControllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Services\DeductionService;
@@ -8,7 +8,7 @@ use App\Models\Deduction;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 
-class HrDeductionController extends Controller
+class EmployeeDeductionController extends Controller
 
 {
     public function __construct(private DeductionService $DeductionService)

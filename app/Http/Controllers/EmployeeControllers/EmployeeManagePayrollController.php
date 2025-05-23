@@ -1,6 +1,6 @@
 <?php
+namespace App\Http\Controllers\EmployeeControllers;
 
-namespace App\Http\Controllers\PayrollControllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Services\PayrollService;
@@ -8,7 +8,7 @@ use App\Models\Employee;
 use App\Models\Payroll;
 use Illuminate\Http\Request;
 
-class PayrollController extends Controller
+class EmployeeManagePayrollController extends Controller
 {
     /**
      * Display a listing of the resource.

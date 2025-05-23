@@ -70,7 +70,7 @@
                 <div>
                     <h2 class="mb-0">{{ $employee->full_name }}</h2>
                     <span class="lead">Registered AS: <b>
-                            {{ $employee->user->roles->where('name', '!=', 'EMPLOYEE')->first()->name }}
+                            {{ $employee->user->roles->where('name', '!=', 'EMPLOYEE')->first()->name??'No Role' }}
                         </b></span>
                     <p class="text-muted"><span>{{ $employee->employee_type }}</span><span> | </span>
                         <span>
@@ -104,7 +104,7 @@
                             id="UpdatePayGrade" text="Update PayGrade" />
 
                         <x-system.modal id="UpdatePayGrade" form="UpdatePayGradeForm" title="Update PayGrade">
-                            <form action="{{ route('payroll.employees.UpdatePayGrade', $employee) }}"
+                            <form action="{{ route('employee.manage.payroll.employees.UpdatePayGrade', $employee) }}"
                                 id="UpdatePayGradeForm" enctype="multipart/form-data" method="POST">
 
                                 @csrf
@@ -160,7 +160,7 @@
 
                     {{-- Deductions Management --}}
                     @canany(['edit_paygrade', 'edit_deductions', 'view_deductions', 'create_deductions'])
-                        <x-system.modal id="ManageDeductions" form="addDeductionForm" title="Manage Employee Deductions">
+                        <x-system.modal id="ManageDeductions" form="addDeductionForm" title="Manage Employee Deductions" :inside="true">
                             {{-- Existing Deductions Table --}}
                             <div class="table-responsive mt-4">
                                 <table class="table table-bordered">
@@ -181,7 +181,7 @@
                                                 <td>
                                                     @can('delete_deductions')
                                                         <form
-                                                            action="{{ route('hr.deductions.destroy', [$employee->id, $deduction->id]) }}"
+                                                            action="{{ route('employee.manage.deductions.destroy', [$employee->id, $deduction->id]) }}"
                                                             method="POST" onsubmit="return confirm('Delete this deduction?')">
                                                             @csrf
                                                             @method('DELETE')
@@ -212,7 +212,7 @@
                                         <x-system.modal id="editDeductionModal-{{ $deduction->id }}"
                                             form="editDeductionForm-{{ $deduction->id }}"
                                             title="Edit Deduction - {{ $deduction->name }}" size="md" :inside="true">
-                                            <form action="{{ route('hr.deductions.update', [$employee->id, $deduction->id]) }}"
+                                            <form action="{{ route('employee.manage.deductions.update', [$employee->id, $deduction->id]) }}"
                                                 method="POST" id="editDeductionForm-{{ $deduction->id }}">
                                                 @csrf
                                                 @method('PUT')
@@ -258,7 +258,7 @@
                             </div>
 
                             {{-- Create New Deduction Form --}}
-                            <form action="{{ route('hr.deductions.store', $employee->id) }}" method="POST">
+                            <form action="{{ route('employee.manage.deductions.store', $employee->id) }}" method="POST">
                                 @csrf
                                 <div class="row">
                                     <div class="col-md-4 mb-3">

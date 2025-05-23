@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\PayrollControllers;
+namespace App\Http\Controllers\EmployeeControllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Services\EmployeeService;
@@ -10,7 +10,7 @@ use App\Models\PayGrade;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class PayrollEmployeeController extends Controller
+class EmployeeManagePayrollEmployeeController extends Controller
 {
     use EmployeeTrait;
     public function __construct(private EmployeeService $employeeService)

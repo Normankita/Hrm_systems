@@ -1,6 +1,6 @@
 <?php
+namespace App\Http\Controllers\EmployeeControllers;
 
-namespace App\Http\Controllers\PayrollControllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Utils\Traits\PayGradeTrait;
@@ -8,7 +8,7 @@ use App\Models\PayGrade;
 use Illuminate\Http\Request;
 
 
-class PayrollPayGradeController extends Controller
+class EmployeeManagePayrollPayGradeController extends Controller
 {
     use PayGradeTrait;
 
