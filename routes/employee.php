@@ -19,13 +19,13 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->controller(EmployeeLeaveController::class)
     ->name('employees.leave.')
     ->group(function () {
-        Route::get('/status', 'index')->name('status')->middleware(['can:view-leave']);
-        Route::get('/request', 'create')->name('request')->middleware(['can:request-leave']);
-        Route::post('/create', 'store')->name('store')->middleware(['can:request-leave']);
-        Route::get('/{leave}', 'show')->name('show')->middleware(['can:view-leave']);
-        Route::get('/{leave}/edit', 'edit')->name('edit')->middleware(['can:edit-leave']);
-        Route::put('/{leave}', 'update')->name('update')->middleware(['can:edit-leave']);
-        Route::delete('/{leave}', 'destroy')->name('destroy')->middleware(['can:delete-leave']);
+        Route::get('/status', 'index')->name('status')->middleware(['can:view_leave']);
+        Route::get('/request', 'create')->name('request')->middleware(['can:request_leave']);
+        Route::post('/create', 'store')->name('store')->middleware(['can:request_leave']);
+        Route::get('/{leave}', 'show')->name('show')->middleware(['can:view_leave']);
+        Route::get('/{leave}/edit', 'edit')->name('edit')->middleware(['can:edit_leave']);
+        Route::put('/{leave}', 'update')->name('update')->middleware(['can:edit_leave']);
+        Route::delete('/{leave}', 'destroy')->name('destroy')->middleware(['can:delete_leave']);
     });
 
 // Profile Routes
@@ -56,9 +56,9 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->controller(EmployeeManageLeavesController::class)
     ->name('employee.manage.leave.')
     ->group(function () {
-        Route::get('/show/{leave}', 'show')->name('show')->middleware(['can:view_leave-requests']);
-        Route::get('/index', 'index')->name('index')->middleware(['can:view_leave-requests']);
-        Route::post('/inspect/{leave}', 'inspect')->name('inspect')->middleware(['can:respond_leave-request']);
+        Route::get('/show/{leave}', 'show')->name('show')->middleware(['can:view_leave_requests']);
+        Route::get('/index', 'index')->name('index')->middleware(['can:view_leave_requests']);
+        Route::post('/inspect/{leave}', 'inspect')->name('inspect')->middleware(['can:respond_leave_request']);
     });
 
 // Leave Types

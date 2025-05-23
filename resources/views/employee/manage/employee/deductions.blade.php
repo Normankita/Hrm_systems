@@ -59,7 +59,7 @@
                                             @can('delete_deductions')
                                                 <form
                                                     action="{{ route('employee.manage.deductions.destroy', [$employee->id, $deduction->id]) }}"
-                                                    method="POST" onsubmit="return confirm('Delete this deduction?')">
+                                                    method="POST" onsubmit="return confirm('Delete this deduction?')" class="d-inline">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit"

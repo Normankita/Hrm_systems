@@ -105,7 +105,7 @@
 
                 {{-- LEave management starts here  --}}
 
-              @can('view_leave_response')
+              @can('view_leave_requests')
                 <li class="has-sub">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
                         data-target="#leaves-menu" aria-expanded="false" aria-controls="leave-menu">
@@ -127,7 +127,7 @@
 
                 {{-- Leave management ends here --}}
 
-                @canany(['create_leave', 'view_leave'])
+                @canany(['request_leave', 'view_leave'])
                                     <li class="has-sub">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
                         data-target="#leave-menu" aria-expanded="false" aria-controls="leave-menu">
@@ -137,7 +137,7 @@
                     </a>
                     <ul class="collapse" id="leave-menu" data-parent="#sidebar-menu">
                         <div class="sub-menu">
-                            @can('create_leave')
+                            @can('request_leave')
                                 <li>
                                 <a class="sidenav-item-link" href="{{ route('employees.leave.request') }}">
                                     <span class="nav-text">Request Leave</span>
