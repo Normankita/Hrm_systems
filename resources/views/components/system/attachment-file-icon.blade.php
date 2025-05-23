@@ -4,7 +4,7 @@
     @php
         $id = str_replace('.', '_', $attachmentName);
     @endphp
-    <div class="mb-1 w-100 bg-light">
+    <div class="mb-1 w-100 bg-light" id="banner_{{$id}}">
         <div class="input-group-text w-100"
             style="background-color: rgb(245, 243, 236); border: 2px solid #ced4da;">
             <x-system.modal-button

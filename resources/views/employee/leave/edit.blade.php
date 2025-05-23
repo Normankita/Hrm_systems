@@ -1,7 +1,8 @@
 @extends('layouts.system')
 
 @section('content')
-<div class="row">
+@can('edit_leave')
+    <div class="row">
     <div class="col-12">
         <div class="card">
             <div class="card-body">
@@ -78,4 +79,5 @@
         </div>
     </div>
 </div>
+@endcan
 @endsection

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\AdminControllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Employee;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -96,8 +97,31 @@ class AdminRoleController extends Controller
     {
         $role = Role::findOrFail($id);
         $permissions = Permission::all();
-        return view('admin.roles.manage_role',
-             compact('role', 'permissions'));
+        return view(
+            'admin.roles.manage_role',
+            compact('role', 'permissions')
+        );
+    }
+
+
+    public function getEmployeesPage()
+    {
+        return view('admin.employee.employee-list');
+    }
+
+
+    public function assignPermissionsPage($id)
+    {
+        $employee = Employee::find($id);
+        if (!$employee) {
+            return redirect()->back();
+        }
+        return view('admin.employee.assign-permissions')
+            ->with('employee', $employee);
+    }
+
+    public function assignPermissions(Request $request, $id) {
+        dd($request->all());
     }
 
 }

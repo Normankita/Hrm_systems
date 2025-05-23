@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\PayrollControllers;
+namespace App\Http\Controllers\EmployeeControllers;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Utils\Traits\PayGradeTrait;
 use App\Models\PayGrade;
-use Illuminate\Http\Request;
 
-
-class PayrollPayGradeController extends Controller
+class EmployeePayGradeController extends Controller
 {
     use PayGradeTrait;
 
@@ -18,7 +17,7 @@ class PayrollPayGradeController extends Controller
     public function index()
     {
         $pay_grades = PayGrade::orderBy("created_at", "desc")->paginate(10);
-        return view('payroll.paygrade.index', compact('pay_grades'));
+        return view('employee.manage.paygrade.index', compact('pay_grades'));
     }
 
     /**
@@ -29,7 +28,7 @@ class PayrollPayGradeController extends Controller
         $this->validatePayGrade($request);
         $this->createPayGrade($request);
 
-        return redirect()->route('payroll.paygrades.index')->with('success', 'Pay Grade created successfully');
+        return redirect()->route('employee.manage.paygrades.index')->with('success', 'Pay Grade created successfully');
     }
 
     /**
@@ -38,7 +37,7 @@ class PayrollPayGradeController extends Controller
     public function show(PayGrade $payGrade)
     {
         // Assuming you will later show the view
-        return view('payroll.paygrade.show', compact('payGrade'));
+        return view('employee.manage.paygrade.show', compact('payGrade'));
     }
 
     /**
@@ -46,7 +45,7 @@ class PayrollPayGradeController extends Controller
      */
     public function edit(PayGrade $payGrade)
     {
-        return view('payroll.paygrade.edit', compact('payGrade'));
+        return view('employee.manage.paygrade.edit', compact('payGrade'));
     }
 
     /**
@@ -57,7 +56,7 @@ class PayrollPayGradeController extends Controller
         $this->validatePayGrade($request, $payGrade->id);
         $this->updatePayGrade($request, $payGrade);
 
-        return redirect()->route('payroll.paygrades.index')->with('success', 'Pay Grade updated successfully');
+        return redirect()->route('employee.manage.paygrades.index')->with('success', 'Pay Grade updated successfully');
     }
 
     /**
@@ -66,6 +65,6 @@ class PayrollPayGradeController extends Controller
     public function destroy(PayGrade $payGrade)
     {
         $payGrade->delete();
-        return redirect()->route('payroll.paygrades.index')->with('success', 'Pay Grade deleted successfully');
+        return redirect()->route('employee.manage.paygrades.index')->with('success', 'Pay Grade deleted successfully');
     }
 }

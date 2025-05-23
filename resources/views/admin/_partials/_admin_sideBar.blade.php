@@ -33,11 +33,13 @@
                                 </a>
                             </li>
                             <li>
-                                {{-- <a class="sidenav-item-link" href="{{ route('admin.employees.index') }}">
-                                    <span class="nav-text">View Employees</span>
-                                </a> --}}
                                 <a class="sidenav-item-link" href="{{ route('admin.employees.index') }}">
                                     <span class="nav-text">View Employees</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="sidenav-item-link" href="{{ route('admin.employees.permissions.all') }}">
+                                    <span class="nav-text">Employee permissions</span>
                                 </a>
                             </li>
                         </div>
@@ -57,15 +59,7 @@
                                 <a class="sidenav-item-link"
                                     href="
                                     {{ route('admin.roles.index') }}">
-                                    <span class="nav-text">Create Role</span>
-                                </a>
-                            </li>
-                            <li>
-                                {{-- <a class="sidenav-item-link" href="{{ route('admin.employees.index') }}">
-                                    <span class="nav-text">View Employees</span>
-                                </a> --}}
-                                <a class="sidenav-item-link" href="{{ route('admin.employees.index') }}">
-                                    <span class="nav-text">Assign Role</span>
+                                    <span class="nav-text">Manage roles</span>
                                 </a>
                             </li>
                         </div>
@@ -89,20 +83,27 @@
                         </div>
                     </ul>
                 </li>
+            </ul>
+        </div>
+        <!-- Bottom Section -->
+        <div class="sidebar-footer" style="position: absolute; bottom: 0; width: 100%; padding: 10px;">
+            <ul class="nav">
                 <li>
-                    <a class="sidenav-item-link" href="{{ route('admin.companies.edit', auth()->user()->company_id) }}">
-                        <i class="mdi mdi-settings"></i>
+                    <a class="sidenav-item-link" style="color: white; padding: 10px 15px;"
+                        href="{{ route('admin.companies.edit', auth()->user()->company_id) }}">
+                        <i class="mdi mdi-account-circle"></i>
                         <span class="nav-text">Company Profile</span>
                     </a>
                 </li>
                 <li>
-                    <a class="sidenav-item-link"
-                    href="{{ route('admin.settings.index', auth()->user()->company_id) }}">
+                    <a class="sidenav-item-link" style="color: white; padding: 10px 15px;"
+                        href="{{ route('admin.settings.index', auth()->user()->company_id) }}">
                         <i class="mdi mdi-settings"></i>
                         <span class="nav-text">Company Settins</span>
                     </a>
                 </li>
             </ul>
         </div>
+
     </div>
 </aside>

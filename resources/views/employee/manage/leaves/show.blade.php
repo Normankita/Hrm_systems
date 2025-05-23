@@ -1,7 +1,8 @@
 @extends('layouts.system')
 
 @section('content')
-    <div class="container-fluid">
+    @can('view_leave_requests')
+        <div class="container-fluid">
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -10,10 +11,10 @@
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <div>
                                 <h4 class="card-title mb-1">Leave Request Details</h4>
-                                <p class="text-muted">Review and manage leave request</p>
+                                <p class="text-muted">Review @can('respond_leave_request')and manage @endcan leave request</p>
                             </div>
                             <div>
-                                <a href="{{ route('hr.leave.index') }}" class="btn btn-light">
+                                <a href="{{ route('employee.manage.leave.index') }}" class="btn btn-light">
                                     <i class="mdi mdi-arrow-left me-1"></i> Back to List
                                 </a>
                             </div>
@@ -123,12 +124,13 @@
                                         <h5 class="card-title mb-3">Leave Reason</h5>
                                         <p class="mb-4">{{ $leave->reason }}</p>
                                         {{-- model pop for approving leave or reject --}}
-                                        @if ($leave->status === 'pending')
+                                       @can('respond_leave_request')
+                                            @if ($leave->status === 'pending')
                                             <div class="d-flex justify-content-end gap-2">
                                                 <x-system.modal-button class="btn btn-primary" text="Reject / Approve Leave" id="approveLeave" />
                                                 <x-system.modal id="approveLeave" form="approveRejectForm">
                                                     <form id="approveRejectForm" method="POST"
-                                                        action="{{ route('hr.leave.inspect', $leave->id) }}">
+                                                        action="{{ route('employee.manage.leave.inspect', $leave->id) }}">
                                                         @csrf
                                                         <div class="form-group">
                                                             <label for="doYou">Approve / Denie</label>
@@ -147,6 +149,7 @@
                                                 </x-system.modal>
                                             </div>
                                         @endif
+                                       @endcan
                                     </div>
                                 </div>
                             </div>
@@ -167,4 +170,5 @@
             </div>
         </div>
     </div>
+    @endcan
 @endsection

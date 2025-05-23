@@ -13,7 +13,6 @@ class Employee extends Model
         // Automatically apply a global scope to all queries
         static::addGlobalScope(new AuthUserCompanyScope);
 
-
         // Automatically assign the tenant_id when creating a new record
         static::creating(function ($item) {
             if (auth()->check()) {

@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Company;
+use App\Models\Role;
 use Illuminate\Database\Seeder;
 
 class RolesSeeder extends Seeder
@@ -11,17 +13,10 @@ class RolesSeeder extends Seeder
      */
     public function run(): void
     {
+        $company = Company::first();
         $roles = array(
             [
                 'name' => 'ADMIN',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'HR_OFFICER',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'PAYROLL_MANAGER',
                 'guard_name' => 'web',
             ],
             [
@@ -36,7 +31,8 @@ class RolesSeeder extends Seeder
 
         // create the actual roles
         foreach ($roles as $role) {
-            \Spatie\Permission\Models\Role::create($role);
+            $role = array_merge($role, ['company_id' => $company->id]); 
+            Role::create($role);
         }
     }
 }

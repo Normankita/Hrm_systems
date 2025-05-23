@@ -1,9 +1,10 @@
 @props(['route'])
 
 @php
-$departments= App\Models\Department::all();
-$roles = App\Models\Role::where('name', '!=', 'ADMIN')->get();
-$pay_grades = App\Models\PayGrade::all();
+    $departments= App\Models\Department::all();
+    $roles = App\Models\Role::whereNotIn('name',
+    ['ADMIN', 'EMPLOYEE'])->get();
+    $pay_grades = App\Models\PayGrade::all();
 @endphp
 
 <div class="card">
@@ -223,7 +224,9 @@ $pay_grades = App\Models\PayGrade::all();
                                     continue;
                                 }
                             @endphp
-                            <option value="{{ $role->id }}" {{ old('role_id') == $role->id ? 'selected' : '' }}>
+                            <option value="{{ $role->id }}"
+                                
+                                {{ old('role_id') == $role->id ? 'selected' : '' }}>
                                 {{ $role->name }}
                             </option>
                         @endforeach

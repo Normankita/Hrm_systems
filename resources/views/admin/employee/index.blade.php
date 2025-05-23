@@ -42,7 +42,7 @@
                                     <td>
                                       <x-system.btn-view :key="$key" :route="route('admin.employees.show', $employee->id)" />
                                       <x-system.btn-edit :key="$key" :route="route('admin.employees.edit', $employee->id)" />
-                                       
+
                                 </tr>
                             @empty
                                 <tr>

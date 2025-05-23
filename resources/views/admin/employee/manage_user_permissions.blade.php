@@ -17,9 +17,9 @@
 
         .permission-group {
             background: white;
-            padding: 10px;
+            padding: 20px;
             border-radius: 10px;
-            margin-bottom: 0px;
+            margin-bottom: 20px;
         }
 
         .permission-group h5 {
@@ -46,6 +46,13 @@
         }
 
         .permission-box.selected {
+            background-color: #85299c;
+            color: white;
+            border-color: #007bff;
+            box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
+        }
+
+        .permission-box.deactive {
             background-color: #85299c;
             color: white;
             border-color: #007bff;
@@ -102,20 +109,21 @@
                     <div class="role-icon mb-3">
                         <i class="bi bi-shield-lock-fill" style="font-size: 3rem; color: #85299c;"></i>
                     </div>
-                    <h2 class="card-title mb-2">Role Permissions Management</h2>
+                    <h2 class="card-title mb-2">User Permissions Management</h2>
                     <p class="text-muted mb-0">Configure access rights for: <span class="badge bg-primary"
-                            style="background-color: #85299c !important; color: white;">{{ $role->name }}</span></p>
+                            style="background-color: #85299c !important; color: white;">{{ $employee->full_name }}</span>
+                    </p>
                     <div class="role-description mt-3">
-                        <p class="text-muted small">Select the permissions you want to grant to this role. Permissions are
+                        <p class="text-muted small">Select the permissions you want to grant to this user. Permissions are
                             grouped by their functionality for easier management.</p>
                     </div>
                 </div>
 
-                <form id="permissionsForm" action="{{ route('admin.permissions.role.update', $role->id) }}" method="POST">
+                <form id="permissionsForm" action="{{ route('admin.permissions.user.update', $employee->user->id) }}"
+                    method="POST">
                     @csrf
                     @method('PUT')
                     <div id="permissionsContainer">
-
                         @php
                             // Group permissions by group_name
                             $grouped = [];
@@ -132,12 +140,12 @@
 
                         <div class="mb-5">
                             <h2>Generic Permissions</h2>
-                            <x-system.forms.permissions-list-form :grouped="$grouped" :role="$role" />
+                            <x-system.forms.permissions-list-form :grouped="$grouped" :employee="$employee" />
                         </div>
 
                         <div class="mt-5 pt-5">
                             <h2>Individual Account Permissions</h2>
-                            <x-system.forms.permissions-list-form :grouped="$individual" :role="$role" />
+                            <x-system.forms.permissions-list-form :grouped="$individual" :employee="$employee" />
                         </div>
                     </div>
 
@@ -193,8 +201,7 @@
                     success: function(response) {
                         alert('Permissions updated successfully!');
                         window.location.href =
-                            "{{ route('admin.roles.edit.permissions', $role->id) }}";
-
+                            "{{ route('admin.employees.edit.permissions', $employee->id) }}";
                     },
                     error: function(xhr) {
                         alert('Error updating permissions: ' + xhr.responseJSON.message);

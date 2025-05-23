@@ -2,7 +2,8 @@
 
 
 @section('content')
-    <div class="row">
+    @can('view_leave_requests')
+        <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-body ">
@@ -39,7 +40,7 @@
                                                 </span>
                                             </td>
                                             <td>
-                                                <x-system.btn-view :route="route('hr.leave.show', $leave)" :key="$key . '_' . $index" />
+                                                <x-system.btn-view :route="route('employee.manage.leave.show', $leave)" :key="$key . '_' . $index" />
                                             </td>
                                         </tr>
                                     @endforeach
@@ -51,4 +52,5 @@
             </div>
         </div>
     </div>
+    @endcan
 @endsection

@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\hrControllers;
+namespace App\Http\Controllers\EmployeeControllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\LeaveType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class HrLeaveTypeController extends Controller
+class EmployeeManageLeaveTypeController extends Controller
 {
     public function index() {
         $leaveTypes = LeaveType::all();
-        return view('hr.leave_type.index')
+        return view('employee.manage.leave_type.index')
             ->with('leaveTypes', $leaveTypes);
             
     }

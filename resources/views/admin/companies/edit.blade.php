@@ -11,6 +11,7 @@
                     @method('PUT')
 
                     <div class="row">
+                        <h3>General Setups</h3>
                         <div class="col-sm-12 col-md-12">
                             <div class="mb-3">
                                 <label for="name" class="form-label">Company Name</label>
@@ -52,6 +53,19 @@
                                 <input type="text" class="form-control" id="tin_number" name="tin_number"
                                     value="{{ $company->tin_number }}" required>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-5 mb-3">
+                        <div class="col-sm-12 col-md-6">
+                            <h3>Configurations Setups</h3>
+                            @foreach (App\Models\Setting::all() as $setting)
+                                <div class="mb-3">
+                                    <label for="{{ $setting->name }}" class="form-label">{{ $setting->name }}</label>
+                                    <input type="day" class="form-control" id="{{ $setting->name }}"
+                                        name="{{ $setting->name }}" value="{{ $setting->value }}" required>
+                                </div>
+                            @endforeach
                         </div>
                     </div>
 

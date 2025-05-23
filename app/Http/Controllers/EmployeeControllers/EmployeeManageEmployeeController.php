@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\HrControllers;
+namespace App\Http\Controllers\EmployeeControllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEmployeeRequest;
@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 
-class HrEmployeeController extends Controller
+class EmployeeManageEmployeeController extends Controller
 {
     use EmployeeTrait, UploadFileTrait;
 
@@ -29,7 +29,7 @@ class HrEmployeeController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('hr.employee.index', compact('employees'));
+        return view('employee.manage.employee.index', compact('employees'));
     }
 
 
@@ -37,7 +37,7 @@ class HrEmployeeController extends Controller
     {
         $roles = Role::where('name', '!=', 'ADMIN')->get();
         $pay_grades = PayGrade::get();
-        return view('hr.employee.create', compact('roles', 'pay_grades'));
+        return view('employee.manage.employee.create', compact('roles', 'pay_grades'));
     }
 
     public function store(StoreEmployeeRequest $request)
@@ -47,7 +47,7 @@ class HrEmployeeController extends Controller
             self::ATTACHMENT_TYPES,
         );
 
-        return redirect()->route('hr.employees.show', $outcome['employee']->id)
+        return redirect()->route('employee.manage.employees.show', $outcome['employee']->id)
             ->with('success', 'Employee created successfully');
     }
 
@@ -61,13 +61,15 @@ class HrEmployeeController extends Controller
         $roles = Role::where('name', '!=', 'ADMIN')->get();
         $pay_grades = PayGrade::get();
 
-        return view('hr.employee.edit', compact('employee', 'roles', 'pay_grades'));
+        return view('employee.manage.employee.edit', compact('employee', 'roles', 'pay_grades'));
     }
 
     public function update(UpdateEmployeeRequest $request, $id)
     {
+
         $outcome = $this->employeeService->updateEmployee($request, $id);
-        return redirect()->route('hr.employees.show', $outcome['employee']->id)
+
+        return redirect()->route('employee.manage.employees.show', $outcome['employee']->id)
             ->with('success', 'Employee updated successfully');
     }
 
@@ -77,7 +79,7 @@ class HrEmployeeController extends Controller
         $attachments = $employee->attachments()->get();
         $deductions = $employee->deductions()->get();
 
-        return view('hr.employee.show', compact('employee', 'attachments'));
+        return view('employee.manage.employee.show', compact('employee', 'attachments'));
     }
 
     public function updatePassword(Request $request, $id)
@@ -115,7 +117,7 @@ class HrEmployeeController extends Controller
     {
         $outcome = $this->employeeService->updateProfilePhoto($request, $id);
         if ($outcome) {
-            return redirect()->route('hr.employees.show', $outcome['employee']->id)
+            return redirect()->route('employee.manage.employees.show', $outcome['employee']->id)
                 ->with('success', 'Passport photo updated successfully');
         }
 

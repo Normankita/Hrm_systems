@@ -6,38 +6,62 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use App\Models\User;
 
 class ApiRolesController extends Controller
 {
     public function __construct()
     {
-
+        // You can add middleware or auth checks here if needed
     }
 
-    public function updatePermissions(Request $request, $id)
+    public function updateRolePermissions(Request $request, $id)
     {
-        // Validate that permissions is a nullable array and each ID exists
         $request->validate([
             'permissions' => 'nullable|array',
             'permissions.*' => 'exists:permissions,id',
         ]);
 
-        // Find the role
         $role = Role::findOrFail($id);
-
-        // If permissions is empty or null, sync an empty array to remove all permissions
-        if (empty($request->permissions)) {
-            $role->syncPermissions([]);
-        } else {
-            // Get permissions by IDs and extract names
-            $permissionsCollection = Permission::whereIn('id', $request->permissions)->get();
-            $permissionNames = $permissionsCollection->pluck('name')->toArray();
-            $role->syncPermissions($permissionNames);
-        }
+        $this->syncEntityPermissions($role, $request->permissions);
 
         return response()->json([
-            'message' => 'Permissions updated successfully',
+            'message' => 'Permissions updated successfully for role',
             'role' => $role,
         ]);
+    }
+
+    public function updateUserPermissions(Request $request, $id)
+    {
+        $request->validate([
+            'permissions' => 'nullable|array',
+            'permissions.*' => 'exists:permissions,id',
+        ]);
+
+        $user = User::findOrFail($id);
+        $this->syncEntityPermissions($user, $request->permissions);
+
+        return response()->json([
+            'message' => 'Permissions updated successfully for user',
+            'user' => $user,
+        ]);
+    }
+
+    /**
+     * Sync permissions to a role or user.
+     *
+     * @param \Spatie\Permission\Traits\HasPermissions $entity
+     * @param array|null $permissions
+     * @return void
+     */
+    private function syncEntityPermissions($entity, $permissions)
+    {
+        if (empty($permissions)) {
+            $entity->syncPermissions([]);
+            return;
+        }
+
+        $permissionNames = Permission::whereIn('id', $permissions)->pluck('name')->toArray();
+        $entity->syncPermissions($permissionNames);
     }
 }
