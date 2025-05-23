@@ -207,7 +207,7 @@ class PermissionSeeder extends Seeder
             ],
             [
                 'name'=> 'view_own_payrolls',
-                'gurad_name'=> 'web',
+                'guard_name'=> 'web',
                 'group_name'=> 'employee',
                 'slug'=> 'view-own-payrolls',
                 'division'=> 'individual'

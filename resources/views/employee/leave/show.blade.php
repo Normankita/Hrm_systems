@@ -1,7 +1,8 @@
 @extends('layouts.system')
 
 @section('content')
-<div class="row">
+@can('view_leave')
+    <div class="row">
     <div class="col-12">
         <div class="card">
             <div class="card-body">
@@ -51,14 +52,18 @@
                     <!-- Edit and Delete Buttons -->
                     @if ($leave->status!=='approved' && $leave->status!=='rejected')
                     <div class="mb-3">
-                        <a href="{{ route('employees.leave.edit', $leave->id) }}" class="mx-10 btn btn-lg btn-dark p-1 px-6">Edit</a>
+                       @can('edit_leave')
+                            <a href="{{ route('employees.leave.edit', $leave->id) }}" class="mx-10 btn btn-lg btn-dark p-1 px-6">Edit</a>
+                       @endcan
 
                         <!-- Delete Form -->
-                        <form action="{{ route('employees.leave.destroy', $leave->id) }}" method="POST" style="display:inline;">
+                        @can('delete_leave')
+                            <form action="{{ route('employees.leave.destroy', $leave->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="mx-10 btn btn-lg btn-danger p-1 px-6" onclick="return confirm('Are you sure you want to delete this leave request?')">Delete </button>
                         </form>
+                        @endcan
                     </div>
                     @endif
 
@@ -67,4 +72,5 @@
         </div>
     </div>
 </div>
+@endcan
 @endsection

@@ -1,14 +1,17 @@
 @extends('layouts.system')
 
 @section('content')
-    <div class="row">
+    @can('view_leave')
+        <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-body ">
 
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h3 class="mb-0">leave Directory</h3>
-                        <a href="{{ route('employees.leave.request') }}" class="btn btn-primary">Request leave</a>
+                        @can('request_leave')
+                            <a href="{{ route('employees.leave.request') }}" class="btn btn-primary">Request leave</a>
+                        @endcan
                     </div>
 
                     <div class="table-responsive">
@@ -53,8 +56,12 @@
                                             <td>
                                                 <x-system.btn-view :key="$key" :route="route('employees.leave.show', $leave->id)" />
                                                @if ($leave->status!=='approved' && $leave->status!=='rejected')
-                                               <x-system.btn-edit :key="$key" :route="route('employees.leave.edit', $leave->id)" />
-                                                <x-system.btn-delete :key="$key" :route="route('employees.leave.destroy', $leave->id)" />                                                   
+                                               @can('edit_leave')
+                                                   <x-system.btn-edit :key="$key" :route="route('employees.leave.edit', $leave->id)" />
+                                               @endcan
+                                               @can('delete_leave')
+                                                    <x-system.btn-delete :key="$key" :route="route('employees.leave.destroy', $leave->id)" /> 
+                                               @endcan                                                  
                                                @endif
                                         </tr>
                                     @empty
@@ -70,4 +77,5 @@
             </div>
         </div>
     </div>
+    @endcan
 @endsection
