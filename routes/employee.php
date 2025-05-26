@@ -118,10 +118,11 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::post('/updatePassword/{id}', 'updatePassword')
             ->name('update.password');
         Route::post('/updateProfile/{id}', 'updatePassportPhoto')->name('updateProfilePhoto');
+        Route::patch('/UpdatePayGrade/{employee}', 'UpdatePayGrade')->name('UpdatePayGrade')->middleware(['can:edit_employees']);
     });
 
 
-    Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
+Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('employee/manage/{employee}/deductions')
     ->controller(EmployeeDeductionController::class)
     ->name('employee.manage.deductions.')
@@ -129,23 +130,28 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::get('/', 'index')->name('index')->middleware(['can:view_deductions']);                     // List deductions for employee
         Route::get('/create', 'create')->name('create')->middleware(['can:create_deductions']);             // Show form to create a deduction for employee
         Route::post('/', 'store')->name('store')->middleware(['can:create_deductions']);                    // Store new deduction for employee
-        Route::get('/{employee}', 'show')->name('show')->middleware(['can:view_deductions']);            // Show a single deduction
+        Route::get('/{deduction}', 'show')->name('show')->middleware(['can:view_deductions']);            // Show a single deduction
         Route::get('/{deduction}/edit', 'edit')->name('edit')->middleware(['can:edit_deductions']);       // Edit a deduction
         Route::put('/{deduction}', 'update')->name('update')->middleware(['can:edit_deductions']);        // Update deduction
         Route::delete('/{deduction}', 'destroy')->name('destroy')->middleware(['can:delete_deductions']);   // Delete deduction
     });
 
-    // Payroll Routes
+// Payroll Routes
 
-    // Payroll Employee Routes
+// Payroll Employee Routes
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('employee/manage/payroll/employee')
     ->name('employee.manage.payroll.employees.')
     ->controller(EmployeeManagePayrollEmployeeController::class)
     ->group(function () {
-        Route::get('/', 'index')->name('index')->middleware(['can:view_employees']);
-        Route::get('/show/{id}', 'show')->name('show')->middleware(['can:view_employee']);
-        Route::patch('/UpdatePayGrade/{employee}', 'UpdatePayGrade')->name('UpdatePayGrade')->middleware(['can:edit_employees']);
+        Route::get('/', 'index')->name('index');
+        Route::get('/pending', 'pending')->name('pending');
+        Route::get('/approved', 'approved')->name('approved');
+        Route::get('/rejected', 'rejected')->name('rejected');
+
+        Route::post('/{payroll}/reject', 'reject')->name('reject');
+        Route::post('/approve-all', 'approveAll')->name('approveAll');
+
     });
 
-   Route::get('/employees/{employee}/payrolls/{payroll}', [EmployeeManagePayrollController::class, 'show'])->name('payroll.show');
+Route::get('/employees/{employee}/payrolls/{payroll}', [EmployeeManagePayrollController::class, 'show'])->name('payroll.show');

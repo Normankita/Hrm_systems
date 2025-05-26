@@ -104,7 +104,7 @@
                             id="UpdatePayGrade" text="Update PayGrade" />
 
                         <x-system.modal id="UpdatePayGrade" form="UpdatePayGradeForm" title="Update PayGrade">
-                            <form action="{{ route('employee.manage.payroll.employees.UpdatePayGrade', $employee) }}"
+                            <form action="{{ route('employee.manage.employees.UpdatePayGrade', $employee) }}"
                                 id="UpdatePayGradeForm" enctype="multipart/form-data" method="POST">
 
                                 @csrf
@@ -150,7 +150,7 @@
                                                 value="{{ old('base_salary_override', optional($employee->pay_grades->firstWhere('pivot.status', true))->pivot->base_salary_override ?? '') }}">
                                         </div>
                                         @error('base_salary_override')
-                                            <span class="text-danger d-block">{{ $message }}</span>
+                                            <span class="text-danger d-block">{{ $message??'an error occured' }}</span>
                                         @enderror
                                     </div>
                                 </div>

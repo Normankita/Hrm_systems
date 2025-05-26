@@ -1,16 +1,19 @@
 @props(['payrolls', 'title'])
-<div class="card">
+@can('view_payment')
+    <div class="card">
     <div class="card-body ">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h3 class="mb-0">{{ $title ?? '' }} Payroll List</h3>
-            @if ($title === 'Pending' || $title === 'All')
-                <form action="{{ route('hr.payrolls.approveAll') }}" method="POST" class="mb-0">
+            @can('create_payment')
+                            @if ($title === 'Pending' || $title === 'All')
+                <form action="{{ route('employee.manage.payroll.employees.approveAll') }}" method="POST" class="mb-0">
                     @csrf
-                    <button type="submit" class="btn btn-primary" @if($payrolls->count() < 1) disabled  @endif>
+                    <button type="submit" class="btn btn-primary" @if ($payrolls->count() < 1) disabled @endif>
                         <i class="mdi mdi-cash-multiple"></i> Approve all Pending Payrolls
                     </button>
                 </form>
             @endif
+            @endcan
         </div>
         <div class="table-responsive">
             <span>Total Payrolls: {{ $payrolls->count() }}</span>
@@ -37,12 +40,9 @@
                             <td>{{ $payroll->period ?? 'N/A' }}</td>
                             <td>
                                 <span
-                                    class="badge
-        {{ $payroll->status === 'approved'
-            ? 'bg-success'
-            : ($payroll->status === 'rejected'
-                ? 'bg-danger'
-                : 'bg-warning text-dark') }}">
+                                    class="badge {{ $payroll->status === 'approved'? 
+                                    'bg-success': ($payroll->status === 'rejected'? 
+                                    'bg-danger': 'bg-warning text-dark') }}">
                                     {{ ucfirst($payroll->status) }}
                                 </span>
                             </td>
@@ -51,13 +51,13 @@
                             <td>
                                 <x-system.modal-button class="btn btn-outline-dark p-1  btn-sm mdi mdi-eye-outline"
                                     id="viewPayroll{{ $payroll->id }}" text="View" textColor="" />
-                                @role('HR_OFFICER')
-                                @if ($payroll->status !== 'approved' && $payroll->status !== 'rejected')
-                                    <x-system.modal-button class="btn btn-outline-danger p-1 btn-sm mdi mdi-close"
-                                        id="rejectPayroll{{ $payroll->id }}" text="Reject" textColor="" />
-                                @endif
-
-                                @endrole
+                                    @can('reject_payment')
+                                        @if ($payroll->status !== 'approved' && $payroll->status !== 'rejected')
+                                        <x-system.modal-button class="btn btn-outline-danger p-1 btn-sm mdi mdi-close"
+                                            id="rejectPayroll{{ $payroll->id }}" text="Reject" textColor="" />
+                                    @endif
+                                    @endcan
+                               
                             </td>
                         </tr>
                         <x-system.modal size="modal-lg" id="viewPayroll{{ $payroll->id }}" title="Payroll Details">
@@ -153,23 +153,26 @@
                                 </div>
                             </div>
                         </x-system.modal>
-                        @if ($payroll->status !== 'approved' && $payroll->status !== 'rejected')
+                        @if ($payroll->status == 'pending')
+                            @can('reject_payment')
                             <x-system.modal id="rejectPayroll{{ $payroll->id }}" title="Reject Payroll">
 
-                            <form action="{{ route('hr.payrolls.reject', $payroll) }}" method="POST">
-                                @csrf
-                                <div class="mb-3">
-                                    <label for="reason{{ $payroll->id }}" class="form-label">Reason for
-                                        Rejection</label>
-                                    <textarea class="form-control" name="reason" id="reason{{ $payroll->id }}" rows="4" required></textarea>
-                                </div>
-                                <div class="d-flex justify-content-end">
-                                    <button type="button" class="btn btn-secondary me-2"
-                                        data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-danger">Submit Rejection</button>
-                                </div>
-                            </form>
-                        </x-system.modal>
+                                <form action="{{ route('employee.manage.payroll.employees.reject', $payroll) }}"
+                                    method="POST">
+                                    @csrf
+                                    <div class="mb-3">
+                                        <label for="reason{{ $payroll->id }}" class="form-label">Reason for
+                                            Rejection</label>
+                                        <textarea class="form-control" name="reason" id="reason{{ $payroll->id }}" rows="4" required></textarea>
+                                    </div>
+                                    <div class="d-flex justify-content-end">
+                                        <button type="button" class="btn btn-secondary me-2"
+                                            data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-danger">Submit Rejection</button>
+                                    </div>
+                                </form>
+                            </x-system.modal>
+                            @endcan
                         @endif
                     @empty
                         <tr>
@@ -181,3 +184,4 @@
         </div>
     </div>
 </div>
+@endcan

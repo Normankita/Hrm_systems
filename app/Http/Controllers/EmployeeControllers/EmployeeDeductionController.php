@@ -51,9 +51,9 @@ public function store(Request $request, Employee $employee)
 
 
     // Show a specific deduction (employee context optional if deduction has employee relation)
-    public function show(Employee $employee)
+    public function show(Employee $employee, Deduction $deduction)
     {
-        return view('employee.manage.employee.deductions', compact('employee'));
+        return view('employee.manage.employee.deductions', compact('employee','deduction'));
     }
 
     // Show form to edit deduction for a given employee

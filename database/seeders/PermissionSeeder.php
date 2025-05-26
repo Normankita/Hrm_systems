@@ -78,6 +78,37 @@ class PermissionSeeder extends Seeder
 
 
             [
+                'name' => 'create_payment',
+                'guard_name' => 'web',
+                'group_name' => 'payment',
+                'slug' => 'create-any-payment',
+                'division' => 'group'
+            ],
+            [
+                'name' => 'edit_payment',
+                'guard_name' => 'web',
+                'group_name' => 'payment',
+                'slug' => 'edit-any-payment',
+                'division' => 'group'
+            ],
+            [
+                'name' => 'view_payment',
+                'guard_name' => 'web',
+                'group_name' => 'payment',
+                'slug' => 'view-any-payment',
+                'division' => 'group'
+            ],
+            [
+                'name'=> 'reject_payment',
+                'guard_name'=> 'web',
+                'group_name'=> 'payment',
+                'slug'=> 'reject-any-payment',
+                'division'=> 'group'
+            ],
+
+
+
+            [
                 'name' => 'view_paygrade',
                 'guard_name' => 'web',
                 'group_name' => 'paygrade',
@@ -153,20 +184,8 @@ class PermissionSeeder extends Seeder
                 'slug' => 'respond-any-leave-request',
                 'division' => 'group'
             ],
-            // [
-            //     'name' => 'edit_leave_response',
-            //     'guard_name' => 'web',
-            //     'group_name' => 'leave_response',
-            //     'slug' => 'edit-any-leave-response',
-            //     'division' => 'group'
-            // ],
-            // [
-            //     'name' => 'delete_leave_response',
-            //     'guard_name' => 'web',
-            //     'group_name' => 'leave_response',
-            //     'slug' => 'delete-any-leave-response',
-            //     'division' => 'group'
-            // ],
+
+
 
 
             [
@@ -199,51 +218,51 @@ class PermissionSeeder extends Seeder
             ],
 
             [
-                'name'=> 'edit_own_employees',
+                'name' => 'edit_own_employees',
                 'guard_name' => 'web',
                 'group_name' => 'employee',
                 'slug' => 'edit-own-employees',
                 'division' => 'individual'
             ],
             [
-                'name'=> 'view_own_payrolls',
-                'guard_name'=> 'web',
-                'group_name'=> 'employee',
-                'slug'=> 'view-own-payrolls',
-                'division'=> 'individual'
+                'name' => 'view_own_payrolls',
+                'guard_name' => 'web',
+                'group_name' => 'employee',
+                'slug' => 'view-own-payrolls',
+                'division' => 'individual'
             ],
             [
-                'name'=>'view_attachments',
-                'guard_name'=>'web',
-                'group_name'=>'employee',
-                'slug'=> 'view-attachments',
-                'division'=>'individual'
+                'name' => 'view_attachments',
+                'guard_name' => 'web',
+                'group_name' => 'employee',
+                'slug' => 'view-attachments',
+                'division' => 'individual'
             ],
 
 
             [
-                'name'=>'view_deductions',
-                'guard_name'=>'web',
-                'group_name'=>'deductions',
-                'slug'=> 'view-deductions',
-                'division'=>'group'
+                'name' => 'view_deductions',
+                'guard_name' => 'web',
+                'group_name' => 'deductions',
+                'slug' => 'view-deductions',
+                'division' => 'group'
             ],
             [
-                'name'=> 'create_deductions',
+                'name' => 'create_deductions',
                 'guard_name' => 'web',
                 'group_name' => 'deductions',
                 'slug' => 'create-deductions',
                 'division' => 'group'
             ],
             [
-                'name'=> 'edit_deductions',
+                'name' => 'edit_deductions',
                 'guard_name' => 'web',
                 'group_name' => 'deductions',
                 'slug' => 'edit-deductions',
                 'division' => 'group'
             ],
             [
-                'name'=> 'delete_deductions',
+                'name' => 'delete_deductions',
                 'guard_name' => 'web',
                 'group_name' => 'deductions',
                 'slug' => 'delete-deductions',

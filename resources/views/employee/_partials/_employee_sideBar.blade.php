@@ -55,105 +55,145 @@
 
                 {{-- Begins Payroll --}}
                 @canany(['view_payroll', 'create_payroll'])
-                                <li class="has-sub">
-                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                        data-target="#payroll-menu" aria-expanded="false" aria-controls="payroll-menu">
-                        <i class="mdi mdi-cash-register"></i>
-                        <span class="nav-text">Manage Payrolls</span>
-                        <b class="caret"></b>
-                    </a>
-                    <ul class="collapse" id="payroll-menu" data-parent="#sidebar-menu">
-                        <div class="sub-menu">
-                            @can('create_payroll')
-                                <li>
-                                <a class="sidenav-item-link" href="{{ route('employee.manage.payrolls.getEmployees') }}">
-                                    <span class="nav-text">Payroll Employees</span>
-                                </a>
-                            </li>
-                            @endcan
-                            @can('view_payroll')
-                                <li>
-                                <a class="sidenav-item-link" href="{{ route('employee.manage.payrolls.index') }}">
-                                    <span class="nav-text">View Payrolls</span>
-                                </a>
-                            </li>
-                            @endcan
-                        </div>
+                    <li class="has-sub">
+                        <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                            data-target="#payroll-menu" aria-expanded="false" aria-controls="payroll-menu">
+                            <i class="mdi mdi-cash-register"></i>
+                            <span class="nav-text">Manage Payrolls</span>
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="collapse" id="payroll-menu" data-parent="#sidebar-menu">
+                            <div class="sub-menu">
+                                @can('create_payroll')
+                                    <li>
+                                        <a class="sidenav-item-link"
+                                            href="{{ route('employee.manage.payrolls.getEmployees') }}">
+                                            <span class="nav-text">Select Employees</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('view_payroll')
+                                    <li>
+                                        <a class="sidenav-item-link" href="{{ route('employee.manage.payrolls.index') }}">
+                                            <span class="nav-text">View Payrolls</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                            </div>
 
-                    </ul>
-                </li>
+                        </ul>
+                    </li>
+                @endcanany
+
+                @canany(['view_payment', 'create_payment', 'edit_payment'])
+                    <li class="has-sub">
+                        <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                            data-target="#payroll-response-menu" aria-expanded="false" aria-controls="payroll-response-menu">
+                            <i class="mdi mdi-cash-multiple"></i>
+                            <span class="nav-text">Manage Payments</span>
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="collapse" id="payroll-response-menu" data-parent="#sidebar-menu">
+                            <div class="sub-menu">
+                                <li>
+                                    <a class="sidenav-item-link" href="{{route('employee.manage.payroll.employees.index')}}">
+                                        <i class="mdi mdi-eye-outline mr-1"></i>
+                                        <span class="nav-text">View All payrolls</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="sidenav-item-link" href="{{route('employee.manage.payroll.employees.pending')}}">
+                                        <i class="mdi mdi-clock-outline mr-1"></i>
+                                        <span class="nav-text">Pending payrolls</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="sidenav-item-link" href="{{route('employee.manage.payroll.employees.approved')}}">
+                                        <i class="mdi mdi-check-circle-outline mr-1"></i>
+                                        <span class="nav-text">Approved payrolls</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="sidenav-item-link" href="{{route('employee.manage.payroll.employees.rejected')}}">
+                                        <i class="mdi mdi-close-circle-outline mr-1"></i>
+                                        <span class="nav-text">Rejected payrolls</span>
+                                    </a>
+                                </li>
+                            </div>
+                        </ul>
+                    </li>
                 @endcanany
                 @can('view_paygrade')
-                                    <li class="has-sub">
-                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                        data-target="#paygrade-menu" aria-expanded="false" aria-controls="employee-menu">
-                        <i class="mdi mdi-cash-multiple"></i>
-                        <span class="nav-text">Manage PayGrade</span>
-                        <b class="caret"></b>
-                    </a>
-                    <ul class="collapse" id="paygrade-menu" data-parent="#sidebar-menu">
-                        <div class="sub-menu">
-                            <li>
-                                <a class="sidenav-item-link" href="{{ route('employee.manage.paygrades.index') }}">
-                                    <span class="nav-text">View PayGrades</span>
-                                </a>
-                            </li>
-                        </div>
-                    </ul>
-                </li>
+                    <li class="has-sub">
+                        <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                            data-target="#paygrade-menu" aria-expanded="false" aria-controls="employee-menu">
+                            <i class="mdi mdi-cash-multiple"></i>
+                            <span class="nav-text">Manage PayGrade</span>
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="collapse" id="paygrade-menu" data-parent="#sidebar-menu">
+                            <div class="sub-menu">
+                                <li>
+                                    <a class="sidenav-item-link" href="{{ route('employee.manage.paygrades.index') }}">
+                                        <span class="nav-text">View PayGrades</span>
+                                    </a>
+                                </li>
+                            </div>
+                        </ul>
+                    </li>
                 @endcan
 
                 {{-- LEave management starts here  --}}
 
-              @can('view_leave_requests')
-                <li class="has-sub">
-                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                        data-target="#leaves-menu" aria-expanded="false" aria-controls="leave-menu">
-                        <i class="mdi mdi-calendar"></i>
-                        <span class="nav-text">Leaves Management</span>
-                        <b class="caret"></b>
-                    </a>
-                    <ul class="collapse" id="leaves-menu" data-parent="#sidebar-menu">
-                        <div class="sub-menu">
-                            <li>
-                                <a class="sidenav-item-link" href="{{ route('employee.manage.leave.index') }}">
-                                    <span class="nav-text">Manage Leaves</span>
-                                </a>
-                            </li>
-                        </div>
-                    </ul>
-                </li>
-              @endcan
+                @can('view_leave_requests')
+                    <li class="has-sub">
+                        <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                            data-target="#leaves-menu" aria-expanded="false" aria-controls="leave-menu">
+                            <i class="mdi mdi-calendar"></i>
+                            <span class="nav-text">Leaves Management</span>
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="collapse" id="leaves-menu" data-parent="#sidebar-menu">
+                            <div class="sub-menu">
+                                <li>
+                                    <a class="sidenav-item-link" href="{{ route('employee.manage.leave.index') }}">
+                                        <span class="nav-text">Manage Leaves</span>
+                                    </a>
+                                </li>
+                            </div>
+                        </ul>
+                    </li>
+                @endcan
 
                 {{-- Leave management ends here --}}
 
                 @canany(['request_leave', 'view_leave'])
-                                    <li class="has-sub">
-                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                        data-target="#leave-menu" aria-expanded="false" aria-controls="leave-menu">
-                        <i class="mdi mdi-calendar"></i>
-                        <span class="nav-text">Leave</span>
-                        <b class="caret"></b>
-                    </a>
-                    <ul class="collapse" id="leave-menu" data-parent="#sidebar-menu">
-                        <div class="sub-menu">
-                            @can('request_leave')
-                                <li>
-                                <a class="sidenav-item-link" href="{{ route('employees.leave.request') }}">
-                                    <span class="nav-text">Request Leave</span>
-                                </a>
-                            </li>
-                            @endcan
-                           @can('view_leave')
-                                <li>
-                                <a class="sidenav-item-link" href="{{ route('employees.leave.status') }}">
-                                    <span class="nav-text">View Leaves</span>
-                                </a>
-                            </li>
-                           @endcan
-                        </div>
-                    </ul>
-                </li>
+                    <li class="has-sub">
+                        <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                            data-target="#leave-menu" aria-expanded="false" aria-controls="leave-menu">
+                            <i class="mdi mdi-calendar"></i>
+                            <span class="nav-text">Leave</span>
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="collapse" id="leave-menu" data-parent="#sidebar-menu">
+                            <div class="sub-menu">
+                                @can('request_leave')
+                                    <li>
+                                        <a class="sidenav-item-link" href="{{ route('employees.leave.request') }}">
+                                            <span class="nav-text">Request Leave</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('view_leave')
+                                    <li>
+                                        <a class="sidenav-item-link" href="{{ route('employees.leave.status') }}">
+                                            <span class="nav-text">View Leaves</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                            </div>
+                        </ul>
+                    </li>
                 @endcanany
             </ul>
         </div>

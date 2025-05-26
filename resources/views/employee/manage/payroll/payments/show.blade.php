@@ -1,5 +1,6 @@
 @extends('layouts.system')
 
+
 @section('content')
     @can('view_payroll')
         <div class="container mt-4">

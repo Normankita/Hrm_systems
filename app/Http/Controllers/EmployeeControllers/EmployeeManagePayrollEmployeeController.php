@@ -7,8 +7,10 @@ use App\Http\Services\EmployeeService;
 use App\Http\Utils\Traits\EmployeeTrait;
 use App\Models\Employee;
 use App\Models\PayGrade;
+use App\Models\Payroll;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class EmployeeManagePayrollEmployeeController extends Controller
 {
@@ -17,43 +19,52 @@ class EmployeeManagePayrollEmployeeController extends Controller
     {
     }
 
-    public function index()
+   public function index()
     {
-        $employees = Auth::user()->company->employees()
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return view('payroll.employee.index', compact('employees'));
+        $payrolls = Payroll::latest()->get();
+        return view('employee.manage.payroll.payments.index', compact('payrolls'));
     }
 
-    public function show($id)
+    public function pending()
     {
-        $employee = Employee::find($id);
-        $pay_grades = PayGrade::all();
-        $attachments = $employee->attachments()->get();
-        $payrolls = $employee->payrolls()->get();
-
-        return view('payroll.employee.show', compact('employee', 'attachments', 'payrolls', 'pay_grades'));
+        $payrolls = Payroll::where('status', 'pending')->get();
+        return view('employee.manage.payroll.payments.pending', compact('payrolls'));
     }
-    public function UpdatePayGrade(Request $request, Employee $employee)
+
+    public function approved()
     {
-        // Validate the request input
+        $payrolls = Payroll::where('status', 'approved')->get();
+        return view('employee.manage.payroll.payments.approved', compact('payrolls'));
+    }
+
+    public function rejected()
+    {
+        $payrolls = Payroll::where('status', 'rejected')->get();
+        return view('employee.manage.payroll.payments.rejected', compact('payrolls'));
+    }
+
+    public function reject(Request $request, Payroll $payroll)
+    {
         $request->validate([
-            'pay_grade_id' => 'required|exists:pay_grades,id',
+            'reason' => 'required|string|max:1000',
         ]);
 
-        // Update the pay grade
-        self::assignActivePaygradeToEmployee(
-            $employee->id,
-            $request->pay_grade_id,
-            [
-                'assigned_by' => auth()->id(),
-                'effective_from' => $request->effective_from,
-                'base_salary_override' => $request->base_salary_override,
-            ]
-        );
+        $payroll->update([
+            'status' => 'rejected',
+            'rejection_reason' => $request->reason,
+        ]);
 
-        return back()->with('success', 'Pay grade updated successfully.');
+        return back()->with('message', 'Payroll rejected successfully.');
     }
 
+    public function approveAll()
+    {
+        DB::transaction(function () {
+            Payroll::where('status', 'pending')->update([
+                'status' => 'approved'
+            ]);
+        });
+
+        return back()->with('message', 'All pending payrolls approved (excluding rejections).');
+    }
 }

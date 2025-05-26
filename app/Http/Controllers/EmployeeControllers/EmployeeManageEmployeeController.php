@@ -126,4 +126,25 @@ class EmployeeManageEmployeeController extends Controller
             'message' => 'Invalid passport photo upload'
         ]);
     }
+
+        public function UpdatePayGrade(Request $request, Employee $employee)
+    {
+        // Validate the request input
+        $request->validate([
+            'pay_grade_id' => 'required|exists:pay_grades,id',
+        ]);
+
+        // Update the pay grade
+        self::assignActivePaygradeToEmployee(
+            $employee->id,
+            $request->pay_grade_id,
+            [
+                'assigned_by' => auth()->id(),
+                'effective_from' => $request->effective_from,
+                'base_salary_override' => $request->base_salary_override,
+            ]
+        );
+
+        return back()->with('success', 'Pay grade updated successfully.');
+    }
 }

@@ -28,15 +28,23 @@ class EmployeePayrollController extends Controller
 
     public function getEmployees()
     {
+        $period = now()->format('Y-m');
+
         $employees = Employee::whereHas('pay_grades', function ($q) {
-            $q->where('employee_pay_grade.status', true); 
-        })->with([
-                    'pay_grades' => fn($q) => $q->where('employee_pay_grade.status', true),
-                    'deductions'
-                ])->get();
+            $q->where('employee_pay_grade.status', true);
+        })
+            ->whereDoesntHave('payrolls', function ($q) use ($period) {
+                $q->where('period', $period);
+            })
+            ->with([
+                'pay_grades' => fn($q) => $q->where('employee_pay_grade.status', true),
+                'deductions'
+            ])
+            ->get();
 
         return view('employee.manage.payroll.select-pay', compact('employees'));
     }
+
 
 
 
