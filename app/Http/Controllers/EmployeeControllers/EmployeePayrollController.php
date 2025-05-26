@@ -9,46 +9,61 @@ use App\Models\Payroll;
 use Illuminate\Http\Request;
 
 class EmployeePayrollController extends Controller
-
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-       $payrolls = Payroll::with(['employee', 'pay_grade'])->latest()->get();
+        $payrolls = Payroll::with(['employee', 'pay_grade'])->latest()->get();
         return view('employee.manage.payroll.index', compact('payrolls'));
 
     }
     public function generateAll()
-{
-    $payrolls = PayrollService::generatePayrollForAllEmployees();
-    return redirect()->back()->with('success', count($payrolls) . ' payrolls generated.');
-}
-
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
     {
-        //
+        $payrolls = PayrollService::generatePayrollForAllEmployees();
+        return redirect()->back()->with('success', count($payrolls) . ' payrolls generated.');
+    }
+
+
+    public function getEmployees()
+    {
+        $employees = Employee::whereHas('pay_grades', function ($q) {
+            $q->where('employee_pay_grade.status', true); 
+        })->with([
+                    'pay_grades' => fn($q) => $q->where('employee_pay_grade.status', true),
+                    'deductions'
+                ])->get();
+
+        return view('employee.manage.payroll.select-pay', compact('employees'));
+    }
+
+
+
+    public function generateForSelected(Request $request)
+    {
+        $employeeIds = $request->input('selected_employees');
+        if (!$employeeIds) {
+            return back()->with('error', 'No employees selected.');
+        }
+        $payrolls = PayrollService::generatePayrollForSelectedEmployees(false, $employeeIds);
+        return redirect()->route('employee.manage.payrolls.index')->with('success', count($payrolls) . ' payrolls generated.');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-  public function show(Employee $employee, Payroll $payroll)
-{
-    // Make sure the payroll belongs to the employee
-    if ($payroll->employee_id !== $employee->id) {
-        abort(403, 'Unauthorized access to payroll.');
+    public function show(Employee $employee, Payroll $payroll)
+    {
+        // Make sure the payroll belongs to the employee
+        if ($payroll->employee_id !== $employee->id) {
+            abort(403, 'Unauthorized access to payroll.');
+        }
+
+        $deductions = $payroll->deductions()->get(); // or however you're storing them
+
+        return view('employee.manage.payroll.show', compact('employee', 'payroll', 'deductions'));
     }
-
-    $deductions = $payroll->deductions()->get(); // or however you're storing them
-
-    return view('employee.manage.payroll.show', compact('employee', 'payroll', 'deductions'));
-}
 
     public function edit(Payroll $payroll)
     {

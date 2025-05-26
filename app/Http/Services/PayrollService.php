@@ -19,14 +19,30 @@ class PayrollService
      */
     public static function generatePayrollForAllEmployees(bool $force = false): array
     {
-        $today = Carbon::today();
-        $period = $today->format('Y-m');
+
 
         // Fetch employees with active pay grades and deductions
         $employees = Employee::with([
             'pay_grades' => fn($q) => $q->wherePivot('status', true),
             'deductions'
         ])->get();
+
+        $generated = self::processPayroll($force, $employees);
+
+        return $generated;
+    }
+
+    public static function generatePayrollForSelectedEmployees(bool $force = false, $employeesIds = []): array
+    {
+        $employees = Employee::whereIn('id', $employeesIds)->get();
+        $generated = self::processPayroll($force, $employees);
+        return $generated;
+    }
+
+    public static function processPayroll(bool $force = false, $employees = []): array
+    {
+        $today = Carbon::today();
+        $period = $today->format('Y-m');
 
         // Load statutory contribution rates
         $contributions = Contribution::pluck('percent', 'name');
@@ -91,20 +107,20 @@ class PayrollService
             try {
                 // Create payroll record
                 $payroll = Payroll::create([
-                    'employee_id'    => $employee->id,
-                    'pay_grade_id'   => $activePayGrade->id,
-                    'payroll_date'   => $today,
-                    'period'         => $period,
-                    'basic_salary'   => $basic,
-                    'allowances'     => $allowances,
-                    'deductions'     => $customDeductions,
-                    'gross_salary'   => $gross,
-                    'net_salary'     => $net,
-                    'paye'           => $paye,
-                    'nssf'           => $nssf,
-                    'psssf'          => $psssf,
-                    'sdl'            => $sdl,
-                    'wcf'            => $wcf,
+                    'employee_id' => $employee->id,
+                    'pay_grade_id' => $activePayGrade->id,
+                    'payroll_date' => $today,
+                    'period' => $period,
+                    'basic_salary' => $basic,
+                    'allowances' => $allowances,
+                    'deductions' => $customDeductions,
+                    'gross_salary' => $gross,
+                    'net_salary' => $net,
+                    'paye' => $paye,
+                    'nssf' => $nssf,
+                    'psssf' => $psssf,
+                    'sdl' => $sdl,
+                    'wcf' => $wcf,
                 ]);
 
                 // Attach deductions
@@ -118,11 +134,10 @@ class PayrollService
                 $generated[] = $payroll;
             } catch (\Throwable $e) {
                 DB::rollBack();
-                
+
                 Log::error('Payroll generation failed', ['employee_id' => $employee->id, 'error' => $e->getMessage()]);
             }
         }
-
         return $generated;
     }
 }

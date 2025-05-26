@@ -64,10 +64,10 @@
                     </a>
                     <ul class="collapse" id="payroll-menu" data-parent="#sidebar-menu">
                         <div class="sub-menu">
-                            @can('view_employees')
+                            @can('create_payroll')
                                 <li>
-                                <a class="sidenav-item-link" href="{{ route('employee.manage.employees.index') }}">
-                                    <span class="nav-text">View Employees</span>
+                                <a class="sidenav-item-link" href="{{ route('employee.manage.payrolls.getEmployees') }}">
+                                    <span class="nav-text">Payroll Employees</span>
                                 </a>
                             </li>
                             @endcan

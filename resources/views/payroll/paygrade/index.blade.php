@@ -12,7 +12,6 @@
                     <!-- create a create button right here -->
                     <x-system.modal-button class="btn btn-primary mb-3" id="createPayGrade" text="Create PayGrade" />
 
-                    <x-system.modal size="modal-lg" id="createPayGrade" title="Create PayGrade" form="createPayGradeForm">
                         <form id="createPayGradeForm" action="{{ route('payroll.paygrades.store') }}" method="POST">
                             @csrf
                             <div class="modal-body">
@@ -45,7 +44,7 @@
                                 </div>
                             </div>
                         </form>
-                    </x-system.modal>
+                    </>
 
                     <div class="table-responsive">
                         <span>Total PayGrades: {{ $pay_grades->count() }}</span>

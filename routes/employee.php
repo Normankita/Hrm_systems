@@ -96,7 +96,9 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::get('/', 'index')->name('index')->middleware(['can:view_payroll']);
         Route::post('/generate-all', 'generateAll')->name('generateAll')->middleware(['can:create_payroll']);
         Route::get('/{payroll}/edit', 'edit')->name('edit')->middleware(['can:edit_payroll']);
+        Route::get('/employees', 'getEmployees')->name('getEmployees')->middleware(['can:create_payroll']);
         Route::put('/{payroll}', 'update')->name('update')->middleware(['can:edit_payroll']);
+        Route::post('/generate', 'generateForSelected')->name('generateSelected')->middleware(['can:create_payroll']);
         Route::delete('/{payroll}', 'destroy')->name('destroy')->middleware(['can:delete_payroll']);
     });
 
