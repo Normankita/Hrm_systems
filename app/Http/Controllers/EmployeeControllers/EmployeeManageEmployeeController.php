@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateEmployeeRequest;
 use App\Http\Services\EmployeeService;
 use App\Http\Utils\Traits\EmployeeTrait;
 use App\Http\Utils\Traits\UploadFileTrait;
+use App\Models\Employee;
 use App\Models\PayGrade;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;

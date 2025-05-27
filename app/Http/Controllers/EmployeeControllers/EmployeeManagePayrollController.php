@@ -10,9 +10,7 @@ use Illuminate\Http\Request;
 
 class EmployeeManagePayrollController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+  
     public function index()
     {
         $payrolls = Payroll::with(['employee', 'pay_grade'])->latest()->get();
@@ -35,7 +33,7 @@ class EmployeeManagePayrollController extends Controller
 
         $deductions = $payroll->deductions()->get(); // or however you're storing them
 
-        return view('hr.payroll.show', compact('employee', 'payroll', 'deductions'));
+        return view('employee.manage.payroll.payments.show', compact('employee', 'payroll', 'deductions'));
     }
 
 }

@@ -5,11 +5,8 @@ namespace App\Http\Controllers\EmployeeControllers;
 use App\Http\Controllers\Controller;
 use App\Http\Services\EmployeeService;
 use App\Http\Utils\Traits\EmployeeTrait;
-use App\Models\Employee;
-use App\Models\PayGrade;
 use App\Models\Payroll;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class EmployeeManagePayrollEmployeeController extends Controller
