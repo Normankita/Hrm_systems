@@ -106,11 +106,8 @@ class EmployeeLeaveController extends Controller
     public function destroy($id)
     {
         $leave = Leave::with('attachments')->findOrFail($id);
-
         $this->deleteExistingAttachments($leave);
-
         $leave->delete();
-
         return redirect()->route('employees.leave.status')->with('success', 'Leave request canceled successfully.');
     }
 
@@ -135,9 +132,7 @@ class EmployeeLeaveController extends Controller
     private function prepareLeaveData(Request $request)
     {
         $leaveType = LeaveType::findOrFail($request->leave_type_id);
-
         $status = $leaveType->required_approval ? 'pending' : 'approved';
-
         return [
             'employee_id' => auth()->user()->employee->id,
             'leave_type_id' => $request->leave_type_id,
