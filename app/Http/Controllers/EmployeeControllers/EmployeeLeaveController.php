@@ -3,14 +3,16 @@
 namespace App\Http\Controllers\EmployeeControllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Utils\Traits\LeaveTrait;
 use App\Http\Utils\Traits\UploadFileTrait;
 use App\Models\Leave;
 use App\Models\LeaveType;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class EmployeeLeaveController extends Controller
 {
-    use UploadFileTrait;
+    use UploadFileTrait, LeaveTrait;
 
     /**
      * Display a listing of the resource.
@@ -30,7 +32,6 @@ class EmployeeLeaveController extends Controller
     public function create()
     {
         $leaveTypes = LeaveType::all();
-
         return view('employee.leave.request', compact('leaveTypes'));
     }
 
@@ -41,10 +42,14 @@ class EmployeeLeaveController extends Controller
     {
         $this->validateLeaveRequest($request);
 
+        $employee = auth()->user()->employee;
+        $response = $this->checkEligibility($employee);
+        if ($response['status'] == 'fail') {
+            return redirect()->back()
+                ->with('fail', $response['message']);
+        }
         $leave = Leave::create($this->prepareLeaveData($request));
-
         $this->handleAttachments($request, $leave);
-
         return redirect()->route('employees.leave.status')->with('success', 'Leave request submitted successfully.');
     }
 
@@ -76,17 +81,24 @@ class EmployeeLeaveController extends Controller
     {
         $this->validateLeaveRequest($request);
 
+        $employee = auth()->user()->employee;
+        $daysCount = $this->getLeaveDaysCount(
+            $employee->getSpentLeaves()
+        );
+        if ($daysCount >= session()->get('leave_days')) {
+            return redirect()->back()
+                ->with('fail', 'You have exeeded max number of days,
+                    please reduce them');
+        }
         // Delete existing attachments if new ones are provided
         if ($request->hasFile('attachments')) {
             $this->deleteExistingAttachments($leave);
         }
-
         $leave->update($this->prepareLeaveData($request));
-
         $this->handleAttachments($request, $leave);
-
         return redirect()->route('employees.leave.status')->with('success', 'Leave request updated successfully.');
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -113,7 +125,7 @@ class EmployeeLeaveController extends Controller
             'end_date' => 'required|date|after_or_equal:start_date',
             'reason' => 'required|string|max:255',
             'attachments.*' => 'file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'comment'=> '',
+            'comment' => '',
         ]);
     }
 
@@ -144,7 +156,7 @@ class EmployeeLeaveController extends Controller
     {
         if ($request->hasFile('attachments')) {
             $attachments = [];
-            $counter=1;
+            $counter = 1;
             foreach ($request->file('attachments') as $file) {
                 $this->handleDocumentUpload(
                     $file,

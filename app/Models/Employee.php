@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Scopes\AuthUserCompanyScope;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Employee extends Model
@@ -90,17 +91,36 @@ class Employee extends Model
             'attachmentable'
         );
     }
-    public function payrolls(){
+    public function payrolls()
+    {
         return $this->hasMany(Payroll::class);
     }
-public function deductions()
-{
-    return $this->hasMany(Deduction::class);
-}
+    public function deductions()
+    {
+        return $this->hasMany(Deduction::class);
+    }
 
 
 
-    public function pay_grades(){
+        /**
+     * Summary of getsSpentLeaves
+     * getting the leaves that the employee has taken
+     * @param mixed $employee
+     */
+    public function getSpentLeaves()
+    {
+        $thisYear = Carbon::now()->year;
+        // select all leaves where created at this year
+        return $this->leaves()
+            ->where('status', 'approved')
+            ->whereYear('start_date', $thisYear)
+            ->get();
+    }
+
+
+
+    public function pay_grades()
+    {
         return $this->belongsToMany(PayGrade::class)->withPivot(['status', 'assigned_by', 'effective_from', 'base_salary_override'])->withTimestamps();
     }
 }
