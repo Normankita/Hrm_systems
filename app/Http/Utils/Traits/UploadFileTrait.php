@@ -63,9 +63,11 @@ trait UploadFileTrait
      */
     private function deleteOldAttachment($attachable, string $type)
     {
+       $attachable->delete();
         $olds = $attachable->attachments()
             ->where('type', $type)
             ->get();
+            
         foreach ($olds as $key => $old) {
             $this->deleteFile($old->path);
             $old->delete();

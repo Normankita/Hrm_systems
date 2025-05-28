@@ -168,6 +168,7 @@ class EmployeeService
 
             // Update the employee's profile picture.
             $employee->update(['profile_picture' => $path]);
+            $this->handlePassportToProfilePhotoUpload($request);
             return [
                 'status' => 'success',
                 'message' => 'Profile photo updated Successfully',

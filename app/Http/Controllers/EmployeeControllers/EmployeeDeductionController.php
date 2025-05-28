@@ -31,8 +31,6 @@ class EmployeeDeductionController extends Controller
 public function store(Request $request, Employee $employee)
 {
     // Remove this after verifying your inputs
-    // dd($request->all());
-
     $validated = $request->validate([
         'name' => 'required|string|max:255',
         'total_amount' => 'required|numeric|min:0',

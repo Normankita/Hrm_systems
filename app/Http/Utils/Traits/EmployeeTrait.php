@@ -20,6 +20,7 @@ trait EmployeeTrait
     public static function createEmployee($data): Employee
     {
         // start by creating a user account first
+        
         $user = User::create([
             'name' => $data['first_name'] . ' ' . $data['last_name'],
             'email' => $data['email'],

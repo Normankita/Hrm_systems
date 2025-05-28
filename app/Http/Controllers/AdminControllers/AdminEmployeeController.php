@@ -127,13 +127,11 @@ class AdminEmployeeController extends Controller
         ]);
     }
 
-    public function updatePassportPhoto(Request $request, $id)
+      public function updatePassportPhoto(Request $request, $id)
     {
         $outcome = $this->employeeService->updateProfilePhoto($request, $id);
-
         if ($outcome) {
-            return redirect()
-                ->route('admin.employees.show', $outcome['employee']->id)
+            return redirect()->back()
                 ->with('success', 'Passport photo updated successfully');
         }
 

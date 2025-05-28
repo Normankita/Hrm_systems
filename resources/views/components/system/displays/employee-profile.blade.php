@@ -79,7 +79,8 @@
                     </p>
 
                     {{-- Profile Image Update (ADMIN, HR_OFFICER) --}}
-                    @canany(['edit_employees', 'edit_own_employees'])
+                    @can('edit_own_employees')
+                        @hasrole('EMPLOYEE')
                         <x-system.modal-button class="btn btn-primary btn-custom me-2" data-bs-toggle="modal"
                             id="UpdateProfilePhoto" text="Update Profile Image" />
 
@@ -96,10 +97,12 @@
                                 </div>
                             </form>
                         </x-system.modal>
-                    @endcanany
+                        @endhasanyrole
+                    @endcan
 
                     {{-- PayGrade Update (PAYROLL_MANAGER) --}}
                     @can('edit_paygrade')
+                        @hasrole('EMPLOYEE')
                         <x-system.modal-button class="btn btn-primary btn-custom me-2" data-bs-toggle="modal"
                             id="UpdatePayGrade" text="Update PayGrade" />
 
@@ -156,6 +159,7 @@
                                 </div>
                             </form>
                         </x-system.modal>
+                        @endhasrole
                     @endcan
 
                     {{-- Back to List --}}
@@ -166,8 +170,10 @@
 
                     {{-- Manage Deductions Button--}}
                     @canany(['edit_deductions', 'view_deductions', 'create_deductions'])
+                      @hasrole('EMPLOYEE')
                         <x-system.btn-view class="btn btn-danger btn-custom me-2" :route="route('employee.manage.deductions.index', $employee)" text="Manage Deductions"/>
 
+                      @endhasrole
                     @endcanany
                 </div>
             </div>
