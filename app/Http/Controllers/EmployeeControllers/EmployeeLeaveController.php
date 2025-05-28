@@ -41,7 +41,7 @@ class EmployeeLeaveController extends Controller
     public function store(Request $request)
     {
         $this->validateLeaveRequest($request);
-
+        
         $employee = auth()->user()->employee;
         $response = $this->checkEligibility($employee);
         if ($response['status'] == 'fail') {

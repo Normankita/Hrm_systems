@@ -1,7 +1,7 @@
 @extends('layouts.system')
 
 @section('content')
-    @can('view_leaveType')
+    @can('view_leaveTypes')
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -14,7 +14,7 @@
                             <x-system.modal-button class="btn btn-primary mb-3" id="createLeaveType" text="Create Leave Type" />
                             <x-system.modal size="modal-lg" id="createLeaveType" title="Create Leave Type"
                                 form="createLeaveTypeForm">
-                                <form id="createLeaveTypeForm" action="{{ route('employee.leave.type.store') }}" method="POST">
+                                <form id="createLeaveTypeForm" action="{{ route('employee.manage.leave.type.store') }}" method="POST">
                                     @csrf
                                     <div class="modal-body">
                                         <div class="form-group">
@@ -104,7 +104,7 @@
                 <x-system.modal id="updateLeaveType-{{ $leaveType->id }}" title="Update Leave Type"
                     form="updateLeaveTypeForm-{{ $leaveType->id }}">
                     <form id="updateLeaveTypeForm-{{ $leaveType->id }}"
-                        action="{{ route('employee.leave.type.update', $leaveType->id) }}" method="POST">
+                        action="{{ route('employee.manage.leave.type.update', $leaveType->id) }}" method="POST">
                         @csrf
                         @method('PUT')
                         <div class="modal-body">
