@@ -9,7 +9,8 @@
 
 <div class="card">
     <div class="card-body p-30">
-        <form action="{{ route($route) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route($route) }}" method="POST"
+         enctype="multipart/form-data">
             @csrf
             <div class="row">
 
@@ -225,7 +226,7 @@
                                 }
                             @endphp
                             <option value="{{ $role->id }}"
-                                
+
                                 {{ old('role_id') == $role->id ? 'selected' : '' }}>
                                 {{ $role->name }}
                             </option>

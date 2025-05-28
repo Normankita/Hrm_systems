@@ -65,8 +65,15 @@ class AdminEmployeeController extends Controller
             self::ATTACHMENT_TYPES
         );
 
+        if ($outcome['status'] === 'fails') {
+            return redirect()->back()->with(['status' => 'fail', 'message' =>
+            'unable to create employee please try again']);
+        }
+
+        $employee = Employee::find($outcome['employee']->id);
         return redirect()
-            ->route('admin.employees.show', $outcome['employee']->id)
+            ->route('admin.employees.show',
+                 $employee->id)
             ->with('success', 'Employee created successfully');
     }
 
@@ -74,8 +81,8 @@ class AdminEmployeeController extends Controller
     {
         $employee = $this->getEmployeeById($id);
         $attachments = $employee->attachments()->get();
-
-        return view('admin.employee.show', compact('employee', 'attachments'));
+        return view('admin.employee.show',
+         compact('employee', 'attachments'));
     }
 
     public function edit($id): View

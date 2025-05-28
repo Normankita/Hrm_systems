@@ -7,6 +7,7 @@ use App\Http\Utils\Traits\UploadFileTrait;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Throwable;
 
 class EmployeeService
 {
@@ -41,7 +42,14 @@ class EmployeeService
             'full_name' => $request->input('first_name') . ' ' . $request->input('middle_name') . ' ' . $request->input('last_name'),
         ]);
 
-        $employee = $this->createEmployee($request->all());
+       try {
+         $employee = $this->createEmployee($request->all());
+       }catch(Throwable $throwable) {
+           return [
+               'status' => 'fail',
+               'message' => $throwable->getMessage()
+           ];
+       }
 
         // Employee Attachment creation
         $isCertificatesUploaded = false;

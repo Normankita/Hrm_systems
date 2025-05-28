@@ -5,42 +5,44 @@ namespace App\Http\Utils\Traits;
 use App\Models\Employee;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use Throwable;
 
 trait EmployeeTrait
 {
-    /**
-     * Summary of createEmployee
-     * This function takes the employee data and creates a new employee
-     * @param array $data
-     * @return Employee
-     */
     public static function createEmployee($data): Employee
     {
         // start by creating a user account first
-        
-        $user = User::create([
-            'name' => $data['first_name'] . ' ' . $data['last_name'],
-            'email' => $data['email'],
-            'password' => Hash::make(strtolower($data['last_name'])),
-            'company_id' => $data['company_id'],
-        ]);
-        $employeeRole = Role::where('name', 'EMPLOYEE')->first();
-        $extraRole = Role::findById($data['role_id']);
-        $roles = [$employeeRole, $extraRole];
-        $user->assignRole($roles);
-        $data['user_id'] = $user->id;
-        $employee = Employee::create($data);
-        self::assignActivePaygradeToEmployee(
-            $employee->id,
-            $data['pay_grade_id'],
-            [
-                'assigned_by' => Auth::user()->id,
-                'effective_from' => now(),
-                'base_salary_override' => $data['base_salary_override'] ? $data['base_salary_override'] : 0,
-            ]
-        );
+        DB::beginTransaction();
+        try {
+            $user = User::create([
+                'name' => $data['first_name'] . ' ' . $data['last_name'],
+                'email' => $data['email'],
+                'password' => Hash::make(strtolower($data['last_name'])),
+                'company_id' => $data['company_id'],
+            ]);
+            $employeeRole = Role::where('name', 'EMPLOYEE')->first();
+            $extraRole = Role::findById($data['role_id']);
+            $roles = [$employeeRole, $extraRole];
+            $user->assignRole($roles);
+            $data['user_id'] = $user->id;
+            $employee = Employee::create($data);
+            self::assignActivePaygradeToEmployee(
+                $employee->id,
+                $data['pay_grade_id'],
+                [
+                    'assigned_by' => Auth::user()->id,
+                    'effective_from' => now(),
+                    'base_salary_override' => $data['base_salary_override'] ? $data['base_salary_override'] : 0,
+                ]
+            );
+            DB::commit();
+        }catch(Throwable $throwable) {
+            DB::rollBack();
+            throw $throwable;
+        }
         return $employee;
     }
 
@@ -57,7 +59,7 @@ trait EmployeeTrait
         return $employee;
     }
 
-    
+
     /**
      * Updates an existing employee.
      *
@@ -94,7 +96,7 @@ trait EmployeeTrait
                 $data['pay_grade_id'],
                 [
                     'assigned_by' => Auth::user()->id,
-                    'effective_from' => $data['effective_from']?? now(),
+                    'effective_from' => $data['effective_from'] ?? now(),
                     'base_salary_override' => $data['base_salary_override'],
                 ]
             );
