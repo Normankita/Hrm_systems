@@ -36,6 +36,7 @@ class AuthenticatedSessionController extends Controller
                 // ->first();
             // $request->session()->put('settings', $settings);
             $request->session()->put('company', Auth::user()->company);
+            $request->session()->put('leave_days',  30);
         }
 
         return redirect()->intended(route('dashboard', absolute: false));

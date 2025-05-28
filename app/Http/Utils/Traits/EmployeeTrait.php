@@ -10,7 +10,6 @@ use Spatie\Permission\Models\Role;
 
 trait EmployeeTrait
 {
-
     /**
      * Summary of createEmployee
      * This function takes the employee data and creates a new employee
@@ -46,6 +45,11 @@ trait EmployeeTrait
     }
 
 
+    /**
+     * Summary of getEmployeeById
+     * @param mixed $id
+     * @return \Illuminate\Database\Eloquent\Collection<int, Employee>
+     */
     public static function getEmployeeById($id): Employee
     {
         // Find the employee by ID
@@ -53,6 +57,7 @@ trait EmployeeTrait
         return $employee;
     }
 
+    
     /**
      * Updates an existing employee.
      *

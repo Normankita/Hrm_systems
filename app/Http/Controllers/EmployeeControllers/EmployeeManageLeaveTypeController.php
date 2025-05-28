@@ -13,7 +13,6 @@ class EmployeeManageLeaveTypeController extends Controller
         $leaveTypes = LeaveType::all();
         return view('employee.manage.leave_type.index')
             ->with('leaveTypes', $leaveTypes);
-            
     }
 
 
