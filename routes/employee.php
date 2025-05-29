@@ -119,6 +119,8 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
             ->name('update.password');
         Route::post('/updateProfile/{id}', 'updatePassportPhoto')->name('updateProfilePhoto');
         Route::patch('/UpdatePayGrade/{employee}', 'UpdatePayGrade')->name('UpdatePayGrade')->middleware(['can:edit_employees']);
+        Route::post('/excel/import', 'excelImport')
+            ->name('excel.import');
     });
 
 

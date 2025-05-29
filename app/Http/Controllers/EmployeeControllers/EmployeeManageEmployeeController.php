@@ -13,6 +13,7 @@ use App\Models\PayGrade;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
 
 class EmployeeManageEmployeeController extends Controller
@@ -147,5 +148,30 @@ class EmployeeManageEmployeeController extends Controller
         );
 
         return back()->with('success', 'Pay grade updated successfully.');
+    }
+
+    
+    public function excelImport(Request $request)
+    {
+        $rules = [
+            'file' => 'mimes:ods,csv,xlsx|required|max:500',
+        ];
+        $validate = Validator::make($request->all(), $rules, $messages = [
+            'excel.required' => 'Select Excel sheet First....',
+            'excel.max' => 'ExcelSheet must not be greater than 500kb',
+        ]);
+
+        if ($validate->fails()) {
+            return [
+                'status' => 'fail',
+                'errors' => $validate->errors(),
+            ];
+        }
+        $responce = $this->employeeService->importEmployees($request);
+        if ($responce['status'] === 'error') {
+            return redirect()->back()->with($responce);
+        }
+        return redirect()->route('employee.manage.employee.index')
+            ->with($responce);
     }
 }
