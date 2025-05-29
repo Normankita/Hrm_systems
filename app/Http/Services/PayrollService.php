@@ -32,7 +32,8 @@ class PayrollService
         return $generated;
     }
 
-    public static function generatePayrollForSelectedEmployees(bool $force = false, $employeesIds = []): array
+    public static function generatePayrollForSelectedEmployees(bool $force = false,
+    $employeesIds = []): array
     {
         $employees = Employee::whereIn('id', $employeesIds)->get();
         $generated = self::processPayroll($force, $employees);
@@ -56,9 +57,7 @@ class PayrollService
             }
 
             // Determine base salary
-            $basic = $activePayGrade->pivot->base_salary_override > 0
-                ? $activePayGrade->pivot->base_salary_override
-                : $activePayGrade->base_salary;
+            $basic = $employee->getBaseSalary();
 
             $allowances = 0;
 
@@ -129,13 +128,14 @@ class PayrollService
                         'total_amount' => $item['total_amount']
                     ]);
                 }
-
                 DB::commit();
                 $generated[] = $payroll;
             } catch (\Throwable $e) {
                 DB::rollBack();
-
-                Log::error('Payroll generation failed', ['employee_id' => $employee->id, 'error' => $e->getMessage()]);
+                return [
+                    'status' => 'fail',
+                    'message' => 'unable to process payroll, please try again...'
+                ];
             }
         }
         return $generated;
