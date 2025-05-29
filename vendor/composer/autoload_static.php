@@ -40,6 +40,7 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
         'a1cfe24d14977df6878b9bf804af2d1c' => __DIR__ . '/..' . '/nunomaduro/collision/src/Adapters/Phpunit/Autoload.php',
         'ec07570ca5a812141189b1fa81503674' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert/Functions.php',
         '377b22b161c09ed6e5152de788ca020a' => __DIR__ . '/..' . '/spatie/laravel-permission/src/helpers.php',
+        '279d75c173acbb4b3fc4415ed72c6739' => __DIR__ . '/../..' . '/app/http/Utils/Helpers.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -601,6 +602,7 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
         'App\\Http\\Services\\EmployeeService' => __DIR__ . '/../..' . '/app/Http/Services/EmployeeService.php',
         'App\\Http\\Services\\PayrollService' => __DIR__ . '/../..' . '/app/Http/Services/PayrollService.php',
         'App\\Http\\Services\\UserService' => __DIR__ . '/../..' . '/app/Http/Services/UserService.php',
+        'App\\Http\\Utils\\Helpers' => __DIR__ . '/../..' . '/app/Http/Utils/Helpers.php',
         'App\\Http\\Utils\\Traits\\DeductionsTrait' => __DIR__ . '/../..' . '/app/Http/Utils/Traits/DeductionsTrait.php',
         'App\\Http\\Utils\\Traits\\EmployeeTrait' => __DIR__ . '/../..' . '/app/Http/Utils/Traits/EmployeeTrait.php',
         'App\\Http\\Utils\\Traits\\LeaveTrait' => __DIR__ . '/../..' . '/app/Http/Utils/Traits/LeaveTrait.php',

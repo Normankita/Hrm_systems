@@ -226,7 +226,7 @@
                         <span class="input-group-text mdi mdi-cash-multiple"></span>
                         <input type="number" name="base_salary_override" class="form-control"
                             placeholder="e.g., 1200000"
-                            value="{{ currencyFormat($employee->getActivePaygrade()->pivot->base_salary_override) }}">>
+                            value="{{ App\Http\Utils\Helpers::currencyFormat($employee->getActivePaygrade()->pivot->base_salary_override) }}">>
                     </div>
                     @error('base_salary_override')
                         <span class="text-danger d-block">{{ $message }}</span>

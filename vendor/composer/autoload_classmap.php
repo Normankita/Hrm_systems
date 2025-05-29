@@ -52,6 +52,7 @@ return array(
     'App\\Http\\Services\\EmployeeService' => $baseDir . '/app/Http/Services/EmployeeService.php',
     'App\\Http\\Services\\PayrollService' => $baseDir . '/app/Http/Services/PayrollService.php',
     'App\\Http\\Services\\UserService' => $baseDir . '/app/Http/Services/UserService.php',
+    'App\\Http\\Utils\\Helpers' => $baseDir . '/app/Http/Utils/Helpers.php',
     'App\\Http\\Utils\\Traits\\DeductionsTrait' => $baseDir . '/app/Http/Utils/Traits/DeductionsTrait.php',
     'App\\Http\\Utils\\Traits\\EmployeeTrait' => $baseDir . '/app/Http/Utils/Traits/EmployeeTrait.php',
     'App\\Http\\Utils\\Traits\\LeaveTrait' => $baseDir . '/app/Http/Utils/Traits/LeaveTrait.php',
