@@ -171,7 +171,7 @@ class EmployeeManageEmployeeController extends Controller
         if ($responce['status'] === 'error') {
             return redirect()->back()->with($responce);
         }
-        return redirect()->route('employee.manage.employee.index')
+        return redirect()->route(route: 'employee.manage.employees.index')
             ->with($responce);
     }
 }
