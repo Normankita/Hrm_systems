@@ -24,8 +24,8 @@ trait EmployeeTrait
                 'company_id' => $data['company_id'],
             ]);
             $employeeRole = Role::where('name', 'EMPLOYEE')->first();
-            $extraRole = Role::findById($data['role_id']);
-            $roles = [$employeeRole, $extraRole];
+            $extraRole = array_key_exists('role_id', $data) ? Role::findById($data['role_id']) : null;
+            $roles = $extraRole ? [$employeeRole, $extraRole] : [$employeeRole];
             $user->assignRole($roles);
             $data['user_id'] = $user->id;
             $employee = Employee::create($data);
@@ -135,6 +135,12 @@ trait EmployeeTrait
         }
     }
 
+    /**
+     * Summary of getNamesFromFullName
+     *
+     * @param mixed $fullName
+     * @return array{first_name: string, last_name: string, middle_name: string}
+     */
     private function getNamesFromFullName($fullName): array
     {
         // Split full name
@@ -143,7 +149,6 @@ trait EmployeeTrait
         $middle_name = $nameParts[1] ?? '';
         $last_name = $nameParts[2] ?? '';
         $nameParts = [
-
             'first_name' => $first_name,
             'middle_name' => $middle_name,
             'last_name' => $last_name,

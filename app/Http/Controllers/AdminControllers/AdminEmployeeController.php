@@ -14,6 +14,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -22,7 +23,9 @@ class AdminEmployeeController extends Controller
 {
     use EmployeeTrait, UploadFileTrait;
 
-    public function __construct(private EmployeeService $employeeService) {}
+    public function __construct(private EmployeeService $employeeService)
+    {
+    }
 
     public function index(): View
     {
@@ -66,14 +69,19 @@ class AdminEmployeeController extends Controller
         );
 
         if ($outcome['status'] === 'fails') {
-            return redirect()->back()->with(['status' => 'fail', 'message' =>
-            'unable to create employee please try again']);
+            return redirect()->back()->with([
+                'status' => 'fail',
+                'message' =>
+                    'unable to create employee please try again'
+            ]);
         }
 
         $employee = Employee::find($outcome['employee']->id);
         return redirect()
-            ->route('admin.employees.show',
-                 $employee->id)
+            ->route(
+                'admin.employees.show',
+                $employee->id
+            )
             ->with('success', 'Employee created successfully');
     }
 
@@ -81,8 +89,10 @@ class AdminEmployeeController extends Controller
     {
         $employee = $this->getEmployeeById($id);
         $attachments = $employee->attachments()->get();
-        return view('admin.employee.show',
-         compact('employee', 'attachments'));
+        return view(
+            'admin.employee.show',
+            compact('employee', 'attachments')
+        );
     }
 
     public function edit($id): View
@@ -134,7 +144,7 @@ class AdminEmployeeController extends Controller
         ]);
     }
 
-      public function updatePassportPhoto(Request $request, $id)
+    public function updatePassportPhoto(Request $request, $id)
     {
         $outcome = $this->employeeService->updateProfilePhoto($request, $id);
         if ($outcome) {
@@ -146,5 +156,31 @@ class AdminEmployeeController extends Controller
             'status' => 'error',
             'message' => 'Invalid passport photo upload'
         ]);
+    }
+
+
+
+    public function excelImport(Request $request)
+    {
+        $rules = [
+            'file' => 'mimes:ods,csv,xlsx|required|max:500',
+        ];
+        $validate = Validator::make($request->all(), $rules, $messages = [
+            'excel.required' => 'Select Excel sheet First....',
+            'excel.max' => 'ExcelSheet must not be greater than 500kb',
+        ]);
+
+        if ($validate->fails()) {
+            return [
+                'status' => 'fail',
+                'errors' => $validate->errors(),
+            ];
+        }
+        $responce = $this->employeeService->importEmployees($request);
+        if ($responce['status'] === 'error') {
+            return redirect()->back()->with($responce);
+        }
+        return redirect()->route('admin.employees.index')
+            ->with($responce);
     }
 }
