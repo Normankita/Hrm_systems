@@ -26,6 +26,8 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
         Route::post('/updateProfile/{id}', 'updatePassportPhoto')->name('updateProfilePhoto');
         Route::get('/edit/permissions/{id}', 'editPermissions')
             ->name('edit.permissions');
+        Route::post('/excel/import', 'excelImport')
+            ->name('excel.import');
     });
 
 

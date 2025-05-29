@@ -88,7 +88,6 @@ class UserSeeder extends Seeder
         ]);
 
 
-
         // 8. Seed statutory contributions
         $contributions = [
             ['name' => 'PAYE', 'percent' => 9, 'description' => 'Income Tax'],
@@ -98,7 +97,8 @@ class UserSeeder extends Seeder
             ['name' => 'WCF', 'percent' => 1, 'description' => 'Workers Compensation Fund'],
         ];
         foreach ($contributions as $c) {
-            Contribution::firstOrCreate(['name' => $c['name']], $c);
+            $c = array_merge(['company_id' => $company->id], $c);
+            Contribution::create($c);
         }
     }
 }

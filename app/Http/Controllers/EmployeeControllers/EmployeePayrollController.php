@@ -29,7 +29,6 @@ class EmployeePayrollController extends Controller
     public function getEmployees()
     {
         $period = now()->format('Y-m');
-
         $employees = Employee::whereHas('pay_grades', function ($q) {
             $q->where('employee_pay_grade.status', true);
         })
@@ -41,7 +40,6 @@ class EmployeePayrollController extends Controller
                 'deductions'
             ])
             ->get();
-
         return view('employee.manage.payroll.select-pay', compact('employees'));
     }
 
@@ -54,8 +52,12 @@ class EmployeePayrollController extends Controller
         if (!$employeeIds) {
             return back()->with('error', 'No employees selected.');
         }
-        $payrolls = PayrollService::generatePayrollForSelectedEmployees(false, $employeeIds);
-        return redirect()->route('employee.manage.payrolls.index')->with('success', count($payrolls) . ' payrolls generated.');
+        $payrolls = PayrollService::generatePayrollForSelectedEmployees(
+            false,
+            $employeeIds
+        );
+        return redirect()->route('employee.manage.payrolls.index')
+            ->with('success', count($payrolls) . ' payrolls generated.');
     }
 
     /**
