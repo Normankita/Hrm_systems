@@ -8,7 +8,6 @@ use App\Models\Employee;
 use App\Models\Payroll;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Log;
 
 class PayrollService
 {
