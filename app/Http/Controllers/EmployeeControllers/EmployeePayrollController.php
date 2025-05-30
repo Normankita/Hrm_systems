@@ -4,6 +4,7 @@ namespace App\Http\Controllers\EmployeeControllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Services\PayrollService;
+use App\Http\Services\PayslipPdfService;
 use App\Models\Employee;
 use App\Models\Payroll;
 use Illuminate\Http\Request;
@@ -19,8 +20,14 @@ class EmployeePayrollController extends Controller
         return view('employee.manage.payroll.index', compact('payrolls'));
 
     }
-    public function generateAll()
+    public function generateAll(Request $request)
     {
+
+        // To get the laravel pdf results you should return the
+        // stream received from the PDF facade
+        $request = [];
+        return PayslipPdfService::createReport($request);
+
         $payrolls = PayrollService::generatePayrollForAllEmployees();
         // check of payroll generation returned an error
         if($payrolls['status'] == 'success') {
