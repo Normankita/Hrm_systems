@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Http\Utils\Traits\PdfTrait;
 use App\Models\Contribution;
 use App\Models\Employee;
 use App\Models\Payroll;
@@ -11,6 +12,9 @@ use Log;
 
 class PayrollService
 {
+    use PdfTrait;
+
+
     /**
      * Generate payrolls for all employees.
      *
@@ -26,15 +30,15 @@ class PayrollService
             'pay_grades' => fn($q) => $q->wherePivot('status', true),
             'deductions'
         ])->get();
-
         $generated = self::processPayroll($force, $employees);
 
         return $generated;
     }
 
-    public static function generatePayrollForSelectedEmployees(bool $force = false,
-    $employeesIds = []): array
-    {
+    public static function generatePayrollForSelectedEmployees(
+        bool $force = false,
+        $employeesIds = []
+    ): array {
         $employees = Employee::whereIn('id', $employeesIds)->get();
         $generated = self::processPayroll($force, $employees);
         return $generated;
@@ -104,7 +108,6 @@ class PayrollService
             DB::beginTransaction();
 
             try {
-                // Create payroll record
                 $payroll = Payroll::create([
                     'employee_id' => $employee->id,
                     'pay_grade_id' => $activePayGrade->id,
@@ -121,22 +124,31 @@ class PayrollService
                     'sdl' => $sdl,
                     'wcf' => $wcf,
                 ]);
-
-                // Attach deductions
                 foreach ($deductionsToAttach as $item) {
                     $payroll->deductions()->attach($item['id'], [
                         'total_amount' => $item['total_amount']
                     ]);
                 }
+
+                // Generate payslip PDF and store it
+                $pdfService = new PayslipPdfService();
+                $pdfContent = $pdfService->generate($payroll);  
+                $filename = "{$employee->full_name}_{$period}";
+                $path = self::storePDF($pdfContent, 'payslips', $filename);
+
+                $payroll->update(['payslip_path' => $path]);
+
                 DB::commit();
                 $generated[] = $payroll;
+
             } catch (\Throwable $e) {
                 DB::rollBack();
                 return [
                     'status' => 'fail',
-                    'message' => 'unable to process payroll, please try again...'
+                    'message' => 'Unable to process payroll. Please try again.',
                 ];
             }
+
         }
         return $generated;
     }
