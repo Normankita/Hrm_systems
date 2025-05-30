@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Services;
 
+use App\Http\Utils\Traits\PdfTrait;
 use App\Models\Payroll;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -35,17 +36,7 @@ class PayslipPdfService
         //     ->where('created_at', '<=', $upTo)
         //     ->get();
 
-
-        $pdf = Pdf::loadView('pdfs.samplePdf');
-        $pdf->output();
-
-        $dom_pdf = $pdf->getDomPDF();
-        $canvas = $dom_pdf->get_canvas();
-        $canvas->page_text(500, 800, "Page {PAGE_NUM} of {PAGE_COUNT}", null,
-             10, [0, 0, 0]);
-
-        $filename = 'datedSales_' . time() . '.pdf';
-        return $pdf->download($filename);  // return $pdf->download($filename) if you need to downlaod the pdf
+        return PdfTrait::generatePdf('pdfs.samplePdf');
 
     }
 }
