@@ -27,7 +27,7 @@ trait PdfTrait
 
 
 
-    public static function generatePdf($template, $downlaod = false, $filename = 'default.pdf', $data = [])
+    public static function generatePdf($template, $filename = 'default.pdf', $data = [], $downlaod = false)
     {
         $pdf = Pdf::loadView($template, $data);
         $pdf->output();
