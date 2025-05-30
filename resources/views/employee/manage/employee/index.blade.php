@@ -48,7 +48,7 @@
                                                 @can('edit_employees')
                                                     <x-system.btn-edit :key="$key" :route="route('employee.manage.employees.edit', $employee->id)" />
                                                 @endcan
-                                        </tr>employee.manage.deductions.
+                                        </tr>
                                     @empty
                                         <tr>
                                             <td colspan="10" class="text-center text-muted">No employees found.</td>
