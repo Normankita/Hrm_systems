@@ -132,10 +132,7 @@ class PayrollService
 
                 // Generate payslip PDF and store it
                 $pdfService = new PayslipPdfService();
-                $pdfContent = $pdfService->generate($payroll);  
-                $filename = "{$employee->full_name}_{$period}";
-                $path = self::storePDF($pdfContent, 'payslips', $filename);
-
+                $path = $pdfService->generate($payroll);
                 $payroll->update(['payslip_path' => $path]);
 
                 DB::commit();

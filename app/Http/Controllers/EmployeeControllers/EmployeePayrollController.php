@@ -22,18 +22,11 @@ class EmployeePayrollController extends Controller
     }
     public function generateAll(Request $request)
     {
-
-        // To get the laravel pdf results you should return the
-        // stream received from the PDF facade
         $request = [];
-        return PayslipPdfService::createReport($request);
-
         $payrolls = PayrollService::generatePayrollForAllEmployees();
-        // check of payroll generation returned an error
-        if($payrolls['status'] == 'success') {
+        
         return redirect()->back()->with('success', count($payrolls) . ' payrolls generated.');
-        }
-        return redirect()->back()->with($payrolls['message'], $payrolls['status']);
+        
     }
 
 
