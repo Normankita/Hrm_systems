@@ -22,24 +22,24 @@ class StoreEmployeeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'department_id' => '',
-            'first_name' => '',
-            'last_name' => '',
+            'department_id' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
             'email' => 'unique:users,email',
-            'phone_number' => '',
-            'gender' => '',
-            'date_of_birth' => '',
+            'phone_number' => 'required',
+            'gender' => 'required',
+            'date_of_birth' => 'required',
             'national_id' => 'unique:employees,national_id',
-            'marital_status' => '',
+            'marital_status' => 'required',
             'residential_address' => '',
             'tin_number' => 'unique:employees,tin_number',
-            'employee_type' => '',
-            'date_of_hire' => '',
-            'passport_photo' => '',
-            'tin_document'=>'',
-            'national_id_document'=>'',
-            'cv_document' => '',
-            'certificates.*' => '',
+            'employee_type' => 'required',
+            'date_of_hire' => 'required',
+            'passport_photo' => 'required',
+            'tin_document'=>'required',
+            'national_id_document'=>'required',
+            'cv_document' => 'required',
+            'certificates.*' => 'required',
         ];
     }
 

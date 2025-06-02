@@ -16,7 +16,7 @@
                 @csrf
                 <div class="form-group">
                     <label for="file">Import Employees from Excel</label>
-                    <input type="file" name="file" id="file" class="form-control" required>
+                    <input type="file" name="file" id="file" class="form-control" >
                     @error('file')
                         <div class="alert alert-danger mt-2">{{ $message }}</div>
                     @enderror
@@ -38,7 +38,7 @@
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-account"></span>
                         <input type="text" name="first_name" class="form-control" placeholder="John"
-                            value="{{ old('first_name') }}" required>
+                            value="{{ old('first_name') }}" >
                     </div>
                     @error('first_name')
                         <span class="text-danger d-block">{{ $message }}</span>
@@ -51,7 +51,7 @@
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-account"></span>
                         <input type="text" name="middle_name" class="form-control" placeholder="Smith"
-                            value="{{ old('middle_name') }}" required>
+                            value="{{ old('middle_name') }}" >
                     </div>
                     @error('middle_name')
                         <span class="text-danger d-block">{{ $message }}</span>
@@ -63,7 +63,7 @@
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-account"></span>
                         <input type="text" name="last_name" class="form-control" placeholder="Doe"
-                            value="{{ old('last_name') }}" required>
+                            value="{{ old('last_name') }}" >
                     </div>
                     @error('last_name')
                         <span class="text-danger d-block">{{ $message }}</span>
@@ -75,7 +75,7 @@
                     <label class="text-dark font-weight-medium">Gender</label>
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-gender-male-female"></span>
-                        <select name="gender" class="form-control" required>
+                        <select name="gender" class="form-control" >
                             <option value="" disabled {{ old('gender') ? '' : 'selected' }}>Select Gender
                             </option>
                             <option value="Male" {{ old('gender') == 'Male' ? 'selected' : '' }}>Male</option>
@@ -84,6 +84,9 @@
 
                         </select>
                     </div>
+                    @error('gender')
+                        <span class="text-danger d-block">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 {{-- Date of Birth --}}
@@ -92,7 +95,7 @@
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-calendar"></span>
                         <input type="date" name="date_of_birth" class="form-control"
-                            value="{{ old('date_of_birth') }}" required>
+                            value="{{ old('date_of_birth') }}" >
                     </div>
                     @error('date_of_birth')
                         <span class="text-danger d-block">{{ $message }}</span>
@@ -105,7 +108,7 @@
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-email"></span>
                         <input type="email" name="email" class="form-control" placeholder="john@example.com"
-                            value="{{ old('email') }}" required>
+                            value="{{ old('email') }}" >
                     </div>
                     @error('email')
                         <span class="text-danger d-block">{{ $message }}</span>
@@ -118,7 +121,7 @@
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-phone"></span>
                         <input type="text" name="phone_number" class="form-control" placeholder="+255712345678"
-                            value="{{ old('phone_number') }}" required>
+                            value="{{ old('phone_number') }}" >
                     </div>
                     @error('phone_number')
                         <span class="text-danger d-block">{{ $message }}</span>
@@ -131,7 +134,7 @@
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-card-account-details"></span>
                         <input type="text" name="national_id" class="form-control" placeholder="1234567890123456"
-                            value="{{ old('national_id') }}" required>
+                            value="{{ old('national_id') }}" >
                     </div>
                     @error('national_id')
                         <span class="text-danger d-block">{{ $message }}</span>
@@ -156,7 +159,7 @@
                     <label class="text-dark font-weight-medium">Marital Status</label>
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-heart"></span>
-                            <select name="marital_status" class="form-control" required>
+                            <select name="marital_status" class="form-control" >
                             <option value="" disabled {{ old('marital_status') ? '' : 'selected' }}>Marital
                                 Status
                             </option>
@@ -190,7 +193,7 @@
                     <label class="text-dark font-weight-medium">Employee Type</label>
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-account-box-outline"></span>
-                        <select name="employee_type" class="form-control" required>
+                        <select name="employee_type" class="form-control" >
                             <option value="" disabled {{ old('employee_type') ? '' : 'selected' }}>
                                 Select Type</option>
                             <option value="Permanent" {{ old('employee_type') == 'Permanent' ? 'selected' : '' }}>
@@ -201,6 +204,9 @@
                                 Probation</option>
                         </select>
                     </div>
+                    @error('employee_type')
+                        <span class="text-danger d-block">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 {{-- Date of Hire --}}
@@ -209,7 +215,7 @@
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-calendar-check"></span>
                         <input type="date" name="date_of_hire" class="form-control"
-                            value="{{ old('date_of_hire') }}" required>
+                            value="{{ old('date_of_hire') }}" >
                     </div>
                     @error('date_of_hire')
                         <span class="text-danger d-block">{{ $message }}</span>
@@ -219,7 +225,7 @@
                 {{-- Department --}}
                 <div class="col-md-6 mb-4">
                     <label for="department_id" class="text-dark font-weight-medium">Department</label>
-                    <select name="department_id" id="department_id" class="form-control" required>
+                    <select name="department_id" id="department_id" class="form-control" >
                         <option value="" disabled {{ old('department_id') ? '' : 'selected' }}>-- Select
                             Department --</option>
                         @foreach ($departments as $department)
@@ -229,12 +235,15 @@
                             </option>
                         @endforeach
                     </select>
+                    @error('department_id')
+                        <span class="text-danger d-block">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 {{-- Role --}}
                 <div class="col-md-6 mb-4">
                     <label for="role_id" class="text-dark font-weight-medium">Designation (Role)</label>
-                    <select name="role_id" id="role_id" class="form-control" required>
+                    <select name="role_id" id="role_id" class="form-control" >
                         <option value="" disabled {{ old('role_id') ? '' : 'selected' }}>Select
                             designation</option>
                         @foreach ($roles as $role)
@@ -250,11 +259,14 @@
                             </option>
                         @endforeach
                     </select>
+                    @error('role_id')
+                        <span class="text-danger d-block">{{ $message }}</span>
+                    @enderror
                 </div>
                                                 {{-- Pay Grade --}}
                 <div class="col-md-6 mb-4">
                     <label for="pay_grade_id" class="text-dark font-weight-medium">PayGrade</label>
-                    <select name="pay_grade_id" id="pay_grade_id" class="form-control" required>
+                    <select name="pay_grade_id" id="pay_grade_id" class="form-control" >
                         <option value="" disabled {{ old('pay_grade_id') ? '' : 'selected' }}>Select
                             PayGrade</option>
                         @foreach ($pay_grades as $pay_grade)
@@ -263,6 +275,9 @@
                             </option>
                         @endforeach
                     </select>
+                    @error('pay_grade_id')
+                        <span class="text-danger d-block">{{ $message }}</span>
+                    @enderror
                 </div>
                                 {{-- Salary --}}
                 <div class="col-md-6 mb-4">
