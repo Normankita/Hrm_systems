@@ -2,15 +2,18 @@
 
 namespace App\Http\Services;
 
+use App\Http\Utils\Traits\PdfTrait;
 use App\Models\Contribution;
 use App\Models\Employee;
 use App\Models\Payroll;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Log;
 
 class PayrollService
 {
+    use PdfTrait;
+
+
     /**
      * Generate payrolls for all employees.
      *
@@ -26,14 +29,15 @@ class PayrollService
             'pay_grades' => fn($q) => $q->wherePivot('status', true),
             'deductions'
         ])->get();
-
         $generated = self::processPayroll($force, $employees);
 
         return $generated;
     }
 
-    public static function generatePayrollForSelectedEmployees(bool $force = false, $employeesIds = []): array
-    {
+    public static function generatePayrollForSelectedEmployees(
+        bool $force = false,
+        $employeesIds = []
+    ): array {
         $employees = Employee::whereIn('id', $employeesIds)->get();
         $generated = self::processPayroll($force, $employees);
         return $generated;
@@ -56,9 +60,7 @@ class PayrollService
             }
 
             // Determine base salary
-            $basic = $activePayGrade->pivot->base_salary_override > 0
-                ? $activePayGrade->pivot->base_salary_override
-                : $activePayGrade->base_salary;
+            $basic = $employee->getBaseSalary();
 
             $allowances = 0;
 
@@ -105,7 +107,6 @@ class PayrollService
             DB::beginTransaction();
 
             try {
-                // Create payroll record
                 $payroll = Payroll::create([
                     'employee_id' => $employee->id,
                     'pay_grade_id' => $activePayGrade->id,
@@ -122,21 +123,28 @@ class PayrollService
                     'sdl' => $sdl,
                     'wcf' => $wcf,
                 ]);
-
-                // Attach deductions
                 foreach ($deductionsToAttach as $item) {
                     $payroll->deductions()->attach($item['id'], [
                         'total_amount' => $item['total_amount']
                     ]);
                 }
 
+                // Generate payslip PDF and store it
+                $pdfService = new PayslipPdfService();
+                $path = $pdfService->generate($payroll);
+                $payroll->update(['payslip_path' => $path]);
+
                 DB::commit();
                 $generated[] = $payroll;
+
             } catch (\Throwable $e) {
                 DB::rollBack();
-
-                Log::error('Payroll generation failed', ['employee_id' => $employee->id, 'error' => $e->getMessage()]);
+                return [
+                    'status' => 'fail',
+                    'message' => 'Unable to process payroll. Please try again.',
+                ];
             }
+
         }
         return $generated;
     }

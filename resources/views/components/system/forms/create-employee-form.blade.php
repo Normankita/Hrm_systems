@@ -1,4 +1,4 @@
-@props(['route'])
+@props(['prefix'])
 
 @php
     $departments= App\Models\Department::all();
@@ -9,7 +9,25 @@
 
 <div class="card">
     <div class="card-body p-30">
-        <form action="{{ route($route) }}" method="POST"
+        <div>
+        <form action="{{ route($prefix.'excel.import') }}"
+             method="POST" enctype="multipart/form-data">
+            <div>
+                @csrf
+                <div class="form-group">
+                    <label for="file">Import Employees from Excel</label>
+                    <input type="file" name="file" id="file" class="form-control" required>
+                    @error('file')
+                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Import</button>
+                </div>
+            </div>
+        </form>
+    </div>
+        <form action="{{ route($prefix.'store') }}" method="POST"
          enctype="multipart/form-data">
             @csrf
             <div class="row">

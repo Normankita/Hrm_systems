@@ -79,10 +79,12 @@ class Employee extends Model
         return $this->hasMany(EmployeeDocument::class);
     }
 
+
     public function leaves()
     {
         return $this->hasMany(Leave::class);
     }
+
 
     public function attachments()
     {
@@ -91,10 +93,14 @@ class Employee extends Model
             'attachmentable'
         );
     }
+
+
     public function payrolls()
     {
         return $this->hasMany(Payroll::class);
     }
+
+
     public function deductions()
     {
         return $this->hasMany(Deduction::class);
@@ -102,7 +108,40 @@ class Employee extends Model
 
 
 
-        /**
+    public function getActivePayGrade()
+    {
+        $payGrades = $this->pay_grades()->latest()->get();
+        $activeGrade = $this->pay_grades()->where(
+            'status',
+            operator: true
+        )->first();
+        foreach ($payGrades as $payGrade) {
+            if ($payGrade->pivot->effective_from <= Carbon::now()) {
+                // Set the previous paygrade as inactive
+                $activeGrade->pivot->status = false;
+                $activeGrade->save();
+                // Set the current paygrade as active
+                $payGrade->pivot->status = true;
+                $payGrade->save();
+                return $payGrade;
+            }
+        }
+        return $activeGrade;
+    }
+
+
+    /**
+     * Summary of getBaseSalary
+     */
+    public function getBaseSalary()
+    {
+        $activePayGrade = $this->getActivePayGrade();
+        return $activePayGrade->pivot->base_salary_override > 0
+            ? $activePayGrade->pivot->base_salary_override
+            : $activePayGrade->base_salary;
+    }
+
+    /**
      * Summary of getsSpentLeaves
      * getting the leaves that the employee has taken
      * @param mixed $employee
@@ -121,6 +160,9 @@ class Employee extends Model
 
     public function pay_grades()
     {
-        return $this->belongsToMany(PayGrade::class)->withPivot(['status', 'assigned_by', 'effective_from', 'base_salary_override'])->withTimestamps();
+        return $this->belongsToMany(PayGrade::class)
+            ->withPivot(['status', 'assigned_by', 'effective_from', 'base_salary_override'])->withTimestamps();
     }
+
+    
 }

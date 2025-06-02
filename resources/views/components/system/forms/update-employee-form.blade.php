@@ -1,9 +1,9 @@
-@props(['employee','route', 'internal_route'])
+@props(['employee', 'route', 'internal_route'])
 
 @php
-$departments= App\Models\Department::all();
-$roles = App\Models\Role::where('name', '!=', 'ADMIN')->get();
-$pay_grades = App\Models\PayGrade::all();
+    $departments = App\Models\Department::all();
+    $roles = App\Models\Role::where('name', '!=', 'ADMIN')->get();
+    $pay_grades = App\Models\PayGrade::all();
 @endphp
 
 <div class="card">
@@ -116,10 +116,12 @@ $pay_grades = App\Models\PayGrade::all();
                             <option value="" disabled>Marital
                                 Status
                             </option>
-                            <option value="Married" {{ old('marital_status') == 'Married' ? 'selected' : '' }}>Married
+                            <option value="Single" {{ $employee->marital_status == 'Single' ? 'selected' : '' }}>Single
                             </option>
-                            <option value="Single" {{ old('marital_status') == 'Single' ? 'selected' : '' }}>Single
+                            <option value="Married" {{ $employee->marital_status == 'Married' ? 'selected' : '' }}>
+                                Married
                             </option>
+
 
                         </select>
                     </div>
@@ -190,38 +192,41 @@ $pay_grades = App\Models\PayGrade::all();
                         @endforeach
                     </select>
                 </div>
-                                                                {{-- Pay Grade --}}
+                {{-- Pay Grade --}}
                 <div class="col-md-3 mb-4">
                     <label for="pay_grade_id" class="text-dark font-weight-medium">PayGrade</label>
                     <select name="pay_grade_id" id="pay_grade_id" class="form-control">
                         <option value="" disabled {{ old('pay_grade_id') ? '' : 'selected' }}>Select
                             PayGrade</option>
                         @foreach ($pay_grades as $pay_grade)
-                            <option value="{{ $pay_grade->id }}" {{ old('pay_grade_id') == $pay_grade->id ? 'selected' : '' }}>
+                            <option value="{{ $pay_grade->id }}"
+                                {{ $employee->getActivePaygrade()->id == $pay_grade->id ? 'selected' : '' }}>
                                 {{ $pay_grade->name }}
                             </option>
                         @endforeach
                     </select>
                 </div>
-                                {{-- Effective from date --}}
+                {{-- Effective from date --}}
                 <div class="col-md-3 mb-4">
                     <label class="text-dark font-weight-medium">Effective From</label>
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-calendar"></span>
                         <input type="date" name="effective_from" class="form-control"
-                            value="{{ old('effective_from') }}">
+                            value="{{ Carbon\Carbon::parse($employee->getActivePaygrade()->pivot->effective_from)->format('Y-m-d') }}">
                     </div>
                     @error('effective_from')
                         <span class="text-danger d-block">{{ $message }}</span>
                     @enderror
                 </div>
-                                {{-- Salary --}}
+                {{-- Salary --}}
                 <div class="col-md-6 mb-4">
-                    <label class="text-dark font-weight-medium">Base Salary Override  <span class="text-muted font-weight-lighter text-sm">(optional)</span> </label>
+                    <label class="text-dark font-weight-medium">Base Salary Override <span
+                            class="text-muted font-weight-lighter text-sm">(optional)</span> </label>
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-cash-multiple"></span>
                         <input type="number" name="base_salary_override" class="form-control"
-                            placeholder="e.g., 1200000" value="{{ old('base_salary_override') }}">>
+                            placeholder="e.g., 1200000"
+                            value="{{ App\Http\Utils\Helpers::currencyFormat($employee->getActivePaygrade()->pivot->base_salary_override) }}">>
                     </div>
                     @error('base_salary_override')
                         <span class="text-danger d-block">{{ $message }}</span>
