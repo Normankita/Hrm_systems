@@ -83,7 +83,7 @@
                 <td><strong>Name:</strong></td>
                 <td>{{ $payroll->employee->full_name }}</td>
                 <td><strong>Employee ID:</strong></td>
-                <td>{{ $payroll->employee->employee_no }}</td>
+                <td>{{ $payroll->employee->employee_id }}</td>
             </tr>
             <tr>
                 <td><strong>Designation:</strong></td>
