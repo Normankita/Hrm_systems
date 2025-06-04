@@ -33,13 +33,13 @@ class StoreEmployeeRequest extends FormRequest
             'marital_status' => 'required',
             'residential_address' => '',
             'tin_number' => 'unique:employees,tin_number',
-            'employee_type' => 'required',
-            'date_of_hire' => 'required',
-            'passport_photo' => 'required',
-            'tin_document'=>'required',
-            'national_id_document'=>'required',
-            'cv_document' => 'required',
-            'certificates.*' => 'required',
+            'employee_type' => 'required|date',
+            'date_of_hire' => 'required|date',
+            'passport_photo' => '',
+            'tin_document'=>'',
+            'national_id_document'=>'',
+            'cv_document' => '',
+            'certificates.*' => '',
         ];
     }
 

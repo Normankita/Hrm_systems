@@ -83,13 +83,13 @@
                 <td><strong>Name:</strong></td>
                 <td>{{ $payroll->employee->full_name }}</td>
                 <td><strong>Employee ID:</strong></td>
-                <td>{{ $payroll->employee->employee_id }}</td>
+                <td>{{ $payroll->employee_id }}</td>
             </tr>
             <tr>
                 <td><strong>Designation:</strong></td>
-                <td>{{ $payroll->employee->designation->name ?? '-' }}</td>
+                <td>{{ $payroll->employee->user->roles->where('name', '!=', 'EMPLOYEE')->first()->name??'No Role' }}</td>
                 <td><strong>Pay Grade:</strong></td>
-                <td>{{ $payroll->payGrade->name ?? '-' }}</td>
+                <td>{{ $payroll->employee->pay_grades->where('pivot.status', true)->first()?->name ?? 'No Active Paygrade' }}</td>
             </tr>
         </table>
 
