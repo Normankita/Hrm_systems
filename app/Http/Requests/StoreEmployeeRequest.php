@@ -33,7 +33,7 @@ class StoreEmployeeRequest extends FormRequest
             'marital_status' => 'required',
             'residential_address' => '',
             'tin_number' => 'unique:employees,tin_number',
-            'employee_type' => 'required|date',
+            'employee_type' => 'required',
             'date_of_hire' => 'required|date',
             'passport_photo' => '',
             'tin_document'=>'',

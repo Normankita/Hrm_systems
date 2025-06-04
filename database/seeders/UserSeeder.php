@@ -59,7 +59,7 @@ class UserSeeder extends Seeder
 
         // 5. Create Employee user
         $emp = User::create([
-            'name' => 'john mafongo',
+            'name' => 'john mafongo Sample',
             'company_id' => $company->id,
             'email' => 'john@example.com',
             'password' => Hash::make('password'),
@@ -72,20 +72,25 @@ class UserSeeder extends Seeder
             'user_id' => $emp->id,
             'company_id' => $company->id,
             'department_id' => $department->id,
-            'full_name' => 'employee User Mkota',
+            'full_name' => $emp->name,
             'gender' => 'male',
             'date_of_birth' => '1990-01-01',
             'phone_number' => '1234567890',
-            'email' => 'john@gmail.co',
+            'email' => $emp->email,
             'national_id' => '123456789',
             'marital_status' => 'Single',
             'residential_address' => '123 Main St',
             'tin_number' => '123456789',
-            'employee_type' => 'Permanent',
+            'employee_type' => 'permanent',
             'date_of_hire' => now(),
             'salary' => 50000,
             'profile_picture' => '',
         ]);
+        $employee->pay_grades()->attach($payGrade->id, [
+                    'assigned_by' => $emp->id,
+                    'effective_from' =>now(),
+                    'base_salary_override' => $employee->salary,
+                ]);
 
 
         // 8. Seed statutory contributions
