@@ -26,12 +26,16 @@ trait PdfTrait
     }
 
 
-
-    public static function generatePdf($template, $filename = 'default.pdf', $data = [], $downlaod = false)
-    {
+    public static function printPdf(
+        $template,
+        $data = [],
+        $filename = "default",
+        $download = false,
+        $saveToStorage = false
+    ) {
         $pdf = Pdf::loadView($template, $data);
-        $pdf->output();
 
+        // Add page numbers
         $dom_pdf = $pdf->getDomPDF();
         $canvas = $dom_pdf->get_canvas();
         $canvas->page_text(
@@ -42,13 +46,27 @@ trait PdfTrait
             10,
             [0, 0, 0]
         );
-        $filename = $filename . time() . '.pdf';
 
-        if ($downlaod) {
-            return $pdf->download($filename);
+        $timestampedFilename = $filename . '_' . time() . '.pdf';
+
+        // Store to local storage
+        if ($saveToStorage) {
+            if ($saveToStorage === true) {
+                $saveToStorage = '';
+            }
+            try {
+                Storage::disk('public')->put('pdfs/' . $saveToStorage . '/' . $timestampedFilename, $pdf->output());
+            } catch (\Exception $e) {
+                throw new \Exception($e->getMessage());
+            }
         }
-        return $pdf->stream($filename);
 
+        // Download or stream
+        if ($download) {
+            return $pdf->download($timestampedFilename);
+        }
+
+        return $pdf->stream($timestampedFilename);
     }
 }
 

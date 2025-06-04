@@ -36,7 +36,9 @@ class PayslipPdfService
         //     ->where('created_at', '<=', $upTo)
         //     ->get();
 
-        return PdfTrait::generatePdf('pdfs.samplePdf');
+        // return PdfTrait::printPdf(
+        //     'pdfs.samplePdf'
+        // );
 
     }
 }
