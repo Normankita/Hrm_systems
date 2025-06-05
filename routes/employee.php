@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\EmployeeControllers\EmployeeDeductionController;
 use App\Http\Controllers\EmployeeControllers\EmployeeLeaveController;
+use App\Http\Controllers\EmployeeControllers\EmployeeManageAllowancesController;
 use App\Http\Controllers\EmployeeControllers\EmployeeManageEmployeeController;
 use App\Http\Controllers\EmployeeControllers\EmployeeManageLeavesController;
 use App\Http\Controllers\EmployeeControllers\EmployeeManageLeaveTypeController;
@@ -60,6 +61,23 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::get('/index', 'index')->name('index')->middleware(['can:view_leave_requests']);
         Route::post('/inspect/{leave}', 'inspect')->name('inspect')->middleware(['can:respond_leave_request']);
     });
+
+
+// Managin Allowances
+
+Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
+    ->prefix('employee/manage/allowance')
+    ->controller(EmployeeManageAllowancesController::class)
+    ->name('employee.manage.allowances.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index')->middleware(['can:view_allowances']);
+        Route::get('/create', 'create')->name('create')->middleware(['can:create_allowances']);
+        Route::post('/store', 'store')->name('store')->middleware(['can:create_allowances']);
+        Route::get('/{allowance}/edit', 'edit')->name('edit')->middleware(['can:edit_allowances']);
+        Route::put('/{allowance}', 'update')->name('update')->middleware(['can:edit_allowances']);
+        Route::delete('/{allowance}', 'destroy')->name('destroy')->middleware(['can:delete_allowances']);
+    });
+
 
 // Leave Types
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])

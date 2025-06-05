@@ -53,6 +53,37 @@
                     </li>
                 @endif
 
+                {{-- Begins Allowances --}}
+                @canany(['view_allowances', 'create_allowances'])
+                    <li class="has-sub">
+                        <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                            data-target="#allowance-menu" aria-expanded="false" aria-controls="allowance-menu">
+                            <i class="mdi mdi-cash-register"></i>
+                            <span class="nav-text">Manage allowances</span>
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="collapse" id="allowance-menu" data-parent="#sidebar-menu">
+                            <div class="sub-menu">
+                                @can('create_allowances')
+                                   <li>
+                                        <a class="sidenav-item-link" href="{{ route('employee.manage.allowances.create') }}">
+                                            <span class="nav-text">Create allowances</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('view_allowances')
+                                    <li>
+                                        <a class="sidenav-item-link" href="{{ route('employee.manage.allowances.index') }}">
+                                            <span class="nav-text">View allowances</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                            </div>
+
+                        </ul>
+                    </li>
+                @endcanany
+
                 {{-- Begins Payroll --}}
                 @canany(['view_payroll', 'create_payroll'])
                     <li class="has-sub">

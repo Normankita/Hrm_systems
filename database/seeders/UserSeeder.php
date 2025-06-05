@@ -87,7 +87,7 @@ class UserSeeder extends Seeder
             'profile_picture' => '',
         ]);
         $employee->pay_grades()->attach($payGrade->id, [
-                    'assigned_by' => $emp->id,
+                    'assigned_by' => $admin->id,
                     'effective_from' =>now(),
                     'base_salary_override' => $employee->salary,
                 ]);

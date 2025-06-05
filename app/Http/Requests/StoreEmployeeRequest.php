@@ -35,6 +35,7 @@ class StoreEmployeeRequest extends FormRequest
             'tin_number' => 'unique:employees,tin_number',
             'employee_type' => 'required',
             'date_of_hire' => 'required|date',
+            'pay_grade_id'=>'required',
             'passport_photo' => '',
             'tin_document'=>'',
             'national_id_document'=>'',
