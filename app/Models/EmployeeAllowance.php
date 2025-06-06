@@ -23,8 +23,14 @@ class EmployeeAllowance extends Model
         return $this->belongsTo(Employee::class);
     }
 
+
     public function allowance()
     {
         return $this->belongsTo(Allowance::class);
     }
+    public function payrolls()
+    {
+        return $this->belongsToMany(Payroll::class, 'employee_allowance_payroll');
+    }
+
 }

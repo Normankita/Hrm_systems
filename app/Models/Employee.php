@@ -165,10 +165,12 @@ class Employee extends Model
     }
 
     public function allowances()
-{
-    return $this->belongsToMany(Allowance::class, 'employee_allowance')
-        ->withPivot(['amount', 'effective_from', 'effective_to', 'frequency', 'status'])
-        ->withTimestamps();
-}
-    
+    {
+        return $this->belongsToMany(Allowance::class, 'employee_allowance')
+            ->withPivot(['amount', 'effective_from', 'effective_to', 'frequency', 'status'])
+            ->withTimestamps();
+    }
+
+
+
 }
