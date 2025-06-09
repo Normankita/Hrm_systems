@@ -1,17 +1,18 @@
 <?php
 
-use App\Http\Controllers\EmployeeControllers\EmployeeDeductionController;
 use App\Http\Controllers\EmployeeControllers\EmployeeLeaveController;
+use App\Http\Controllers\EmployeeControllers\EmployeeManageAllowancesController;
+use App\Http\Controllers\EmployeeControllers\EmployeeManageDeductionController;
+use App\Http\Controllers\EmployeeControllers\EmployeeManageEmployeeAllowancesController;
 use App\Http\Controllers\EmployeeControllers\EmployeeManageEmployeeController;
 use App\Http\Controllers\EmployeeControllers\EmployeeManageLeavesController;
 use App\Http\Controllers\EmployeeControllers\EmployeeManageLeaveTypeController;
 use App\Http\Controllers\EmployeeControllers\EmployeeManagePayrollController;
 use App\Http\Controllers\EmployeeControllers\EmployeeManagePayrollEmployeeController;
-use App\Http\Controllers\EmployeeControllers\EmployeeManagePayrollPayGradeController;
-use App\Http\Controllers\EmployeeControllers\EmployeePayGradeController;
 use App\Http\Controllers\EmployeeControllers\EmployeePayrollController;
 use App\Http\Controllers\EmployeeControllers\EmployeeProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EmployeeControllers\EmployeePayGradeController;
 
 // Leave Request Routes
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
@@ -61,6 +62,40 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::post('/inspect/{leave}', 'inspect')->name('inspect')->middleware(['can:respond_leave_request']);
     });
 
+
+// Managin Allowances
+
+Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
+    ->prefix('employee/manage/allowance')
+    ->controller(EmployeeManageAllowancesController::class)
+    ->name('employee.manage.allowances.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index')->middleware(['can:view_allowances']);
+        Route::get('/create', 'create')->name('create')->middleware(['can:create_allowances']);
+        Route::post('/store', 'store')->name('store')->middleware(['can:create_allowances']);
+        Route::get('/{allowance}/edit', 'edit')->name('edit')->middleware(['can:edit_allowances']);
+        Route::put('/{allowance}', 'update')->name('update')->middleware(['can:edit_allowances']);
+        Route::delete('/{allowance}', 'destroy')->name('destroy')->middleware(['can:delete_allowances']);
+    });
+
+
+// Employee Allowances Start here
+
+Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
+    ->prefix('employee/manage/{employee}/allowances')
+    ->controller(EmployeeManageEmployeeAllowancesController::class)
+    ->name('employee.manage.employee.allowances.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index')->middleware('can:view_allowances');
+        Route::get('/create', 'create')->name('create')->middleware('can:create_allowances');
+        Route::post('/', 'store')->name('store')->middleware('can:create_allowances');
+        Route::get('/{allowance_id}/edit', 'edit')->name('edit')->middleware('can:edit_allowances');
+        Route::put('/{allowance_id}', 'update')->name('update')->middleware('can:edit_allowances');
+        Route::delete('/{allowance_id}', 'destroy')->name('destroy')->middleware('can:delete_allowances');
+        Route::put('{allowance}/toggle-status', 'toggleStatus')->name('toggleStatus')->middleware(['can:edit_allowances']);
+    });
+
+
 // Leave Types
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('employee/manage/leave/type')
@@ -100,7 +135,7 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::put('/{payroll}', 'update')->name('update')->middleware(['can:edit_payroll']);
         Route::post('/generate', 'generateForSelected')->name('generateSelected')->middleware(['can:create_payroll']);
         Route::delete('/{payroll}', 'destroy')->name('destroy')->middleware(['can:delete_payroll']);
-        Route::get('/{payroll}', 'show')->name('show')->middleware(['can:view_payroll']); 
+        Route::get('/{payroll}', 'show')->name('show')->middleware(['can:view_payroll']);
     });
 
 // (Optional) Employee Management Routes if you plan to use them
@@ -127,7 +162,7 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
 
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('employee/manage/{employee}/deductions')
-    ->controller(EmployeeDeductionController::class)
+    ->controller(EmployeeManageDeductionController::class)
     ->name('employee.manage.deductions.')
     ->group(function () {
         Route::get('/', 'index')->name('index')->middleware(['can:view_deductions']);                     // List deductions for employee

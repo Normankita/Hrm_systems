@@ -105,6 +105,7 @@ class AdminEmployeeController extends Controller
 
         $roles = Role::where('name', '!=', 'ADMIN')->get();
         $pay_grades = PayGrade::all();
+        // dd($pay_grades);
 
         return view('admin.employee.edit', compact('employee', 'roles', 'pay_grades'));
     }

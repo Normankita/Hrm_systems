@@ -247,7 +247,7 @@
                             PayGrade</option>
                         @foreach ($pay_grades as $pay_grade)
                             <option value="{{ $pay_grade->id }}"
-                                {{ $employee->getActivePaygrade()->id == $pay_grade->id ? 'selected' : '' }}>
+                                {{ ($employee->getActivePaygrade()->id == $pay_grade->id ? 'selected' : '') }}>
                                 {{ $pay_grade->name }}
                             </option>
                         @endforeach

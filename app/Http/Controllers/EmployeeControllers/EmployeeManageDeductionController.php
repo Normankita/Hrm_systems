@@ -8,7 +8,7 @@ use App\Models\Deduction;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 
-class EmployeeDeductionController extends Controller
+class EmployeeManageDeductionController extends Controller
 
 {
     public function __construct(private DeductionService $DeductionService)
@@ -21,11 +21,6 @@ class EmployeeDeductionController extends Controller
         return view('employee.manage.employee.deductions', compact('employee', 'deductions'));
     }
 
-    // Show form to create deduction for a given employee
-    public function create(Employee $employee)
-    {
-        return view('hr.deductions.create', compact('employee'));
-    }
 
     // Store a deduction for the given employee
 public function store(Request $request, Employee $employee)

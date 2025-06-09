@@ -5,6 +5,7 @@ namespace App\Http\Services;
 use App\Http\Utils\Traits\PdfTrait;
 use App\Models\Contribution;
 use App\Models\Employee;
+use App\Models\EmployeeAllowance;
 use App\Models\Payroll;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -13,58 +14,74 @@ class PayrollService
 {
     use PdfTrait;
 
-
-    /**
-     * Generate payrolls for all employees.
-     *
-     * @param bool $force If true, existing payrolls for the current period will be deleted and regenerated.
-     * @return array List of generated payrolls
-     */
     public static function generatePayrollForAllEmployees(bool $force = false): array
     {
-
-
-        // Fetch employees with active pay grades and deductions
         $employees = Employee::with([
             'pay_grades' => fn($q) => $q->wherePivot('status', true),
-            'deductions'
+            'deductions',
+            'allowances' // eager load with pivot
         ])->get();
-        $generated = self::processPayroll($force, $employees);
 
-        return $generated;
+        return self::processPayroll($force, $employees);
     }
 
-    public static function generatePayrollForSelectedEmployees(
-        bool $force = false,
-        $employeesIds = []
-    ): array {
-        $employees = Employee::whereIn('id', $employeesIds)->get();
-        $generated = self::processPayroll($force, $employees);
-        return $generated;
+    public static function generatePayrollForSelectedEmployees(bool $force = false, $employeeIds = []): array
+    {
+        $employees = Employee::with([
+            'pay_grades' => fn($q) => $q->wherePivot('status', true),
+            'deductions',
+            'allowances'
+        ])->whereIn('id', $employeeIds)->get();
+
+        return self::processPayroll($force, $employees);
     }
 
     public static function processPayroll(bool $force = false, $employees = []): array
     {
         $today = Carbon::today();
         $period = $today->format('Y-m');
+        $todayDate = $today->format('Y-m-d');
 
-        // Load statutory contribution rates
         $contributions = Contribution::pluck('percent', 'name');
         $generated = [];
 
         foreach ($employees as $employee) {
             $activePayGrade = $employee->pay_grades->first();
 
-            if (!$activePayGrade) {
+            if (!$activePayGrade)
                 continue;
-            }
 
-            // Determine base salary
             $basic = $employee->getBaseSalary();
 
-            $allowances = 0;
+            // Fetch valid employee allowances
+            $employeeAllowances = $employee->allowances()
+                ->wherePivot('status', true)
+                ->wherePivot('effective_from', '<=', $todayDate)
+                ->wherePivot('effective_to', '>=', $todayDate)
+                ->get();
+            $employeeAllowancesTotal = 0;
+            $allowancesToAttach = [];
 
-            // Handle regeneration: delete existing payroll if $force = true
+            foreach ($employeeAllowances as $allowance) {
+                $employeeAllowancesTotal += $allowance->pivot->amount;
+
+                // Fetch the actual pivot row ID (EmployeeAllowance)
+                $employeeAllowance = EmployeeAllowance::where('employee_id', $employee->id)
+                    ->where('allowance_id', $allowance->id)
+                    ->where('status', true)
+                    ->where('effective_from', '<=', $todayDate)
+                    ->where('effective_to', '>=', $todayDate)
+                    ->first();
+
+                if ($employeeAllowance) {
+                    $allowancesToAttach[] = [
+                        'employee_allowance_id' => $employeeAllowance->id,
+                        'amount' => $allowance->pivot->amount,
+                    ];
+                }
+            }
+
+            // Handle regeneration
             if ($force) {
                 Payroll::where('employee_id', $employee->id)->where('period', $period)->delete();
             } else {
@@ -73,7 +90,7 @@ class PayrollService
                 }
             }
 
-            // Calculate statutory deductions
+            // Statutory deductions
             $paye = $basic * ($contributions['PAYE'] ?? 0) / 100;
             $nssf = $basic * ($contributions['NSSF'] ?? 0) / 100;
             $psssf = $basic * ($contributions['PSSSF'] ?? 0) / 100;
@@ -82,14 +99,12 @@ class PayrollService
 
             $statutory = $paye + $nssf + $psssf + $sdl + $wcf;
 
-            // Handle custom deductions (e.g. loans)
+            // Custom deductions (e.g., loans)
             $customDeductions = 0;
             $deductionsToAttach = [];
 
             foreach ($employee->deductions as $deduction) {
-                $appliedCount = $deduction->payrolls()
-                    ->wherePivot('deduction_id', $deduction->id)
-                    ->count();
+                $appliedCount = $deduction->payrolls()->wherePivot('deduction_id', $deduction->id)->count();
 
                 if ($appliedCount < $deduction->installments) {
                     $customDeductions += $deduction->installment_amount;
@@ -101,11 +116,10 @@ class PayrollService
             }
 
             $totalDeductions = $statutory + $customDeductions;
-            $gross = $basic + $allowances;
+            $gross = $basic + $employeeAllowancesTotal;
             $net = $gross - $totalDeductions;
 
             DB::beginTransaction();
-
             try {
                 $payroll = Payroll::create([
                     'employee_id' => $employee->id,
@@ -113,7 +127,7 @@ class PayrollService
                     'payroll_date' => $today,
                     'period' => $period,
                     'basic_salary' => $basic,
-                    'allowances' => $allowances,
+                    'allowances' => $employeeAllowancesTotal,
                     'deductions' => $customDeductions,
                     'gross_salary' => $gross,
                     'net_salary' => $net,
@@ -129,23 +143,32 @@ class PayrollService
                     ]);
                 }
 
-                // Generate payslip PDF and store it
+                // bad zone where allowances in payroll are set to zero
+
+                foreach ($allowancesToAttach as $item) {
+                    $payroll->employeeAllowances()->attach($item['employee_allowance_id'], [
+                        'amount' => $item['amount']
+                    ]);
+                }
+
+                // ends here
+
                 $pdfService = new PayslipPdfService();
+
                 $path = $pdfService->generate($payroll);
                 $payroll->update(['payslip_path' => $path]);
 
                 DB::commit();
                 $generated[] = $payroll;
-
             } catch (\Throwable $e) {
-                DB::rollBack();
-                return [
-                    'status' => 'fail',
-                    'message' => 'Unable to process payroll. Please try again.',
-                ];
-            }
 
+                dd($e);
+                DB::rollBack();
+                // optionally log the error: \Log::error($e);
+                continue;
+            }
         }
+
         return $generated;
     }
 }

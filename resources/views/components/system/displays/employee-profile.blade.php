@@ -70,7 +70,7 @@
                 <div>
                     <h2 class="mb-0">{{ $employee->full_name }}</h2>
                     <span class="lead">Registered AS: <b>
-                            {{ $employee->user->roles->where('name', '!=', 'EMPLOYEE')->first()->name??'No Role' }}
+                            {{ $employee->user->roles->where('name', '!=', 'EMPLOYEE')->first()->name ?? 'No Role' }}
                         </b></span>
                     <p class="text-muted"><span>{{ $employee->employee_type }}</span><span> | </span>
                         <span>
@@ -81,84 +81,84 @@
                     {{-- Profile Image Update (ADMIN, HR_OFFICER) --}}
                     @can('edit_own_employees')
                         @hasrole('EMPLOYEE')
-                        <x-system.modal-button class="btn btn-primary btn-custom me-2" data-bs-toggle="modal"
-                            id="UpdateProfilePhoto" text="Update Profile Image" />
+                            <x-system.modal-button class="btn btn-primary btn-custom me-2" data-bs-toggle="modal"
+                                id="UpdateProfilePhoto" text="Update Profile Image" />
 
-                        <x-system.modal id="UpdateProfilePhoto" form="updateProfilePhotoForm" title="New Profile photo">
-                            <form action="{{ route($prefix . '.updateProfilePhoto', $employee->id) }}"
-                                id="updateProfilePhotoForm" enctype="multipart/form-data" method="POST">
-                                @csrf
-                                <div class="form-group">
-                                    <div class="col-md-12 mb-4">
-                                        <x-system.form-inputs.file-upload name="profile_picture" label="Profile Picture"
-                                            accept="image/jpeg,image/png,image/jpg" maxSize="2" icon="mdi-camera"
-                                            col="12" required />
+                            <x-system.modal id="UpdateProfilePhoto" form="updateProfilePhotoForm" title="New Profile photo">
+                                <form action="{{ route($prefix . '.updateProfilePhoto', $employee->id) }}"
+                                    id="updateProfilePhotoForm" enctype="multipart/form-data" method="POST">
+                                    @csrf
+                                    <div class="form-group">
+                                        <div class="col-md-12 mb-4">
+                                            <x-system.form-inputs.file-upload name="profile_picture" label="Profile Picture"
+                                                accept="image/jpeg,image/png,image/jpg" maxSize="2" icon="mdi-camera"
+                                                col="12" required />
+                                        </div>
                                     </div>
-                                </div>
-                            </form>
-                        </x-system.modal>
+                                </form>
+                            </x-system.modal>
                         @endhasanyrole
                     @endcan
 
                     {{-- PayGrade Update (PAYROLL_MANAGER) --}}
                     @can('edit_paygrade')
                         @hasrole('EMPLOYEE')
-                        <x-system.modal-button class="btn btn-primary btn-custom me-2" data-bs-toggle="modal"
-                            id="UpdatePayGrade" text="Update PayGrade" />
+                            <x-system.modal-button class="btn btn-primary btn-custom me-2" data-bs-toggle="modal"
+                                id="UpdatePayGrade" text="Update PayGrade" />
 
-                        <x-system.modal id="UpdatePayGrade" form="UpdatePayGradeForm" title="Update PayGrade">
-                            <form action="{{ route('employee.manage.employees.UpdatePayGrade', $employee) }}"
-                                id="UpdatePayGradeForm" enctype="multipart/form-data" method="POST">
+                            <x-system.modal id="UpdatePayGrade" form="UpdatePayGradeForm" title="Update PayGrade">
+                                <form action="{{ route('employee.manage.employees.UpdatePayGrade', $employee) }}"
+                                    id="UpdatePayGradeForm" enctype="multipart/form-data" method="POST">
 
-                                @csrf
-                                @method('PATCH')
+                                    @csrf
+                                    @method('PATCH')
 
-                                <div class="form-group row">
-                                    <div class="col-md-6 mb-4">
-                                        <label for="pay_grade_id" class="text-dark font-weight-medium">PayGrade</label>
-                                        <select name="pay_grade_id" id="pay_grade_id" class="form-control" required>
-                                            <option value="" disabled
-                                                {{ !old('pay_grade_id') && !optional($employee->pay_grades->firstWhere('pivot.status', true)) ? 'selected' : '' }}>
-                                                Select PayGrade</option>
-                                            @foreach ($pay_grades as $pay_grade)
-                                                <option value="{{ $pay_grade->id }}"
-                                                    {{ old('pay_grade_id', optional($employee->pay_grades->firstWhere('pivot.status', true))->id) == $pay_grade->id ? 'selected' : '' }}>
-                                                    {{ $pay_grade->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    {{-- Effective from date --}}
-                                    <div class="col-md-6 mb-4">
-                                        <label class="text-dark font-weight-medium">Effective From</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text mdi mdi-calendar"></span>
-                                            <input type="date" name="effective_from" class="form-control"
-                                                value="{{ old('effective_from', optional($employee->pay_grades->firstWhere('pivot.status', true))->pivot->effective_from ?? '') }}"
-                                                required>
+                                    <div class="form-group row">
+                                        <div class="col-md-6 mb-4">
+                                            <label for="pay_grade_id" class="text-dark font-weight-medium">PayGrade</label>
+                                            <select name="pay_grade_id" id="pay_grade_id" class="form-control" required>
+                                                <option value="" disabled
+                                                    {{ !old('pay_grade_id') && !optional($employee->pay_grades->firstWhere('pivot.status', true)) ? 'selected' : '' }}>
+                                                    Select PayGrade</option>
+                                                @foreach ($pay_grades as $pay_grade)
+                                                    <option value="{{ $pay_grade->id }}"
+                                                        {{ old('pay_grade_id', optional($employee->pay_grades->firstWhere('pivot.status', true))->id) == $pay_grade->id ? 'selected' : '' }}>
+                                                        {{ $pay_grade->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
-                                        @error('effective_from')
-                                            <span class="text-danger d-block">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                    {{-- Salary --}}
-                                    <div class="col-md-12 mb-4">
-                                        <label class="text-dark font-weight-medium">Base Salary Override <span
-                                                class="text-muted font-weight-lighter text-sm">(optional)</span> </label>
-                                        <div class="input-group">
-                                            <span class="input-group-text mdi mdi-cash-multiple"></span>
-                                            <input type="number" name="base_salary_override" class="form-control"
-                                                placeholder="e.g., 1200000"
-                                                value="{{ old('base_salary_override', optional($employee->pay_grades->firstWhere('pivot.status', true))->pivot->base_salary_override ?? '') }}">
+
+                                        {{-- Effective from date --}}
+                                        <div class="col-md-6 mb-4">
+                                            <label class="text-dark font-weight-medium">Effective From</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text mdi mdi-calendar"></span>
+                                                <input type="date" name="effective_from" class="form-control"
+                                                    value="{{ old('effective_from', optional($employee->pay_grades->firstWhere('pivot.status', true))->pivot->effective_from ?? '') }}"
+                                                    required>
+                                            </div>
+                                            @error('effective_from')
+                                                <span class="text-danger d-block">{{ $message }}</span>
+                                            @enderror
                                         </div>
-                                        @error('base_salary_override')
-                                            <span class="text-danger d-block">{{ $message??'an error occured' }}</span>
-                                        @enderror
+                                        {{-- Salary --}}
+                                        <div class="col-md-12 mb-4">
+                                            <label class="text-dark font-weight-medium">Base Salary Override <span
+                                                    class="text-muted font-weight-lighter text-sm">(optional)</span> </label>
+                                            <div class="input-group">
+                                                <span class="input-group-text mdi mdi-cash-multiple"></span>
+                                                <input type="number" name="base_salary_override" class="form-control"
+                                                    placeholder="e.g., 1200000"
+                                                    value="{{ old('base_salary_override', optional($employee->pay_grades->firstWhere('pivot.status', true))->pivot->base_salary_override ?? '') }}">
+                                            </div>
+                                            @error('base_salary_override')
+                                                <span class="text-danger d-block">{{ $message ?? 'an error occured' }}</span>
+                                            @enderror
+                                        </div>
                                     </div>
-                                </div>
-                            </form>
-                        </x-system.modal>
+                                </form>
+                            </x-system.modal>
                         @endhasrole
                     @endcan
 
@@ -168,13 +168,22 @@
                             LIST</a>
                     @endcanany
 
-                    {{-- Manage Deductions Button--}}
-                    @canany(['edit_deductions', 'view_deductions', 'create_deductions'])
-                      @hasrole('EMPLOYEE')
-                        <x-system.btn-view class="btn btn-danger btn-custom me-2" :route="route('employee.manage.deductions.index', $employee)" text="Manage Deductions"/>
-
-                      @endhasrole
+                    {{-- Manage Allowances Button --}}
+                    @canany(['edit_allowances', 'view_allowances', 'create_allowances'])
+                        @hasrole('EMPLOYEE')
+                            <x-system.btn-view class="btn btn-primary btn-custom me-2" :route="route('employee.manage.employee.allowances.index', $employee)"
+                                text="Manage Allowances" />
+                        @endhasrole
                     @endcanany
+
+                    {{-- Manage Deductions Button --}}
+                    @canany(['edit_deductions', 'view_deductions', 'create_deductions'])
+                        @hasrole('EMPLOYEE')
+                            <x-system.btn-view class="btn btn-danger btn-custom me-2 mt-2" :route="route('employee.manage.deductions.index', $employee)"
+                                text="Manage Deductions" />
+                        @endhasrole
+                    @endcanany
+                    
                 </div>
             </div>
 
@@ -190,16 +199,16 @@
                 </div>
             </div>
 
-            <div class="mb-4">
-                <h4 class="section-title">Employment Details</h4>
-                <div class="info-grid">
-                    <div><strong>Company:</strong> {{ $employee->company->name }}</div>
-                    <div><strong>Department:</strong> {{ $employee->department->name }}</div>
-                    <div><strong>Date of Hire:</strong> {{ $employee->date_of_hire }}</div>
-                    <div><strong>Date of Termination:</strong> {{ $employee->date_of_termination ?? 'N/A' }}</div>
-                    <div><strong>Salary:</strong> {{ number_format($employee->salary, 2) }} Tshs</div>
-                </div>
-            </div>
+            @php
+                $activePayGrade = $employee->pay_grades->firstWhere('pivot.status', true);
+                $salary = $activePayGrade
+                    ? ($activePayGrade->pivot->base_salary_override > 0
+                        ? $activePayGrade->pivot->base_salary_override
+                        : $activePayGrade->base_salary)
+                    : null;
+            @endphp
+            <div><strong>Salary:</strong> {{ $salary ? number_format($salary, 2) . ' Tshs' : 'N/A' }}</div>
+
 
             <div class="mb-4">
                 <h4 class="section-title">Other Information</h4>

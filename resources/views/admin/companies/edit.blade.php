@@ -70,7 +70,7 @@
                     </div>
                     <div class="row mt-5 mb-3">
                         <div class="row col-sm-12 col-md-12">
-                            <h3>Statutory Deductions</h3>
+                            <h3>Statutory Deductions(%)</h3>
                             @foreach ($contributions as $contribution)
                                 <label for="percent_{{ $contribution->id }}"
                                     class="form-label">{{ $contribution->name }}</label>
