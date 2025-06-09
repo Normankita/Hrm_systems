@@ -179,11 +179,11 @@
                     {{-- Manage Deductions Button --}}
                     @canany(['edit_deductions', 'view_deductions', 'create_deductions'])
                         @hasrole('EMPLOYEE')
-                            <x-system.btn-view class="btn btn-danger btn-custom me-2 mt-2" :route="route('employee.manage.deductions.index', $employee)"
+                            <x-system.btn-view class="btn btn-danger btn-custom me-2" :route="route('employee.manage.deductions.index', $employee)"
                                 text="Manage Deductions" />
                         @endhasrole
                     @endcanany
-                    
+
                 </div>
             </div>
 

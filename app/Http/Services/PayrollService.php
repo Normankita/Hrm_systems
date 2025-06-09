@@ -104,7 +104,9 @@ class PayrollService
             $deductionsToAttach = [];
 
             foreach ($employee->deductions as $deduction) {
-                $appliedCount = $deduction->payrolls()->wherePivot('deduction_id', $deduction->id)->count();
+                $appliedCount = $deduction->payrolls()
+                    ->wherePivot('deduction_id', $deduction->id)
+                    ->count();
 
                 if ($appliedCount < $deduction->installments) {
                     $customDeductions += $deduction->installment_amount;

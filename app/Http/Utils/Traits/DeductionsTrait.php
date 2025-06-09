@@ -38,7 +38,7 @@ trait DeductionsTrait
 
     /**
      * getDeductions
-     * This function returns only deductions
+     * This function returns (ONLY) deductions (Deduction)
      * that are supposed to be taken away from our employee's salary
      * @param \App\Models\Employee $employee
      * @return array
@@ -60,8 +60,18 @@ trait DeductionsTrait
 
 
     /**
+     * This function return number of the completed installments
+     * @return int
+     */
+    private function getCompletedInstallments(Employee $employee): int {
+        $deductions = self::getDeductions($employee);
+        return count($deductions);
+    }
+
+
+    /**
      * statutoryContributions
-     * This function returns statutory contributions
+     * This function returns (ONLY) statutory contributions
      * that are supposed to be taken away from our employee's salary
      * @param mixed $baseSalary
      * @return array{nssf: float|int, paye: float|int, psssf: float|int, sdl: float|int, wcf: float|int}
@@ -82,5 +92,27 @@ trait DeductionsTrait
             'wcf' => $wcf
         ];
         return $statutory;
+    }
+
+
+    /**
+     * Summary of getPaidAmount
+     * This function returns the total amount paid by the employee
+     * from his salary
+     * @return float
+     */
+    private function getPaidAmount(Employee $employee) : float {
+        $deductions = self::getDeductions($employee);
+        $deductions = collect($deductions);
+        $count = $deductions->sum('pivot.total_amount');
+        return $count;
+    }
+
+
+
+    public function getRemainingDeductions(Employee $employee)
+    {
+        $deductionsToAttach = self::getDeductions($employee);
+
     }
 }
