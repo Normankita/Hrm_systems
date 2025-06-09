@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Models\Scopes\AuthUserCompanyScope;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class Employee extends Model
 {
@@ -157,6 +159,18 @@ class Employee extends Model
     }
 
 
+       public static function generatePayrollForSelectedExpected(bool $force = false, $employeeIds = []): array
+    {
+        $employees = Employee::with([
+            'pay_grades' => fn($q) => $q->wherePivot('status', true),
+            'deductions',
+            'allowances'
+        ])->whereIn('id', $employeeIds)->get();
+
+        return self::processPayroll($force, $employees);
+    }
+
+
 
     public function pay_grades()
     {
@@ -170,6 +184,182 @@ class Employee extends Model
             ->withPivot(['amount', 'effective_from', 'effective_to', 'frequency', 'status'])
             ->withTimestamps();
     }
+
+
+    // create a function to generate a year deductions
+    public function yearDeductions(Employee $employee, $data, $path) {
+        $total = $employee->getAll();
+        foreach ($data as $value) {
+
+        if (!(Storage::disk('local')->exists($path))) {
+            return [
+                'status' => 'error',
+                'message' => 'File not found'
+            ];
+        }
+        $file = Storage::path($path);
+
+        $spreadsheet = IOFactory::load($file);
+        $sheet = $spreadsheet->getActiveSheet();
+        $rows = $sheet->toArray();
+
+        // Assuming first row is the header
+        unset($rows[0]);
+
+        DB::beginTransaction();
+        $department = Department::first();
+
+        if (!$department) {
+            DB::rollBack();
+            return [
+                'status' => 'error',
+                'message' => 'Department not found'
+            ];
+        }
+        }
+
+    }
+
+    public static function processPayrollAllowed(bool $force = false, $employees = []): array
+    {
+        $today = Carbon::today();
+        $period = $today->format('Y-m');
+        $todayDate = $today->format('Y-m-d');
+
+        $contributions = Contribution::pluck('percent', 'name');
+        $generated = [];
+
+        foreach ($employees as $employee) {
+            $activePayGrade = $employee->pay_grades->first();
+
+            if (!$activePayGrade)
+                continue;
+
+            $basic = $employee->getBaseSalary();
+
+            // Fetch valid employee allowances
+            $employeeAllowances = $employee->allowances()
+                ->wherePivot('status', true)
+                ->wherePivot('effective_from', '<=', $todayDate)
+                ->wherePivot('effective_to', '>=', $todayDate)
+                ->get();
+            $employeeAllowancesTotal = 0;
+            $allowancesToAttach = [];
+
+            foreach ($employeeAllowances as $allowance) {
+                $employeeAllowancesTotal += $allowance->pivot->amount;
+
+                // Fetch the actual pivot row ID (EmployeeAllowance)
+                $employeeAllowance = EmployeeAllowance::where('employee_id', $employee->id)
+                    ->where('allowance_id', $allowance->id)
+                    ->where('status', true)
+                    ->where('effective_from', '<=', $todayDate)
+                    ->where('effective_to', '>=', $todayDate)
+                    ->first();
+
+                if ($employeeAllowance) {
+                    $allowancesToAttach[] = [
+                        'employee_allowance_id' => $employeeAllowance->id,
+                        'amount' => $allowance->pivot->amount,
+                    ];
+                }
+            }
+
+            // Handle regeneration
+            if ($force) {
+                Payroll::where('employee_id', $employee->id)->where('period', $period)->delete();
+            } else {
+                if (Payroll::where('employee_id', $employee->id)->where('period', $period)->exists()) {
+                    continue;
+                }
+            }
+
+            // Statutory deductions
+            $paye = $basic * ($contributions['PAYE'] ?? 0) / 100;
+            $nssf = $basic * ($contributions['NSSF'] ?? 0) / 100;
+            $psssf = $basic * ($contributions['PSSSF'] ?? 0) / 100;
+            $sdl = $basic * ($contributions['SDL'] ?? 0) / 100;
+            $wcf = $basic * ($contributions['WCF'] ?? 0) / 100;
+
+            $statutory = $paye + $nssf + $psssf + $sdl + $wcf;
+
+            // Custom deductions (e.g., loans)
+            $customDeductions = 0;
+            $deductionsToAttach = [];
+
+            foreach ($employee->deductions as $deduction) {
+                $appliedCount = $deduction->payrolls()
+                    ->wherePivot('deduction_id', $deduction->id)
+                    ->count();
+
+                if ($appliedCount < $deduction->installments) {
+                    $customDeductions += $deduction->installment_amount;
+                    $deductionsToAttach[] = [
+                        'id' => $deduction->id,
+                        'total_amount' => $deduction->installment_amount,
+                    ];
+                }
+            }
+
+            $totalDeductions = $statutory + $customDeductions;
+            $gross = $basic + $employeeAllowancesTotal;
+            $net = $gross - $totalDeductions;
+
+            DB::beginTransaction();
+            try {
+                $payroll = Payroll::create([
+                    'employee_id' => $employee->id,
+                    'pay_grade_id' => $activePayGrade->id,
+                    'payroll_date' => $today,
+                    'period' => $period,
+                    'basic_salary' => $basic,
+                    'allowances' => $employeeAllowancesTotal,
+                    'deductions' => $customDeductions,
+                    'gross_salary' => $gross,
+                    'net_salary' => $net,
+                    'paye' => $paye,
+                    'nssf' => $nssf,
+                    'psssf' => $psssf,
+                    'sdl' => $sdl,
+                    'wcf' => $wcf,
+                ]);
+                foreach ($deductionsToAttach as $item) {
+                    $payroll->deductions()->attach($item['id'], [
+                        'total_amount' => $item['total_amount']
+                    ]);
+                }
+
+                // bad zone where allowances in payroll are set to zero
+
+                foreach ($allowancesToAttach as $item) {
+                    $payroll->employeeAllowances()->attach($item['employee_allowance_id'], [
+                        'amount' => $item['amount']
+                    ]);
+                }
+
+                // ends here
+
+                $pdfService = new PayslipPdfService();
+
+                $path = $pdfService->generate($payroll);
+                $payroll->update(['payslip_path' => $path]);
+
+                DB::commit();
+                $generated[] = $payroll;
+            } catch (\Throwable $e) {
+
+                dd($e);
+                DB::rollBack();
+                // optionally log the error: \Log::error($e);
+                continue;
+            }
+        }
+
+
+
+
+
+
 
 
 
