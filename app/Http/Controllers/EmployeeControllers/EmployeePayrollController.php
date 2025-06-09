@@ -8,6 +8,7 @@ use App\Http\Services\PayslipPdfService;
 use App\Models\Employee;
 use App\Models\Payroll;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class EmployeePayrollController extends Controller
 {
@@ -22,18 +23,11 @@ class EmployeePayrollController extends Controller
     }
     public function generateAll(Request $request)
     {
-
-        // To get the laravel pdf results you should return the
-        // stream received from the PDF facade
         $request = [];
-        return PayslipPdfService::createReport($request);
-
         $payrolls = PayrollService::generatePayrollForAllEmployees();
-        // check of payroll generation returned an error
-        if($payrolls['status'] == 'success') {
+        
         return redirect()->back()->with('success', count($payrolls) . ' payrolls generated.');
-        }
-        return redirect()->back()->with($payrolls['message'], $payrolls['status']);
+        
     }
 
 
@@ -74,36 +68,25 @@ class EmployeePayrollController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function show(Employee $employee, Payroll $payroll)
+    public function show(Payroll $payroll)
     {
-        // Make sure the payroll belongs to the employee
-        if ($payroll->employee_id !== $employee->id) {
-            abort(403, 'Unauthorized access to payroll.');
-        }
+        $employee= Employee::find($payroll->employee_id);
+      
+        $deductions = $payroll->deductions()->get(); 
 
-        $deductions = $payroll->deductions()->get(); // or however you're storing them
-
-        return view('employee.manage.payroll.show', compact('employee', 'payroll', 'deductions'));
+        return view('employee.manage.payroll.payments.show', compact('employee', 'payroll', 'deductions'));
     }
 
-    public function edit(Payroll $payroll)
-    {
-        //
+    public function downloadPayslip($id)
+{
+    $payroll = Payroll::findOrFail($id);
+
+    if (!$payroll->payslip_path || !Storage::exists($payroll->payslip_path)) {
+        abort(404, 'Payslip not found.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Payroll $payroll)
-    {
-        //
-    }
+    return Storage::download($payroll->payslip_path, 'Payslip_' . $payroll->id . '.pdf');
+}
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Payroll $payroll)
-    {
-        //
-    }
+
 }

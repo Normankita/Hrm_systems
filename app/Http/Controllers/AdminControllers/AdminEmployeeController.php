@@ -10,7 +10,6 @@ use App\Http\Utils\Traits\EmployeeTrait;
 use App\Http\Utils\Traits\UploadFileTrait;
 use App\Models\Employee;
 use App\Models\PayGrade;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;

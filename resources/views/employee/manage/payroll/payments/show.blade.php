@@ -5,8 +5,8 @@
     @can('view_payroll')
         <div class="container mt-4">
             <div class="card shadow-sm border-0">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">Payroll Details - {{ $employee->full_name }}</h4>
+                <div class="card-header bg-primary" >
+                    <h4 class="mb-0 text-white">Payroll Details - {{ $employee->full_name }}</h4>
                 </div>
                 <div class="card-body">
                     {{-- SECTION: Basic Info --}}
@@ -96,6 +96,16 @@
                             </span>
                         </div>
                     </div>
+                    @if ($payroll->payslip_path)
+                        <div class="row mb-2">
+                            <div class="col-md-4">Payslip:</div>
+                            <div class="col-md-8">
+                                <a href="{{ asset('storage/' . $payroll->payslip_path) }}" target="_blank"
+                                    class="btn btn-sm btn-primary">View</a>
+                            </div>
+                        </div>
+                    @endif
+                    
 
                     @if ($payroll->status === 'rejected')
                         <div class="row mb-2 text-danger">

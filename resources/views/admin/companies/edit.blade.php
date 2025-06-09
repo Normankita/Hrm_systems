@@ -68,7 +68,27 @@
                             @endforeach
                         </div>
                     </div>
-
+                    <div class="row mt-5 mb-3">
+                        <div class="row col-sm-12 col-md-12">
+                            <h3>Statutory Deductions</h3>
+                            @foreach ($contributions as $contribution)
+                                <label for="percent_{{ $contribution->id }}"
+                                    class="form-label">{{ $contribution->name }}</label>
+                                <div class="row mb-3">
+                                    <div class="col-sm-12 col-md-6">
+                                        <input type="number" class="form-control" id="percent_{{ $contribution->id }}"
+                                            name="contributions[{{ $contribution->id }}][percent]"
+                                            value="{{ $contribution->percent }}" required>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6">
+                                        <input type="text" class="form-control" id="description_{{ $contribution->id }}"
+                                            name="contributions[{{ $contribution->id }}][description]"
+                                            value="{{ $contribution->description }}" required>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
                     <button type="submit" class="btn btn-primary">Update Company</button>
                 </form>
             </div>

@@ -100,6 +100,7 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::put('/{payroll}', 'update')->name('update')->middleware(['can:edit_payroll']);
         Route::post('/generate', 'generateForSelected')->name('generateSelected')->middleware(['can:create_payroll']);
         Route::delete('/{payroll}', 'destroy')->name('destroy')->middleware(['can:delete_payroll']);
+        Route::get('/{payroll}', 'show')->name('show')->middleware(['can:view_payroll']); 
     });
 
 // (Optional) Employee Management Routes if you plan to use them

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Payslip - {{ $payroll->employee->full_name }}</title>
@@ -19,10 +20,11 @@
             border: 1px solid #ddd;
             padding: 20px 30px;
             border-radius: 10px;
-            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
         }
 
-        h2, h4 {
+        h2,
+        h4 {
             text-align: center;
             margin: 5px 0;
         }
@@ -68,6 +70,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="payslip">
         <h2>Company Name</h2>
@@ -80,13 +83,13 @@
                 <td><strong>Name:</strong></td>
                 <td>{{ $payroll->employee->full_name }}</td>
                 <td><strong>Employee ID:</strong></td>
-                <td>{{ $payroll->employee->employee_no }}</td>
+                <td>{{ $payroll->employee_id }}</td>
             </tr>
             <tr>
                 <td><strong>Designation:</strong></td>
-                <td>{{ $payroll->employee->designation->name ?? '-' }}</td>
+                <td>{{ $payroll->employee->user->roles->where('name', '!=', 'EMPLOYEE')->first()->name??'No Role' }}</td>
                 <td><strong>Pay Grade:</strong></td>
-                <td>{{ $payroll->payGrade->name ?? '-' }}</td>
+                <td>{{ $payroll->employee->pay_grades->where('pivot.status', true)->first()?->name ?? 'No Active Paygrade' }}</td>
             </tr>
         </table>
 
@@ -123,22 +126,49 @@
                 </tr>
             </thead>
             <tbody>
-                <tr><td>PAYE</td><td>{{ number_format($payroll->paye, 2) }}</td></tr>
-                <tr><td>NSSF</td><td>{{ number_format($payroll->nssf, 2) }}</td></tr>
-                <tr><td>PSSSF</td><td>{{ number_format($payroll->psssf, 2) }}</td></tr>
-                <tr><td>SDL</td><td>{{ number_format($payroll->sdl, 2) }}</td></tr>
-                <tr><td>WCF</td><td>{{ number_format($payroll->wcf, 2) }}</td></tr>
+                @php
+                    $totalCustomDeductions = 0;
+                @endphp
 
-                @foreach($payroll->deductions as $deduction)
-                    <tr>
-                        <td>{{ $deduction->name }}</td>
-                        <td>{{ number_format($deduction->pivot->total_amount, 2) }}</td>
-                    </tr>
-                @endforeach
+                <tr>
+                    <td>PAYE</td>
+                    <td>{{ number_format($payroll->paye, 2) }}</td>
+                </tr>
+                <tr>
+                    <td>NSSF</td>
+                    <td>{{ number_format($payroll->nssf, 2) }}</td>
+                </tr>
+                <tr>
+                    <td>PSSSF</td>
+                    <td>{{ number_format($payroll->psssf, 2) }}</td>
+                </tr>
+                <tr>
+                    <td>SDL</td>
+                    <td>{{ number_format($payroll->sdl, 2) }}</td>
+                </tr>
+                <tr>
+                    <td>WCF</td>
+                    <td>{{ number_format($payroll->wcf, 2) }}</td>
+                </tr>
+
+                @if ($payroll->deductions instanceof \Illuminate\Support\Collection)
+                    @foreach ($payroll->deductions as $deduction)
+                        <tr>
+                            <td>{{ $deduction->name }}</td>
+                            <td>{{ number_format($deduction->pivot->total_amount, 2) }}</td>
+                        </tr>
+                    @endforeach
+                @endif
+
+
+                @php
+                    $totalStatutory = $payroll->paye + $payroll->nssf + $payroll->psssf + $payroll->sdl + $payroll->wcf;
+                    $totalDeductions = $totalStatutory + $totalCustomDeductions;
+                @endphp
 
                 <tr>
                     <td><strong>Total Deductions</strong></td>
-                    <td><strong>{{ number_format($payroll->deductions + $payroll->paye + $payroll->nssf + $payroll->psssf + $payroll->sdl + $payroll->wcf, 2) }}</strong></td>
+                    <td><strong>{{ number_format($totalDeductions, 2) }}</strong></td>
                 </tr>
             </tbody>
         </table>
@@ -152,4 +182,5 @@
         </div>
     </div>
 </body>
+
 </html>
