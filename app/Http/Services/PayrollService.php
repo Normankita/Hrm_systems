@@ -161,10 +161,7 @@ class PayrollService
                 DB::commit();
                 $generated[] = $payroll;
             } catch (\Throwable $e) {
-
-                dd($e);
                 DB::rollBack();
-                // optionally log the error: \Log::error($e);
                 continue;
             }
         }
