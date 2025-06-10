@@ -263,6 +263,13 @@ class EmployeeService
                 $middle_name = $names['middle_name'];
                 $last_name = $names['last_name'];
 
+
+                $dateStrReplace = str_replace('/', '-', $row[2]);
+                $birthDate = Carbon::parse($dateStrReplace)->format('Y-m-d') ?? '';
+
+                $dateStrReplace = str_replace('/', '-', $row[10]);
+                $dateOfHire = Carbon::parse($dateStrReplace)->format('Y-m-d') ?? '';
+
                 EmployeeTrait::createEmployee([
                     'full_name' => $row[0],
                     'pay_grade_id' => $paygrade->id,
@@ -273,7 +280,7 @@ class EmployeeService
                     'middle_name' => $middle_name,
                     'last_name' => $last_name,
                     'gender' => $gender,
-                    'date_of_birth' => Carbon::parse($row[2])->format('Y-m-d') ?? '',
+                    'date_of_birth' => $birthDate,
                     'phone_number' => $row[3] ?? '',
                     'email' => $row[4] ?? '',
                     'national_id' => $row[5] ?? '',
@@ -281,7 +288,7 @@ class EmployeeService
                     'residential_address' => $row[7] ?? '',
                     'tin_number' => $row[8] ?? '',
                     'employee_type' => $employee_type,
-                    'date_of_hire' => Carbon::parse($row[10])->format('Y-m-d') ?? '',
+                    'date_of_hire' => $dateOfHire,
                 ]);
 
                 DB::commit();
