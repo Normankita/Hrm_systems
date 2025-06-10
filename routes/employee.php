@@ -106,7 +106,17 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::post('/store', 'store')->name('store')->middleware(['can:create_leaveType']);
         Route::put('/update/{leaveType}', 'update')->name('update')->middleware(['can:edit_leaveType']);
         Route::delete('/destroy/{leaveType}', 'destroy')->name('destroy')->middleware(['can:delete_leaveType']);
+        // report routes
     });
+// Leave Types
+Route::prefix('employee/manage/leave/reports')
+    ->controller(EmployeeManageLeaveTypeController::class)
+    ->name('employee.manage.leave.reports.')
+    ->group(function () {
+        Route::view('/report', 'employee.manage.leaves.reports.index')->name('reports');
+    });
+
+
 
 // PayGrade Routes
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])

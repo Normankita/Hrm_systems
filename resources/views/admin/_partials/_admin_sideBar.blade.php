@@ -83,6 +83,26 @@
                         </div>
                     </ul>
                 </li>
+
+
+
+                <li class="has-sub">
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                        data-target="#reports_menu" aria-expanded="false" aria-controls="reports_menu">
+                        <i class="mdi mdi-file-document-box"></i>
+                        <span class="nav-text">Reports</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="collapse" id="reports_menu" data-parent="#sidebar-menu">
+                        <div class="sub-menu">
+                            <li>
+                                <a class="sidenav-item-link" href="{{ route('admin.departments.index') }}">
+                                    <span class="nav-text">view departments</span>
+                                </a>
+                            </li>
+                        </div>
+                    </ul>
+                </li>
             </ul>
         </div>
         <!-- Bottom Section -->
