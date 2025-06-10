@@ -171,10 +171,9 @@ class AdminEmployeeController extends Controller
         ]);
 
         if ($validate->fails()) {
-            return [
-                'status' => 'fail',
-                'errors' => $validate->errors(),
-            ];
+
+            return redirect()->back()
+                ->withErrors($validate);
         }
         $responce = $this->employeeService->importEmployees($request);
         if ($responce['status'] === 'error') {

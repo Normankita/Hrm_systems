@@ -19,11 +19,14 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        $this->call( CompanySeeder::class );
-        $this->call( RolesSeeder::class );
+        $this->call( [
+            CompanySeeder::class,
+            RolesSeeder::class
+        ]);
         $this->call( PermissionSeeder::class );
         $this->call( UserSeeder::class );
         $this->call( LeaveTypeSeeder::class );
+        $this->call( AddingPaygradeToDefaultEmployeeSeeder::class );
 
     }
 }

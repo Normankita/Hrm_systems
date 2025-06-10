@@ -86,11 +86,6 @@ class UserSeeder extends Seeder
             'salary' => 50000,
             'profile_picture' => '',
         ]);
-        $employee->pay_grades()->attach($payGrade->id, [
-                    'assigned_by' => $admin->id,
-                    'effective_from' =>now(),
-                    'base_salary_override' => $employee->salary,
-                ]);
 
 
         // 8. Seed statutory contributions

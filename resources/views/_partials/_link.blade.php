@@ -20,20 +20,14 @@
 {{-- My links if exist --}}
 
 
-<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
-
 <link href="{{asset("bootstrap5.1.1/plugins/jvectormap/jquery-jvectormap-2.0.3.css")}}" rel="stylesheet" />
-
 
 
 <link href="{{asset('bootstrap5.1.1/plugins/daterangepicker/daterangepicker.css')}}" rel="stylesheet" />
 
 <link href="{{asset('bootstrap5.1.1/plugins/toaster/toastr.min.css')}}" rel="stylesheet" />
 
-
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-
-
 
 
 <link id="main-css-href" rel="stylesheet" href="{{asset('bootstrap5.1.1/css/style.css')}}" />
@@ -42,3 +36,5 @@
 
 
 <script src="plugins/nprogress/nprogress.js"></script>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
