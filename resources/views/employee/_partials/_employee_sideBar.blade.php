@@ -213,6 +213,11 @@
                                         <span class="nav-text">Manage Leaves</span>
                                     </a>
                                 </li>
+                                 <li>
+                                    <a class="sidenav-item-link" href="{{ route('employee.manage.leave.reports.reports') }}">
+                                        <span class="nav-text">Leave Reports</span>
+                                    </a>
+                                </li>
                             </div>
                         </ul>
                     </li>
