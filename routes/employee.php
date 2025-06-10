@@ -118,6 +118,8 @@ Route::prefix('employee/manage/leave/reports')
 
 
 
+
+
 // PayGrade Routes
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('employee/manage/paygrade')
@@ -148,7 +150,7 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::get('/{payroll}', 'show')->name('show')->middleware(['can:view_payroll']);
     });
 
-// (Optional) Employee Management Routes if you plan to use them
+//  Employee Management Routes
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('/employee/manage/employees')
     ->name('employee.manage.employees.')
@@ -168,6 +170,16 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::post('/excel/import', 'excelImport')
             ->name('excel.import');
     });
+
+//Employe Reports
+Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
+    ->prefix('employee/manage/employee/reports')
+    ->controller(EmployeeManageEmployeeController::class)
+    ->name('employee.manage.employee.reports.')
+    ->group(function () {
+        Route::view('/report', 'employee.manage.reports.index')->name('reports');
+    });
+
 
 
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])

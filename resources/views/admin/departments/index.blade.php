@@ -14,8 +14,7 @@
                     </div>
                     <h4 class="card-title">Departments</h4>
                     <div class="table-responsive">
-                        <table id="department_table"
-                            class="table table-bordered table-hover align-middle
+                        <table class="table table-bordered table-hover align-middle
                          text-nowrap">
                             <thead class="table-light text-lime">
                                 <tr>
@@ -141,16 +140,4 @@
                 </div>
             </div>
         @endforeach
-    @endsection
-
-
-    @section('scripts')
-        <script>
-            /*======== 14. DATA TABLE ========*/
-            var department_table = $("#department_table");
-            department_table.DataTable({
-                lengthChange: false,
-                pageLength: 10,
-            });
-        </script>
     @endsection
