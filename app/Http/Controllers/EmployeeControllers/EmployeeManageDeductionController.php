@@ -4,13 +4,18 @@ namespace App\Http\Controllers\EmployeeControllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Services\DeductionService;
+use App\Http\Utils\Traits\DeductionsTrait;
 use App\Models\Deduction;
 use App\Models\Employee;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class EmployeeManageDeductionController extends Controller
-
 {
+    use DeductionsTrait;
+
     public function __construct(private DeductionService $DeductionService)
     {
     }
@@ -23,30 +28,30 @@ class EmployeeManageDeductionController extends Controller
 
 
     // Store a deduction for the given employee
-public function store(Request $request, Employee $employee)
-{
-    // Remove this after verifying your inputs
-    $validated = $request->validate([
-        'name' => 'required|string|max:255',
-        'total_amount' => 'required|numeric|min:0',
-        'installments' => 'required|integer|min:1',
-        'description' => 'nullable|string',
-    ]);
+    public function store(Request $request, Employee $employee)
+    {
+        // Remove this after verifying your inputs
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'total_amount' => 'required|numeric|min:0',
+            'installments' => 'required|integer|min:1',
+            'description' => 'nullable|string',
+        ]);
 
-    $validated['employee_id'] = $employee->id;
-    $validated['installment_amount'] = $validated['total_amount'] / $validated['installments'];
+        $validated['employee_id'] = $employee->id;
+        $validated['installment_amount'] = $validated['total_amount'] / $validated['installments'];
 
-    DeductionService::createDeduction($validated);
+        DeductionService::createDeduction($validated);
 
-    return redirect()->back()->with('success', 'Deduction created successfully.');
-}
+        return redirect()->back()->with('success', 'Deduction created successfully.');
+    }
 
 
 
     // Show a specific deduction (employee context optional if deduction has employee relation)
     public function show(Employee $employee, Deduction $deduction)
     {
-        return view('employee.manage.employee.deductions', compact('employee','deduction'));
+        return view('employee.manage.employee.deductions', compact('employee', 'deduction'));
     }
 
     // Show form to edit deduction for a given employee
@@ -65,15 +70,55 @@ public function store(Request $request, Employee $employee)
             'description' => 'nullable|string',
         ]);
 
-    $validated['installment_amount'] = $validated['total_amount'] / $validated['installments'];
+        // chack if the entered amount is greater or equal to the paid
+        $paidAmount = $this->getPaidAmount($employee);
 
+        if ($validated['total_amount'] < $paidAmount) {
+            return redirect()->back()->with(
+                'error',
+                'Total amount cannot be less than the paid amount.'
+            );
+        }
+        // if greater or equal to the paid amount
+        // check if the entered installments number is greater than the installments
+        if ($validated['total_amount'] > $paidAmount) {
+            // checking the number of installments if is greater that the current installments
+            if ($this->getCompletedInstallments($employee) >= $validated['installments']) {
+                return redirect()->back()->with(
+                    'error',
+                    'completed Installments cannot be greater or equal to the installments.'
+                );
+            }
+        } elseif ($validated['total_amount'] == $paidAmount) {
+            return redirect()->back()->with(
+                'error',
+                'No intallments remains'
+            );
+        }
 
-        // Ensure employee_id is consistent with the URL employee
-        $validated['employee_id'] = $employee->id;
+        // check the difference btn the entered installments and paid installments
+        $differenceInInstallments = $validated['installments'] - $this->getCompletedInstallments($employee);
+        $differenceInAmount = $validated['total_amount'] - $paidAmount;
+        // updating the installment_amount
+        $validated['installment_amount'] = $differenceInAmount / $differenceInInstallments;
 
-        DeductionService::updateDeduction($deduction, $validated);
+        DB::beginTransaction();
+        try {
+            // update the old_installment_amount
+            $deduction->update([
+                'old_installment_amount' => $deduction->installment_amount
+            ]);
+            // update the deduction
+            $deduction->update($validated);
+            // saving the data in our database
+            DB::commit();
+            return redirect()->back()->with('success', 'Deduction updated successfully.');
 
-        return redirect()->back()->with('success', 'Deduction updated successfully.');
+        } catch (Throwable $throwable) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Error updating deduction');
+        }
+
     }
 
     // Delete a deduction for the given employee

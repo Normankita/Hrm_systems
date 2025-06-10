@@ -36,7 +36,10 @@
                                         <td>{{ $department->description }}</td>
                                         <td>{{ \Carbon\Carbon::parse($department->created_at)->format('d M Y') }}</td>
                                         <td>
-                                            <x-system.modal-button id="editDepartment-{{ $department->id }}" text="Edit" />
+                                            <x-system.modal-button
+                                            class="btn btn-primary btn-sm"
+                                            id="editDepartment-{{ $department->id }}"
+                                            text="Edit" />
                                         </td>
                                     </tr>
                                 @endforeach

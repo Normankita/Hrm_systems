@@ -26,6 +26,10 @@ class EmployeePayGradeController extends Controller
     public function store(Request $request)
     {
         $this->validatePayGrade($request);
+        // ensure that the new paygrade ranges in not in any of the grade
+        $base = $request->base_salary;
+        $max = $request->max_salary;
+
         $this->createPayGrade($request);
 
         return redirect()->route('employee.manage.paygrades.index')->with('success', 'Pay Grade created successfully');

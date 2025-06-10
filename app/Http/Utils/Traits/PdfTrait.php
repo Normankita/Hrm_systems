@@ -80,3 +80,4 @@ trait PdfTrait
         }
     }
 }
+
