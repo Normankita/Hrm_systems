@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\EmployeeControllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Leave;
 use App\Models\LeaveType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -50,6 +51,14 @@ class EmployeeManageLeaveTypeController extends Controller
 
     public function destroy(LeaveType $leaveType) {
         $leaveType->delete();
-        return redirect()->back()->with('success', 'Leave Type deleted successfully');
+        return redirect()->back()
+            ->with('success', 'Leave Type deleted successfully');
+    }
+
+    public function getRejectedLeavesPage() {
+        $rejectedLeaves = Leave::where('status', 'rejected')
+            ->get();
+        return view('employee.manage.leaves.reports.rejected')
+            ->with('rejectedLeaves', $rejectedLeaves);
     }
 }

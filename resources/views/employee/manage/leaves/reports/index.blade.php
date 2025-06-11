@@ -8,7 +8,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-4">
-                        <a href="">
+                        <a href="{{ route('employee.manage.leave.reports.rejected') }}">
                             <div class="card border-primary">
                                 <div class="card-body">
                                     <h5 class="card-title font-weight-bold">

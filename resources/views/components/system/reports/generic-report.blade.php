@@ -1,0 +1,37 @@
+      @props(['id'])
+      <!-- For PDF usability -->
+      <div class="report" id="{{ $id }}">
+          <!-- three buttons for pdf, excel, and print with MDI icons -->
+          <div class="mb-3">
+              <x-system.pdfs.pdf-trigger-btn :id="$id" />
+              <x-system.excel.excel-trigger-btn :id="$id" />
+          </div>
+          <div>
+              <div class="container">
+                  <div class="col-md-12">
+                      <!-- decrale a named slot called header -->
+                      {{ $viewTable }}
+                      <div class="d-none">
+                          {{ $reportTable }}
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+
+      <script>
+          function downloadPDF(id) {
+              var element = document.getElementById(`${id}-pdf`);
+              html2pdf().from(element).save();
+          }
+
+          function exportToExcel(id) {
+              console.log("Exporting to Excel...");
+              var table = document.getElementById(`${id}-excel`);
+              var workbook = XLSX.utils.table_to_book(table, {
+                  sheet: "Sheet 1"
+              });
+              XLSX.writeFile(workbook, "data.xlsx");
+          }
+      </script>

@@ -108,12 +108,14 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::delete('/destroy/{leaveType}', 'destroy')->name('destroy')->middleware(['can:delete_leaveType']);
         // report routes
     });
-// Leave Types
+// Leave reports
 Route::prefix('employee/manage/leave/reports')
     ->controller(EmployeeManageLeaveTypeController::class)
     ->name('employee.manage.leave.reports.')
     ->group(function () {
         Route::view('/report', 'employee.manage.leaves.reports.index')->name('reports');
+
+        Route::get('/rejected', 'getRejectedLeavesPage')->name('rejected');
     });
 
 
