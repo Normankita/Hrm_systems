@@ -175,14 +175,14 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
             ->name('excel.import');
     });
 
-//Employe Reports
+//Employee Reports
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('employee/manage/employee/reports')
     ->controller(EmployeeManageEmployeeController::class)
     ->name('employee.manage.employees.reports.')
     ->group(function () {
         Route::view('/report', 'employee.manage.employee.reports.index')->name('index');
-        Route::get('/suspended', 'getSuspendedEmployeesPage')->name('suspanded');
+        Route::get('/suspended', 'getSuspendedEmployeesPage')->name('suspended');
         Route::get('/active', 'getActiveEmployeesPage')->name('active');
     });
 

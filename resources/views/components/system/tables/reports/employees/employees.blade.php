@@ -14,7 +14,6 @@
                     <th>date of termination</th>
                     <th>email</th>
                     <th>employee type</th>
-                    <th>gender</th>
                     <th>Reason</th>
                 </tr>
             </thead>
@@ -22,13 +21,16 @@
                 @foreach ($employees as $employee)
                     <tr>
                         <td>{{ $employee->full_name }}</td>
-                        <td>{{ $employee->date_of_hire>format('Y-m-d')??'N/A' }}</td>
-                        <td>{{ $employee->date_of_termination>format('Y-m-d')??'N/A' }}</td>
-                        <td><span class="badge badge-danger">
+                        <td>{{ $employee->date_of_hire ?? 'N/A' }}</td>
+                        <td>{{ $employee->date_of_termination ?? 'N/A'}}</td>
+                        <td>{{$employee->email}}</td>
+                        <td>{{ $employee->employee_type }}</td>
+                        {{-- <td>
+                            <span class="badge badge-danger">
                                 {{ $employee->status }}
-                            </span></td>
-                        <!-- adjust a reason to contain 30 characters -->
-                        <td>{{ Str::limit($employee->reason, 30, '...') }}</td>
+                            </span>
+                        </td> --}}
+                        <td>{{ Str::limit($employee->reason, 30, '...')??'N/A' }}</td>
                     </tr>
                 @endforeach
             </tbody>
