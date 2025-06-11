@@ -15,7 +15,15 @@
                     </x-slot>
                     <x-slot name="reportTable">
                          <x-system.tables.reports.leaves.leaves
-                             :leaves="$rejectedLeaves" id="rejectedLeaves"/>
+                             :leaves="$rejectedLeaves" id="rejectedLeaves">
+                             <div class="row">
+                                 <div class="col-md-12">
+                                     <p class="text-muted">
+                                         Note: The table above shows all rejected leaves. You can filter the data by date, employee, or leave type using the search functionality.
+                                     </p>
+                                 </div>
+                             </div>
+                         </x-system.tables.reports.leaves.leaves>
                     </x-slot>
                 </x-system.reports.generic-report>
             </div>
