@@ -10,28 +10,32 @@ use Illuminate\Support\Facades\Validator;
 
 class EmployeeManageLeaveTypeController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         $leaveTypes = LeaveType::all();
         return view('employee.manage.leave_type.index')
             ->with('leaveTypes', $leaveTypes);
     }
 
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $rules = [
             'name' => 'required|string|max:255|unique:leave_types,name',
             'description' => 'nullable|string|max:255',
             'deducts_from_annual_leave' => 'boolean',
         ];
         $request->request->add(
-            ['code' => str_replace(' ', '_', $request->name)]);
+            ['code' => str_replace(' ', '_', $request->name)]
+        );
         Validator::make($request->all(), $rules)->validate();
         LeaveType::create($request->all());
         return redirect()->back()
-        ->with('success', 'Leave Type created successfully');
+            ->with('success', 'Leave Type created successfully');
     }
 
-    public function update(Request $request, LeaveType $leaveType) {
+    public function update(Request $request, LeaveType $leaveType)
+    {
         $rules = [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:255',
@@ -44,21 +48,40 @@ class EmployeeManageLeaveTypeController extends Controller
             'deducts_from_annual_leave' => $request->deducts_from_annual_leave,
         ]);
         return redirect()->back()
-        ->with('success',
-         'Leave Type updated successfully');
+            ->with(
+                'success',
+                'Leave Type updated successfully'
+            );
     }
 
 
-    public function destroy(LeaveType $leaveType) {
+    public function destroy(LeaveType $leaveType)
+    {
         $leaveType->delete();
         return redirect()->back()
             ->with('success', 'Leave Type deleted successfully');
     }
 
-    public function getRejectedLeavesPage() {
+    public function getRejectedLeavesPage()
+    {
         $rejectedLeaves = Leave::where('status', 'rejected')
             ->get();
         return view('employee.manage.leaves.reports.rejected')
             ->with('rejectedLeaves', $rejectedLeaves);
+    }
+
+    public function getAcceptedLeavesPage()
+    {
+        $acceptedLeaves = Leave::where('status', 'rejected')
+            ->get();
+        return view('employee.manage.leaves.reports.accepted')
+            ->with('acceptedLeaves', $acceptedLeaves);
+    }
+
+    public function getPendingLeavesPage() {
+        $pendingLeaves = Leave::where('status', 'pending')
+            ->get();
+        return view('employee.manage.leaves.reports.pending')
+            ->with('pendingLeaves', $pendingLeaves);
     }
 }

@@ -116,6 +116,8 @@ Route::prefix('employee/manage/leave/reports')
         Route::view('/report', 'employee.manage.leaves.reports.index')->name('reports');
 
         Route::get('/rejected', 'getRejectedLeavesPage')->name('rejected');
+        Route::get('/accepted', 'getAcceptedLeavesPage')->name('accepted');
+        Route::get('/pending', 'getPendingLeavesPage')->name('pending');
     });
 
 

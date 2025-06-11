@@ -8,21 +8,20 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-4">
-                        <a href="{{ route('employee.manage.leave.reports.rejected') }}">
-                            <div class="card border-primary">
-                                <div class="card-body">
-                                    <h5 class="card-title font-weight-bold">
-                                        Rejected Leaves
-                                    </h5>
-                                    <p class="card-text">
-                                        Total:
-                                    </p>
-                                    <h2 class="text-primary">980000</h2>
-                                </div>
-                            </div>
-                        </a>
+                        <x-system.reports.report-card-anchor title="Rejected Leaves" :route="route('employee.manage.leave.reports.rejected')">
+                        </x-system.reports.report-card-anchor>
                     </div>
+
+                    <div class="col-md-4">
+                        <x-system.reports.report-card-anchor title="Rejected Leaves" :route="route('employee.manage.leave.reports.accepted')">
+                        </x-system.reports.report-card-anchor>
+                    </div>
+
+                         <div class="col-md-4">
+                        <x-system.reports.report-card-anchor title="Pending Leaves" :route="route('employee.manage.leave.reports.pending')">
+                        </x-system.reports.report-card-anchor>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-@endsection
+    @endsection
