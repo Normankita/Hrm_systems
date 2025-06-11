@@ -11,7 +11,7 @@
                   <div class="col-md-12">
                       <!-- decrale a named slot called header -->
                       {{ $viewTable }}
-                      <div class="">
+                      <div class="d-none">
                           {{ $reportTable }}
                       </div>
                   </div>
