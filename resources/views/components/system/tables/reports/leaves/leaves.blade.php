@@ -6,7 +6,7 @@
 <div id="{{ $pdfId }}">
     <div class="container mr-4 mt-4">
         {{ $slot }}
-        <table class="table table-bordered mt-5 {{ $class }}" id="{{ $excelId }}">
+        <table class="table mt-5 {{ $class }}" id="{{ $excelId }}">
             <thead>
                 <tr>
                     <th>Leave Type</th>
@@ -29,6 +29,22 @@
                         <td>{{ Str::limit($leave->reason, 30, '...') }}</td>
                     </tr>
                 @endforeach
+
+                @php $co = 0; @endphp
+                @while (true)
+                    @if ($co > 100)
+                        @break
+                    @endif
+                    @php $co++; @endphp
+                    <tr>
+                        <td>Annual Leave</td>
+                        <td>2025-06-01</td>
+                        <td>2025-06-10</td>
+                        <td>Approved</td>
+                        <td>Family Vacation</td>
+                    </tr>
+
+                @endwhile
             </tbody>
         </table>
     </div>
