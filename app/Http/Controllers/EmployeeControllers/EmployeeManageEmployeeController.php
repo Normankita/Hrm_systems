@@ -175,13 +175,23 @@ class EmployeeManageEmployeeController extends Controller
             ->with($responce);
     }
 
-    public function getActiveEmployees()
+    public function getActiveEmployeesPage()
     {
         $employees= Employee::all();
         // $employees = Employee::where('status', 'active')
         //     ->orderBy('created_at', 'desc')
         //     ->get();
 
-        return view('employee.manage.employee.active', compact('employees'));
+        return view('employee.manage.employee.reports.active', compact('employees'));
+    }
+
+        public function getSuspendedEmployeesPage()
+    {
+        $employees= Employee::all();
+        // $employees = Employee::where('status', 'active')
+        //     ->orderBy('created_at', 'desc')
+        //     ->get();
+
+        return view('employee.manage.employee.reports.suspended', compact('employees'));
     }
 }
