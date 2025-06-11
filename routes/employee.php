@@ -177,9 +177,9 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('employee/manage/employee/reports')
     ->controller(EmployeeManageEmployeeController::class)
-    ->name('employee.manage.employee.reports.')
+    ->name('employee.manage.employees.reports.')
     ->group(function () {
-        Route::view('/report', 'employee.manage.reports.index')->name('reports');
+        Route::view('/report', 'employee.manage.employee.reports.index')->name('index');
     });
 
 
