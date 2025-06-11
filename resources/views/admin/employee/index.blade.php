@@ -13,7 +13,7 @@
 
                     <div class="table-responsive">
                         <span>Total Employees: {{ $employees->count() }}</span>
-                        <table id="employeeTable" class="table table-bordered table-hover   align-middle text-nowrap">
+                        <table class="table table-bordered table-hover   align-middle text-nowrap">
                             <thead class="table-light text-lime">
 
                                 <tr>
@@ -58,26 +58,3 @@
     </div>
 @endsection
 
-@section('scripts')
-    <script>
-        $(document).ready(function() {
-            $('#employeeTable').DataTable({
-                "responsive": true,
-                "autoWidth": false,
-                "pageLength": 10,
-                "paging": true,
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                // "lengthChange": false ,
-                "order": [
-                    [1, "asc"]
-                ],
-                "columnDefs": [{
-                    "orderable": true,
-                    "targets": [0, 6],
-                }]
-            });
-        });
-    </script>
-@endsection

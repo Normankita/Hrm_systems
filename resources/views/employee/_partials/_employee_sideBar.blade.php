@@ -48,6 +48,12 @@
                                         </a>
                                     </li>
                                 @endif
+                                <li>
+                                    <a class="sidenav-item-link"
+                                        href="{{ route('employee.manage.employees.reports.index') }}">
+                                        <span class="nav-text">Employee Reports</span>
+                                    </a>
+                                </li>
                             </div>
                         </ul>
                     </li>
