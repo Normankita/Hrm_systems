@@ -110,7 +110,7 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     });
 // Leave reports
 Route::prefix('employee/manage/leave/reports')
-    ->controller(EmployeeManageLeaveTypeController::class)
+    ->controller(EmployeeManageLeavesController::class)
     ->name('employee.manage.leave.reports.')
     ->group(function () {
         Route::view('/report', 'employee.manage.leaves.reports.index')->name('reports');
@@ -182,6 +182,8 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->name('employee.manage.employees.reports.')
     ->group(function () {
         Route::view('/report', 'employee.manage.employee.reports.index')->name('index');
+        Route::get('/suspended', 'getSuspendedEmployeesPage')->name('suspanded');
+        Route::get('/active', 'getActiveEmployeesPage')->name('active');
     });
 
 

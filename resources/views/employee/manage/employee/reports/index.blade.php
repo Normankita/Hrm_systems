@@ -13,12 +13,7 @@
                     </div>
 
                     <div class="col-md-4">
-                        <x-system.reports.report-card-anchor title="Rejected Leaves" :route="route('employee.manage.leave.reports.accepted')">
-                        </x-system.reports.report-card-anchor>
-                    </div>
-
-                         <div class="col-md-4">
-                        <x-system.reports.report-card-anchor title="Pending Leaves" :route="route('employee.manage.leave.reports.pending')">
+                        <x-system.reports.report-card-anchor title="Active Employees" :route="route('employee.manage.leave.reports.accepted')">
                         </x-system.reports.report-card-anchor>
                     </div>
                 </div>

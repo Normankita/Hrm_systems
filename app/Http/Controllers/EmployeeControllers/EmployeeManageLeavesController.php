@@ -51,4 +51,29 @@ class EmployeeManageLeavesController extends Controller
             ->with(['status' => 'success', 'message' => 'operation was a successfull']);
     }
 
+
+
+    public function getRejectedLeavesPage()
+    {
+        $rejectedLeaves = Leave::where('status', 'rejected')
+            ->get();
+        return view('employee.manage.leaves.reports.rejected')
+            ->with('rejectedLeaves', $rejectedLeaves);
+    }
+
+    public function getAcceptedLeavesPage()
+    {
+        $acceptedLeaves = Leave::where('status', 'rejected')
+            ->get();
+        return view('employee.manage.leaves.reports.accepted')
+            ->with('acceptedLeaves', $acceptedLeaves);
+    }
+
+    public function getPendingLeavesPage() {
+        $pendingLeaves = Leave::where('status', 'pending')
+            ->get();
+        return view('employee.manage.leaves.reports.pending')
+            ->with('pendingLeaves', $pendingLeaves);
+    }
+
 }

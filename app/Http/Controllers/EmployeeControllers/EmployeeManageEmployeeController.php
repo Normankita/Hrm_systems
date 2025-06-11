@@ -174,4 +174,14 @@ class EmployeeManageEmployeeController extends Controller
         return redirect()->route(route: 'employee.manage.employees.index')
             ->with($responce);
     }
+
+    public function getActiveEmployees()
+    {
+        $employees= Employee::all();
+        // $employees = Employee::where('status', 'active')
+        //     ->orderBy('created_at', 'desc')
+        //     ->get();
+
+        return view('employee.manage.employee.active', compact('employees'));
+    }
 }
