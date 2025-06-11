@@ -16,11 +16,12 @@
                     <x-slot name="reportTable">
                          <x-system.tables.reports.leaves.leaves
                              :leaves="$rejectedLeaves" id="rejectedLeaves">
-                             <div class="row">
-                                 <div class="col-md-12">
-                                     <p class="text-muted">
-                                         Note: The table above shows all rejected leaves. You can filter the data by date, employee, or leave type using the search functionality.
-                                     </p>
+                             <div class="row justify-content-center">
+                                 <div class="col-md-10">
+                                    <h4 class="text-center">Rejected Leaves Report</h4>
+                                    <!-- display the time of printing the report -->
+                                    <p class="text-muted text-end">Report generated on: {{ now()->format('Y-m-d H:i:s') }}</p>
+                                    <p class="text-muted text-end">Total Rejected Leaves: {{ $rejectedLeaves->count() }}</p>
                                  </div>
                              </div>
                          </x-system.tables.reports.leaves.leaves>
