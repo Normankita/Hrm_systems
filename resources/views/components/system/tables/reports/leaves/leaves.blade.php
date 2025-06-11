@@ -4,6 +4,7 @@
         $excelId =  $id != null ? "$id-excel" : '';
 @endphp
 <div id="{{ $pdfId }}">
+    {{ $slot }}
     <table class="table table-bordered mt-5 {{ $class }}" id="{{ $excelId }}">
         <thead>
             <tr>
