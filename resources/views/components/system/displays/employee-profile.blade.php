@@ -72,7 +72,7 @@
                     : 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg' }}"
                     alt="Profile Image" class="profile-img me-3">
                 <div>
-                    <h2 class="mb-0">{{ $employee->full_name }}</h2>
+                    <h2 class="mb-0">{{ $employee->full_name }} <span class="badge text-danger "> {{$employee->currentStatus?->status->name}} </span></h2>
                     <span class="lead">Registered AS: <b>
                             {{ $employee->user->roles->where('name', '!=', 'EMPLOYEE')->first()->name ?? 'No Role' }}
                         </b></span>
