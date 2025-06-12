@@ -12,12 +12,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
 
         $this->call( [
             CompanySeeder::class,
@@ -27,8 +21,9 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             StatusSeeder::class,
             EmployeeStatusHistorySeeder::class,
+            EmployeeStatusPermissions::class,
         ]);
-        $this->call( LeaveTypeSeeder::class );
+        $this->call( LeaveTypeSeeder::class);
         $this->call( AddingPaygradeToDefaultEmployeeSeeder::class );
 
     }

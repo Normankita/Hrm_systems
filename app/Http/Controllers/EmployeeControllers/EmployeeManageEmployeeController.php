@@ -151,7 +151,11 @@ class EmployeeManageEmployeeController extends Controller
         return back()->with('success', 'Pay grade updated successfully.');
     }
 
-
+    /**
+     * Function to handle the import of employees from an Excel file.
+     * @param \Illuminate\Http\Request $request
+     * @return array{errors: \Illuminate\Support\MessageBag, status: string|\Illuminate\Http\RedirectResponse}
+     */
     public function excelImport(Request $request)
     {
         $rules = [
@@ -176,23 +180,83 @@ class EmployeeManageEmployeeController extends Controller
             ->with($responce);
     }
 
+    /**
+     * getting the active employees page
+     * @return \Illuminate\Contracts\View\View
+     */
     public function getActiveEmployeesPage()
     {
-        $employees = Employee::all();
-        // $employees = Employee::where('status', 'active')
-        //     ->orderBy('created_at', 'desc')
-        //     ->get();
+        $employees = Employee::whereHas('currentStatus.status', function ($q) {
+            $q->where('name', 'Active');
+        })->with('currentStatus.status')->get();
+
 
         return view('employee.manage.employee.reports.active', compact('employees'));
     }
 
+
+    /**
+     * function to get the suspended employees page
+     * @return \Illuminate\Contracts\View\View
+     */
     public function getSuspendedEmployeesPage()
     {
-        $employees = Employee::all();
-        // $employees = Employee::where('status', 'active')
-        //     ->orderBy('created_at', 'desc')
-        //     ->get();
+        $employees = Employee::whereHas('currentStatus.status', function ($q) {
+            $q->where('name', 'Suspended');
+        })->with('currentStatus.status')->get();
+
 
         return view('employee.manage.employee.reports.suspended', compact('employees'));
     }
+
+
+    public function getOnLeaveEmployeesPage()
+    {
+        $employees = Employee::whereHas('currentStatus.status', function ($q) {
+            $q->where('name', 'On Leave');
+        })->with('currentStatus.status')->get();
+
+        return view('employee.manage.employee.reports.on_leave', compact('employees'));
+    }
+
+    public function getResignedEmployeesPage()
+    {
+        $employees = Employee::whereHas('currentStatus.status', function ($q) {
+            $q->where('name', 'resigned');
+        })->with('currentStatus.status')->get();
+
+        return view('employee.manage.employee.reports.resigned', compact('employees'));
+    }
+    public function getTerminatedEmployeesPage()
+    {
+        $employees = Employee::whereHas('currentStatus.status', function ($q) {
+            $q->where('name', 'Terminated');
+        })->with('currentStatus.status')->get();
+
+        return view('employee.manage.employee.reports.terminated', compact('employees'));
+    }
+
+    public function updateStatus(Request $request, Employee $employee)
+    {
+        $request->validate([
+            'status' => 'required|exists:statuses,id',
+            'effective_date' => 'nullable|date',
+            'reason' => 'nullable|string|max:1000',
+        ]);
+
+        // Mark all other status histories inactive
+        $employee->statusHistories()->update(['isActive' => false]);
+
+        // Create new status history
+        $employee->statusHistories()->create([
+            'status_id' => $request->status,
+            'reason' => $request->reason,
+            'effective_date' => $request->effective_date ?? now(),
+            'assigned_by' => auth()->id(),
+            'isActive' => true,
+        ]);
+
+        return redirect()->back()->with('success', 'Employee status updated successfully.');
+    }
+
 }

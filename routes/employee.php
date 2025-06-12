@@ -92,6 +92,7 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::put('/{allowance_id}', 'update')->name('update')->middleware('can:edit_allowances');
         Route::delete('/{allowance_id}', 'destroy')->name('destroy')->middleware('can:delete_allowances');
         Route::put('{allowance}/toggle-status', 'toggleStatus')->name('toggleStatus')->middleware(['can:edit_allowances']);
+        
     });
 
 
@@ -173,6 +174,11 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::patch('/UpdatePayGrade/{employee}', 'UpdatePayGrade')->name('UpdatePayGrade')->middleware(['can:edit_employees']);
         Route::post('/excel/import', 'excelImport')
             ->name('excel.import');
+            // route to update Employee status
+        Route::post('/{employee}/toggle-status', 'updateStatus')
+            ->name('updateStatus')
+            ->middleware(['can:edit_employee_status']);
+        
     });
 //Employee Reports
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
@@ -183,6 +189,9 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::view('/report', 'employee.manage.employee.reports.index')->name('index');
         Route::get('/suspended', 'getSuspendedEmployeesPage')->name('suspended');
         Route::get('/active', 'getActiveEmployeesPage')->name('active');
+        Route::get('/terminated', 'getTerminatedEmployeesPage')->name('terminated');
+        Route::get('/on-leave', 'getOnLeaveEmployeesPage')->name('on_leave');
+        Route::get('/resigned', 'getResignedEmployeesPage')->name('resigned');
     });
 
 

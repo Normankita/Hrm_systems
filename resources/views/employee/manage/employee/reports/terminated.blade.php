@@ -1,0 +1,29 @@
+@extends('layouts.system')
+
+@section('content')
+    <!-- a table to show rejected employee -->
+    <div class="container mt-4">
+        <div class="card shadow rounded">
+            <div class="card-header bg-success">
+                <h4 class="mb-0 text-white">Terminated employees</h4>
+            </div>
+            <div class="card-body">
+                <x-system.reports.generic-report id="terminatedEmployees">
+                    <x-slot name="viewTable">
+                        <x-system.tables.reports.employees.employees :employees="$employees" class="dt-table" />
+                    </x-slot>
+                    <x-slot name="reportTable">
+                        <x-system.tables.reports.employees.employees :employees="$employees" id="terminatedEmployees">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p class="text-muted">
+                                        Note: The table above shows all Terminated.
+                                    </p>
+                                </div>
+                            </div>
+                        </x-system.tables.reports.employees.employees>
+                    </x-slot>
+                </x-system.reports.generic-report>
+            </div>
+        </div>
+    @endsection

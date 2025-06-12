@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Employee;
 use App\Models\EmployeeStatusHistory;
 use App\Models\Status;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class EmployeeStatusHistorySeeder extends Seeder

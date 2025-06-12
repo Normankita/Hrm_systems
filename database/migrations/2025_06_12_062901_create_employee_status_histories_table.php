@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->foreignId('employee_id')->constrained()->onDelete('cascade');
             $table->foreignId('status_id')->constrained('statuses');
             $table->unsignedBigInteger('assigned_by')->nullable();
+            $table->boolean('isActive')->default(true);  
             $table->timestamp('effective_date');
             $table->string('reason')->nullable();
             $table->timestamps();

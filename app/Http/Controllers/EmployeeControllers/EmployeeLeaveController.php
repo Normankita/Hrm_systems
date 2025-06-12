@@ -40,6 +40,7 @@ class EmployeeLeaveController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $this->validateLeaveRequest($request);
 
         $employee = auth()->user()->employee;

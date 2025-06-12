@@ -9,6 +9,7 @@ run php artisan migrate
 
 run php artisan db:seed AllowancePermissionSeeder
 run php artisan db:seed StatusSeeder
+run php artisan db:seed EmployeeStatusPermissions
 
 ## License
 
