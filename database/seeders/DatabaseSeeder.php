@@ -21,10 +21,13 @@ class DatabaseSeeder extends Seeder
 
         $this->call( [
             CompanySeeder::class,
-            RolesSeeder::class
+            RolesSeeder::class,
+            PermissionSeeder::class,
+            AllowancePermissionSeeder::class,
+            UserSeeder::class,
+            StatusSeeder::class,
+            EmployeeStatusHistorySeeder::class,
         ]);
-        $this->call( PermissionSeeder::class );
-        $this->call( UserSeeder::class );
         $this->call( LeaveTypeSeeder::class );
         $this->call( AddingPaygradeToDefaultEmployeeSeeder::class );
 
