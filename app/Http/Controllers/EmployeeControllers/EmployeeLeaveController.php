@@ -41,13 +41,17 @@ class EmployeeLeaveController extends Controller
     public function store(Request $request)
     {
         $this->validateLeaveRequest($request);
-        
+
         $employee = auth()->user()->employee;
-        $response = $this->checkEligibility($employee);
-        if ($response['status'] == 'fail') {
-            return redirect()->back()
-                ->with('fail', $response['message']);
+        $leaveType = LeaveType::where('id', $request->leaveTypeId)->first();
+        if ($leaveType->is_compensated) {
+            $response = $this->checkEligibility($employee);
+            if ($response['status'] == 'fail') {
+                return redirect()->back()
+                    ->with('fail', $response['message']);
+            }
         }
+
         $leave = Leave::create($this->prepareLeaveData($request));
         $this->handleAttachments($request, $leave);
         return redirect()->route('employees.leave.status')->with('success', 'Leave request submitted successfully.');

@@ -8,6 +8,7 @@ run php artisan migrate
 ## Seed Data into the Database (no data loss)
 
 run php artisan db:seed AllowancePermissionSeeder
+run php artisan db:seed StatusSeeder
 
 ## License
 

@@ -171,6 +171,17 @@ class Employee extends Model
             ->withTimestamps();
     }
 
+    public function statusHistories()
+    {
+        return $this->hasMany(EmployeeStatusHistory::class);
+    }
+
+    public function latestStatus()
+    {
+        return $this->hasOne(EmployeeStatusHistory::class)->latestOfMany('effective_date');
+    }
+
+
 
 
 }
