@@ -156,6 +156,12 @@
                                         <span class="nav-text">Rejected payrolls</span>
                                     </a>
                                 </li>
+                                  <li>
+                                    <a class="sidenav-item-link" href="{{ route('employee.manage.payroll.employees.reports.index') }}">
+                                        <i class="mdi mdi-close-circle-outline mr-1"></i>
+                                        <span class="nav-text">Payroll Reports</span>
+                                    </a>
+                                </li>
                             </div>
                         </ul>
                     </li>

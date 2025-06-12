@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use App\Models\Scopes\AuthUserCompanyScope;
+use App\Http\Utils\Traits\HasDateFilter;
 use Illuminate\Database\Eloquent\Model;
 
 class Leave extends Model
 {
+    use HasDateFilter;
 
     protected $fillable = [
         'employee_id',

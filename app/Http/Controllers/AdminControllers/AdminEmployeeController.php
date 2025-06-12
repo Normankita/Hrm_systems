@@ -35,23 +35,6 @@ class AdminEmployeeController extends Controller
         return view('admin.employee.index', compact('employees'));
     }
 
-    public function permissionsAll(): View
-    {
-        $employees = Auth::user()->company->employees()
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return view('admin.employee.employee-list', compact('employees'));
-    }
-
-    public function editPermissions(int $id): View
-    {
-        $employee = Employee::findOrFail($id);
-        $permissions = Permission::all();
-
-        return view('admin.employee.manage_user_permissions', compact('employee', 'permissions'));
-    }
-
     public function create(): View
     {
         $roles = Role::where('name', '!=', 'ADMIN')->get();

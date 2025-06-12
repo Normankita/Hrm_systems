@@ -13,7 +13,7 @@
 
                     <div class="table-responsive">
                         <span>Total Employees: {{ $employees->count() }}</span>
-                        <table class="table table-bordered table-hover   align-middle text-nowrap">
+                        <table class="table table-bordered table-hover   align-middle text-nowrap dt-table">
                             <thead class="table-light text-lime">
 
                                 <tr>

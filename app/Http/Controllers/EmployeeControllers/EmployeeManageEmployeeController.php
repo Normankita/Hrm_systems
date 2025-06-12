@@ -28,6 +28,7 @@ class EmployeeManageEmployeeController extends Controller
     public function index()
     {
         $employees = Auth::user()->company->employees()
+            ->filterByDate(request())
             ->orderBy('created_at', 'desc')
             ->get();
 

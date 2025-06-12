@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Http\Utils\Traits\HasDateFilter;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class Payroll extends Model
 {
+    use HasDateFilter;
     protected $fillable = [
         'employee_id',
         'pay_grade_id',
@@ -31,6 +34,8 @@ class Payroll extends Model
         'approved_at' => 'datetime',
         'payroll_date' => 'date',
     ];
+
+
     public function approvedBy()
     {
         return $this->belongsTo(User::class, 'approved_by');
@@ -46,7 +51,7 @@ class Payroll extends Model
     {
         return $this->belongsTo(PayGrade::class);
     }
-    
+
     public function deductions()
     {
         return $this->belongsToMany(Deduction::class)
