@@ -16,6 +16,19 @@
                         <x-system.reports.report-card-anchor title="Active Employees" :route="route('employee.manage.employees.reports.active')">
                         </x-system.reports.report-card-anchor>
                     </div>
+                    <div class="col-md-4">
+                        <x-system.reports.report-card-anchor title="On Leave Employees" :route="route('employee.manage.employees.reports.onLeave')">
+                        </x-system.reports.report-card-anchor>
+                    </div>
+                    <div class="col-md-4">
+                        <x-system.reports.report-card-anchor title="Resigned Employees" :route="route('employee.manage.employees.reports.resigned')">
+                        </x-system.reports.report-card-anchor>
+                    </div>
+                    <div class="col-md-4">
+                        <x-system.reports.report-card-anchor title="Terminated Employees" :route="route('employee.manage.employees.reports.terminated')">
+                        </x-system.reports.report-card-anchor>
+                    </div>
+                    
                 </div>
             </div>
         </div>

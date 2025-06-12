@@ -66,7 +66,7 @@ trait EmployeeTrait
     public static function getEmployeeById($id): Employee
     {
         // Find the employee by ID
-        $employee = Employee::with(['pay_grades', 'attachments', 'payrolls'])->findOrFail($id);
+        $employee = Employee::with(['pay_grades', 'attachments', 'payrolls','currentStatus', 'statusHistories'])->findOrFail($id);
         return $employee;
     }
 
