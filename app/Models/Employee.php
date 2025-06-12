@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Http\Utils\Traits\HasDateFilter;
 use App\Models\Scopes\AuthUserCompanyScope;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Employee extends Model
 {
+    use HasDateFilter;
 
     protected static function booted()
     {
@@ -152,6 +154,9 @@ class Employee extends Model
         // select all leaves where created at this year
         return $this->leaves()
             ->where('status', 'approved')
+            ->with('leaveType', function ($query) {
+                $query->where('is_compensated', false);
+            })
             ->whereYear('start_date', $thisYear)
             ->get();
     }

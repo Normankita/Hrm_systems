@@ -43,8 +43,8 @@ class EmployeeLeaveController extends Controller
         $this->validateLeaveRequest($request);
 
         $employee = auth()->user()->employee;
-        $leaveType = LeaveType::where('id', $request->leaveTypeId)->first();
-        if ($leaveType->is_compensated) {
+        $leaveType = LeaveType::find($request->leaveTypeId);
+        if (!$leaveType->is_compensated) {
             $response = $this->checkEligibility($employee);
             if ($response['status'] == 'fail') {
                 return redirect()->back()

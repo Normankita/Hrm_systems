@@ -28,6 +28,7 @@ class EmployeeManageEmployeeController extends Controller
     public function index()
     {
         $employees = Auth::user()->company->employees()
+            ->filterByDate(request())
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -129,7 +130,7 @@ class EmployeeManageEmployeeController extends Controller
         ]);
     }
 
-        public function UpdatePayGrade(Request $request, Employee $employee)
+    public function UpdatePayGrade(Request $request, Employee $employee)
     {
         // Validate the request input
         $request->validate([
@@ -150,7 +151,7 @@ class EmployeeManageEmployeeController extends Controller
         return back()->with('success', 'Pay grade updated successfully.');
     }
 
-    
+
     public function excelImport(Request $request)
     {
         $rules = [
@@ -177,7 +178,7 @@ class EmployeeManageEmployeeController extends Controller
 
     public function getActiveEmployeesPage()
     {
-        $employees= Employee::all();
+        $employees = Employee::all();
         // $employees = Employee::where('status', 'active')
         //     ->orderBy('created_at', 'desc')
         //     ->get();
@@ -185,9 +186,9 @@ class EmployeeManageEmployeeController extends Controller
         return view('employee.manage.employee.reports.active', compact('employees'));
     }
 
-        public function getSuspendedEmployeesPage()
+    public function getSuspendedEmployeesPage()
     {
-        $employees= Employee::all();
+        $employees = Employee::all();
         // $employees = Employee::where('status', 'active')
         //     ->orderBy('created_at', 'desc')
         //     ->get();

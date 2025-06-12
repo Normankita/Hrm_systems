@@ -53,6 +53,10 @@ class EmployeeManageLeavesController extends Controller
 
 
 
+    /**
+     * get the rejected leaves
+     * @return \Illuminate\Contracts\View\View
+     */
     public function getRejectedLeavesPage()
     {
         $rejectedLeaves = Leave::where('status', 'rejected')
@@ -61,6 +65,11 @@ class EmployeeManageLeavesController extends Controller
             ->with('rejectedLeaves', $rejectedLeaves);
     }
 
+    
+    /**
+     * getting leaves
+     * @return \Illuminate\Contracts\View\View
+     */
     public function getAcceptedLeavesPage()
     {
         $acceptedLeaves = Leave::where('status', 'rejected')
@@ -69,8 +78,14 @@ class EmployeeManageLeavesController extends Controller
             ->with('acceptedLeaves', $acceptedLeaves);
     }
 
+
+    /**
+     * getting the leaves that are pending
+     * @return \Illuminate\Contracts\View\View
+     */
     public function getPendingLeavesPage() {
         $pendingLeaves = Leave::where('status', 'pending')
+            ->filterByDate(request())
             ->get();
         return view('employee.manage.leaves.reports.pending')
             ->with('pendingLeaves', $pendingLeaves);

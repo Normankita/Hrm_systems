@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminControllers\AdminRoleController;
 use App\Http\Controllers\AdminControllers\AdminCompanyController;
 use App\Http\Controllers\AdminControllers\AdminDepartmentController;
 use App\Http\Controllers\AdminControllers\AdminEmployeeController;
+use App\Http\Controllers\AdminControllers\AdminPermissionsController;
 use App\Http\Controllers\AdminControllers\AdminSettingController;
 use App\Http\Controllers\Api\ApiRolesController;
 use Illuminate\Support\Facades\Route;
@@ -15,7 +16,6 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
     ->name('admin.employees.')
     ->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::get('permissions/all','permissionsAll')->name('permissions.all');
         Route::get('edit/{id}', 'edit')->name('edit');
         Route::put('update/{id}', 'update')->name('update');
         Route::get('/create', 'create')->name('create');
@@ -24,12 +24,24 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
         Route::post('/updatePassword/{id}', 'updatePassword')
             ->name('update.password');
         Route::post('/updateProfile/{id}', 'updatePassportPhoto')->name('updateProfilePhoto');
-        Route::get('/edit/permissions/{id}', 'editPermissions')
-            ->name('edit.permissions');
         Route::post('/excel/import', 'excelImport')
             ->name('excel.import');
     });
 
+
+
+
+    Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
+    ->prefix('/admin/employee/permissions')
+    ->controller(AdminPermissionsController::class)
+    ->name('admin.employees.')
+    ->group(function () {
+        Route::get('/all','permissionsAll')->name('permissions.all');
+        Route::get('/edit/permissions/{id}', 'editPermissions')
+            ->name('/edit.permissions');
+    });
+
+    
 
 Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
     ->prefix('/admin/department')

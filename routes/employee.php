@@ -80,7 +80,6 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
 
 
 // Employee Allowances Start here
-
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('employee/manage/{employee}/allowances')
     ->controller(EmployeeManageEmployeeAllowancesController::class)
@@ -154,6 +153,7 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::get('/{payroll}', 'show')->name('show')->middleware(['can:view_payroll']);
     });
 
+
 //  Employee Management Routes
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('/employee/manage/employees')
@@ -174,7 +174,6 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::post('/excel/import', 'excelImport')
             ->name('excel.import');
     });
-
 //Employee Reports
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('employee/manage/employee/reports')
@@ -202,7 +201,6 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::delete('/{deduction}', 'destroy')->name('destroy')->middleware(['can:delete_deductions']);   // Delete deduction
     });
 
-// Payroll Routes
 
 // Payroll Employee Routes
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
@@ -218,6 +216,14 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::post('/{payroll}/reject', 'reject')->name('reject');
         Route::post('/approve-all', 'approveAll')->name('approveAll');
 
+    });
+// payroll report routes
+    Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
+    ->prefix('employee/manage/payroll/employee/reports')
+    ->name('employee.manage.payroll.employees.reports.')
+    ->controller(EmployeeManagePayrollEmployeeController::class)
+    ->group(function () {
+        Route::view('/', 'employee.manage.payroll.reports.index')->name('index');
     });
 
 Route::get('/employees/{employee}/payrolls/{payroll}', [EmployeeManagePayrollController::class, 'show'])->name('payroll.show');
