@@ -37,6 +37,10 @@
 
                 <div class="content"><!-- For Components documentaion -->
                     <x-system.success-and-error />
+                    <button onclick="history.back()" class="btn btn-outline-primary">
+                        <i class="mdi mdi-arrow-left"></i> Back
+                    </button>
+
                     @yield('content')
                 </div>
 
@@ -46,9 +50,9 @@
         </div>
     </div>
     <!-- Card Offcanvas -->
-    @include("_partials._offCanvas")
+    @include('_partials._offCanvas')
 
-    @include("_partials._scripts")
+    @include('_partials._scripts')
 
     @yield('scripts')
 

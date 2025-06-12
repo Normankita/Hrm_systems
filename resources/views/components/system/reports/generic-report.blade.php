@@ -1,22 +1,22 @@
       @props(['id'])
       <!-- For PDF usability -->
       <div class="report" id="{{ $id }}">
-          <!-- three buttons for pdf, excel, and print with MDI icons -->
-          <div class="mb-3 d-none printers-buttons">
-              <x-system.pdfs.pdf-trigger-btn :id="$id" />
-              <x-system.excel.excel-trigger-btn :id="$id" />
-          </div>
-          <div>
-              <div class="container">
-                  <div class="col-md-12">
-                      <!-- decrale a named slot called header -->
-                      {{ $viewTable }}
-                      <div class="d-none">
-                          {{ $reportTable }}
-                      </div>
-                  </div>
-              </div>
-          </div>
+            <!-- three buttons for pdf, excel, and print with MDI icons -->
+            <div class="mb-3 d-none printers-buttons">
+                <x-system.pdfs.pdf-trigger-btn :id="$id" />
+                <x-system.excel.excel-trigger-btn :id="$id" />
+            </div>
+            <div>
+                <div class="container">
+                    <div class="col-md-12">
+                        <!-- decrale a named slot called header -->
+                        {{ $viewTable }}
+                        <div class="d-none">
+                            {{ $reportTable }}
+                        </div>
+                    </div>
+                </div>
+            </div>
       </div>
 
       <script>
