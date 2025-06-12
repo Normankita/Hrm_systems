@@ -3,6 +3,8 @@
 namespace App\Http\Utils\Traits;
 
 use App\Models\Employee;
+use App\Models\EmployeeStatusHistory;
+use App\Models\Status;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -29,6 +31,15 @@ trait EmployeeTrait
             $user->assignRole($roles);
             $data['user_id'] = $user->id;
             $employee = Employee::create($data);
+            $status=Status::where('name', 'Active')->first();
+            // create an employee status history record of which isActive is true 
+            EmployeeStatusHistory::create([
+                'employee_id' => $employee->id,
+                'status_id' => $status->id,
+                'is_active' => true,
+                'effective_from' => now(),
+                'assigned_by' => Auth::user()->id,
+            ]);
             self::assignActivePaygradeToEmployee(
                 $employee->id,
                 $data['pay_grade_id'],

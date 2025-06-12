@@ -40,10 +40,11 @@ class EmployeeLeaveController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $this->validateLeaveRequest($request);
 
         $employee = auth()->user()->employee;
-        $leaveType = LeaveType::where('id', $request->leaveTypeId)->first();
+        $leaveType = LeaveType::where('id', $request->leave_type_id)->first();
         if ($leaveType->is_compensated) {
             $response = $this->checkEligibility($employee);
             if ($response['status'] == 'fail') {

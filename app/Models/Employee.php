@@ -176,10 +176,11 @@ class Employee extends Model
         return $this->hasMany(EmployeeStatusHistory::class);
     }
 
-    public function latestStatus()
+    public function currentStatus()
     {
-        return $this->hasOne(EmployeeStatusHistory::class)->latestOfMany('effective_date');
+        return $this->hasOne(EmployeeStatusHistory::class)->where('isActive', true)->latestOfMany('effective_date');
     }
+
 
 
 

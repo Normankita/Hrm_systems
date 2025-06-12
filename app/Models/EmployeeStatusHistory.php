@@ -10,7 +10,7 @@ class EmployeeStatusHistory extends Model
         'employee_id',
         'status_id',
         'assigned_by',
-        'status',
+        'isActive',
         'effective_date',
         'reason',
     ];

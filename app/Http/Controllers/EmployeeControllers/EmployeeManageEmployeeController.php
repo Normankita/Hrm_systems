@@ -129,7 +129,7 @@ class EmployeeManageEmployeeController extends Controller
         ]);
     }
 
-        public function UpdatePayGrade(Request $request, Employee $employee)
+    public function UpdatePayGrade(Request $request, Employee $employee)
     {
         // Validate the request input
         $request->validate([
@@ -150,7 +150,11 @@ class EmployeeManageEmployeeController extends Controller
         return back()->with('success', 'Pay grade updated successfully.');
     }
 
-    
+    /**
+     * Function to handle the import of employees from an Excel file.
+     * @param \Illuminate\Http\Request $request
+     * @return array{errors: \Illuminate\Support\MessageBag, status: string|\Illuminate\Http\RedirectResponse}
+     */
     public function excelImport(Request $request)
     {
         $rules = [
@@ -175,23 +179,87 @@ class EmployeeManageEmployeeController extends Controller
             ->with($responce);
     }
 
+    /**
+     * getting the active employees page
+     * @return \Illuminate\Contracts\View\View
+     */
     public function getActiveEmployeesPage()
     {
-        $employees= Employee::all();
-        // $employees = Employee::where('status', 'active')
-        //     ->orderBy('created_at', 'desc')
-        //     ->get();
+        $employees = Employee::whereHas('currentStatus.status', function ($q) {
+            $q->where('name', 'Active');
+        })->with('currentStatus.status')->get();
+
 
         return view('employee.manage.employee.reports.active', compact('employees'));
     }
 
-        public function getSuspendedEmployeesPage()
+
+    /**
+     * function to get the suspended employees page
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function getSuspendedEmployeesPage()
     {
-        $employees= Employee::all();
-        // $employees = Employee::where('status', 'active')
-        //     ->orderBy('created_at', 'desc')
-        //     ->get();
+        $employees = Employee::whereHas('currentStatus.status', function ($q) {
+            $q->where('name', 'Suspended');
+        })->with('currentStatus.status')->get();
+
 
         return view('employee.manage.employee.reports.suspended', compact('employees'));
+    }
+
+    
+     public function getOnLeaveEmployeesPage()
+    {
+        $employees = Employee::whereHas('currentStatus.status', function ($q) {
+            $q->where('name', 'On Leave');
+        })->with('currentStatus.status')->get();
+
+        return view('employee.manage.employee.reports.on_leave', compact('employees'));
+    }
+   
+    public function getResignedEmployeesPage()
+    {
+        $employees = Employee::whereHas('currentStatus.status', function ($q) {
+            $q->where('name', 'resigned');
+        })->with('currentStatus.status')->get();
+
+        return view('employee.manage.employee.reports.resigned', compact('employees'));
+    }
+    public function getTerminatedEmployeesPage()
+    {
+        $employees = Employee::whereHas('currentStatus.status', function ($q) {
+            $q->where('name', 'Terminated');
+        })->with('currentStatus.status')->get();
+
+        return view('employee.manage.employee.reports.terminated', compact('employees'));
+    }
+
+    public function updateEmployeeStatus(Request $request, $id)
+    {
+        // get the status id from request then save all the data, employee id, status id, reason, effective date, assigned by in EmployeeStatusHistory table 
+        $request->validate([
+            'status_id' => 'required|exists:statuses,id',
+            'reason' => 'required|string|max:255',
+            'effective_date' => 'required|date',
+        ]);
+        $employee = Employee::findOrFail($id);
+        $status = $request->input('status_id');
+        $reason = $request->input('reason');
+        $effectiveDate = $request->input('effective_date') ?? now();
+        $assignedBy = Auth::user()->id;
+
+        // Update all other employee ststuses in the EmployeeStatusHistory table to false in the inactive column
+        $employee->statusHistories()->update(['isActive' => false]);
+        // Create a new status history record
+        $employee->statusHistories()->create([
+            'status_id' => $status,
+            'reason' => $reason,
+            'effective_date' => $effectiveDate,
+            'assigned_by' => $assignedBy,
+            'isActive' => true,
+        ]);
+
+        return redirect()->back()->with('success', 'Employee status updated successfully');
     }
 }
