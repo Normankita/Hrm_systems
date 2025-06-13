@@ -9,14 +9,15 @@
                         <!-- Employee Status -->
                         <div class="bg-white shadow rounded-2xl p-4">
                             <h2 class="text-gray-600 text-sm mb-1">Status</h2>
-                            <p class="text-xl font-semibold text-green-600">Active <!-- Replace with dynamic status -->
+                            <p class="text-xl font-semibold text-green-600">
+                                {{ $employee->currentStatus->status->name }}
                             </p>
                         </div>
 
                         <!-- Net Salary -->
                         <div class="bg-white shadow rounded-2xl p-4">
                             <h2 class="text-gray-600 text-sm mb-1">Net Salary (This Month)</h2>
-                            <p class="text-xl font-semibold text-blue-600">TZS 1,200,000
+                            <p class="text-xl font-semibold text-blue-600">TZS {{ $dashboard['net_salary']}}
                                 <!-- Replace with dynamic salary -->
                             </p>
                         </div>
@@ -32,9 +33,9 @@
                         <!-- Leave Balance -->
                         <div class="bg-white shadow rounded-2xl p-4">
                             <h2 class="text-gray-600 text-sm mb-1">Leave Balance</h2>
-                            <p class="text-md text-gray-800">Annual: 10 days <!-- Replace with dynamic annual leave for Employee that is from the table -->
+                            <p class="text-md text-gray-800">Annual: {{ $dashboard['leave_balance'] }} days
+                                <!-- Replace with dynamic annual leave for Employee that is from the table -->
                             </p>
-                            <p class="text-md text-gray-800">Sick: 5 days <!-- Replace with dynamic sick leave --></p>
                         </div>
                     </div>
 
@@ -42,36 +43,36 @@
                         <!-- Recent Payslips -->
                         <div class="bg-white shadow rounded-2xl p-6">
                             <h3 class="text-lg font-semibold text-gray-700 mb-4">Recent Payslips</h3>
-                            <ul>
-                                <li class="border-b py-2 flex justify-between">
-                                    <span>March 2025</span>
-                                    <a href="#" class="text-blue-600 text-sm">Download</a>
-                                    <!-- Replace with payslip route -->
-                                </li>
-                                <li class="border-b py-2 flex justify-between">
-                                    <span>February 2025</span>
-                                    <a href="#" class="text-blue-600 text-sm">Download</a>
-                                </li>
-                                <li class="border-b py-2 flex justify-between">
-                                    <span>January 2025</span>
-                                    <a href="#" class="text-blue-600 text-sm">Download</a>
-                                </li>
-                                <!-- Loop through dynamic payslips -->
-                            </ul>
+                            @if ($dashboard['recent_payrolls']->isNotEmpty())
+                                <ul>
+                                    @foreach ($dashboard['recent_payrolls'] as $payroll)
+                                        <li class="border-b py-2 flex justify-between">
+                                            <span>{{ $payroll->period }}</span>
+                                                <a href="{{ asset('storage/' . $payroll->payslip_path) }}" class="text-blue-600 text-sm">Download</a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
                         </div>
 
                         <!-- Recent Leave Requests -->
                         <div class="bg-white shadow rounded-2xl p-6">
                             <h3 class="text-lg font-semibold text-gray-700 mb-4">Recent Leave Requests</h3>
                             <ul>
-                                <li class="border-b py-2">
-                                    <span class="text-sm">Annual Leave: 2025-03-10 to 2025-03-15</span>
-                                    <span class="ml-2 text-xs text-green-500">(Approved)</span>
-                                </li>
-                                <li class="border-b py-2">
-                                    <span class="text-sm">Sick Leave: 2025-02-20 to 2025-02-22</span>
-                                    <span class="ml-2 text-xs text-yellow-500">(Pending)</span>
-                                </li>
+                                @if ($dashboard['recent_leaves']->isNotEmpty())
+                                    @foreach ($dashboard['recent_leaves'] as $leave)
+                                        <li class="border-b py-2">
+                                            <span class="text-sm">{{ $leave->leaveType->name }}:
+                                                {{ $leave->start_date }} to {{ $leave->end_date }}</span>
+                                            <span
+                                                class="ml-2 text-xs {{ $leave->status == 'Approved' ? 'text-green-500' : ($leave->status == 'Pending' ? 'text-yellow-500' : 'text-red-500') }}">
+                                                ({{ $leave->status }})
+                                            </span>
+                                        </li>
+                                    @endforeach
+                                @else
+                                    <li class="text-gray-500">No recent leave requests.</li>
+                                @endif
                                 <!-- Loop through dynamic leave requests -->
                             </ul>
                         </div>

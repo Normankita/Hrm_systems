@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Utils\Traits\HasDateFilter;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -63,6 +64,7 @@ class Payroll extends Model
     {
         return $this->belongsToMany(EmployeeAllowance::class, 'employee_allowance_payroll')->withPivot('amount');
     }
+
 
 
 }
