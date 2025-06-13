@@ -25,12 +25,7 @@
                         <td>{{ $employee->date_of_termination ?? 'N/A'}}</td>
                         <td>{{$employee->email}}</td>
                         <td>{{ $employee->employee_type }}</td>
-                        {{-- <td>
-                            <span class="badge badge-danger">
-                                {{ $employee->status }}
-                            </span>
-                        </td> --}}
-                        <td>{{ Str::limit($employee->reason, 30, '...')??'N/A' }}</td>
+                        <td>{{ Str::limit($employee->currentStatus->reason, 30, '...')??'N/A' }}</td>
                     </tr>
                 @endforeach
             </tbody>

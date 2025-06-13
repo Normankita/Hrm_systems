@@ -2,7 +2,6 @@
 
 @section('content')
     <!-- a table to show rejected leaves -->
-    <div class="container mt-4">
         <div class="card shadow rounded">
             <div class="card-header bg-success">
                 <h4 class="mb-0 text-white">Accepted Leaves</h4>

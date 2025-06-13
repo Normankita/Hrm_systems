@@ -2,7 +2,6 @@
 
 @section('content')
     <!-- a table to show rejected employee -->
-    <div class="container mt-4">
         <div class="card shadow rounded">
             <div class="card-header bg-success">
                 <h4 class="mb-0 text-white">Resigned employees</h4>
@@ -17,7 +16,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <p class="text-muted">
-                                        Note: The table above shows all Resigned.
+                                        Note: The table below shows all Resigned employees.
                                     </p>
                                 </div>
                             </div>

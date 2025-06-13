@@ -5,7 +5,6 @@ namespace App\Http\Controllers\EmployeeControllers;
 use App\Http\Controllers\Controller;
 use App\Models\Allowance;
 use App\Models\Employee;
-use App\Models\EmployeeAllowance;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 

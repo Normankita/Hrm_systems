@@ -24,8 +24,8 @@
               let element = document.getElementById(`${id}-pdf`);
               html2pdf()
                   .set({
-                      margin: 0.5,
-                      filename: 'mypdf.pdf',
+                      margin: 0.1,
+                      filename: `${id}.pdf`,
                       image: {
                           type: 'jpeg',
                           quality: 0.98
@@ -44,11 +44,11 @@
           }
 
           function exportToExcel(id) {
-              console.log("Exporting to Excel...");
+            //   console.log("Exporting to Excel...");
               var table = document.getElementById(`${id}-excel`);
               var workbook = XLSX.utils.table_to_book(table, {
                   sheet: "Sheet 1"
               });
-              XLSX.writeFile(workbook, "data.xlsx");
+              XLSX.writeFile(workbook, `${id}-data.xlsx`);
           }
       </script>

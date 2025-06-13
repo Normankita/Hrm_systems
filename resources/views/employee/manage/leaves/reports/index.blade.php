@@ -1,6 +1,5 @@
 @extends('layouts.system')
 @section('content')
-    <div class="container mt-4">
         <div class="card shadow rounded">
             <div class="card-header bg-primary">
                 <h4 class="mb-0 text-white">Leave Reports</h4>
