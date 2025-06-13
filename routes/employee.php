@@ -190,7 +190,7 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::get('/suspended', 'getSuspendedEmployeesPage')->name('suspended');
         Route::get('/active', 'getActiveEmployeesPage')->name('active');
         Route::get('/terminated', 'getTerminatedEmployeesPage')->name('terminated');
-        Route::get('/on-leave', 'getOnLeaveEmployeesPage')->name('on_leave');
+        Route::get('/on-leave', 'getOnLeaveEmployeesPage')->name('onLeave');
         Route::get('/resigned', 'getResignedEmployeesPage')->name('resigned');
     });
 

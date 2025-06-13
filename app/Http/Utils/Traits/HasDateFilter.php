@@ -16,7 +16,7 @@ trait HasDateFilter
      */
     public function scopeFilterByDate(Builder $query, $request, $column = 'created_at'): Builder
     {
-        dd($request->dateEnabled);
+        // dd($request->dateEnabled);
         if ($request->has('dateEnabled') && $request->input('dateEnabled') && $request->input('dateEnabled') == "on" && $request->filled('date')) {
             $query->whereDate($column, $request->input('date'));
             // set this two variables into flash sessions

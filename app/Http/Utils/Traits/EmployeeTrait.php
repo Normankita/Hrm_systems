@@ -39,6 +39,7 @@ trait EmployeeTrait
                 'is_active' => true,
                 'effective_from' => now(),
                 'assigned_by' => Auth::user()->id,
+                'reason'=>'Got hired',
             ]);
             self::assignActivePaygradeToEmployee(
                 $employee->id,
