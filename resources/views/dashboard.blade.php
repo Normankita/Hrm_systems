@@ -11,6 +11,14 @@
 
 @section('content')
     @role('ADMIN')
+        {{-- @php
+            $dashboard = collect(DashboardDataService::getAdminDashboardData());
+        @endphp
+        @if ($dashboard->isEmpty())
+            @php
+                $invalidState = true;
+            @endphp
+        @endif --}}
         @include('admin.dashboard')
     @endrole
 

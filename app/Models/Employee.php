@@ -131,6 +131,33 @@ class Employee extends Model
         return $activeGrade;
     }
 
+    public static function countEmployeesCurrentlyOnLeave(): int
+    {
+        return static::whereHas('leaves', function ($query) {
+            $today = Carbon::today();
+            $query->where('status', 'approved')
+                ->whereDate('start_date', '<=', $today)
+                ->whereDate('end_date', '>=', $today);
+        })->count();
+    }
+    /**
+     * Check if the employee is currently on leave
+     *
+     * @return bool
+     */
+
+    public function isCurrentlyOnLeave(): bool
+    {
+        $today = Carbon::today();
+
+        return $this->leaves()
+            ->where('status', 'approved')
+            ->whereDate('start_date', '<=', $today)
+            ->whereDate('end_date', '>=', $today)
+            ->exists();
+
+    }
+
 
     /**
      * Summary of getBaseSalary
@@ -184,9 +211,9 @@ class Employee extends Model
     public function currentStatus()
     {
         return $this->hasOne(EmployeeStatusHistory::class)
-        ->where('isActive', true);
+            ->where('isActive', true);
     }
-        public function getApprovedMonthPayrolls(Carbon $month)
+    public function getApprovedMonthPayrolls(Carbon $month)
     {
         return $this->payrolls()
             ->where('period', $month->format('Y-m'))
