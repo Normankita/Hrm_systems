@@ -30,6 +30,8 @@ class DashboardDataService
 
     }
 
+    /** */
+
         private static function getLeaveDaysCount($employeeLeaves)
     {
         $daysCount = 0;
@@ -43,4 +45,6 @@ class DashboardDataService
         }
         return $daysCount;
     }
+
+
 }
