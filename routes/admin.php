@@ -11,6 +11,17 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
+    ->prefix('/admin/employee/permissions')
+    ->controller(AdminPermissionsController::class)
+    ->name('admin.employees.')
+    ->group(function () {
+        Route::get('/all', 'permissionsAll')->name('permissions.all');
+        Route::get('/edit/permissions/{id}', 'editPermissions')
+            ->name('edit.permissions');
+    });
+
+
+Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
     ->prefix('/admin/employee')
     ->controller(AdminEmployeeController::class)
     ->name('admin.employees.')
@@ -28,20 +39,6 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
             ->name('excel.import');
     });
 
-
-
-
-    Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
-    ->prefix('/admin/employee/permissions')
-    ->controller(AdminPermissionsController::class)
-    ->name('admin.employees.')
-    ->group(function () {
-        Route::get('/all','permissionsAll')->name('permissions.all');
-        Route::get('/edit/permissions/{id}', 'editPermissions')
-            ->name('/edit.permissions');
-    });
-
-    
 
 Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
     ->prefix('/admin/department')

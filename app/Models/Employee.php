@@ -184,7 +184,7 @@ class Employee extends Model
     public function currentStatus()
     {
         return $this->hasOne(EmployeeStatusHistory::class)
-        ->where('isActive', true);
+            ->where('isActive', true);
     }
         public function getApprovedMonthPayrolls(Carbon $month)
     {
