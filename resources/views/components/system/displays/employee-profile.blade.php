@@ -56,7 +56,7 @@
     $currentEffectiveDate = $employee->currentStatus?->effective_date;
 @endphp
 
-<div class="container mt-4">
+<div class="mt-4">
     <div class="card shadow rounded">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
             <h4 class="mb-0 text-white">
@@ -67,79 +67,90 @@
         <div class="card-body">
 
             <div class="d-flex align-items-center mb-4">
-                <img src="{{ $employee->profile_picture
-                    ? asset('storage/' . $employee->profile_picture)
-                    : 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg' }}"
-                    alt="Profile Image" class="profile-img me-3">
-                <div>
-                    <h2 class="mb-0">{{ $employee->full_name }} <span class="badge text-danger ">
-                            {{ $employee->currentStatus?->status->name }} </span></h2>
-                    <span class="lead">Registered AS: <b>
-                            {{ $employee->user->roles->where('name', '!=', 'EMPLOYEE')->first()->name ?? 'No Role' }}
-                        </b></span>
-                    <p class="text-muted"><span>{{ $employee->employee_type }}</span><span> | </span>
-                        <span>
-                            {{ $employee->pay_grades->where('pivot.status', true)->first()?->name ?? 'No Active Paygrade' }}
-                        </span>
-                    </p>
-
-                    <div class="row justify-content-start">
-                        <div class="col-md-4">
-                            {{-- Profile Image Update (ADMIN, HR_OFFICER) --}}
-                            @can('edit_own_employees')
-                                @hasrole('EMPLOYEE')
-                                    <x-system.modal-button class="btn btn-primary btn-custom me-2" data-bs-toggle="modal"
-                                        id="UpdateProfilePhoto" text="Update Profile Image" />
-
-                                @endhasanyrole
-                            @endcan
-                        </div>
-                        <div class="col-md-3">
-                            {{-- PayGrade Update (PAYROLL_MANAGER) --}}
-                            @can('edit_paygrade')
-                                @hasrole('EMPLOYEE')
-                                    <x-system.modal-button class="btn btn-primary btn-custom me-2" data-bs-toggle="modal"
-                                        id="UpdatePayGrade" text="Update PayGrade" />
-                                @endhasrole
-                            @endcan
-                        </div>
-                        <div class="col-md-4">
-                            {{-- Employee Status update --}}
-                            @can('edit_employee_status')
-                                @hasrole('EMPLOYEE')
-                                    <x-system.modal-button class="btn btn-primary btn-custom me-2" data-bs-toggle="modal"
-                                        id="UpdateEmployeeStatus" text="Update Employee Status" />
-                                @endhasrole
-                            @endcan
-                        </div>
-                        <div class="col-md-3">
-
-                            {{-- Back to List --}}
-                            @canany(['view_employees'])
-                                <a href="{{ route($prefix . '.index') }}" class="btn btn-outline-secondary btn-custom">BACK
+                <div class="row justify-content-start">
+                    <div class="col-sm-12 col-md-6">
+                        {{-- Back to List --}}
+                        @canany(['view_employees'])
+                            <div class="col-md-6 mb-4 mt-2">
+                                <a href="{{ route($prefix . '.index') }}"
+                                    class="btn btn-block btn-outline-secondary btn-custom">BACK
                                     TO
                                     LIST</a>
-                            @endcanany
+                            </div>
+                        @endcanany
+                    </div>
+                    <div class="d-inline-flex align-items-center col-sm-12 col-md-12">
+                        <img src="{{ $employee->profile_picture
+                            ? asset('storage/' . $employee->profile_picture)
+                            : 'https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg' }}"
+                            alt="Profile Image" class="profile-img me-3">
+                        <div>
+                            <h2 class="mb-0">{{ $employee->full_name }}
+                                <span
+                                    class="badge {{ $employee->currentStatus?->status->name == 'Active' ? 'bg-success' : 'bg-danger' }}">
+                                    {{ $employee->currentStatus?->status->name }}</span>
+                            </h2>
+                            <span class="lead">Registered AS: <b>
+                                    {{ $employee->user->roles->where('name', '!=', 'EMPLOYEE')->first()->name ?? 'No Role' }}
+                                </b></span>
+                            <p class="text-muted"><span>{{ $employee->employee_type }}</span><span> | </span>
+                                <span>
+                                    {{ $employee->pay_grades->where('pivot.status', true)->first()?->name ?? 'No Active Paygrade' }}
+                                </span>
+                            </p>
                         </div>
-                        <div class="col-md-4">
-                            {{-- Manage Allowances Button --}}
-                            @canany(['edit_allowances', 'view_allowances', 'create_allowances'])
-                                @hasrole('EMPLOYEE')
-                                    <x-system.btn-view class="btn btn-primary btn-custom me-2" :route="route('employee.manage.employee.allowances.index', $employee)"
-                                        text="Manage Allowances" />
-                                @endhasrole
-                            @endcanany
-                        </div>
-                        <div class="col-md-4">
+                    </div>
 
-                            {{-- Manage Deductions Button --}}
-                            @canany(['edit_deductions', 'view_deductions', 'create_deductions'])
-                                @hasrole('EMPLOYEE')
-                                    <x-system.btn-view class="btn btn-danger btn-custom me-2" :route="route('employee.manage.deductions.index', $employee)"
+
+                    <div class="row justify-content-start">
+
+                        {{-- Profile Image Update (ADMIN, HR_OFFICER) --}}
+                        @can('edit_own_employees')
+                            @hasrole('EMPLOYEE')
+                                <div class="col-md-6 mt-2">
+                                    <x-system.modal-button class="btn btn-block btn-primary btn-custom" data-bs-toggle="modal"
+                                        id="UpdateProfilePhoto" text="UPDATE PROFILE IMAGE" />
+                                </div>
+                            @endhasanyrole
+                        @endcan
+                        {{-- PayGrade Update (PAYROLL_MANAGER) --}}
+                        @can('edit_paygrade')
+                            @hasrole('EMPLOYEE')
+                                <div class="col-md-6 mt-2">
+                                    <x-system.modal-button class="btn btn-block btn-primary btn-custom" data-bs-toggle="modal"
+                                        id="UpdatePayGrade" text="UPDATE PAYGRADE" />
+                                </div>
+                            @endhasrole
+                        @endcan
+                        {{-- Employee Status update --}}
+                        @can('edit_employee_status')
+                            @hasrole('EMPLOYEE')
+                                <div class="col-md-6 mt-2">
+                                    <x-system.modal-button class="btn btn-block btn-primary btn-custom me-2"
+                                        data-bs-toggle="modal" id="UpdateEmployeeStatus" text="UPDATE EMPLOYEE STATUS" />
+                                </div>
+                            @endhasrole
+                        @endcan
+
+                        {{-- Manage Allowances Button --}}
+                        @canany(['edit_allowances', 'view_allowances', 'create_allowances'])
+                            @hasrole('EMPLOYEE')
+                                <div class="col-md-6 mt-2">
+                                    <x-system.btn-view class="btn btn-block btn-primary btn-custom me-2" :route="route('employee.manage.employee.allowances.index', $employee)"
+                                        text="Manage Allowances" />
+                                </div>
+                            @endhasrole
+                        @endcanany
+                        {{-- Manage Loans Button --}}
+                        {{-- Manage Deductions Button --}}
+                        @canany(['edit_deductions', 'view_deductions', 'create_deductions'])
+                            @hasrole('EMPLOYEE')
+                                <div class="col-md-6 mt-2">
+                                    <x-system.btn-view class="btn btn-block btn-primary btn-custom me-2" :route="route('employee.manage.deductions.index', $employee)"
                                         text="Manage Deductions" />
-                                @endhasrole
-                            @endcanany
-                        </div>
+                                </div>
+                            @endhasrole
+                        @endcanany
                     </div>
                 </div>
             </div>
@@ -175,7 +186,6 @@
                 </div>
             </div>
             @hasanyrole(['ADMIN', 'HR_OFFICER', 'EMPLOYEE'])
-
                 {{-- Attachments Section --}}
                 @can('view_attachments')
                     <div class="mb-4">

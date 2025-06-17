@@ -71,7 +71,7 @@
                         <ul class="collapse" id="allowance-menu" data-parent="#sidebar-menu">
                             <div class="sub-menu">
                                 @can('create_allowances')
-                                   <li>
+                                    <li>
                                         <a class="sidenav-item-link" href="{{ route('employee.manage.allowances.create') }}">
                                             <span class="nav-text">Create allowances</span>
                                         </a>
@@ -116,6 +116,11 @@
                                         </a>
                                     </li>
                                 @endcan
+                                <li>
+                                    <a class="sidenav-item-link" href="{{ route('employee.manage.payrolls.index') }}">
+                                        <span class="nav-text">View Payrolls</span>
+                                    </a>
+                                </li>
                             </div>
 
                         </ul>
@@ -125,7 +130,8 @@
                 @canany(['view_payment', 'create_payment', 'edit_payment'])
                     <li class="has-sub">
                         <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                            data-target="#payroll-response-menu" aria-expanded="false" aria-controls="payroll-response-menu">
+                            data-target="#payroll-response-menu" aria-expanded="false"
+                            aria-controls="payroll-response-menu">
                             <i class="mdi mdi-cash-multiple"></i>
                             <span class="nav-text">Manage Payments</span>
                             <b class="caret"></b>
@@ -133,31 +139,36 @@
                         <ul class="collapse" id="payroll-response-menu" data-parent="#sidebar-menu">
                             <div class="sub-menu">
                                 <li>
-                                    <a class="sidenav-item-link" href="{{route('employee.manage.payroll.employees.index')}}">
+                                    <a class="sidenav-item-link"
+                                        href="{{ route('employee.manage.payroll.employees.index') }}">
                                         <i class="mdi mdi-eye-outline mr-1"></i>
                                         <span class="nav-text">View All payrolls</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="sidenav-item-link" href="{{route('employee.manage.payroll.employees.pending')}}">
+                                    <a class="sidenav-item-link"
+                                        href="{{ route('employee.manage.payroll.employees.pending') }}">
                                         <i class="mdi mdi-clock-outline mr-1"></i>
                                         <span class="nav-text">Pending payrolls</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="sidenav-item-link" href="{{route('employee.manage.payroll.employees.approved')}}">
+                                    <a class="sidenav-item-link"
+                                        href="{{ route('employee.manage.payroll.employees.approved') }}">
                                         <i class="mdi mdi-check-circle-outline mr-1"></i>
                                         <span class="nav-text">Approved payrolls</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="sidenav-item-link" href="{{route('employee.manage.payroll.employees.rejected')}}">
+                                    <a class="sidenav-item-link"
+                                        href="{{ route('employee.manage.payroll.employees.rejected') }}">
                                         <i class="mdi mdi-close-circle-outline mr-1"></i>
                                         <span class="nav-text">Rejected payrolls</span>
                                     </a>
                                 </li>
-                                  <li>
-                                    <a class="sidenav-item-link" href="{{ route('employee.manage.payroll.employees.reports.index') }}">
+                                <li>
+                                    <a class="sidenav-item-link"
+                                        href="{{ route('employee.manage.payroll.employees.reports.index') }}">
                                         <i class="mdi mdi-close-circle-outline mr-1"></i>
                                         <span class="nav-text">Payroll Reports</span>
                                     </a>
@@ -186,7 +197,7 @@
                     </li>
                 @endcan
 
-                                {{-- LeaveType management starts here  --}}
+                {{-- LeaveType management starts here  --}}
 
                 @can('view_leaveTypes')
                     <li class="has-sub">
@@ -225,8 +236,9 @@
                                         <span class="nav-text">Manage Leaves</span>
                                     </a>
                                 </li>
-                                 <li>
-                                    <a class="sidenav-item-link" href="{{ route('employee.manage.leave.reports.reports') }}">
+                                <li>
+                                    <a class="sidenav-item-link"
+                                        href="{{ route('employee.manage.leave.reports.reports') }}">
                                         <span class="nav-text">Leave Reports</span>
                                     </a>
                                 </li>

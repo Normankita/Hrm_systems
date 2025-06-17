@@ -57,7 +57,6 @@ class AdminEmployeeController extends Controller
                     'unable to create employee please try again'
             ]);
         }
-
         $employee = Employee::find($outcome['employee']->id);
         return redirect()
             ->route(

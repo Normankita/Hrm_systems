@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
 use App\Http\Services\EmployeeService;
+use App\Http\Utils\Helpers;
 use App\Http\Utils\Traits\EmployeeTrait;
 use App\Http\Utils\Traits\UploadFileTrait;
 use App\Models\Employee;
@@ -14,6 +15,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Numeric;
+use PhpParser\Node\Expr\Cast\Double;
 use Spatie\Permission\Models\Role;
 
 class EmployeeManageEmployeeController extends Controller
@@ -45,11 +48,17 @@ class EmployeeManageEmployeeController extends Controller
 
     public function store(StoreEmployeeRequest $request)
     {
+        Helpers::sanitizeRequestNumbers($request);
+
         $outcome = $this->employeeService->storeEmployee(
             $request,
             self::ATTACHMENT_TYPES,
         );
-
+        if ($outcome['status'] === 'fail') {
+            return redirect()->back()
+                ->with($outcome)
+                ->withInput();
+        }
         return redirect()->route('employee.manage.employees.show', $outcome['employee']->id)
             ->with('success', 'Employee created successfully');
     }

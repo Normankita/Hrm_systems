@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Role;
 use Throwable;
 
@@ -32,15 +33,17 @@ trait EmployeeTrait
             $data['user_id'] = $user->id;
             $employee = Employee::create($data);
             $status=Status::where('name', 'Active')->first();
-            // create an employee status history record of which isActive is true 
+
+            // create an employee status history record of which isActive is true
             EmployeeStatusHistory::create([
                 'employee_id' => $employee->id,
                 'status_id' => $status->id,
                 'is_active' => true,
-                'effective_from' => now(),
+                'effective_date' => now(),
                 'assigned_by' => Auth::user()->id,
                 'reason'=>'Got hired',
             ]);
+
             self::assignActivePaygradeToEmployee(
                 $employee->id,
                 $data['pay_grade_id'],

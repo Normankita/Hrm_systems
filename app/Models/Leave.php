@@ -33,4 +33,9 @@ class Leave extends Model
         return $this->morphMany(
             Attachment::class, 'attachmentable');
     }
+
+    public function leave_appraval()
+    {
+        return $this->hasOne(LeaveApproval::class);
+    }
 }

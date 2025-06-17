@@ -19,4 +19,8 @@ class LeaveApproval extends Model
     {
         return $this->belongsTo(Employee::class);
     }
+
+    public function leave() {
+        return $this->belongsTo(Leave::class);
+    }
 }

@@ -50,7 +50,6 @@ class EmployeeManagePayrollEmployeeController extends Controller
             'status' => 'rejected',
             'rejection_reason' => $request->reason,
         ]);
-
         return back()->with('message', 'Payroll rejected successfully.');
     }
 
@@ -61,7 +60,6 @@ class EmployeeManagePayrollEmployeeController extends Controller
                 'status' => 'approved'
             ]);
         });
-
         return back()->with('message', 'All pending payrolls approved (excluding rejections).');
     }
 }

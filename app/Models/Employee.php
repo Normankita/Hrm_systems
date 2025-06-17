@@ -186,12 +186,18 @@ class Employee extends Model
         return $this->hasOne(EmployeeStatusHistory::class)
             ->where('isActive', true);
     }
-        public function getApprovedMonthPayrolls(Carbon $month)
+
+    public function getApprovedMonthPayrolls(Carbon $month)
     {
         return $this->payrolls()
             ->where('period', $month->format('Y-m'))
             ->where('status', 'approved')
             ->first()->net_salary ?? 0;
+    }
+
+    public function leaveApprovals()
+    {
+        return $this->hasMany(LeaveApproval::class);
     }
 
 }
