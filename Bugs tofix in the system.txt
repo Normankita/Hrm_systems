@@ -1,0 +1,61 @@
+Statutoru deduction i accept decimal
+System Logs
+Comma separator currency
+Approved | Rejected leave comment shall be shown Kweny leave
+restict DoB
+Add Attendance days employee dashboard
+limit only one between PSSSF | NSSF 
+
+
+
+SYSTEM KNOWN ERRORS
+==================== 
+
+
+1. CREATE EMPLOYEE / BOTH WAYS HAITAKI (excel na normal ways)--> fixed 
+
+2. PDF KWENYE LEAVES HAIFANYI KAZI --> Network Error
+
+3. BUTTONS ZA EMPLOYEE PROFILE ZINAONEKANA VIBAYA SANA-->fixed
+
+4. mtu hawezi kuwa na role zaidi ya moja kwa wakati mmoja
+
+5. NETWORK ISSUE KWENYE LOADING SOSMETIMES INALETA SHIDA KIDOGO-->Future updates
+
+6. makadirio ni kwamba todays updates ndio zimeleta errors tulizozipata
+
+7. kunashida ya kwenye kucreate allowance, kucreate na structure yake kiujumla--> future updates
+
+8. je nikweli kwamba hao wengine hawatoonekana kama hawajawekwa kwenye paygrade? --> wanakuwa assigned default paygrade when imported and seeded
+
+9. mtu akichagua nssf basi psssf isitokee -->
+
+10. kwenye kuaccept payroll kuna error inatokea ambayo sio error, hata na mimi siajelewa.
+
+11. Tukiacha itachukua ya base au itachukua ile ya zaman?
+
+12. suspension inashida kwenye interface yake.
+
+13. mtu akiwa suspended au akichangiwa status yake, anakuwa affected vpi?
+
+14. Tracking every movement of the users that he does like edit, delete and updates
+	those are the important ones
+
+15. comma seperation in the currency
+
+16. dedctions ziwe na decial places
+
+17.  display jected or accpeted on view leave. In short show all infos that
+	are required there.
+
+18. Date of birth should start from 18  years old
+
+
+
+
+
+
+
+
+Maoani
+Attendncy ya  mwezi katika dashboard
