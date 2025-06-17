@@ -76,7 +76,7 @@
                                     <div class="col-sm-12 col-md-6">
                                         <label for="percent_{{ $contribution->id }}"
                                             class="form-label">{{ $contribution->name }} (%)</label>
-                                        <input type="number" class="form-control" id="percent_{{ $contribution->id }}"
+                                        <input type="number" step="0.01" class="form-control" id="percent_{{ $contribution->id }}"
                                             name="contributions[{{ $contribution->id }}][percent]"
                                             value="{{ $contribution->percent }}" required>
                                     </div>

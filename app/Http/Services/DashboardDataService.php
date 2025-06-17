@@ -5,6 +5,7 @@ use App\Models\Deduction;
 use App\Models\Employee;
 use App\Models\Leave;
 use App\Models\Payroll;
+use App\Models\Setting;
 use Carbon\Carbon;
 
 class DashboardDataService
@@ -44,8 +45,40 @@ class DashboardDataService
         $data['total_payrolls'] = Payroll::where('status', 'approved')->sum('net_salary');
         $data['total_deductions'] = Deduction::sum('total_amount');
         $data['recent_employees'] = Employee::orderBy('created_at', 'desc')->take(5)->get();
+        $data['recent_leaves'] = Leave::orderBy('created_at', 'desc')->take(5)->get();
+        $data['pending_payrolls'] = Payroll::where('status', 'pending')->count();
+        $data['last_payroll_period'] = Payroll::latest()->first() ? Payroll::latest()->first()->created_at->format('F j') : null;
 
-        dd($data);
+        $pendingPayroll = Payroll::where('status', 'pending')->first();
+
+        if ($pendingPayroll) {
+            $paymentDateSetting = Setting::where('name', 'payment_date')->first();
+
+            if ($paymentDateSetting) {
+                $dayOfMonth = intval($paymentDateSetting->value); 
+                // Get the target payment date in the current month
+                $now = Carbon::now();
+                $year = $now->year;
+                $month = $now->month;
+
+                // If today is past the payment day, use next month
+                if ($now->day > $dayOfMonth) {
+                    $paymentDate = Carbon::createFromDate($year, $month, 1)->addMonth()->day($dayOfMonth);
+                } else {
+                    $paymentDate = Carbon::createFromDate($year, $month, 1)->day($dayOfMonth);
+                }
+
+                $data['days_left_for_payment'] = $now->diffInDays($paymentDate, false); 
+            } else {
+                $data['days_left_for_payment'] = null; 
+            }
+        } else {
+            $data['days_left_for_payment'] = null;
+        }
+
+
+
+        return $data;
     }
 
 

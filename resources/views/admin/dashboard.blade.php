@@ -6,7 +6,7 @@
             <div class="col-sm-6 col-md-3">
                 <div class="card card-default ">
                     <div class="card-header">
-                        <h2>38,700,000 TZS</h2> <!-- Replace with dynamic total payroll value -->
+                        <h2>{{number_format($dashboard['total_payrolls'])}} TZS</h2> <!-- Replace with dynamic total payroll value -->
                         <div class="sub-title">
                             <span>Payroll This Month</span>
                         </div>
@@ -18,7 +18,7 @@
             <div class="col-sm-6 col-md-3">
                 <div class="card card-default">
                     <div class="card-header">
-                        <h2>8,200,000 TZS</h2> <!-- Replace with dynamic deductions value -->
+                        <h2>{{number_format($dashboard['total_deductions'])}} TZS</h2> <!-- Replace with dynamic deductions value -->
                         <div class="sub-title">
                             <span>Total Deductions</span>
                         </div>
@@ -30,7 +30,7 @@
             <div class="col-sm-6 col-md-3">
                 <div class="card card-default">
                     <div class="card-header">
-                        <h2>12</h2> <!-- Replace with dynamic count -->
+                        <h2>{{ $dashboard['employees_on_leave'] }}</h2> <!-- Replace with dynamic count -->
                         <div class="sub-title">
                             <span>Employees on Leave</span>
                         </div>
@@ -42,7 +42,7 @@
             <div class="col-sm-6 col-md-3">
                 <div class="card card-default">
                     <div class="card-header">
-                        <h2>152</h2> <!-- Replace with dynamic total employee count -->
+                        <h2>{{ $dashboard['total_employees'] }}</h2> <!-- Replace with dynamic total employee count -->
                         <div class="sub-title">
                             <span>Total Employees</span>
                         </div>
@@ -74,16 +74,16 @@
                     </div>
                     <div class="card-body">
                         <ul>
-                            <li>Payroll due in 3 days</li>
-                            <li>2 pending payroll approvals</li>
-                            <li>Last payroll run: March 30</li>
+                            <li>Payroll due in {{$dashboard['days_left_for_payment']}} days</li>
+                            <li>{{$dashboard['pending_payrolls']}} pending payroll approvals</li>
+                            <li>Last payroll run: {{$dashboard['last_payroll_period']}}</li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Third Row: Employee Table -->
+        <!-- Third Row: Employee Table --> 
         <div class="row mt-4">
             <div class="col-xl-12">
                 <div class="card card-default">
@@ -101,19 +101,14 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- Replace with dynamic content -->
+                               @foreach ($dashboard['recent_employees'] as $employee )
                                 <tr>
-                                    <td>Jane Doe</td>
-                                    <td>Finance</td>
-                                    <td>Accountant</td>
-                                    <td>2025-04-01</td>
+                                    <td>{{ $employee->full_name }}</td>
+                                    <td>{{ $employee->department->name }}</td>
+                                    <td>{{ $employee->user->roles->pluck('name')->join(', ') }}</td>
+                                    <td>{{ $employee->date_of_hire }}</td>
                                 </tr>
-                                <tr>
-                                    <td>John Smith</td>
-                                    <td>IT</td>
-                                    <td>Developer</td>
-                                    <td>2025-03-28</td>
-                                </tr>
+                               @endforeach
                             </tbody>
                         </table>
                     </div>

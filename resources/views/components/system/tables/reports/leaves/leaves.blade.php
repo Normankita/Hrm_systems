@@ -19,8 +19,8 @@
             @foreach ($leaves as $leave)
                 <tr>
                     <td>{{ $leave->leave_type }}</td>
-                    <td>{{ $leave->start_date->format('Y-m-d') }}</td>
-                    <td>{{ $leave->end_date->format('Y-m-d') }}</td>
+                    <td>{{ $leave->start_date }}</td>
+                    <td>{{ $leave->end_date}}</td>
                     <td><span class="badge badge-danger">
                             {{ $leave->status }}
                         </span></td>

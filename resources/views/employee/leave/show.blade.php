@@ -51,6 +51,20 @@
                             {{ ucfirst($leave->status) }}
                         </span>
                     </div>
+                    @if ($leave->status == 'approved' && $leave->approved_by)
+                        <div class="mb-3">
+                            <strong>Approved By:</strong> {{ $leave->approvedBy->full_name }} {{ $leave->approvedBy->last_name }}
+                        </div>
+                        <div class="mb-3">
+                            <strong>Approved On:</strong> {{ \Carbon\Carbon::parse($leave->approved_at)->toFormattedDateString() }}
+                        </div> 
+                    @endif
+
+                    @if ($leave->comment)
+                        <div class="mb-3">
+                        <strong>Comment: </strong> {{ $leave->comment }}
+                    </div>
+                    @endif
 
                     <!-- Edit and Delete Buttons -->
                     @if ($leave->status!=='approved' && $leave->status!=='rejected')
