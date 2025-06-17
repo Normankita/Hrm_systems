@@ -142,8 +142,8 @@
                     <label class="text-dark font-weight-medium">National ID</label>
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-card-account-details"></span>
-                        <input type="text" name="national_id" class="form-control" placeholder="1234567890123456"
-                            value="{{ old('national_id') }}">
+                        <input type="text" name="national_id" class="form-control" placeholder=""
+                            value="{{ old('national_id') }}" required>
                     </div>
                     @error('national_id')
                         <span class="text-danger d-block">{{ $message }}</span>
@@ -191,7 +191,7 @@
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-home-map-marker"></span>
                         <input type="text" name="residential_address" class="form-control"
-                            placeholder="e.g., Sinza Mori, Dar es Salaam" value="{{ old('residential_address') }}">>
+                            placeholder="e.g., Sinza Mori, Dar es Salaam" value="{{ old('residential_address') }}">
                     </div>
                     @error('residential_address')
                         <span class="text-danger d-block">{{ $message }}</span>

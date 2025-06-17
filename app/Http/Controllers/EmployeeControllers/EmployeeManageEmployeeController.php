@@ -15,8 +15,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rules\Numeric;
-use PhpParser\Node\Expr\Cast\Double;
 use Spatie\Permission\Models\Role;
 
 class EmployeeManageEmployeeController extends Controller
@@ -90,7 +88,6 @@ class EmployeeManageEmployeeController extends Controller
         $employee = EmployeeTrait::getEmployeeById($id);
         $attachments = $employee->attachments()->get();
         $deductions = $employee->deductions()->get();
-
         return view('employee.manage.employee.show', compact('employee', 'attachments'));
     }
 
@@ -161,9 +158,9 @@ class EmployeeManageEmployeeController extends Controller
     }
 
     /**
-     * Function to handle the import of employees from an Excel file.
+     * Summary of excelImport
      * @param \Illuminate\Http\Request $request
-     * @return array{errors: \Illuminate\Support\MessageBag, status: string|\Illuminate\Http\RedirectResponse}
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function excelImport(Request $request)
     {
@@ -176,10 +173,7 @@ class EmployeeManageEmployeeController extends Controller
         ]);
 
         if ($validate->fails()) {
-            return [
-                'status' => 'fail',
-                'errors' => $validate->errors(),
-            ];
+            return redirect()->back()->withErrors($validate)->withInput();
         }
         $responce = $this->employeeService->importEmployees($request);
         if ($responce['status'] === 'error') {
