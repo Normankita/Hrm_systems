@@ -28,13 +28,11 @@ class EmployeeManageEmployeeAllowancesController extends Controller
         $request->validate([
             'allowance_id' => ['required', 'exists:allowances,id'],
             'amount' => ['required', 'numeric', 'min:0'],
-            'frequency' => ['required', Rule::in(['monthly', 'quarterly', 'yearly', 'one-time'])],
+            'frequency' => ['required', Rule::in(['weekly', 'monthly', 'yearly', 'one-time'])],
             'effective_from' => ['nullable', 'date'],
             'effective_to' => ['nullable', 'date', 'after_or_equal:effective_from'],
         ]);
-
         $employee = Employee::findOrFail($employeeId);
-
         $employee->allowances()->attach($request->allowance_id, [
             'amount' => $request->amount,
             'frequency' => $request->frequency,
@@ -44,7 +42,6 @@ class EmployeeManageEmployeeAllowancesController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-
         return back()->with('success', 'Allowance added.');
     }
 
@@ -57,7 +54,6 @@ class EmployeeManageEmployeeAllowancesController extends Controller
         $employee->allowances()->updateExistingPivot($allowanceId, [
             'status' => $request->input('status') ? true : false,
         ]);
-
         return redirect()->back()->with('success', 'Allowance status updated successfully.');
     }
 
