@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EmployeeControllers\EmployeeAllowanceGroupController;
 use App\Http\Controllers\EmployeeControllers\EmployeeLeaveController;
 use App\Http\Controllers\EmployeeControllers\EmployeeManageAllowancesController;
 use App\Http\Controllers\EmployeeControllers\EmployeeManageDeductionController;
@@ -92,7 +93,17 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::put('/{allowance_id}', 'update')->name('update')->middleware('can:edit_allowances');
         Route::delete('/{allowance_id}', 'destroy')->name('destroy')->middleware('can:delete_allowances');
         Route::put('{allowance}/toggle-status', 'toggleStatus')->name('toggleStatus')->middleware(['can:edit_allowances']);
-        
+    });
+
+
+// Employee Allowances Group Routes Starts
+Route::prefix('employee/manage/allowances/groups')
+    ->controller(EmployeeAllowanceGroupController::class)
+    ->name('employee.manage.employee.allowances.groups.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/{id}/edit', 'edit')->name('edit');
     });
 
 
@@ -174,11 +185,11 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::patch('/UpdatePayGrade/{employee}', 'UpdatePayGrade')->name('UpdatePayGrade')->middleware(['can:edit_employees']);
         Route::post('/excel/import', 'excelImport')
             ->name('excel.import');
-            // route to update Employee status
+        // route to update Employee status
         Route::post('/{employee}/toggle-status', 'updateStatus')
             ->name('updateStatus')
             ->middleware(['can:edit_employee_status']);
-        
+
     });
 //Employee Reports
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
@@ -227,7 +238,7 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
 
     });
 // payroll report routes
-    Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
+Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('employee/manage/payroll/employee/reports')
     ->name('employee.manage.payroll.employees.reports.')
     ->controller(EmployeeManagePayrollEmployeeController::class)

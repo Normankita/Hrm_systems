@@ -12,7 +12,7 @@ $(document).ready(function () {
             ordering: true,
             info: true,
             // "lengthChange": false ,
-            order: [[1, "asc"]],
+            order: [[0, "asc"]],
             columnDefs: [
                 {
                     orderable: true,
