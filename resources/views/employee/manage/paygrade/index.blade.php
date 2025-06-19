@@ -25,12 +25,12 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="name">PayGrade base Salary</label>
-                                            <input type="number" value="{{ old('base_salary') }}" class="form-control"
+                                            <input data-format="number" type="text" value="{{ old('base_salary') }}" class="form-control"
                                                 name="base_salary" id="base_salary" required>
                                         </div>
                                         <div class="form-group">
                                             <label for="name">PayGrade Max Salary</label>
-                                            <input type="number" value="{{ old('max_salary') }}" class="form-control"
+                                            <input data-format="number" type="text" value="{{ old('max_salary') }}" class="form-control"
                                                 name="max_salary" id="max_salary" required>
                                         </div>
 
@@ -134,12 +134,12 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="base_salary">Base Salary</label>
-                                                            <input type="number" value="{{ $pay_grade->base_salary }}"
+                                                            <input data-format="number" type="text" value="{{ $pay_grade->base_salary }}"
                                                                 class="form-control" name="base_salary" required>
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="max_salary">Max Salary</label>
-                                                            <input type="number" value="{{ $pay_grade->max_salary }}"
+                                                            <input data-format="number" type="text" value="{{ $pay_grade->max_salary }}"
                                                                 class="form-control" name="max_salary" required>
                                                         </div>
                                                         <div class="form-group">

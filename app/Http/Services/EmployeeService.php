@@ -269,6 +269,7 @@ class EmployeeService
 
                 $dateStrReplace = str_replace('/', '-', $row[10]);
                 $dateOfHire = Carbon::parse($dateStrReplace)->format('Y-m-d') ?? '';
+                
 
                 EmployeeTrait::createEmployee([
                     'full_name' => $row[0],

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\EmployeeControllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Services\DeductionService;
+use App\Http\Utils\Helpers;
 use App\Http\Utils\Traits\DeductionsTrait;
 use App\Models\Deduction;
 use App\Models\Employee;
@@ -30,6 +31,8 @@ class EmployeeManageDeductionController extends Controller
     // Store a deduction for the given employee
     public function store(Request $request, Employee $employee)
     {
+        Helpers::sanitizeRequestNumbers($request);
+
         // Remove this after verifying your inputs
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -63,6 +66,8 @@ class EmployeeManageDeductionController extends Controller
     // Update a deduction for the given employee
     public function update(Request $request, Employee $employee, Deduction $deduction)
     {
+        Helpers::sanitizeRequestNumbers($request);
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'total_amount' => 'required|numeric|min:0',

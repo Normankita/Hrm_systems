@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\EmployeeControllers;
 
+use App\Http\Utils\Helpers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Utils\Traits\PayGradeTrait;
@@ -25,6 +26,7 @@ class EmployeePayGradeController extends Controller
      */
     public function store(Request $request)
     {
+        Helpers::sanitizeRequestNumbers($request);
         $this->validatePayGrade($request);
         // ensure that the new paygrade ranges in not in any of the grade
         $base = $request->base_salary;
@@ -57,6 +59,8 @@ class EmployeePayGradeController extends Controller
      */
     public function update(Request $request, PayGrade $payGrade)
     {
+        Helpers::sanitizeRequestNumbers($request);
+
         $this->validatePayGrade($request, $payGrade->id);
         $this->updatePayGrade($request, $payGrade);
 

@@ -76,6 +76,7 @@ class EmployeeManageEmployeeController extends Controller
 
     public function update(UpdateEmployeeRequest $request, $id)
     {
+         Helpers::sanitizeRequestNumbers($request);
 
         $outcome = $this->employeeService->updateEmployee($request, $id);
 
@@ -138,6 +139,7 @@ class EmployeeManageEmployeeController extends Controller
 
     public function UpdatePayGrade(Request $request, Employee $employee)
     {
+        Helpers::sanitizeRequestNumbers($request);
         // Validate the request input
         $request->validate([
             'pay_grade_id' => 'required|exists:pay_grades,id',

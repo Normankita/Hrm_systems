@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateEmployeeRequest extends FormRequest
@@ -42,5 +43,28 @@ class UpdateEmployeeRequest extends FormRequest
             'cv_document' => '',
             'certificates.*' => '',
         ];
+    }
+        /**
+     * 
+     * custom validator for checking age at hire
+     * @param mixed $validator
+     * @return void
+     */
+    public function withValidator($validator): void
+    {
+        $validator->after(function ($validator) {
+            $dob = $this->input('date_of_birth');
+            $hireDate = $this->input('date_of_hire');
+
+            if ($dob && $hireDate) {
+                $dob = Carbon::parse($dob);
+                $hire = Carbon::parse($hireDate);
+                $ageAtHire = $dob->diffInYears($hire);
+
+                if ($ageAtHire < 18) {
+                    $validator->errors()->add('date_of_birth', 'The employee must be at least 18 years old at the time of hire.');
+                }
+            }
+        });
     }
 }

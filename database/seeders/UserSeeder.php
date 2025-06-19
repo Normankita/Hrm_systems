@@ -90,11 +90,11 @@ class UserSeeder extends Seeder
 
         // 8. Seed statutory contributions
         $contributions = [
-            ['name' => 'PAYE', 'percent' => 9, 'description' => 'Income Tax'],
-            ['name' => 'NSSF', 'percent' => 10, 'description' => 'Social Security Fund'],
-            ['name' => 'PSSSF', 'percent' => 6, 'description' => 'Pension Scheme'],
-            ['name' => 'SDL', 'percent' => 4, 'description' => 'Skills Development Levy'],
-            ['name' => 'WCF', 'percent' => 1, 'description' => 'Workers Compensation Fund'],
+            ['name' => 'PAYE', 'percent' => 0, 'description' => 'Income Tax'],
+            ['name' => 'NSSF', 'percent' => 0, 'description' => 'Social Security Fund'],
+            ['name' => 'PSSSF', 'percent' => 0, 'description' => 'Pension Scheme'],
+            ['name' => 'SDL', 'percent' => 0, 'description' => 'Skills Development Levy'],
+            ['name' => 'WCF', 'percent' => 0, 'description' => 'Workers Compensation Fund'],
         ];
         foreach ($contributions as $c) {
             $c = array_merge(['company_id' => $company->id], $c);

@@ -60,6 +60,9 @@ class EmployeeManagePayrollEmployeeController extends Controller
                 'status' => 'approved'
             ]);
         });
-        return back()->with('message', 'All pending payrolls approved (excluding rejections).');
+        return back()->with([
+            'status' => 'success',
+            'message' => 'All pending payrolls approved (excluding rejections)'
+        ]);
     }
 }
