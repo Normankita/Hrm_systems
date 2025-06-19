@@ -84,6 +84,11 @@
                                         </a>
                                     </li>
                                 @endcan
+                                <li>
+                                    <a href="{{ route('employee.manage.employee.allowances.groups.index') }}">
+                                        <span class="nav-text">Allowance Groups</span>
+                                    </a>
+                                </li>
                             </div>
 
                         </ul>

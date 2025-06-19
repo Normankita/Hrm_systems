@@ -5,18 +5,31 @@
         <div class="row">
             <div class="card">
                 <div class="card-body">
+                    <div class="row justify-content-start">
+                        <div class="col-md-6">
+                            <h3 class="card-title lead" style="text-transform: capitalize;">
+                                {{ strtoupper($employee->full_name) }}
+                            </h3>
+                        </div>
+
+                    </div>
                     {{-- Create Allowance --}}
                     @can('create_allowances')
                         <x-system.modal-button id="createAllowanceModal" form="createAllowanceForm" title="Create Allowance"
-                            text="Create an Allowance" />
+                            text="Give Allowance" />
 
-                        <x-system.modal id="createAllowanceModal" form="createAllowanceForm" title="Create Allowance"
-                            :inside="true">
+                        <x-system.modal size="modal-lg" id="createAllowanceModal" form="createAllowanceForm"
+                            title="Assign Allowance" :inside="true">
                             <form action="{{ route('employee.manage.employee.allowances.store', $employee->id) }}" method="POST"
                                 id="createAllowanceForm">
                                 @csrf
                                 <div class="row">
-                                    <div class="col-md-4 mb-3">
+                                    <div class="col-md-12 mb-3">
+                                        <label for="amount" class="form-label">Employee Name</label>
+                                        <input type="readonly" readonly step="0.01" class="form-control" required
+                                            value="{{ $employee->full_name }}">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
                                         <label for="allowance_id" class="form-label">Allowance</label>
                                         <select name="allowance_id" class="form-control" required>
                                             <option disabled selected>Select Allowance</option>
@@ -30,7 +43,7 @@
                                         @enderror
                                     </div>
 
-                                    <div class="col-md-4 mb-3">
+                                    <div class="col-md-6 mb-3">
                                         <label for="amount" class="form-label">Amount</label>
                                         <input type="number" name="amount" step="0.01" class="form-control" required
                                             value="{{ old('amount') }}">
@@ -39,7 +52,7 @@
                                         @enderror
                                     </div>
 
-                                    <div class="col-md-4 mb-3">
+                                    <div class="col-md-6 mb-3">
                                         <label for="effective_from" class="form-label">Effective From</label>
                                         <input type="date" name="effective_from" class="form-control"
                                             value="{{ old('effective_from') }}">
@@ -48,7 +61,7 @@
                                         @enderror
                                     </div>
 
-                                    <div class="col-md-4 mb-3">
+                                    <div class="col-md-6 mb-3">
                                         <label for="effective_to" class="form-label">Effective Till</label>
                                         <input type="date" name="effective_to" class="form-control"
                                             value="{{ old('effective_to') }}">
@@ -57,7 +70,7 @@
                                         @enderror
                                     </div>
 
-                                    <div class="col-md-4 mb-3">
+                                    <div class="col-md-6 mb-3">
                                         <label for="frequency" class="form-label">Frequency</label>
                                         <select name="frequency" class="form-control" required>
                                             <option value="monthly" @selected(old('frequency') === 'monthly')>Monthly</option>
@@ -80,7 +93,7 @@
 
                     {{-- Allowances Table --}}
                     <div class="table-responsive mt-4">
-                        <table class="table table-bordered">
+                        <table class="table dt-table table-bordered">
                             <thead>
                                 <tr>
                                     <th>Allowance</th>
@@ -92,7 +105,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($employee->allowances as $allowance)
+                                @foreach ($employee->allowances as $allowance)
                                     <tr>
                                         <td>{{ $allowance->name ?? 'N/A' }}</td>
                                         <td>{{ number_format($allowance->pivot->amount, 2) }}</td>
@@ -107,7 +120,8 @@
                                                     onsubmit="return confirm('Are you sure you want to {{ $allowance->pivot->status ? 'deactivate' : 'activate' }} this allowance?')">
                                                     @csrf
                                                     @method('PUT')
-                                                    <input type="hidden" name="status" value="{{ $allowance->pivot->status  ? 0 : 1 }}">
+                                                    <input type="hidden" name="status"
+                                                        value="{{ $allowance->pivot->status ? 0 : 1 }}">
                                                     <button type="submit"
                                                         class="btn btn-sm {{ $allowance->pivot->status ? 'btn-outline-danger' : 'btn-outline-success' }} p-1">
                                                         {{ $allowance->pivot->status ? 'Deactivate' : 'Activate' }}
@@ -115,18 +129,13 @@
                                                 </form>
                                             @endcan
 
-
                                             @can('edit_allowances')
                                                 <x-system.modal-button class="btn btn-outline-dark btn-sm p-1 m-1"
                                                     id="editAllowanceModal-{{ $allowance->id }}" text="Edit" textColor="" />
                                             @endcan
                                         </td>
                                     </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="4" class="text-center text-muted">No allowances found.</td>
-                                    </tr>
-                                @endforelse
+                                @endforeach
                             </tbody>
                         </table>
                     </div>

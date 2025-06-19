@@ -59,4 +59,10 @@ class User extends Authenticatable
         return $this->hasOne(Employee::class);
     }
 
+    public function activeRoles()
+    {
+        return $this->roles()->where('name', '!=', 'EMPLOYEE')
+            ->first();
+    }
+
 }

@@ -227,4 +227,14 @@ class Employee extends Model
         return $this->hasMany(LeaveApproval::class);
     }
 
+    public function allowance_groups()
+    {
+        return $this->belongsToMany(
+            AllowanceGroup::class,
+            'allowance_group_employee'
+        )
+            ->withPivot(['amount', 'isActive'])
+            ->withTimestamps();
+    }
+
 }
