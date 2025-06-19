@@ -20,7 +20,7 @@
                                     </div>
                                     <div class="col-md-12 mb-3">
                                         <label for="total_amount" class="form-label">Amount</label>
-                                        <input type="number" step="0.01" name="total_amount" id="total_amount"
+                                        <input data-format="number" type="text" step="0.01" name="total_amount" id="total_amount"
                                             class="form-control" required>
                                     </div>
                                     <div class="col-md-12 mb-3">
@@ -106,7 +106,7 @@
                                         <div class="mb-3">
                                             <label for="total_amount-{{ $deduction->id }}" class="form-label">Total
                                                 Amount</label>
-                                            <input type="number" step="0.01" name="total_amount"
+                                            <input data-format="number" type="text" step="0.01" name="total_amount"
                                                 id="total_amount-{{ $deduction->id }}" class="form-control"
                                                 value="{{ $deduction->total_amount }}" required>
                                         </div>

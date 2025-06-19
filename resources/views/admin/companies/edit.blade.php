@@ -1,6 +1,6 @@
 @extends('layouts.system')
 @section('content')
-    <div class="container mt-4">
+    
         <div class="card shadow rounded">
             <div class="card-header bg-primary text-white">
                 <h4 class="mb-0 text-white">Edit Company</h4>
@@ -95,5 +95,5 @@
                 </form>
             </div>
         </div>
-    </div>
+    
 @endsection

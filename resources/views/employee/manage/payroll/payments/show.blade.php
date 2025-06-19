@@ -5,7 +5,7 @@
     @can('view_payroll')
         <div class="container mt-4">
             <div class="card shadow-sm border-0">
-                <div class="card-header bg-primary" >
+                <div class="card-header bg-primary">
                     <h4 class="mb-0 text-white">Payroll Details - {{ $employee->full_name }}</h4>
                 </div>
                 <div class="card-body">
@@ -48,14 +48,18 @@
                         <div class="col-md-4">PAYE</div>
                         <div class="col-md-8">{{ number_format($payroll->paye, 2) }}</div>
                     </div>
-                    <div class="row mb-2">
-                        <div class="col-md-4">NSSF</div>
-                        <div class="col-md-8">{{ number_format($payroll->nssf, 2) }}</div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-md-4">PSSSF</div>
-                        <div class="col-md-8">{{ number_format($payroll->psssf, 2) }}</div>
-                    </div>
+                    @if ($payroll->nssf)
+                        <div class="row mb-2">
+                            <div class="col-md-4">NSSF</div>
+                            <div class="col-md-8">{{ number_format($payroll->nssf, 2) }}</div>
+                        </div>
+                    @endif
+                    @if ($payroll->psssf)
+                        <div class="row mb-2">
+                            <div class="col-md-4">PSSSF</div>
+                            <div class="col-md-8">{{ number_format($payroll->psssf, 2) }}</div>
+                        </div>
+                    @endif
                     <div class="row mb-2">
                         <div class="col-md-4">SDL</div>
                         <div class="col-md-8">{{ number_format($payroll->sdl, 2) }}</div>
@@ -105,7 +109,7 @@
                             </div>
                         </div>
                     @endif
-                    
+
 
                     @if ($payroll->status === 'rejected')
                         <div class="row mb-2 text-danger">

@@ -4,12 +4,12 @@ namespace App\Http\Utils\Traits;
 
 use App\Models\Employee;
 use App\Models\EmployeeStatusHistory;
+use App\Models\PayGrade;
 use App\Models\Status;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Role;
 use Throwable;
 
@@ -17,7 +17,13 @@ trait EmployeeTrait
 {
     public static function createEmployee($data): Employee
     {
+
         // start by creating a user account first
+
+        //validate if 
+        
+
+
         DB::beginTransaction();
         try {
             $user = User::create([
@@ -32,7 +38,7 @@ trait EmployeeTrait
             $user->assignRole($roles);
             $data['user_id'] = $user->id;
             $employee = Employee::create($data);
-            $status=Status::where('name', 'Active')->first();
+            $status = Status::where('name', 'Active')->first();
 
             // create an employee status history record of which isActive is true
             EmployeeStatusHistory::create([
@@ -41,20 +47,22 @@ trait EmployeeTrait
                 'is_active' => true,
                 'effective_date' => now(),
                 'assigned_by' => Auth::user()->id,
-                'reason'=>'Got hired',
+                'reason' => 'Got hired',
             ]);
 
+            $PayGrade = PayGrade::find($data['pay_grade_id']);
+            $newSalaryOverride = $data['base_salary_override'] ? $data['base_salary_override'] : $PayGrade->base_salary;
             self::assignActivePaygradeToEmployee(
                 $employee->id,
                 $data['pay_grade_id'],
                 [
                     'assigned_by' => Auth::user()->id,
                     'effective_from' => now(),
-                    'base_salary_override' => $data['base_salary_override'] ? $data['base_salary_override'] : 0,
+                    'base_salary_override' => $newSalaryOverride,
                 ]
             );
             DB::commit();
-        }catch(Throwable $throwable) {
+        } catch (Throwable $throwable) {
             DB::rollBack();
             throw $throwable;
         }
@@ -70,7 +78,7 @@ trait EmployeeTrait
     public static function getEmployeeById($id): Employee
     {
         // Find the employee by ID
-        $employee = Employee::with(['pay_grades', 'attachments', 'payrolls','currentStatus', 'statusHistories'])->findOrFail($id);
+        $employee = Employee::with(['pay_grades', 'attachments', 'payrolls', 'currentStatus', 'statusHistories'])->findOrFail($id);
         return $employee;
     }
 
@@ -102,6 +110,8 @@ trait EmployeeTrait
                 $user->syncRoles([$newRole, $employeeRole]);
             }
         }
+        $PayGrade = PayGrade::find($data['pay_grade_id']);
+        $newSalaryOverride = $data['base_salary_override'] ? $data['base_salary_override'] : $PayGrade->base_salary;
 
         $employee->update($data);
 
@@ -112,7 +122,7 @@ trait EmployeeTrait
                 [
                     'assigned_by' => Auth::user()->id,
                     'effective_from' => $data['effective_from'] ?? now(),
-                    'base_salary_override' => $data['base_salary_override'],
+                    'base_salary_override' => $newSalaryOverride,
                 ]
             );
         }

@@ -134,14 +134,18 @@
                     <td>PAYE</td>
                     <td>{{ number_format($payroll->paye, 2) }}</td>
                 </tr>
-                <tr>
-                    <td>NSSF</td>
-                    <td>{{ number_format($payroll->nssf, 2) }}</td>
-                </tr>
-                <tr>
-                    <td>PSSSF</td>
-                    <td>{{ number_format($payroll->psssf, 2) }}</td>
-                </tr>
+                @if ($payroll->nssf)
+                    <tr>
+                        <td>NSSF</td>
+                        <td>{{ number_format($payroll->nssf, 2) }}</td>
+                    </tr>
+                @endif
+                @if ($payroll->psssf)
+                    <tr>
+                        <td>PSSSF</td>
+                        <td>{{ number_format($payroll->psssf, 2) }}</td>
+                    </tr>
+                @endif
                 <tr>
                     <td>SDL</td>
                     <td>{{ number_format($payroll->sdl, 2) }}</td>
