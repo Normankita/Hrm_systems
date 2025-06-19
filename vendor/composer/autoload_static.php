@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit88970a0117c062eed55fa8728fc43833
+class ComposerStaticInit66fb4a159942bbebce53c944b7190c4f
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -589,8 +589,10 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
         'App\\Http\\Controllers\\AdminControllers\\AdminCompanyController' => __DIR__ . '/../..' . '/app/Http/Controllers/AdminControllers/AdminCompanyController.php',
         'App\\Http\\Controllers\\AdminControllers\\AdminDepartmentController' => __DIR__ . '/../..' . '/app/Http/Controllers/AdminControllers/AdminDepartmentController.php',
         'App\\Http\\Controllers\\AdminControllers\\AdminEmployeeController' => __DIR__ . '/../..' . '/app/Http/Controllers/AdminControllers/AdminEmployeeController.php',
+        'App\\Http\\Controllers\\AdminControllers\\AdminPermissionsController' => __DIR__ . '/../..' . '/app/Http/Controllers/AdminControllers/AdminPermissionsController.php',
         'App\\Http\\Controllers\\AdminControllers\\AdminRoleController' => __DIR__ . '/../..' . '/app/Http/Controllers/AdminControllers/AdminRoleController.php',
         'App\\Http\\Controllers\\AdminControllers\\AdminSettingController' => __DIR__ . '/../..' . '/app/Http/Controllers/AdminControllers/AdminSettingController.php',
+        'App\\Http\\Controllers\\Api\\ApiAllowanceGroupsController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/ApiAllowanceGroupsController.php',
         'App\\Http\\Controllers\\Api\\ApiRolesController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/ApiRolesController.php',
         'App\\Http\\Controllers\\Auth\\AuthenticatedSessionController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/AuthenticatedSessionController.php',
         'App\\Http\\Controllers\\Auth\\ConfirmablePasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ConfirmablePasswordController.php',
@@ -605,9 +607,11 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\DepartmentController' => __DIR__ . '/../..' . '/app/Http/Controllers/DepartmentController.php',
         'App\\Http\\Controllers\\DesignationController' => __DIR__ . '/../..' . '/app/Http/Controllers/DesignationController.php',
-        'App\\Http\\Controllers\\DesignationRoleMappingController' => __DIR__ . '/../..' . '/app/Http/Controllers/DesignationRoleMappingController.php',
-        'App\\Http\\Controllers\\EmployeeControllers\\EmployeeDeductionController' => __DIR__ . '/../..' . '/app/Http/Controllers/EmployeeControllers/EmployeeDeductionController.php',
+        'App\\Http\\Controllers\\EmployeeControllers\\EmployeeAllowanceGroupController' => __DIR__ . '/../..' . '/app/Http/Controllers/EmployeeControllers/EmployeeAllowanceGroupController.php',
         'App\\Http\\Controllers\\EmployeeControllers\\EmployeeLeaveController' => __DIR__ . '/../..' . '/app/Http/Controllers/EmployeeControllers/EmployeeLeaveController.php',
+        'App\\Http\\Controllers\\EmployeeControllers\\EmployeeManageAllowancesController' => __DIR__ . '/../..' . '/app/Http/Controllers/EmployeeControllers/EmployeeManageAllowancesController.php',
+        'App\\Http\\Controllers\\EmployeeControllers\\EmployeeManageDeductionController' => __DIR__ . '/../..' . '/app/Http/Controllers/EmployeeControllers/EmployeeManageDeductionController.php',
+        'App\\Http\\Controllers\\EmployeeControllers\\EmployeeManageEmployeeAllowancesController' => __DIR__ . '/../..' . '/app/Http/Controllers/EmployeeControllers/EmployeeManageEmployeeAllowancesController.php',
         'App\\Http\\Controllers\\EmployeeControllers\\EmployeeManageEmployeeController' => __DIR__ . '/../..' . '/app/Http/Controllers/EmployeeControllers/EmployeeManageEmployeeController.php',
         'App\\Http\\Controllers\\EmployeeControllers\\EmployeeManageLeaveTypeController' => __DIR__ . '/../..' . '/app/Http/Controllers/EmployeeControllers/EmployeeManageLeaveTypeController.php',
         'App\\Http\\Controllers\\EmployeeControllers\\EmployeeManageLeavesController' => __DIR__ . '/../..' . '/app/Http/Controllers/EmployeeControllers/EmployeeManageLeavesController.php',
@@ -628,18 +632,25 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
         'App\\Http\\Requests\\StoreEmployeeRequest' => __DIR__ . '/../..' . '/app/Http/Requests/StoreEmployeeRequest.php',
         'App\\Http\\Requests\\UpdateCompanyRequest' => __DIR__ . '/../..' . '/app/Http/Requests/UpdateCompanyRequest.php',
         'App\\Http\\Requests\\UpdateEmployeeRequest' => __DIR__ . '/../..' . '/app/Http/Requests/UpdateEmployeeRequest.php',
+        'App\\Http\\Resources\\UserResource' => __DIR__ . '/../..' . '/app/Http/Resources/UserResource.php',
+        'App\\Http\\Services\\DashboardDataService' => __DIR__ . '/../..' . '/app/Http/Services/DashboardDataService.php',
         'App\\Http\\Services\\DeductionService' => __DIR__ . '/../..' . '/app/Http/Services/DeductionService.php',
         'App\\Http\\Services\\EmployeeService' => __DIR__ . '/../..' . '/app/Http/Services/EmployeeService.php',
         'App\\Http\\Services\\PayrollService' => __DIR__ . '/../..' . '/app/Http/Services/PayrollService.php',
         'App\\Http\\Services\\PayslipPdfService' => __DIR__ . '/../..' . '/app/Http/Services/PayslipPdfService.php',
         'App\\Http\\Services\\UserService' => __DIR__ . '/../..' . '/app/Http/Services/UserService.php',
         'App\\Http\\Utils\\Helpers' => __DIR__ . '/../..' . '/app/Http/Utils/Helpers.php',
+        'App\\Http\\Utils\\Traits\\AllowanceGroupTrait' => __DIR__ . '/../..' . '/app/Http/Utils/Traits/AllowanceGroupTrait.php',
         'App\\Http\\Utils\\Traits\\DeductionsTrait' => __DIR__ . '/../..' . '/app/Http/Utils/Traits/DeductionsTrait.php',
         'App\\Http\\Utils\\Traits\\EmployeeTrait' => __DIR__ . '/../..' . '/app/Http/Utils/Traits/EmployeeTrait.php',
+        'App\\Http\\Utils\\Traits\\HasDateFilter' => __DIR__ . '/../..' . '/app/Http/Utils/Traits/HasDateFilter.php',
         'App\\Http\\Utils\\Traits\\LeaveTrait' => __DIR__ . '/../..' . '/app/Http/Utils/Traits/LeaveTrait.php',
         'App\\Http\\Utils\\Traits\\PayGradeTrait' => __DIR__ . '/../..' . '/app/Http/Utils/Traits/PayGradeTrait.php',
+        'App\\Http\\Utils\\Traits\\PayrollTrait' => __DIR__ . '/../..' . '/app/Http/Utils/Traits/PayrollTrait.php',
         'App\\Http\\Utils\\Traits\\PdfTrait' => __DIR__ . '/../..' . '/app/Http/Utils/Traits/PdfTrait.php',
         'App\\Http\\Utils\\Traits\\UploadFileTrait' => __DIR__ . '/../..' . '/app/Http/Utils/Traits/UploadFileTrait.php',
+        'App\\Models\\Allowance' => __DIR__ . '/../..' . '/app/Models/Allowance.php',
+        'App\\Models\\AllowanceGroup' => __DIR__ . '/../..' . '/app/Models/AllowanceGroup.php',
         'App\\Models\\Attachment' => __DIR__ . '/../..' . '/app/Models/Attachment.php',
         'App\\Models\\Attendance' => __DIR__ . '/../..' . '/app/Models/Attendance.php',
         'App\\Models\\Bonus' => __DIR__ . '/../..' . '/app/Models/Bonus.php',
@@ -651,9 +662,11 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
         'App\\Models\\Designation' => __DIR__ . '/../..' . '/app/Models/Designation.php',
         'App\\Models\\DesignationRoleMapping' => __DIR__ . '/../..' . '/app/Models/DesignationRoleMapping.php',
         'App\\Models\\Employee' => __DIR__ . '/../..' . '/app/Models/Employee.php',
+        'App\\Models\\EmployeeAllowance' => __DIR__ . '/../..' . '/app/Models/EmployeeAllowance.php',
         'App\\Models\\EmployeeContract' => __DIR__ . '/../..' . '/app/Models/EmployeeContract.php',
         'App\\Models\\EmployeeDocument' => __DIR__ . '/../..' . '/app/Models/EmployeeDocument.php',
         'App\\Models\\EmployeePayGrade' => __DIR__ . '/../..' . '/app/Models/EmployeePayGrade.php',
+        'App\\Models\\EmployeeStatusHistory' => __DIR__ . '/../..' . '/app/Models/EmployeeStatusHistory.php',
         'App\\Models\\Leave' => __DIR__ . '/../..' . '/app/Models/Leave.php',
         'App\\Models\\LeaveApproval' => __DIR__ . '/../..' . '/app/Models/LeaveApproval.php',
         'App\\Models\\LeaveType' => __DIR__ . '/../..' . '/app/Models/LeaveType.php',
@@ -667,6 +680,7 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
         'App\\Models\\Role' => __DIR__ . '/../..' . '/app/Models/Role.php',
         'App\\Models\\Scopes\\AuthUserCompanyScope' => __DIR__ . '/../..' . '/app/Models/Scopes/AuthUserCompanyScope.php',
         'App\\Models\\Setting' => __DIR__ . '/../..' . '/app/Models/Setting.php',
+        'App\\Models\\Status' => __DIR__ . '/../..' . '/app/Models/Status.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'App\\View\\Components\\AppLayout' => __DIR__ . '/../..' . '/app/View/Components/AppLayout.php',
@@ -813,12 +827,17 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
         'Cron\\MinutesField' => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron/MinutesField.php',
         'Cron\\MonthField' => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron/MonthField.php',
         'Database\\Factories\\UserFactory' => __DIR__ . '/../..' . '/database/factories/UserFactory.php',
+        'Database\\Seeders\\AddingPaygradeToDefaultEmployeeSeeder' => __DIR__ . '/../..' . '/database/seeders/AddingPaygradeToDefaultEmployeeSeeder.php',
+        'Database\\Seeders\\AllowancePermissionSeeder' => __DIR__ . '/../..' . '/database/seeders/AllowancePermissionSeeder.php',
         'Database\\Seeders\\CompanySeeder' => __DIR__ . '/../..' . '/database/seeders/CompanySeeder.php',
         'Database\\Seeders\\DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeders/DatabaseSeeder.php',
+        'Database\\Seeders\\EmployeeStatusHistorySeeder' => __DIR__ . '/../..' . '/database/seeders/EmployeeStatusHistorySeeder.php',
+        'Database\\Seeders\\EmployeeStatusPermissions' => __DIR__ . '/../..' . '/database/seeders/EmployeeStatusPermissions.php',
         'Database\\Seeders\\LeaveTypeSeeder' => __DIR__ . '/../..' . '/database/seeders/LeaveTypeSeeder.php',
         'Database\\Seeders\\PayGradeSeeder' => __DIR__ . '/../..' . '/database/seeders/PayGradeSeeder.php',
         'Database\\Seeders\\PermissionSeeder' => __DIR__ . '/../..' . '/database/seeders/PermissionSeeder.php',
         'Database\\Seeders\\RolesSeeder' => __DIR__ . '/../..' . '/database/seeders/RolesSeeder.php',
+        'Database\\Seeders\\StatusSeeder' => __DIR__ . '/../..' . '/database/seeders/StatusSeeder.php',
         'Database\\Seeders\\UserSeeder' => __DIR__ . '/../..' . '/database/seeders/UserSeeder.php',
         'DateError' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateError.php',
         'DateException' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateException.php',
@@ -7602,9 +7621,9 @@ class ComposerStaticInit88970a0117c062eed55fa8728fc43833
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit88970a0117c062eed55fa8728fc43833::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit88970a0117c062eed55fa8728fc43833::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit88970a0117c062eed55fa8728fc43833::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit66fb4a159942bbebce53c944b7190c4f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit66fb4a159942bbebce53c944b7190c4f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit66fb4a159942bbebce53c944b7190c4f::$classMap;
 
         }, null, ClassLoader::class);
     }

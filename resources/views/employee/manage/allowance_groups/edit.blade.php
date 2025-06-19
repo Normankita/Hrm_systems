@@ -102,11 +102,15 @@
                             <div class="mb-5">
                                 <h2>Group Members Table</h2>
                             </div>
+                            <div>
+                            </div>
                             <x-system.table class="dt-table">
                                 <x-slot name="head">
+                                    <input class="all-checker" type="checkbox" name="all">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
+                                            <th>#
+                                            </th>
                                             <th>Name</th>
                                             <th>Amount</th>
                                             <th>Role</th>
@@ -116,11 +120,11 @@
                                 </x-slot>
                                 <x-slot name="body">
                                     <tbody>
-                                        <form action="/delete">
                                         @foreach ($group->employees as $key => $employee)
                                             <tr>
                                                 <th>{{ $key + 1 }}
-                                                    <input type="checkbox" name="employee" value="{{ $employee->id }}">
+                                                    <input class="row-checker" data-check="column" type="checkbox"
+                                                        name="employee" value="{{ $employee->id }}">
                                                 </th>
                                                 <th>{{ $employee->full_name }}</th>
                                                 <th>{{ $employee->pivot->amount }}</th>
@@ -131,7 +135,6 @@
                                                 </th>
                                             </tr>
                                         @endforeach
-                                        </form>
                                     </tbody>
                                 </x-slot>
                             </x-system.table>
@@ -178,7 +181,6 @@
                     this.chosen.amount = this.amount;
                     this.selectedEmployees.push(this.chosen);
                     this.employees.splice(this.employees.indexOf(this.chosen), 1);
-                    console.log(this.selectedEmployees);
                 },
                 removeEmployeeFromSelected(index) {
                     this.employees.push(this.selectedEmployees[index]);
