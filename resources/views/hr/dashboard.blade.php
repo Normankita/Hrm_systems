@@ -121,7 +121,7 @@
                     <div class="card p-4">
                         <h5 class="card-title">Recent Leave Requests</h5>
                         <div class="mb-3 col-5">
-                            <a href="{{ route('hr.leave.index') }}" class="btn btn-primary btn-sm">
+                            <a href="#" class="btn btn-primary btn-sm">
                                 manage leave requests
                             </a>
                         </div>
@@ -173,7 +173,7 @@
                             <div class="mt-4">
                                 <h5 class="card-title">Leave Types Preview</h5>
                                 <div class="mb-3 col-5">
-                                    <a href="{{ route('hr.leave.type.index') }}" class="btn btn-primary btn-sm">
+                                    <a href="#" class="btn btn-primary btn-sm">
                                         manage leave Types
                                     </a>
                                 </div>

@@ -4,6 +4,7 @@ namespace App\Http\Services;
 use App\Models\Deduction;
 use App\Models\Employee;
 use App\Models\Leave;
+use App\Models\LeaveType;
 use App\Models\Payroll;
 use App\Models\Setting;
 use Carbon\Carbon;
@@ -19,6 +20,7 @@ class DashboardDataService
         if ($spentLeaves) {
             $leaveDaysCount = self::getLeaveDaysCount($spentLeaves);
         }
+
         $leavebalance = $leaveDays - $leaveDaysCount;
         $data = [];
         if ($employee) {
@@ -29,6 +31,12 @@ class DashboardDataService
             $data['leave_balance'] = $leavebalance;
             $data['recent_leaves'] = $employee->leaves()->orderBy('created_at', 'desc')->take(5)->get();
             $data['recent_payrolls'] = $employee->payrolls()->orderBy('created_at', 'desc')->take(5)->get();
+            $data['recent_leave_request'] = Employee::getRecentLeaveRequest();
+            $data['leave_types'] = LeaveType::all();
+            $data['employees_on_leave'] = Employee::countEmployeesCurrentlyOnLeave();
+            $data['total_employees'] = Employee::count();
+
+
         }
         return $data;
 
@@ -55,7 +63,7 @@ class DashboardDataService
             $paymentDateSetting = Setting::where('name', 'payment_date')->first();
 
             if ($paymentDateSetting) {
-                $dayOfMonth = intval($paymentDateSetting->value); 
+                $dayOfMonth = intval($paymentDateSetting->value);
                 // Get the target payment date in the current month
                 $now = Carbon::now();
                 $year = $now->year;
@@ -68,9 +76,9 @@ class DashboardDataService
                     $paymentDate = Carbon::createFromDate($year, $month, 1)->day($dayOfMonth);
                 }
 
-                $data['days_left_for_payment'] = $now->diffInDays($paymentDate, false); 
+                $data['days_left_for_payment'] = $now->diffInDays($paymentDate, false);
             } else {
-                $data['days_left_for_payment'] = null; 
+                $data['days_left_for_payment'] = null;
             }
         } else {
             $data['days_left_for_payment'] = null;

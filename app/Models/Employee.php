@@ -140,6 +140,23 @@ class Employee extends Model
                 ->whereDate('end_date', '>=', $today);
         })->count();
     }
+
+    /**
+     * Function to return Employees who are currently on a leave 
+     * @return \Illuminate\Database\Eloquent\Collection<int, Employee>
+     */
+    public static function getRecentLeaveRequest()
+    {
+        $today= Carbon::today();
+        $latestEmployeeLeaveRequests = self::with('leaves')
+            ->whereHas('leaves', function ($query) use ($today) {
+                $query->where('start_date', '<=', $today)->where('end_date', '>=', $today);
+            })
+            ->latest()
+            ->take(10)
+            ->get();
+            return $latestEmployeeLeaveRequests;
+    }
     /**
      * Check if the employee is currently on leave
      *
