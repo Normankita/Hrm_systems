@@ -1,6 +1,7 @@
 <?php
 namespace App\Models;
 
+use App\Http\Utils\Traits\HasEvents;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

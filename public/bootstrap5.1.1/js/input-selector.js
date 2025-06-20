@@ -1,63 +1,79 @@
-let selectedObject = [];
-let domObjects = [];
+class TableSelectionHandler {
+    constructor(tableSelector, allCheckerSelector) {
+        this.tableSelector = tableSelector;
+        this.allCheckerSelector = allCheckerSelector;
+        this.selectedObject = [];
+        this.domObjects = [];
 
-$(document).ready(function () {
-
-    // fetch the visible rows and listen for clicks
-    domObjects = fetchVisibleRows();
-    domObjects.forEach(input => {
-        input.on('click', function () {
-            inCheckerClick(input);
+        $(document).ready(() => {
+            this.initialize();
         });
-    });
-
-    // Now listen for typing in the search input
-    $("div.dataTables_filter input").on("input", function () {
-        // reset the selected object
-        selectedObject = [];
-        // reset the checked boxes
-        resetAllSelected();
-    });
-
-    $(".all-checker").on("click", function () {
-        selectedObject = [];
-        let inputs = fetchVisibleRows();
-        if (this.checked) {
-            inputs.forEach((input) => {
-                selectedObject.push(input.val());
-                input.prop("checked", true);
-            });
-        } else {
-            resetAllSelected();
-        }
-    });
-});
-
-function fetchVisibleRows() {
-    var table = $(".dt-table").DataTable();
-    // Get all visible rows (after search, filter, etc.)
-    var visibleRows = table.rows({ search: "applied" }).nodes();
-    let inputs = [];
-    // Loop through each visible row
-    $(visibleRows).each(function () {
-        inputs.push($(this).find('input[type="checkbox"]'));
-    });
-    return inputs;
-}
-
-function inCheckerClick(element) {
-    if (element.prop('checked')) {
-        if (selectedObject.includes(element.value)) return;
-        selectedObject.push(element.val());
-    } else {
-        if (!selectedObject.includes(element.value)) return;
-        selectedObject.splice(selectedObject.indexOf(element.val()), 1);
     }
-}
 
-function resetAllSelected() {
-    selectedObject = [];
-    domObjects.forEach(input => {
-        input.prop("checked", false);
-    });
+    initialize() {
+        this.domObjects = this.fetchVisibleRows();
+        this.attachCheckboxListeners();
+
+        $(`div.dataTables_filter input`).on("input", () => {
+            this.selectedObject = [];
+            this.resetAllSelected();
+        });
+
+        $(this.allCheckerSelector).on("click", (event) => {
+            this.selectedObject = [];
+            const inputs = this.fetchVisibleRows();
+            if (event.target.checked) {
+                inputs.forEach((input) => {
+                    this.selectedObject.push(input.val());
+                    input.prop("checked", true);
+                });
+            } else {
+                this.resetAllSelected();
+            }
+        });
+    }
+
+    fetchVisibleRows() {
+        const table = $(this.tableSelector).DataTable();
+        const visibleRows = table.rows({ search: "applied" }).nodes();
+        const inputs = [];
+
+        $(visibleRows).each((_, row) => {
+            inputs.push($(row).find('input[type="checkbox"]'));
+        });
+
+        return inputs;
+    }
+
+    attachCheckboxListeners() {
+        this.domObjects.forEach((input) => {
+            input.on("click", () => {
+                this.handleCheckboxClick(input);
+            });
+        });
+    }
+
+    handleCheckboxClick(element) {
+        if (element.prop("checked")) {
+            if (!this.selectedObject.includes(element.val())) {
+                this.selectedObject.push(element.val());
+            }
+        } else {
+            const index = this.selectedObject.indexOf(element.val());
+            if (index !== -1) {
+                this.selectedObject.splice(index, 1);
+            }
+        }
+    }
+
+    resetAllSelected() {
+        this.selectedObject = [];
+        this.domObjects.forEach((input) => {
+            input.prop("checked", false);
+        });
+    }
+
+    getSelected() {
+        return this.selectedObject;
+    }
 }

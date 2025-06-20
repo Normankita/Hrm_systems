@@ -106,7 +106,8 @@
                             </div>
                             <x-system.table class="dt-table">
                                 <x-slot name="head">
-                                    <input class="all-checker" type="checkbox" name="all">
+                                    <label for="all">select all</label>
+                                    <input class="all-checker m-2" type="checkbox" name="all">
                                     <thead>
                                         <tr>
                                             <th>#
@@ -120,7 +121,7 @@
                                 </x-slot>
                                 <x-slot name="body">
                                     <tbody>
-                                        @foreach ($group->employees as $key => $employee)
+                                        @foreach ($group->activeEmployees as $key => $employee)
                                             <tr>
                                                 <th>{{ $key + 1 }}
                                                     <input class="row-checker" data-check="column" type="checkbox"
@@ -138,6 +139,8 @@
                                     </tbody>
                                 </x-slot>
                             </x-system.table>
+                            <button class="btn btn-danger btn-sm" v-on:click="deleteEmployeeFromGroup" type="button">remove
+                                selected</button>
                         </div>
                     </div>
                 </div>
@@ -153,6 +156,9 @@
 
 @section('scripts')
     <script>
+        // Initialize the handler and store the instance
+        const handler1 = new TableSelectionHandler('.dt-table', '.all-checker');
+
         const employees = {!! json_encode($employees) !!};
         const allowanceGroup = {!! json_encode($group) !!};
         const user = {!! json_encode($user) !!};
@@ -169,7 +175,6 @@
                     error: null,
                     user: user,
                     amount: 0,
-
                     removedIndexes: [],
                 };
             },
@@ -205,6 +210,21 @@
                             this.error = "Something went wrong, refresh page and try again";
                         });
 
+                },
+                deleteEmployeeFromGroup() {
+                    let dt = handler1.getSelected();
+                    const route = `/api/groups/remove/employees/from/group/${this.group.id}`;
+                    axios.post(route, {employees: handler1.getSelected(), user: this.user})
+                        .then(response => {
+                            const data = response.data;
+                            if (data.status == 'success') {
+                                location.reload();
+                            }
+                        })
+                        .catch(error => {
+                            this.empSubmit = false;
+                            this.error = "Something went wrong, refresh page and try again";
+                        });
                 },
             },
 
