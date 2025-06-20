@@ -107,17 +107,6 @@ class Inspiring
             'Always remember that you are absolutely unique. Just like everyone else. - Margaret Mead',
             'You must be the change you wish to see in the world. - Mahatma Gandhi',
             'We must ship. - Taylor Otwell',
-            'We become what our mind thinks about. - Earl Nightingale',
-            'We are what we repeatedly do. Excellence, then, is not an act, but a habit. - Aristotle',
-            'We are what we think. All that we are arises with our thoughts. With our thoughts, we make the world. - Buddha',
-            'We do not remember days, we remember moments. - Cesare Pavese',
-            'We do not see things as they are, we see them as we are. - Anaïs Nin',
-            'We do not stop playing because we grow old; we grow old because we stop playing. - George Bernard Shaw',
-            'Our eyes only see, and our ears only hear what our minds are looking for. - Norman Kita',
-            'Our life is what our thoughts make it. - Marcus Aurelius',
-            'Our lives begin to end the day we become silent about things that matter. - Martin Luther King Jr.',
-            'Our thoughts create our reality. - Buddha',
-            'Our thoughts shape our reality. - Buddha',
         ]);
     }
 

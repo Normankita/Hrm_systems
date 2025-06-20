@@ -4,7 +4,6 @@ namespace App\Http\Utils\Traits;
 
 use App\Models\Employee;
 use Carbon\Carbon;
-use PhpParser\Node\Stmt\Return_;
 
 trait LeaveTrait
 {

@@ -36,6 +36,11 @@
  <script src="{{ asset('bootstrap5.1.1/js/custom.js') }}"></script>
  <script src="{{ asset('bootstrap5.1.1/plugins/nprogress/nprogress.js') }}"></script>
  <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+
+ <script src="{{ asset('bootstrap5.1.1/js/defaultTableData.js') }}"></script>
+
+ <script src="{{ asset('bootstrap5.1.1/js/input-selector.js') }}"></script>
+
  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
@@ -43,7 +48,6 @@
  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
- <script src="{{ asset('bootstrap5.1.1/js/defaultTableData.js') }}"></script>
 
  <script>
      $(document).ready(function() {

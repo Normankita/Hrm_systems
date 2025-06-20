@@ -3,23 +3,55 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Utils\Traits\HasEvents;
 use App\Models\AllowanceGroup;
+use App\Models\AllowanceGroupEmployeePivot;
+use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class ApiAllowanceGroupsController extends Controller
 {
 
-    public function removeMembersToGroup(Request $request, $groupId) {
-        // Update isActive to false
-        DB::table('allowance_group_employee')
-            ->where('allowance_group_id', $groupId)
-            ->whereIn('employee_id', $request->ids)
-            ->update([
-                'isActive' => false,
-                'updated_at' => now(),
+    public function removeMembersFromGroup(Request $request, $groupId)
+    {
+        $employeesIds = $request->employees;
+        $user = $request->user;
+        if (count($employeesIds) < 1) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No employees selected',
             ]);
+        }
 
+        DB::beginTransaction();
+        $effectedRow = AllowanceGroupEmployeePivot::where('allowance_group_id', $groupId)
+            ->whereIn('employee_id', $employeesIds)
+            ->get();
+        try {
+            foreach ($effectedRow as $dataRow) {
+                $dataRow->recordEvent(
+                    'update',
+                    $dataRow->toArray(),
+                    $user['id']
+                );
+            }
+            DB::table('allowance_group_employee')
+                ->where('allowance_group_id', $groupId)
+                ->whereIn('employee_id', $employeesIds)
+                ->update([
+                    'isActive' => false,
+                    'updated_at' => now(),
+                ]);
+            DB::commit();
+        } catch (Throwable $throwable) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 'error',
+                'message' => $throwable->getMessage(),
+            ]);
+        }
         return response()->json([
             'status' => 'success',
             'message' => 'Employee removed from group successfully',

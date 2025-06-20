@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use App\Http\Utils\Traits\HasDateFilter;
+use App\Http\Utils\Traits\HasEvents;
 use App\Models\Scopes\AuthUserCompanyScope;
 use Illuminate\Database\Eloquent\Model;
 
 class AllowanceGroup extends Model
 {
 
-    use HasDateFilter;
+    use HasDateFilter, HasEvents;
 
     protected static function booted()
     {
@@ -46,5 +47,15 @@ class AllowanceGroup extends Model
             'allowance_group_employee'
         )->withPivot(['amount', 'isActive'])
             ->withTimestamps();
+    }
+
+    public function activeEmployees()
+    {
+        return $this->employees()->wherePivot('isActive', true);
+    }
+
+    public function inActiveEmployees()
+    {
+        return $this->employees()->wherePivot('isActive', false);
     }
 }

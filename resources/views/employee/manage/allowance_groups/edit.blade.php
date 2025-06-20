@@ -102,11 +102,16 @@
                             <div class="mb-5">
                                 <h2>Group Members Table</h2>
                             </div>
+                            <div>
+                            </div>
                             <x-system.table class="dt-table">
                                 <x-slot name="head">
+                                    <label for="all">select all</label>
+                                    <input class="all-checker m-2" type="checkbox" name="all">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
+                                            <th>#
+                                            </th>
                                             <th>Name</th>
                                             <th>Amount</th>
                                             <th>Role</th>
@@ -116,11 +121,11 @@
                                 </x-slot>
                                 <x-slot name="body">
                                     <tbody>
-                                        <form action="/delete">
-                                        @foreach ($group->employees as $key => $employee)
+                                        @foreach ($group->activeEmployees as $key => $employee)
                                             <tr>
                                                 <th>{{ $key + 1 }}
-                                                    <input type="checkbox" name="employee" value="{{ $employee->id }}">
+                                                    <input class="row-checker" data-check="column" type="checkbox"
+                                                        name="employee" value="{{ $employee->id }}">
                                                 </th>
                                                 <th>{{ $employee->full_name }}</th>
                                                 <th>{{ $employee->pivot->amount }}</th>
@@ -131,10 +136,11 @@
                                                 </th>
                                             </tr>
                                         @endforeach
-                                        </form>
                                     </tbody>
                                 </x-slot>
                             </x-system.table>
+                            <button class="btn btn-danger btn-sm" v-on:click="deleteEmployeeFromGroup" type="button">remove
+                                selected</button>
                         </div>
                     </div>
                 </div>
@@ -150,6 +156,9 @@
 
 @section('scripts')
     <script>
+        // Initialize the handler and store the instance
+        const handler1 = new TableSelectionHandler('.dt-table', '.all-checker');
+
         const employees = {!! json_encode($employees) !!};
         const allowanceGroup = {!! json_encode($group) !!};
         const user = {!! json_encode($user) !!};
@@ -166,7 +175,6 @@
                     error: null,
                     user: user,
                     amount: 0,
-
                     removedIndexes: [],
                 };
             },
@@ -178,7 +186,6 @@
                     this.chosen.amount = this.amount;
                     this.selectedEmployees.push(this.chosen);
                     this.employees.splice(this.employees.indexOf(this.chosen), 1);
-                    console.log(this.selectedEmployees);
                 },
                 removeEmployeeFromSelected(index) {
                     this.employees.push(this.selectedEmployees[index]);
@@ -203,6 +210,21 @@
                             this.error = "Something went wrong, refresh page and try again";
                         });
 
+                },
+                deleteEmployeeFromGroup() {
+                    let dt = handler1.getSelected();
+                    const route = `/api/groups/remove/employees/from/group/${this.group.id}`;
+                    axios.post(route, {employees: handler1.getSelected(), user: this.user})
+                        .then(response => {
+                            const data = response.data;
+                            if (data.status == 'success') {
+                                location.reload();
+                            }
+                        })
+                        .catch(error => {
+                            this.empSubmit = false;
+                            this.error = "Something went wrong, refresh page and try again";
+                        });
                 },
             },
 
