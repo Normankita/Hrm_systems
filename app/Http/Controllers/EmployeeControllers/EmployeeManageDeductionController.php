@@ -32,7 +32,7 @@ class EmployeeManageDeductionController extends Controller
     public function store(Request $request, Employee $employee)
     {
         Helpers::sanitizeRequestNumbers($request);
-
+        
         // Remove this after verifying your inputs
         $validated = $request->validate([
             'name' => 'required|string|max:255',

@@ -6,9 +6,11 @@ use App\Models\Deduction;
 
 class DeductionService
 {
-    public static function createDeduction(array $data): Deduction
+    public static function createDeduction(array $data)
     {
-        return Deduction::create($data);
+        $deduction = Deduction::create($data);
+        $deduction->recordEvent('add', $data);
+        return $deduction;
     }
 
     public static function updateDeduction(Deduction $deduction, array $data): bool

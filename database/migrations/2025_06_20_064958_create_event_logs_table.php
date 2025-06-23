@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->enum('type', ['add', 'delete', 'update']);
             $table->json('data')->nullable();
+            $table->foreignId('company_id');
             $table->timestamps(); // includes created_at & updated_at
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('event_logs');
+        Schema::dropIfExists('events');
     }
 };

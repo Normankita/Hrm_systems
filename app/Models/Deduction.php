@@ -1,12 +1,13 @@
 <?php
 namespace App\Models;
 
+use App\Http\Utils\Traits\HasEvents;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Deduction extends Model
 {
-    use HasFactory;
+    use HasFactory, HasEvents;
 
     protected $fillable = [
         'employee_id',
