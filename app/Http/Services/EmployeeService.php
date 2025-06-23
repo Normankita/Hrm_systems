@@ -50,6 +50,7 @@ class EmployeeService
 
         try {
             $employee = $this->createEmployee($request->all());
+            $employee->recordEvent('add', $request);
         } catch (Throwable $throwable) {
             return [
                 'status' => 'fail',

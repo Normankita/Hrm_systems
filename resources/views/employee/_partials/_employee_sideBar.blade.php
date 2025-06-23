@@ -121,11 +121,6 @@
                                         </a>
                                     </li>
                                 @endcan
-                                <li>
-                                    <a class="sidenav-item-link" href="{{ route('employee.manage.payrolls.index') }}">
-                                        <span class="nav-text">View Payrolls</span>
-                                    </a>
-                                </li>
                             </div>
 
                         </ul>
