@@ -29,7 +29,8 @@ class EmployeeManageLeaveTypeController extends Controller
             ['code' => str_replace(' ', '_', $request->name)]
         );
         Validator::make($request->all(), $rules)->validate();
-        LeaveType::create($request->all());
+       $leaveType= LeaveType::create($request->all());
+       $leaveType->recordEvent('add', $request->all());
         return redirect()->back()
             ->with('success', 'Leave Type created successfully');
     }
@@ -41,12 +42,16 @@ class EmployeeManageLeaveTypeController extends Controller
             'description' => 'nullable|string|max:255',
             'deducts_from_annual_leave' => 'boolean',
         ];
+
+        
         Validator::make($request->all(), $rules)->validate();
-        $leaveType->update([
+        $data= [
             'name' => $request->name,
             'description' => $request->description,
             'deducts_from_annual_leave' => $request->deducts_from_annual_leave,
-        ]);
+        ];
+        $leaveType->update($data);
+       $leaveType->recordEvent('update', $data);
         return redirect()->back()
             ->with(
                 'success',

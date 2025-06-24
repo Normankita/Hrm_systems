@@ -17,13 +17,6 @@ trait EmployeeTrait
 {
     public static function createEmployee($data): Employee
     {
-
-        // start by creating a user account first
-
-        //validate if 
-        
-
-
         DB::beginTransaction();
         try {
             $user = User::create([
@@ -38,9 +31,8 @@ trait EmployeeTrait
             $user->assignRole($roles);
             $data['user_id'] = $user->id;
             $employee = Employee::create($data);
+            $employee->recordEvent('add', $data);
             $status = Status::where('name', 'Active')->first();
-
-            // create an employee status history record of which isActive is true
             EmployeeStatusHistory::create([
                 'employee_id' => $employee->id,
                 'status_id' => $status->id,
@@ -49,7 +41,6 @@ trait EmployeeTrait
                 'assigned_by' => Auth::user()->id,
                 'reason' => 'Got hired',
             ]);
-
             $PayGrade = PayGrade::find($data['pay_grade_id']);
             $newSalaryOverride = $data['base_salary_override'] ? $data['base_salary_override'] : $PayGrade->base_salary;
             self::assignActivePaygradeToEmployee(
@@ -96,37 +87,42 @@ trait EmployeeTrait
         if (!$employee) {
             return null;
         }
-
-        // Update user record
-        $user = User::find($employee->user_id);
-        if ($user) {
-            $user->update([
-                'name' => $data['full_name'] ?? ($data['first_name'] . ' ' . $data['last_name']),
-                'email' => $data['email'],
-            ]);
-            if (isset($data['role_id'])) {
-                $newRole = Role::findById($data['role_id']);
-                $employeeRole = Role::where('name', 'EMPLOYEE')->first();
-                $user->syncRoles([$newRole, $employeeRole]);
+        DB::beginTransaction();
+        try {
+            // Update user record
+            $user = User::find($employee->user_id);
+            if ($user) {
+                $user->update([
+                    'name' => $data['full_name'] ?? ($data['first_name'] . ' ' . $data['last_name']),
+                    'email' => $data['email'],
+                ]);
+                if (isset($data['role_id'])) {
+                    $newRole = Role::findById($data['role_id']);
+                    $employeeRole = Role::where('name', 'EMPLOYEE')->first();
+                    $user->syncRoles([$newRole, $employeeRole]);
+                }
             }
+            $PayGrade = PayGrade::find($data['pay_grade_id']);
+            $newSalaryOverride = $data['base_salary_override'] ? $data['base_salary_override'] : $PayGrade->base_salary;
+            $employee->update($data);
+            $employee->recordEvent('update', $data);
+
+            if (isset($data['pay_grade_id'])) {
+                self::assignActivePaygradeToEmployee(
+                    $employee->id,
+                    $data['pay_grade_id'],
+                    [
+                        'assigned_by' => Auth::user()->id,
+                        'effective_from' => $data['effective_from'] ?? now(),
+                        'base_salary_override' => $newSalaryOverride,
+                    ]
+                );
+            }
+            DB::commit();
+        } catch (Throwable $throwable) {
+            DB::rollBack();
+            throw $throwable;
         }
-        $PayGrade = PayGrade::find($data['pay_grade_id']);
-        $newSalaryOverride = $data['base_salary_override'] ? $data['base_salary_override'] : $PayGrade->base_salary;
-
-        $employee->update($data);
-
-        if (isset($data['pay_grade_id'])) {
-            self::assignActivePaygradeToEmployee(
-                $employee->id,
-                $data['pay_grade_id'],
-                [
-                    'assigned_by' => Auth::user()->id,
-                    'effective_from' => $data['effective_from'] ?? now(),
-                    'base_salary_override' => $newSalaryOverride,
-                ]
-            );
-        }
-
         return $employee;
     }
 

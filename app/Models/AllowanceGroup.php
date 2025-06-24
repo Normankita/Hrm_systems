@@ -49,6 +49,11 @@ class AllowanceGroup extends Model
             ->withTimestamps();
     }
 
+    public function allowance()
+    {
+        return $this->belongsTo(Allowance::class);
+    }
+
     public function activeEmployees()
     {
         return $this->employees()->wherePivot('isActive', true);

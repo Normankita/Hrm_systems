@@ -123,7 +123,7 @@ class PayrollService
 
             DB::beginTransaction();
             try {
-                $payroll = Payroll::create([
+                $payrolldata=[
                     'employee_id' => $employee->id,
                     'pay_grade_id' => $activePayGrade->id,
                     'payroll_date' => $today,
@@ -138,7 +138,9 @@ class PayrollService
                     'psssf' => $psssf,
                     'sdl' => $sdl,
                     'wcf' => $wcf,
-                ]);
+                ];
+                $payroll = Payroll::create($payrolldata);
+                $payroll->recordEvent('add', $payrolldata);
                 foreach ($deductionsToAttach as $item) {
                     $payroll->deductions()->attach($item['id'], [
                         'total_amount' => $item['total_amount']
@@ -159,7 +161,6 @@ class PayrollService
 
                 $path = $pdfService->generate($payroll);
                 $payroll->update(['payslip_path' => $path]);
-
                 DB::commit();
                 $generated[] = $payroll;
             } catch (\Throwable $e) {

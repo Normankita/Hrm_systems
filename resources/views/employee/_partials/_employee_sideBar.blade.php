@@ -89,6 +89,11 @@
                                         <span class="nav-text">Allowance Groups</span>
                                     </a>
                                 </li>
+                                <li>
+                                    <a href="{{ route('employee.manage.frequencies.index') }}"> <span
+                                            class="nav-text">Manage Frequencies</span>
+                                    </a>
+                                </li>
                             </div>
 
                         </ul>

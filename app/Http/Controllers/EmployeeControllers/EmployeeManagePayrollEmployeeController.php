@@ -8,6 +8,7 @@ use App\Http\Utils\Traits\EmployeeTrait;
 use App\Models\Payroll;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class EmployeeManagePayrollEmployeeController extends Controller
 {
@@ -16,7 +17,7 @@ class EmployeeManagePayrollEmployeeController extends Controller
     {
     }
 
-   public function index()
+    public function index()
     {
         $payrolls = Payroll::latest()->get();
         return view('employee.manage.payroll.payments.index', compact('payrolls'));
@@ -45,21 +46,30 @@ class EmployeeManagePayrollEmployeeController extends Controller
         $request->validate([
             'reason' => 'required|string|max:1000',
         ]);
-
-        $payroll->update([
+        $data = [
             'status' => 'rejected',
             'rejection_reason' => $request->reason,
-        ]);
+        ];
+        $payroll->update($data);
+        $payroll->recordEvent('update', $data);
         return back()->with('message', 'Payroll rejected successfully.');
     }
 
     public function approveAll()
     {
-        DB::transaction(function () {
+        DB::beginTransaction();
+        try {
             Payroll::where('status', 'pending')->update([
                 'status' => 'approved'
             ]);
-        });
+            Payroll::recordEvent('update', ['Category'=>'Approved all payrolls']);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return back()->with([
+                'status' => 'fail',
+                'message' => $e->getMessage(),
+            ]);
+        }
         return back()->with([
             'status' => 'success',
             'message' => 'All pending payrolls approved (excluding rejections)'

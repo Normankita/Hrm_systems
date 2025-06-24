@@ -17,7 +17,7 @@
                     {{-- Create Allowance --}}
                     @can('create_allowances')
                         <x-system.modal-button id="createAllowanceGroupModal" form="createAllowanceGroupForm" title="Create Allowance"
-                            text="Give Allowance" />
+                            text="New Group" />
 
                         <x-system.modal id="createAllowanceGroupModal" form="createAllowanceGroupForm"
                             title="New Allowance Group" :inside="true">

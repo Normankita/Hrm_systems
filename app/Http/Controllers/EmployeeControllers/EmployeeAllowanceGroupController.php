@@ -4,8 +4,8 @@ namespace App\Http\Controllers\EmployeeControllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Utils\Traits\AllowanceGroupTrait;
+use App\Models\Allowance;
 use App\Models\AllowanceGroup;
-use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -14,8 +14,9 @@ class EmployeeAllowanceGroupController extends Controller
     use AllowanceGroupTrait;
     public function index() {
         $groups = AllowanceGroup::all();
+        $allowances = Allowance::all();
         return view('employee.manage.allowance_groups.index')
-            ->with('groups', $groups);
+            ->with(['groups'=> $groups, 'allowances'=>$allowances]);
     }
 
     public function store(Request $request) {
@@ -33,6 +34,7 @@ class EmployeeAllowanceGroupController extends Controller
             'name' => $request->name,
             'description' => $request->description,
         ]);
+        
         return redirect()->back()->with('success', 'Allowance group created successfully');
     }
 
@@ -45,5 +47,10 @@ class EmployeeAllowanceGroupController extends Controller
         return view('employee.manage.allowance_groups.edit')
             ->with('group', $group)
             ->with('employees', $employees);
+    }
+    public function getGroupMembers (AllowanceGroup $group){
+        $employees = self::getEmployeeForAdditionSelection($group);
+        return view('employee.manage.allowance_groups.members')
+        ->with(['employees'=> $employees, 'group'=>$group]);
     }
 }

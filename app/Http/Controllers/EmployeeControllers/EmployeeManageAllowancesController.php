@@ -36,44 +36,13 @@ class EmployeeManageAllowancesController extends Controller
             'is_taxable' => 'required|boolean',
         ]);
 
-        Allowance::create([
+        $allowance= Allowance::create([
             'company_id' => auth()->user()->company_id,
             'name' => $request->name,
             'description' => $request->description,
             'is_taxable' => $request->is_taxable
         ]);
+        $allowance->recordEvent('add', $allowance->toArray());
         return redirect()->route('employee.manage.allowances.index')->with('success', 'Allowance created successfully');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Allowance $allowance)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Allowance $allowance)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Allowance $allowance)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Allowance $allowance)
-    {
-        //
     }
 }

@@ -1,4 +1,4 @@
-@extends('layouts.system')
+kito@extends('layouts.system')
 @section('content')
     
         <div class="card shadow rounded">

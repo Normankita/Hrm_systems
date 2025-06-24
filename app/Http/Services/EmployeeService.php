@@ -50,7 +50,6 @@ class EmployeeService
 
         try {
             $employee = $this->createEmployee($request->all());
-            $employee->recordEvent('add', $request);
         } catch (Throwable $throwable) {
             return [
                 'status' => 'fail',
@@ -183,6 +182,7 @@ class EmployeeService
 
             // Update the employee's profile picture.
             $employee->update(['profile_picture' => $path]);
+            $employee->recordEvent('update', ['details' => 'profile picture update', 'target' => $employee->id]);
             $this->handlePassportToProfilePhotoUpload($request);
             return [
                 'status' => 'success',
@@ -270,7 +270,7 @@ class EmployeeService
 
                 $dateStrReplace = str_replace('/', '-', $row[10]);
                 $dateOfHire = Carbon::parse($dateStrReplace)->format('Y-m-d') ?? '';
-                
+
 
                 EmployeeTrait::createEmployee([
                     'full_name' => $row[0],

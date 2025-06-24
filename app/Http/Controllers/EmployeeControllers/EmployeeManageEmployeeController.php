@@ -110,7 +110,7 @@ class EmployeeManageEmployeeController extends Controller
         $employee->user->update([
             'password' => Hash::make($request->password),
         ]);
-
+        $employee->recordEvent('update', ['details'=>'password change', 'target'=> $employee->id]);
         return redirect()->back()->with([
             'status' => 'success',
             'message' => 'Password updated successfully'
@@ -252,14 +252,16 @@ class EmployeeManageEmployeeController extends Controller
         // Mark all other status histories inactive
         $employee->statusHistories()->update(['isActive' => false]);
 
-        // Create new status history
-        $employee->statusHistories()->create([
+        $data=[
             'status_id' => $request->status,
             'reason' => $request->reason,
             'effective_date' => $request->effective_date ?? now(),
             'assigned_by' => auth()->id(),
             'isActive' => true,
-        ]);
+        ];
+        // Create new status history
+        $employee->statusHistories()->create($data);
+        $employee->recordEvent('add', $data);
 
         return redirect()->back()->with('success', 'Employee status updated successfully.');
     }

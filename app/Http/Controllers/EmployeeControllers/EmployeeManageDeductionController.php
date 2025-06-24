@@ -8,7 +8,6 @@ use App\Http\Utils\Helpers;
 use App\Http\Utils\Traits\DeductionsTrait;
 use App\Models\Deduction;
 use App\Models\Employee;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Throwable;

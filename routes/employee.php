@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EmployeeControllers\EmployeeManageAllowanceFrequencyController;
 use App\Http\Controllers\EmployeeControllers\EmployeeAllowanceGroupController;
 use App\Http\Controllers\EmployeeControllers\EmployeeLeaveController;
 use App\Http\Controllers\EmployeeControllers\EmployeeManageAllowancesController;
@@ -64,6 +65,17 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     });
 
 
+// Managing frequencies 
+Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
+    ->prefix('employee/manage/frequencies')
+    ->controller(EmployeeManageAllowanceFrequencyController::class)
+    ->name('employee.manage.frequencies.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/store', 'store')->name('store');
+    });
+
+
 // Managin Allowances
 
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
@@ -104,6 +116,7 @@ Route::prefix('employee/manage/allowances/groups')
         Route::get('/', 'index')->name('index');
         Route::post('/store', 'store')->name('store');
         Route::get('/{id}/edit', 'edit')->name('edit');
+        Route::get('/members/{group}', 'getGroupMembers')->name('members');
     });
 
 
