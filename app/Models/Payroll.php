@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use App\Http\Utils\Traits\HasDateFilter;
+use App\Http\Utils\Traits\HasEvents;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
 class Payroll extends Model
 {
-    use HasDateFilter;
+    use HasDateFilter, HasEvents;
     protected $fillable = [
         'employee_id',
         'pay_grade_id',

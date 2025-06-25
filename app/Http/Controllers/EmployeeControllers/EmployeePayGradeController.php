@@ -29,11 +29,9 @@ class EmployeePayGradeController extends Controller
         Helpers::sanitizeRequestNumbers($request);
         $this->validatePayGrade($request);
         // ensure that the new paygrade ranges in not in any of the grade
-        $base = $request->base_salary;
-        $max = $request->max_salary;
-
+        // $base = $request->base_salary;
+        // $max = $request->max_salary;
         $this->createPayGrade($request);
-
         return redirect()->route('employee.manage.paygrades.index')->with('success', 'Pay Grade created successfully');
     }
 

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Allowance extends Model
 {
-    use HasFactory;
+    use HasFactory, HasEvents;
 
     protected $fillable = [
         'company_id',

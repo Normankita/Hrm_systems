@@ -42,6 +42,7 @@ class EmployeeManageEmployeeAllowancesController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+        $employee->recordEvent('add', $request->all());
         return back()->with('success', 'Allowance added.');
     }
 
@@ -51,9 +52,13 @@ class EmployeeManageEmployeeAllowancesController extends Controller
     {
         $employee = Employee::findOrFail($employeeId);
         $allowance = $employee->allowances()->where('allowance_id', $allowanceId)->firstOrFail();
-        $employee->allowances()->updateExistingPivot($allowanceId, [
-            'status' => $request->input('status') ? true : false,
-        ]);
+        $employee->allowances()->updateExistingPivot(
+            $allowanceId,
+            [
+                'status' => $request->input('status') ? true : false,
+            ]
+        );
+        $employee->recordEvent('update', $request->all());
         return redirect()->back()->with('success', 'Allowance status updated successfully.');
     }
 
@@ -74,15 +79,15 @@ class EmployeeManageEmployeeAllowancesController extends Controller
             'frequency' => $request->frequency,
             'updated_at' => now(),
         ]);
-
+        $employee->recordEvent('update', $request->all());
         return back()->with('success', 'Allowance updated.');
     }
 
     public function destroy($employeeId, $allowanceId)
     {
         $employee = Employee::findOrFail($employeeId);
+        $employee->recordEvent('delete', $employee->allowances()->find($allowanceId)->toArray());
         $employee->allowances()->detach($allowanceId);
-
         return back()->with('success', 'Allowance deleted.');
     }
 }

@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Http\Utils\Traits\HasEvents;
 use App\Models\Scopes\AuthUserCompanyScope;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Permission\Models\Role;
 
 class LeaveType extends Model
 {
+    use HasEvents;
     protected static function booted()
     {
         // Automatically apply a global scope to all queries

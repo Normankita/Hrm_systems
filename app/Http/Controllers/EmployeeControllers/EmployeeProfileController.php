@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Hash;
 class EmployeeProfileController extends Controller
 {
 
-    use UploadFileTrait;
+    use UploadFileTrait, EmployeeTrait;
 
     
     public function __construct(private EmployeeService $employeeService){}
@@ -35,11 +35,10 @@ class EmployeeProfileController extends Controller
 
         $attachments = $employee->attachments()->get();
         // // Split full name
-        $fullName = $employee->full_name;
-        $nameParts = explode(' ', $fullName, 2);
-        // Only split into 2 parts: first and last
-        $employee->first_name = $nameParts[0];
-        $employee->last_name = $nameParts[1] ?? '';
+        $names = $this->getNamesFromFullName($employee->full_name);
+        $employee->first_name = $names['first_name'];
+        $employee->middle_name = $names['middle_name'];
+        $employee->last_name = $names['last_name'];
         return view('employee.profile.edit',
         compact('employee', 'attachments'));
     }
@@ -51,6 +50,7 @@ class EmployeeProfileController extends Controller
 {
     $rules = [
         'first_name' => 'required|string|max:255',
+        'middle_name' => 'required|string|max:255',
         'last_name' => 'required|string|max:255',
         'email' => 'required|email|max:255',
         'phone' => 'nullable|string|max:20',
@@ -72,8 +72,9 @@ class EmployeeProfileController extends Controller
     }
 
     $data = $request->all();
-    $data['full_name'] = $request->input('first_name') . ' ' . $request->input('last_name');
-
+    $data['full_name'] = $request->input('first_name') . ' '.$request->input('middle_name').' ' . $request->input('last_name');
+    $data['pay_grade_id']=$employee->getActivePayGrade()->id;
+    $data['base_salary_override']= $employee->getActivePayGrade()->base_salary_override;
     EmployeeTrait::updateEmployee($employee->id, $data);
 
     return redirect()->route('employees.profile.index')

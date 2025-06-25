@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Http\Utils\Traits\HasEvents;
 use Illuminate\Database\Eloquent\Model;
 
 class PayGrade extends Model
 {
+    use HasEvents;
     protected $fillable = [
         'name',
         'base_salary',

@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use App\Http\Utils\Traits\HasDateFilter;
+use App\Http\Utils\Traits\HasEvents;
 use Illuminate\Database\Eloquent\Model;
 
 class Leave extends Model
 {
-    use HasDateFilter;
+    use HasDateFilter, HasEvents;
 
     protected $fillable = [
         'employee_id',

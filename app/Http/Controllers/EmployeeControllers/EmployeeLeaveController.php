@@ -22,7 +22,6 @@ class EmployeeLeaveController extends Controller
         $leaves = Leave::with(['employee', 'leaveType', 'attachments'])
             ->where('employee_id', auth()->user()->employee->id)
             ->get();
-
         return view('employee.leave.index', compact('leaves'));
     }
 
@@ -40,7 +39,6 @@ class EmployeeLeaveController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
         $this->validateLeaveRequest($request);
         $employee = auth()->user()->employee;
         $leaveType = LeaveType::find($request->leave_type_id);
@@ -51,8 +49,8 @@ class EmployeeLeaveController extends Controller
                     ->with('fail', $response['message']);
             }
         }
-
         $leave = Leave::create($this->prepareLeaveData($request));
+        $leave->recordEvent('add', $this->prepareLeaveData($request));
         $this->handleAttachments($request, $leave);
         return redirect()->route('employees.leave.status')->with('success', 'Leave request submitted successfully.');
     }
@@ -63,7 +61,6 @@ class EmployeeLeaveController extends Controller
     public function show($id)
     {
         $leave = Leave::with('attachments')->findOrFail($id);
-
         return view('employee.leave.show', compact('leave'));
     }
 
@@ -74,7 +71,6 @@ class EmployeeLeaveController extends Controller
     {
         $leave = Leave::with('attachments')->findOrFail($id);
         $leaveTypes = LeaveType::all();
-
         return view('employee.leave.edit', compact('leave', 'leaveTypes'));
     }
 
@@ -84,7 +80,6 @@ class EmployeeLeaveController extends Controller
     public function update(Request $request, Leave $leave)
     {
         $this->validateLeaveRequest($request);
-
         $employee = auth()->user()->employee;
         $daysCount = $this->getLeaveDaysCount(
             $employee->getSpentLeaves()
@@ -94,11 +89,11 @@ class EmployeeLeaveController extends Controller
                 ->with('fail', 'You have exeeded max number of days,
                     please reduce them');
         }
-        // Delete existing attachments if new ones are provided
         if ($request->hasFile('attachments')) {
             $this->deleteExistingAttachments($leave);
         }
         $leave->update($this->prepareLeaveData($request));
+        $leave->recordEvent('update', $this->prepareLeaveData($request));
         $this->handleAttachments($request, $leave);
         return redirect()->route('employees.leave.status')->with('success', 'Leave request updated successfully.');
     }
@@ -112,6 +107,7 @@ class EmployeeLeaveController extends Controller
         $leave = Leave::with('attachments')->findOrFail($id);
         $this->deleteExistingAttachments($leave);
         $leave->delete();
+        $leave->recordEvent('delete', $leave->toArray());
         return redirect()->route('employees.leave.status')->with('success', 'Leave request canceled successfully.');
     }
 

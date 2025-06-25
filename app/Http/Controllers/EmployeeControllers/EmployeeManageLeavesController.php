@@ -38,7 +38,7 @@ class EmployeeManageLeavesController extends Controller
 
         $status = $status == 0 ? "rejected" : 'approved';
 
-        LeaveApproval::create([
+        $leaveApproval = LeaveApproval::create([
             'employee_id' => $leave->employee_id,
             'leave_id' => $leave->id,
             'inspector_id' => Auth::user()->id,
@@ -46,7 +46,10 @@ class EmployeeManageLeavesController extends Controller
             'comment' => $comment,
             'inspected_at' => now()
         ]);
+
+        $leaveApproval->recordEvent('add',  $leaveApproval->toArray());
         $leave->update(['status' =>$status, 'comment'=>$comment]);
+        $leave->recordEvent('update', $leave->toArray());
         return redirect()->back()
             ->with(['status' => 'success', 'message' => 'operation was a successfull']);
     }

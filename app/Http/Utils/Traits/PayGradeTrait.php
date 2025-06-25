@@ -20,12 +20,15 @@ trait PayGradeTrait
 
     protected function createPayGrade(Request $request)
     {
-        return PayGrade::create($request->all());
+        $payGrade = PayGrade::create($request->all());
+        $payGrade->recordEvent('add', $request->all());
+        return $payGrade;
     }
 
     protected function updatePayGrade(Request $request, PayGrade $payGrade)
     {
         $payGrade->update($request->all());
+        $payGrade->recordEvent('update', $request->all());
         return $payGrade;
     }
 }

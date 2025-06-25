@@ -18,6 +18,14 @@
                                     <input type="text" name="first_name" class="form-control" value="{{ old('first_name', $employee->first_name) }}" required>
                                 </div>
                             </div>
+                            {{-- Middle Name --}}
+                            <div class="col-md-6 mb-4">
+                                <label class="text-dark font-weight-medium">Middle Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text mdi mdi-account"></span>
+                                    <input type="text" name="middle_name" class="form-control" value="{{ old('middle_name', $employee->middle_name) }}" required>
+                                </div>
+                            </div>
 
                             {{-- Last Name --}}
                             <div class="col-md-6 mb-4">

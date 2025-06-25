@@ -89,6 +89,11 @@
                                         <span class="nav-text">Allowance Groups</span>
                                     </a>
                                 </li>
+                                <li>
+                                    <a href="{{ route('employee.manage.frequencies.index') }}"> <span
+                                            class="nav-text">Manage Frequencies</span>
+                                    </a>
+                                </li>
                             </div>
 
                         </ul>
@@ -121,11 +126,6 @@
                                         </a>
                                     </li>
                                 @endcan
-                                <li>
-                                    <a class="sidenav-item-link" href="{{ route('employee.manage.payrolls.index') }}">
-                                        <span class="nav-text">View Payrolls</span>
-                                    </a>
-                                </li>
                             </div>
 
                         </ul>

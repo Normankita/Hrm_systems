@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use App\Http\Utils\Traits\HasDateFilter;
+use App\Http\Utils\Traits\HasEvents;
 use App\Models\Scopes\AuthUserCompanyScope;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Employee extends Model
 {
-    use HasDateFilter;
+    use HasDateFilter, HasEvents;
 
     protected static function booted()
     {
