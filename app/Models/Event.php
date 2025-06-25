@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 class Event extends Model
 {
 
-        protected static function booted()
+    protected static function booted()
     {
         // Automatically apply a global scope to all queries
         static::addGlobalScope(new AuthUserCompanyScope);
@@ -29,8 +29,13 @@ class Event extends Model
         });
     }
 
-    protected $fillable = ['eventable_id',
-     'eventable_type', 'user_id', 'type', 'data'];
+    protected $fillable = [
+        'eventable_id',
+        'eventable_type',
+        'user_id',
+        'type',
+        'data'
+    ];
 
     protected $casts = [
         'data' => 'array',
