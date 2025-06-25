@@ -61,7 +61,12 @@ class ApiAllowanceGroupsController extends Controller
         // attach employees to the designated grouph
         $user = $request->user;
         $group = AllowanceGroup::findOrFail($groupId);
-
+        if(!$group){
+            return response()->json([
+            'status' => 'fail',
+            'message' => 'This Operation was not successful'
+        ]);
+        }
         foreach ($request->employees as $employee) {
             $exists = DB::table('allowance_group_employee')
                 ->where('allowance_group_id', $group->id)
@@ -75,7 +80,6 @@ class ApiAllowanceGroupsController extends Controller
                     ->where('employee_id', $employee['id'])
                     ->update([
                         'isActive' => true,
-                        'amount' => $employee['amount'],
                         'updated_at' => now(),
                     ]);
             } else {
@@ -83,7 +87,6 @@ class ApiAllowanceGroupsController extends Controller
                 DB::table('allowance_group_employee')->insert([
                     'allowance_group_id' => $group->id,
                     'employee_id' => $employee['id'],
-                    'amount' => $employee['amount'],
                     'isActive' => true,
                     'created_at' => now(),
                 ]);

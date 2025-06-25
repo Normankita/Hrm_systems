@@ -47,7 +47,6 @@
                                             <th>#
                                             </th>
                                             <th>Name</th>
-                                            <th>Amount</th>
                                             <th>Role</th>
                                             <th>Actions</th>
                                         </tr>
@@ -62,7 +61,6 @@
                                                         name="employee" value="{{ $employee->id }}">
                                                 </th>
                                                 <th>{{ $employee->full_name }}</th>
-                                                <th>{{ $employee->pivot->amount }}</th>
                                                 <th>{{ $employee->user->activeRoles()?->name ?? 'N/A' }}</th>
                                                 <th>
                                                     <x-system.btn-edit text="edit" route="#" />
@@ -108,7 +106,6 @@
                     group: allowanceGroup,
                     error: null,
                     user: user,
-                    amount: 0,
                     removedIndexes: [],
                 };
             },
@@ -117,7 +114,6 @@
                     if (this.chosen == '') {
                         return;
                     }
-                    this.chosen.amount = this.amount;
                     this.selectedEmployees.push(this.chosen);
                     this.employees.splice(this.employees.indexOf(this.chosen), 1);
                 },

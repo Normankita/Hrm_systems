@@ -15,7 +15,6 @@ class AllowanceGroupEmployeePivot extends Model
         'eventable_type',
         'allowance_group_id',
         'employee_id',
-        'amount',
         'isActive'
     ];
 }

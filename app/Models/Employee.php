@@ -251,7 +251,7 @@ class Employee extends Model
             AllowanceGroup::class,
             'allowance_group_employee'
         )
-            ->withPivot(['amount', 'isActive'])
+            ->withPivot([ 'isActive'])
             ->withTimestamps();
     }
 

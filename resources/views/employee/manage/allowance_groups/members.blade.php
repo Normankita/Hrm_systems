@@ -43,17 +43,6 @@
             <div class="row mb-3">
                 <div class="col-md-5">
                     <label>Seach Employee</label>
-                    <select class="form-control" id="multiSelect" multiple="multiple">
-                        <option v-for="employee in employees" :value="employee.id">
-                            @{{ employee.full_name }}
-                        </option>
-                    </select>
-
-
-
-
-
-
                     <div style="position: relative">
                         <!-- Search input -->
                         <input type="text" class="form-control" ref="searchInput" v-model="searchTerm"
@@ -69,15 +58,9 @@
                             </li>
                         </ul>
                     </div>
-
-
-
-
-
-
                 </div>
                 <div class="col-md-2 d-flex align-items-end">
-                    <button class="btn btn-sm btn-secondary" v-on:click="removeFromSelected">remove last</button>
+                    <button class="btn btn-sm btn-success" v-on:click="addAllEmployees" id="addAllButton">Add All</button>
                 </div>
             </div>
 
@@ -86,17 +69,22 @@
                 <thead>
                     <tr>
                         <th>Name</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(employee, index) in selectedOptions" :key="employee.id">
                         <td>@{{ employee.full_name }}</td>
+                        <td>
+                            <button class="btn btn-sm btn-secondary"
+                                v-on:click="()=> removeFromSelected(employee)">Remove</button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
-            {{-- <div class="text-end mt-2">
+            <div class="text-end mt-2">
                 <button class="btn btn-sm btn-primary" type="button" v-on:click="submitSelectedEmployees">Submit</button>
-            </div> --}}
+            </div>
         </div>
     </div>
 @endsection
@@ -110,24 +98,25 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <script>
+
         // receive employee data from backend
         const employees = {!! json_encode($employees) !!};
         const allowanceGroup = {!! json_encode($group) !!};
         const user = {!! json_encode($user) !!};
 
+        const redirectToGroup=(uri)=>{
+            location.href=uri;
+        }
         const app = Vue.createApp({
             data() {
                 return {
                     employees: employees,
-                    defaultAmount: '',
                     defaultFrequency: '',
                     empSubmit: false,
                     group: allowanceGroup,
                     user: user,
                     error: null,
                     selectedOptions: [],
-
-
                     searchTerm: '',
                     selectedItem: null,
                     showDropdown: false,
@@ -152,11 +141,6 @@
                     const checked = event.target.checked;
                     this.employees.forEach(e => e.selected = checked);
                 },
-                applyDefaultAmount() {
-                    this.employees.forEach(e => {
-                        if (e.selected) e.amount = this.defaultAmount;
-                    });
-                },
                 applyDefaultFrequency() {
                     this.employees.forEach(e => {
                         if (e.selected) e.frequency = this.defaultFrequency;
@@ -164,14 +148,7 @@
                 },
                 submitSelectedEmployees() {
                     this.empSubmit = true;
-                    const selected = this.employees
-                        .filter(e => e.selected)
-                        .map(e => ({
-                            id: e.id,
-                            full_name: e.full_name,
-                            amount: e.amount,
-                            frequency: e.frequency
-                        }));
+                    const selected = this.selectedOptions;
 
                     if (selected.length === 0) {
                         this.empSubmit = false;
@@ -184,8 +161,11 @@
                             employees: selected
                         })
                         .then(res => {
+                            console.log(res.data);
                             if (res.data.status === 'success') {
-                                location.reload();
+                                console.log("I am the one ")
+                                redirectToGroup("/employee/manage/allowances/groups/"+this.group.id+"/edit")
+
                             } else {
                                 this.empSubmit = false;
                                 this.error = "Failed to submit.";
@@ -206,14 +186,12 @@
 
                     // Get input position
                     const rect = input.getBoundingClientRect();
-
                     // Adjust dropdown position
                     this.dropdownStyles.top = `${input.offsetTop + input.offsetHeight}px`;
                     this.dropdownStyles.left = `${input.offsetLeft}px`;
                     this.dropdownStyles.width = `${input.offsetWidth}px`;
 
                     // Filter options
-                    console.log(this.filteredOptions);
                     this.filteredOptions = this.options.filter(option =>
                         option.full_name.toLowerCase().includes(this.searchTerm.toLowerCase())
                     );
@@ -221,64 +199,34 @@
                     this.showDropdown = true;
                 },
                 selectItem(item) {
-                    this.selectedItem = item;
-                    this.searchTerm = item;
+                    this.selectedItem = "";
+                    this.searchTerm = "";
                     this.showDropdown = false;
+
 
                     const doesExists = this.selectedOptions.find(e => e.id === item.id);
                     if (!doesExists) {
                         this.selectedOptions.push(item);
+                        this.options = this.options.filter(emp => emp.id != item.id);
                     }
-                    console.log(this.selectedOptions);
+                    document.getElementById('addAllButton').focus();
+
                 },
                 hideDropdownWithDelay() {
                     setTimeout(() => {
                         this.showDropdown = false;
                     }, 150);
+                },
+                removeFromSelected(employee) {
+                    this.selectedOptions = this.selectedOptions.filter(e => e.id !== employee.id);
+                    this.options.push(employee);
+                },
+                addAllEmployees() {
+                    this.options.map(opt => this.selectedOptions.push(opt))
+                    this.options = [];
                 }
-                // removeFromSelected(employee) {
-                //     // this.selectedOptions = this.selectedOptions.filter(e => e.id !== id);
-                //     this.selectedOptions = this.selectedOptions.filter(e => e.id !== employee
-                //     .id); // remove last selected option
-                //     // after removing from the selected options, update the select2 to include the change
-                //     const selectElement = $('#multiSelect');
-                //     this.employees.forEach(employee => {
-                //         const newOptions = this.selectedOptions.map(e => {
-                //             if (e.id == employee.id) { return null}
-                //             `<option value="${employee.id}">${employee.full_name}</option>`
-                //     }).join('');
-                //             selectElement.html(newOptions);
-                //     });
-                //     selectElement.select2(); // reinitialize select2
-                //     console.log(this.selectedOptions);
-                // }
             },
-            mounted() {
-                // Initialize Select2
-                $('#multiSelect').select2();
-                const self = this;
-                // Listen for change and update Vue data
-                $('#multiSelect').on('change', (e) => {
-                    let empIds = $('#multiSelect').val(); // array of selected values
-                    // does employee exist in the table
-                    self.selectedOptions = empIds.map(id => {
-                        const employee = self.employees.find(emp => {
-                            // checking if emp.ikd is not undefines
-                            return emp.id == id;
-                        });
-                        if (employee) {
-                            return employee;
-                        } else {
-                            return null;
-                        }
-                    });
-                });
-            },
-            beforeUnmount() {
-                // Clean up
-                $('#multiSelect').off('change');
-                $('#multiSelect').select2('destroy');
-            }
+
         }).mount('#emps');
     </script>
 @endsection

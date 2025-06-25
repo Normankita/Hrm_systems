@@ -14,7 +14,6 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('allowance_group_id');
             $table->foreignId('employee_id');
-            $table->double('amount');
             $table->boolean('isActive')->default(true);
             $table->timestamps();
         });

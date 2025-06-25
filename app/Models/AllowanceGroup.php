@@ -45,7 +45,7 @@ class AllowanceGroup extends Model
         return $this->belongsToMany(
             Employee::class,
             'allowance_group_employee'
-        )->withPivot(['amount', 'isActive'])
+        )->withPivot(['isActive'])
             ->withTimestamps();
     }
 
