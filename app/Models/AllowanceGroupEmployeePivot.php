@@ -11,8 +11,6 @@ class AllowanceGroupEmployeePivot extends Model
     protected $table = 'allowance_group_employee';
 
     protected $fillable = [
-        'eventable_id',
-        'eventable_type',
         'allowance_group_id',
         'employee_id',
         'isActive'
