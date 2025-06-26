@@ -55,7 +55,6 @@ kito@extends('layouts.system')
                             </div>
                         </div>
                     </div>
-
                     <div class="row mt-5 mb-3">
                         <div class="col-sm-12 col-md-6">
                             <h3>Configurations Setups</h3>

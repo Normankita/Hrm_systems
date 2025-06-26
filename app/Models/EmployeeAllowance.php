@@ -10,11 +10,9 @@ class EmployeeAllowance extends Model
 
     protected $fillable = [
         'employee_id',
+        'frequency_id',
         'allowance_id',
         'amount',
-        'effective_from',
-        'effective_to',
-        'frequency',
         'status',
     ];
 
