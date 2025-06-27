@@ -148,7 +148,7 @@ class Employee extends Model
      */
     public static function getRecentLeaveRequest()
     {
-        $today= Carbon::today();
+        $today = Carbon::today();
         $latestEmployeeLeaveRequests = self::with('leaves')
             ->whereHas('leaves', function ($query) use ($today) {
                 $query->where('start_date', '<=', $today)->where('end_date', '>=', $today);
@@ -156,7 +156,7 @@ class Employee extends Model
             ->latest()
             ->take(10)
             ->get();
-            return $latestEmployeeLeaveRequests;
+        return $latestEmployeeLeaveRequests;
     }
     /**
      * Check if the employee is currently on leave
@@ -217,9 +217,15 @@ class Employee extends Model
     public function allowances()
     {
         return $this->belongsToMany(Allowance::class, 'employee_allowance')
-            ->withPivot(['amount', 'effective_from', 'effective_to', 'frequency', 'status'])
+            ->withPivot(['amount', 'allowance_frequency_id', 'status'])
             ->withTimestamps();
     }
+
+    public function employeeAllowances()
+    {
+        return $this->hasMany(EmployeeAllowance::class);
+    }
+
 
     public function statusHistories()
     {
@@ -251,7 +257,7 @@ class Employee extends Model
             AllowanceGroup::class,
             'allowance_group_employee'
         )
-            ->withPivot([ 'isActive'])
+            ->withPivot(['isActive'])
             ->withTimestamps();
     }
 

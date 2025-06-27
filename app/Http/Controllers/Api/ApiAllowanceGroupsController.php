@@ -112,9 +112,10 @@ class ApiAllowanceGroupsController extends Controller
             ]);
         }
         foreach ($request->employees as $employee) {
-            // dd($groupId);
-            $employeeGroup = DB::table('allowance_group_employee')->get();
-            dd($employeeGroup);
+            $employeeGroup =  DB::table('allowance_group_employee')
+                ->where('allowance_group_id', $group->id)
+                ->where('employee_id', $employee['id'])
+                ->first();
             if (!$employeeGroup) {
                 return response()->json([
                     'status' => 'fail',

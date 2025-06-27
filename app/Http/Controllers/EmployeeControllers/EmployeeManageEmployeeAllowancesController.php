@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\EmployeeControllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\utils\Traits\AllowanceTrait;
+use App\Http\Utils\Traits\AllowanceTrait;
 use App\Models\Allowance;
+use App\Models\AllowanceFrequency;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -18,10 +19,11 @@ class EmployeeManageEmployeeAllowancesController extends Controller
     public function index(Employee $employee)
     {
         // Eager load 'allowances' relationship
-        $employee = Employee::with('allowances')->findOrFail($employee->id);
+        $employee = Employee::with('employeeAllowances.allowance', 'employeeAllowances.frequency')->findOrFail($employee->id);
+       $frequencies= AllowanceFrequency::all();
         $allowances = Allowance::all();
 
-        return view("employee.manage.employee.allowances", compact("employee", "allowances"));
+        return view("employee.manage.employee.allowances", compact("employee", "allowances", "frequencies"));
     }
 
 
@@ -30,12 +32,10 @@ class EmployeeManageEmployeeAllowancesController extends Controller
         $request->validate([
             'allowance_id' => ['required', 'exists:allowances,id'],
             'amount' => ['required', 'numeric', 'min:0'],
-            'frequency' => ['required', Rule::in(['weekly', 'monthly', 'yearly', 'one-time'])],
-            'effective_from' => ['nullable', 'date'],
-            'effective_to' => ['nullable', 'date', 'after_or_equal:effective_from'],
+            'frequency_id' => ['required'],
         ]);
-        $employee=$this->createAllowanceForEmployee($employeeId, $request);
-        $employee->recordEvent('add', ['amount'=>$request->input('amount'), 'frequency_id'=>$request->input('frequency_id')]);
+        $employee = $this->createAllowanceForEmployee($employeeId, $request, $request->input('allowance_id'));
+        
         return back()->with('success', 'Allowance added.');
     }
 
