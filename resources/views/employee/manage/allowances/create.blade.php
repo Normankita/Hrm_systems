@@ -38,7 +38,7 @@
                             </div>
 
                             {{-- Is is Taxed --}}
-                            <div class="col-md-6 mb-4">
+                            <div class="col-md-6 mb-4 d-none">
                                 <label class="text-dark font-weight-medium">Taxable</label>
                                 <div class="input-group">
                                     <span class="input-group-text mdi mdi-cash"></span>

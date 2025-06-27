@@ -21,7 +21,7 @@
                                     <tr>
                                         <th></th>
                                         <th>Name</th>
-                                        <th>Base Category</th>
+                                        <th>based on</th>
                                         <th>Count per Category</th>
                                         <th>Day span</th>
                                         <th>Action</th>
@@ -65,7 +65,7 @@
                         <input type="text" name="name" class="form-control" required>
                     </div>
                     <div class="col-md-12 mb-4">
-                        <label for="effective_date" class="text-dark font-weight-medium">Base Category</label>
+                        <label for="effective_date" class="text-dark font-weight-medium">based on</label>
                         <select name="base_category" id="base_category" class="form-control" required>
                             <option value="year">Year</option>
                             <option value="month">Month</option>
@@ -73,11 +73,11 @@
                         </select>
                     </div>
                     <div class="col-md-12 mb-4">
-                        <label for="no_base_times" class="text-dark font-weight-medium">Base Category count</label>
+                        <label for="no_base_times" class="text-dark font-weight-medium">based on (count)</label>
                         <input name="no_base_times" id="no_base_times" class="form-control" required>
                     </div>
                     <div class="col-md-12 mb-4">
-                        <label for="no_times" class="text-dark font-weight-medium">Number of times per base category count</label>
+                        <label for="no_times" class="text-dark font-weight-medium">Number of times per cycle</label>
                         <input name="no_times" id="no_times" class="form-control" required>
                     </div>
                 </div>

@@ -12,13 +12,11 @@
                 <div class="card-body">
                     <div class="row justify-content-between">
                         <div class="col-md-4">
-                            <div class="d-flex">
-                                <a href="{{ route('employee.manage.employee.allowances.groups.members', $group) }}" class="btn btn-primary"> Add Members </a>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="d-flex">
-                                <a href="{{ route('employee.manage.employee.allowances.groups.assign', $group) }}" class="btn btn-primary"> Assign New Allowance  </a>
+                            <div class="row justify-content-end">
+                                <a  href="{{ route('employee.manage.employee.allowances.groups.members', $group) }}"
+                                    class="btn btn-primary col-12 my-2"> Add Members </a>
+                                    <a href="{{ route('employee.manage.employee.allowances.groups.assign', $group) }}"
+                                        class="btn btn-primary col-12 my-2"> Assign New Allowance </a>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -149,7 +147,10 @@
                 deleteEmployeeFromGroup() {
                     let dt = handler1.getSelected();
                     const route = `/api/groups/remove/employees/from/group/${this.group.id}`;
-                    axios.post(route, {employees: handler1.getSelected(), user: this.user})
+                    axios.post(route, {
+                            employees: handler1.getSelected(),
+                            user: this.user
+                        })
                         .then(response => {
                             const data = response.data;
                             if (data.status == 'success') {

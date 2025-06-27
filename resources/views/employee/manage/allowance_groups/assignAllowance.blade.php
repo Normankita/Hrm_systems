@@ -48,7 +48,7 @@
                 </div>
             </div>
 
-            <table class="table table-bordered table-sm">
+            <table class="table table-bordered table-sm p-5">
                 <thead>
                     <tr>
                         <th><input type="checkbox" v-on:change="toggleAll($event)"></th>

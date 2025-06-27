@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('group_category_employee_allowances');
+        Schema::dropIfExists(table: 'group_category_employee_allowances_pivot');
     }
 };
