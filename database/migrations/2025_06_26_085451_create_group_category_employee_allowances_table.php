@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('group_category_employee_allowances_pivot', function (Blueprint $table) {
+        Schema::create('group_category_employee_allowances', function (Blueprint $table) {
             $table->id();
             $table->foreignId('allowance_group_employee_id');
             $table->foreignId('allowance_id');

@@ -10,7 +10,7 @@ class EmployeeAllowance extends Model
 
     protected $fillable = [
         'employee_id',
-        'frequency_id',
+        'allowance_frequency_id',
         'allowance_id',
         'amount',
         'status',
@@ -26,6 +26,12 @@ class EmployeeAllowance extends Model
     {
         return $this->belongsTo(Allowance::class);
     }
+
+    public function frequency()
+    {
+        return $this->belongsTo(AllowanceFrequency::class, 'allowance_frequency_id');
+    }
+
     public function payrolls()
     {
         return $this->belongsToMany(Payroll::class, 'employee_allowance_payroll');

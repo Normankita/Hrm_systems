@@ -51,34 +51,15 @@
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
-
                                     <div class="col-md-6 mb-3">
-                                        <label for="effective_from" class="form-label">Effective From</label>
-                                        <input type="date" name="effective_from" class="form-control"
-                                            value="{{ old('effective_from') }}">
-                                        @error('effective_from')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <label for="effective_to" class="form-label">Effective Till</label>
-                                        <input type="date" name="effective_to" class="form-control"
-                                            value="{{ old('effective_to') }}">
-                                        @error('effective_to')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <label for="frequency" class="form-label">Frequency</label>
-                                        <select name="frequency" class="form-control" required>
-                                            <option value="monthly" @selected(old('frequency') === 'monthly')>Monthly</option>
-                                            <option value="quarterly" @selected(old('frequency') === 'quarterly')>Quarterly</option>
-                                            <option value="yearly" @selected(old('frequency') === 'yearly')>Yearly</option>
-                                            <option value="one-time" @selected(old('frequency') === 'one-time')>One-time</option>
+                                        <label for="frequency_id" class="form-label">Frequency</label>
+                                        <select name="frequency_id" class="form-control" required>
+                                            @foreach ($frequencies as $frequency)
+                                                <option value="{{ $frequency->id }}" @selected(old('frequency_id') === '{{ $frequency->id }}')>
+                                                    {{ $frequency->name }}</option>
+                                            @endforeach
                                         </select>
-                                        @error('frequency')
+                                        @error('frequency_id')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
@@ -99,48 +80,43 @@
                                     <th>Allowance</th>
                                     <th>Amount</th>
                                     <th>Frequency</th>
-                                    <th>Effective From</th>
-                                    <th>Effective To</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($employee->allowances as $allowance)
+                                @foreach ($employee->employeeAllowances as $ea)
                                     <tr>
-                                        <td>{{ $allowance->name ?? 'N/A' }}</td>
-                                        <td>{{ number_format($allowance->pivot->amount, 2) }}</td>
-                                        <td>{{ ucfirst($allowance->pivot->frequency) }}</td>
-                                        <td>{{ $allowance->pivot->effective_from ?? 'N/A' }}</td>
-                                        <td>{{ $allowance->pivot->effective_to ?? 'N/A' }}</td>
+                                        <td>{{ $ea->allowance->name ?? 'N/A' }}</td>
+                                        <td>{{ number_format($ea->amount, 2) }}</td>
+                                        <td>{{ ucfirst($ea->frequency?->name ?? 'N/A') }}</td>
                                         <td>
                                             @can('edit_allowances')
                                                 <form
-                                                    action="{{ route('employee.manage.employee.allowances.toggleStatus', [$employee->id, $allowance->id]) }}"
+                                                    action="{{ route('employee.manage.employee.allowances.toggleStatus', [$employee->id, $ea->allowance->id]) }}"
                                                     method="POST" class="d-inline"
-                                                    onsubmit="return confirm('Are you sure you want to {{ $allowance->pivot->status ? 'deactivate' : 'activate' }} this allowance?')">
+                                                    onsubmit="return confirm('Are you sure you want to {{ $ea->status ? 'deactivate' : 'activate' }} this allowance?')">
                                                     @csrf
                                                     @method('PUT')
-                                                    <input type="hidden" name="status"
-                                                        value="{{ $allowance->pivot->status ? 0 : 1 }}">
+                                                    <input type="hidden" name="status" value="{{ $ea->status ? 0 : 1 }}">
                                                     <button type="submit"
-                                                        class="btn btn-sm {{ $allowance->pivot->status ? 'btn-outline-danger' : 'btn-outline-success' }} p-1">
-                                                        {{ $allowance->pivot->status ? 'Deactivate' : 'Activate' }}
+                                                        class="btn btn-sm {{ $ea->status ? 'btn-outline-danger' : 'btn-outline-success' }} p-1">
+                                                        {{ $ea->status ? 'Deactivate' : 'Activate' }}
                                                     </button>
                                                 </form>
                                             @endcan
 
                                             @can('edit_allowances')
                                                 <x-system.modal-button class="btn btn-outline-dark btn-sm p-1 m-1"
-                                                    id="editAllowanceModal-{{ $allowance->id }}" text="Edit" textColor="" />
+                                                    id="editAllowanceModal-{{ $ea->allowance->id }}" text="Edit"
+                                                    textColor="" />
                                             @endcan
                                         </td>
                                     </tr>
                                 @endforeach
+
                             </tbody>
                         </table>
                     </div>
-
-                    {{-- Edit Allowance Modals --}}
                     @can('edit_allowances')
                         @foreach ($employee->allowances as $allowance)
                             <x-system.modal id="editAllowanceModal-{{ $allowance->id }}"
@@ -154,17 +130,18 @@
 
                                     <div class="mb-3">
                                         <label for="amount" class="form-label">Amount</label>
-                                        <input type="number" step="0.01" name="amount" class="form-control"
-                                            value="{{ $allowance->amount }}" required>
+                                        <input type="text" name="amount" class="form-control"
+                                            value="{{ old('amount', $allowance->pivot->amount) }}">
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="frequency" class="form-label">Frequency</label>
-                                        <select name="frequency" class="form-control" required>
-                                            <option value="monthly" @selected($allowance->frequency === 'monthly')>Monthly</option>
-                                            <option value="quarterly" @selected($allowance->frequency === 'quarterly')>Quarterly</option>
-                                            <option value="yearly" @selected($allowance->frequency === 'yearly')>Yearly</option>
-                                            <option value="one-time" @selected($allowance->frequency === 'one-time')>One-time</option>
+                                        <select name="frequency_id" class="form-control" required>
+                                            @foreach ($frequencies as $frequency)
+                                                <option value="{{ $frequency->id }}" @selected(old('frequency_id', $allowance->pivot->allowance_frequency_id) == $frequency->id)>
+                                                    {{ $frequency->name }}
+                                                </option>
+                                            @endforeach
                                         </select>
                                     </div>
 
@@ -172,6 +149,7 @@
                                         <button type="submit" class="btn btn-primary">Update Allowance</button>
                                     </div>
                                 </form>
+
                             </x-system.modal>
                         @endforeach
                     @endcan

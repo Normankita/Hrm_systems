@@ -58,7 +58,7 @@ class EmployeeAllowanceGroupController extends Controller
         $frequencies= AllowanceFrequency::all();
         $allowances= Allowance::all();
         $group= AllowanceGroup::find($group->id);
-        $employees = self::getEmployeeForAdditionSelection($group);
+        $employees = $group->activeEmployees()->get();
         return view('employee.manage.allowance_groups.assignAllowance')
         ->with(['employees'=> $employees, 'group'=>$group, 'frequencies'=>$frequencies,'allowances'=>$allowances]);
     }
