@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->enum('base_category', ['year','month']);
             $table->foreignId('company_id')->constrained()->onDelete('cascade');
+            $table->integer('no_base_times');
             $table->integer('no_times');
             $table->double('days_apart');
             $table->timestamps();

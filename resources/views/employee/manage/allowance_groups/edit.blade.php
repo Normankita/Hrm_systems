@@ -16,6 +16,11 @@
                                 <a href="{{ route('employee.manage.employee.allowances.groups.members', $group) }}" class="btn btn-primary"> Add Members </a>
                             </div>
                         </div>
+                        <div class="col-md-4">
+                            <div class="d-flex">
+                                <a href="{{ route('employee.manage.employee.allowances.groups.assign', $group) }}" class="btn btn-primary"> Assign New Allowance  </a>
+                            </div>
+                        </div>
                         <div class="col-md-6">
                             <div class="mb-4">
                                 <h2>Allowance Group</h2>

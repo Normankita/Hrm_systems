@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\EmployeeControllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\utils\Traits\AllowanceTrait;
 use App\Models\Allowance;
 use App\Models\Employee;
 use Illuminate\Http\Request;
@@ -10,6 +11,7 @@ use Illuminate\Validation\Rule;
 
 class EmployeeManageEmployeeAllowancesController extends Controller
 {
+    use AllowanceTrait;
     /**
      * Display a listing of the resource.
      */
@@ -32,17 +34,8 @@ class EmployeeManageEmployeeAllowancesController extends Controller
             'effective_from' => ['nullable', 'date'],
             'effective_to' => ['nullable', 'date', 'after_or_equal:effective_from'],
         ]);
-        $employee = Employee::findOrFail($employeeId);
-        $employee->allowances()->attach($request->allowance_id, [
-            'amount' => $request->amount,
-            'frequency' => $request->frequency,
-            'effective_from' => $request->effective_from,
-            'effective_to' => $request->effective_to,
-            'status' => true,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-        $employee->recordEvent('add', $request->all());
+        $employee=$this->createAllowanceForEmployee($employeeId, $request);
+        $employee->recordEvent('add', ['amount'=>$request->input('amount'), 'frequency_id'=>$request->input('frequency_id')]);
         return back()->with('success', 'Allowance added.');
     }
 

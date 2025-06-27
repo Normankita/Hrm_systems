@@ -67,12 +67,17 @@
                     <div class="col-md-12 mb-4">
                         <label for="effective_date" class="text-dark font-weight-medium">Base Category</label>
                         <select name="base_category" id="base_category" class="form-control" required>
-                            <option value="month">Month</option>
                             <option value="year">Year</option>
+                            <option value="month">Month</option>
+                            <option value="week">Week</option>
                         </select>
                     </div>
                     <div class="col-md-12 mb-4">
-                        <label for="no_times" class="text-dark font-weight-medium">Number of times</label>
+                        <label for="no_base_times" class="text-dark font-weight-medium">Base Category count</label>
+                        <input name="no_base_times" id="no_base_times" class="form-control" required>
+                    </div>
+                    <div class="col-md-12 mb-4">
+                        <label for="no_times" class="text-dark font-weight-medium">Number of times per base category count</label>
                         <input name="no_times" id="no_times" class="form-control" required>
                     </div>
                 </div>

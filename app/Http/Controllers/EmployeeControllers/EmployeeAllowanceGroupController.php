@@ -5,6 +5,7 @@ namespace App\Http\Controllers\EmployeeControllers;
 use App\Http\Controllers\Controller;
 use App\Http\Utils\Traits\AllowanceGroupTrait;
 use App\Models\Allowance;
+use App\Models\AllowanceFrequency;
 use App\Models\AllowanceGroup;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -52,5 +53,13 @@ class EmployeeAllowanceGroupController extends Controller
         $employees = self::getEmployeeForAdditionSelection($group);
         return view('employee.manage.allowance_groups.members')
         ->with(['employees'=> $employees, 'group'=>$group]);
+    }
+    public function getGroupMembersToAssignAllowance (AllowanceGroup $group){
+        $frequencies= AllowanceFrequency::all();
+        $allowances= Allowance::all();
+        $group= AllowanceGroup::find($group->id);
+        $employees = self::getEmployeeForAdditionSelection($group);
+        return view('employee.manage.allowance_groups.assignAllowance')
+        ->with(['employees'=> $employees, 'group'=>$group, 'frequencies'=>$frequencies,'allowances'=>$allowances]);
     }
 }

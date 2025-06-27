@@ -30,6 +30,7 @@ class AllowanceFrequency extends Model
         'name',
         'company_id',
         'base_category',
+        'no_base_times',
         'no_times',
         'days_apart',
     ];

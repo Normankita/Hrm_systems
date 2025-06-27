@@ -117,6 +117,7 @@ Route::prefix('employee/manage/allowances/groups')
         Route::post('/store', 'store')->name('store');
         Route::get('/{id}/edit', 'edit')->name('edit');
         Route::get('/members/{group}', 'getGroupMembers')->name('members');
+        Route::get('/assign-allowance/{group}', 'getGroupMembersToAssignAllowance')->name('assign');
     });
 
 
