@@ -18,13 +18,17 @@ trait HasEvents
      * @param mixed $userId
      * @return Event
      */
-    public function recordEvent(string $type, array $data = [], $userId = null): Event
+    public function recordEvent(string $type, array $data = [], $userId = null, $companyId = null): Event
     {
         $jsonData = json_encode($data);
-        return $this->events()->create([
+        $eventData = [
             'user_id' => $userId ?? auth()->user()->id,
             'type' => $type,
             'data' => $jsonData,
-        ]);
+        ];
+        if ($companyId) {
+            $eventData['company_id'] = $companyId;
+        }
+        return $this->events()->create($eventData);
     }
 }

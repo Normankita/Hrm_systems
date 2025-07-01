@@ -15,6 +15,7 @@ trait AllowanceTrait
     public static function createAllowanceForEmployee($employeeId, $data=[], $allowance_id, $user=null)
     {
         $employee = Employee::findOrFail($employeeId);
+        $companyId = $employee->company_id;
         $employee->allowances()->attach($allowance_id, [
             'amount' => $data['amount'],
             'allowance_frequency_id' => $data['frequency_id'],
@@ -22,7 +23,7 @@ trait AllowanceTrait
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-        $employee->recordEvent('add', $data, $user['id']);
+        $employee->recordEvent('add', $data, $user['id'], $companyId);
         return $employee;
     }
 }
