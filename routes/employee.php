@@ -109,7 +109,8 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
 
 
 // Employee Allowances Group Routes Starts
-Route::prefix('employee/manage/allowances/groups')
+Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
+    ->prefix('employee/manage/allowances/groups')
     ->controller(EmployeeAllowanceGroupController::class)
     ->name('employee.manage.employee.allowances.groups.')
     ->group(function () {

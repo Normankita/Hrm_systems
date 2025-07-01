@@ -122,7 +122,7 @@ class ApiAllowanceGroupsController extends Controller
                     'message' => 'data not found'
                 ]);
             }
-            $employee = $this->createAllowanceForEmployee($employee['id'], ['amount' => $employee['amount'], 'frequency_id' => $employee['frequency_id']], $request->allowance_id);
+            $employee = $this->createAllowanceForEmployee($employee['id'], ['amount' => $employee['amount'], 'frequency_id' => $employee['frequency_id']], $request->allowance_id, $user);
             if (!$employee) {
                 return response()->json([
                     'status' => 'fail',

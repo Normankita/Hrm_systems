@@ -13,10 +13,12 @@
                     <div class="row justify-content-between">
                         <div class="col-md-4">
                             <div class="row justify-content-end">
-                                <a  href="{{ route('employee.manage.employee.allowances.groups.members', $group) }}"
+                                <a href="{{ route('employee.manage.employee.allowances.groups.members', $group) }}"
                                     class="btn btn-primary col-12 my-2"> Add Members </a>
+                                @if (count($group->activeEmployees)>0)
                                     <a href="{{ route('employee.manage.employee.allowances.groups.assign', $group) }}"
                                         class="btn btn-primary col-12 my-2"> Assign New Allowance </a>
+                                @endif
                             </div>
                         </div>
                         <div class="col-md-6">

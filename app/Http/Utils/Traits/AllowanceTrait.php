@@ -12,7 +12,7 @@ trait AllowanceTrait
      * @param mixed $allowance_id
      * @return Employee|\Illuminate\Database\Eloquent\Collection<int, Employee>
      */
-    public static function createAllowanceForEmployee($employeeId, $data=[], $allowance_id)
+    public static function createAllowanceForEmployee($employeeId, $data=[], $allowance_id, $user=null)
     {
         $employee = Employee::findOrFail($employeeId);
         $employee->allowances()->attach($allowance_id, [
@@ -22,7 +22,7 @@ trait AllowanceTrait
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-        $employee->recordEvent('add', $data);
+        $employee->recordEvent('add', $data, $user['id']);
         return $employee;
     }
 }
