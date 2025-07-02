@@ -70,17 +70,17 @@
                         </a>
                         <ul class="collapse" id="allowance-menu" data-parent="#sidebar-menu">
                             <div class="sub-menu">
-                                @can('create_allowances')
+                                {{-- @can('create_allowances')
                                     <li>
                                         <a class="sidenav-item-link" href="{{ route('employee.manage.allowances.create') }}">
-                                            <span class="nav-text">Create allowances</span>
+                                            <span class="nav-text">Allowance Category</span>
                                         </a>
                                     </li>
-                                @endcan
+                                @endcan --}}
                                 @can('view_allowances')
                                     <li>
                                         <a class="sidenav-item-link" href="{{ route('employee.manage.allowances.index') }}">
-                                            <span class="nav-text">View allowances</span>
+                                            <span class="nav-text">Allowance Categories</span>
                                         </a>
                                     </li>
                                 @endcan
@@ -92,6 +92,11 @@
                                 <li>
                                     <a href="{{ route('employee.manage.frequencies.index') }}"> <span
                                             class="nav-text">Manage Frequencies</span>
+                                    </a>
+                                </li>
+                                   <li>
+                                    <a href="{{ route('employee.manage.frequencies.index') }}"> <span
+                                            class="nav-text">Disbursements</span>
                                     </a>
                                 </li>
                             </div>

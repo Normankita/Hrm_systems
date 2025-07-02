@@ -21,7 +21,11 @@ trait FrequencyTrait
                 break;
             case 'week':
                 $request->merge([
-                    'days_apart' => $this->calculateDaysApart(7, $request->input('no_base_times'), $request->input('no_times')),
+                    'days_apart' => $this->calculateDaysApart(
+                        7,
+                        $request->input('no_base_times'),
+                        $request->input('no_times')
+                    ),
                 ]);
                 break;
             default:
@@ -31,14 +35,26 @@ trait FrequencyTrait
                 ];
         }
 
-        $allowanceFrequency = AllowanceFrequency::create($request->all());
+        $allowanceFrequency = AllowanceFrequency::create(
+            $request->all()
+        );
         return $allowanceFrequency;
     }
 
-    private function calculateDaysApart($category_days, $category_count, $number_times): float|int
-    {
+    public function calculateDaysApart(
+        $category_days,
+        $category_count,
+        $number_times,
+    ): float|int {
         $days_apart = ($category_days * $category_count) / $number_times;
         return $days_apart;
+    }
+
+    public function getDaysSpan(
+        $category_days,
+        $category_count,
+    ) {
+        return $category_days * $category_count;
     }
 
 }

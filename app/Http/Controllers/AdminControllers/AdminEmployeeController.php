@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
 use App\Http\Services\EmployeeService;
+use App\Http\Utils\Helpers;
 use App\Http\Utils\Traits\EmployeeTrait;
 use App\Http\Utils\Traits\UploadFileTrait;
 use App\Models\Employee;
@@ -45,6 +46,8 @@ class AdminEmployeeController extends Controller
 
     public function store(StoreEmployeeRequest $request)
     {
+        Helpers::sanitizeRequestNumbers($request);
+
         $outcome = $this->employeeService->storeEmployee(
             $request,
             self::ATTACHMENT_TYPES
@@ -94,6 +97,8 @@ class AdminEmployeeController extends Controller
 
     public function update(UpdateEmployeeRequest $request, $id)
     {
+                Helpers::sanitizeRequestNumbers($request);
+
         $outcome = $this->employeeService->updateEmployee($request, $id);
 
         return redirect()

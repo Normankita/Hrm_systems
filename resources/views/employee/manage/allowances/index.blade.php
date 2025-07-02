@@ -10,7 +10,7 @@
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h3 class="mb-0">Allowance Directory</h3>
                             @can('create_allowances')
-                                <a href="{{ route('employee.manage.allowances.create') }}" class="btn btn-primary">Add An Allowance</a>
+                                <a href="{{ route('employee.manage.allowances.create') }}" class="btn btn-primary">Add New Category</a>
                             @endcan
                         </div>
 
