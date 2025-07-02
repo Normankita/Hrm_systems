@@ -11,9 +11,13 @@ class EmployeeManageDisbursements extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $category = $request->get('category') ?? null;
+        $disbursements = DisbursedAllowance::all();
+        return view('employee.manage.disbursement_allowance.index')
+            ->with(['disbursements' => $disbursements])
+            ->with('category', $category);
     }
 
     /**

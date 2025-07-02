@@ -95,7 +95,7 @@
                                     </a>
                                 </li>
                                    <li>
-                                    <a href="{{ route('employee.manage.frequencies.index') }}"> <span
+                                    <a href="{{ route('employee.manage.disbursements.index') }}"> <span
                                             class="nav-text">Disbursements</span>
                                     </a>
                                 </li>
