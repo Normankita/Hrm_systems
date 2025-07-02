@@ -5,6 +5,7 @@ use App\Http\Controllers\EmployeeControllers\EmployeeAllowanceGroupController;
 use App\Http\Controllers\EmployeeControllers\EmployeeLeaveController;
 use App\Http\Controllers\EmployeeControllers\EmployeeManageAllowancesController;
 use App\Http\Controllers\EmployeeControllers\EmployeeManageDeductionController;
+use App\Http\Controllers\EmployeeControllers\EmployeeManageDisbursements;
 use App\Http\Controllers\EmployeeControllers\EmployeeManageEmployeeAllowancesController;
 use App\Http\Controllers\EmployeeControllers\EmployeeManageEmployeeController;
 use App\Http\Controllers\EmployeeControllers\EmployeeManageLeavesController;
@@ -239,16 +240,15 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
 
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('employee/manage/{employee}/disbursements')
-    ->controller(::class)
-    ->name('employee.manage.deductions.')
+    ->controller(EmployeeManageDisbursements::class)
+    ->name('employee.manage.disbursements.')
     ->group(function () {
-        Route::get('/', 'index')->name('index')->middleware(['can:view_deductions']);                     // List deductions for employee
-        Route::get('/create', 'create')->name('create')->middleware(['can:create_deductions']);             // Show form to create a deduction for employee
-        Route::post('/', 'store')->name('store')->middleware(['can:create_deductions']);                    // Store new deduction for employee
-        Route::get('/{deduction}', 'show')->name('show')->middleware(['can:view_deductions']);            // Show a single deduction
-        Route::get('/{deduction}/edit', 'edit')->name('edit')->middleware(['can:edit_deductions']);       // Edit a deduction
-        Route::put('/{deduction}', 'update')->name('update')->middleware(['can:edit_deductions']);        // Update deduction
-        Route::delete('/{deduction}', 'destroy')->name('destroy')->middleware(['can:delete_deductions']);   // Delete deduction
+        Route::get('/', 'index')->name('index')->middleware(['can:view_disbursements']);                     // List disbursement for employee
+        Route::get('/create', 'create')->name('create')->middleware(['can:create_disbursement']);             // Show form to create a disbursement for employee
+        Route::post('/', 'store')->name('store')->middleware(['can:create_disbursement']);                    // Store new disbursement for employee
+        Route::get('/{disbursement}', 'show')->name('show')->middleware(['can:view_disbursement']);            // Show a single disbursement
+        Route::put('/{disbursement}', 'update')->name('update')->middleware(['can:edit_disbursement']);        // Update disbursement
+        Route::delete('/{disbursement}', 'destroy')->name('destroy')->middleware(['can:delete_disbursement']);   // Delete disbursement
     });
 
 
