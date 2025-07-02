@@ -62,7 +62,6 @@
                                     <label class="form-check-label" for="flexSwitchCheckDefault">Enable Form</label>
                                 </div>
                             </form>
-
                         </div>
                     </div>
                     @yield('content')

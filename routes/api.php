@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ApiAllowanceGroupsController;
+use App\Http\Controllers\Api\ApiDisbursementsController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -19,3 +20,11 @@ Route::prefix('groups')
         Route::post('/assign/allowance/to/group/{id}', 'assignAllowanceToGroup')->name('assig.allowance.to.group');
     });
 
+
+Route::prefix('disbursements')
+    ->controller(ApiDisbursementsController::class)
+    ->name('disbursements.')
+    ->group(function () {
+        Route::get('/categorized', 'fetchCategoryWise')
+            ->name('categorized');
+    });
