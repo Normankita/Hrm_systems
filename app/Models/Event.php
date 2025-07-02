@@ -34,7 +34,8 @@ class Event extends Model
         'eventable_type',
         'user_id',
         'type',
-        'data'
+        'data',
+        'company_id'
     ];
 
     protected $casts = [
