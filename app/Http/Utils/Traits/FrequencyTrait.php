@@ -11,20 +11,19 @@ trait FrequencyTrait
         switch ($request->input('base_category')) {
             case 'month':
                 $request->merge([
-                    'days_apart' => $this->calculateDaysApart(30, $request->input('no_base_times'), $request->input('no_times')),
+                    'days_apart' => $this->getDaysSpan(30, $request->input('no_base_times')),
                 ]);
                 break;
             case 'year':
                 $request->merge([
-                    'days_apart' => $this->calculateDaysApart(365, $request->input('no_base_times'), $request->input('no_times')),
+                    'days_apart' => $this->getDaysSpan(365, $request->input('no_base_times')),
                 ]);
                 break;
             case 'week':
                 $request->merge([
-                    'days_apart' => $this->calculateDaysApart(
+                    'days_apart' => $this->getDaysSpan(
                         7,
-                        $request->input('no_base_times'),
-                        $request->input('no_times')
+                        $request->input('no_base_times')
                     ),
                 ]);
                 break;

@@ -15,6 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('allowance_group_employee_id');
             $table->foreignId('allowance_id');
+            $table->foreignId('allowance_frequency_id');
+            $table->double('amount');
+            $table->date('effective_from');
+            $table->boolean('status')->default(false);
             $table->timestamps();
         });
     }
