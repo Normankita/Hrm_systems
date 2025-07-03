@@ -49,9 +49,9 @@ class AllowanceGroup extends Model
             ->withTimestamps();
     }
 
-    public function allowance()
+    public function allowances()
     {
-        return $this->belongsTo(Allowance::class);
+        return $this->belongsToMany(Allowance::class);
     }
 
     public function activeEmployees()

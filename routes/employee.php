@@ -244,8 +244,9 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->name('employee.manage.disbursements.')
     ->group(function () {
         Route::get('/', 'index')->name('index');
-        // Route::get('/create', 'create')->name('create')->middleware(['can:create_disbursement']);             // Show form to create a disbursement for employee
-        // Route::post('/', 'store')->name('store')->middleware(['can:create_disbursement']);                    // Store new disbursement for employee
+        Route::get('/create', 'create')->name('create')
+            ->middleware(['password.confirm']);
+        Route::post('/', 'store')->name('store');
         // Route::get('/{disbursement}', 'show')->name('show')->middleware(['can:view_disbursement']);            // Show a single disbursement
         // Route::put('/{disbursement}', 'update')->name('update')->middleware(['can:edit_disbursement']);        // Update disbursement
         // Route::delete('/{disbursement}', 'destroy')->name('destroy')->middleware(['can:delete_disbursement']);   // Delete disbursement

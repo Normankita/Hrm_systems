@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\AllowanceGroups;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -22,3 +23,11 @@ require __DIR__. '/employee.php';
 require __DIR__ . '/auth.php';
 
 require __DIR__ . '/api.php';
+
+
+Route::get('/test', function () {
+    $categories = \App\Models\Allowance::limit(1)->get();
+    $basedOn = AllowanceGroups::CATEGORY;
+    $service = new \App\Http\Services\AllowanceDisbursementService();
+    $result = $service->handleDisbursement($basedOn, $categories->pluck('id')->toArray());
+})->name('test');

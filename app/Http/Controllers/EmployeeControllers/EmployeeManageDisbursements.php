@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\EmployeeControllers;
 
+use App\Enums\AllowanceGroups;
 use App\Http\Controllers\Controller;
+use App\Models\Allowance;
 use App\Models\DisbursedAllowance;
 use Illuminate\Http\Request;
 
@@ -23,9 +25,27 @@ class EmployeeManageDisbursements extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $basedOn = $request->get('basedOn');
+        if (!$basedOn) {
+            return redirect()->back()->withErrors(['basedOn' => 'Based on parameter is required.']);
+        }
+        if ($basedOn == AllowanceGroups::GROUP) {
+            return view('employee.manage.disbursement_allowance.create.grouped');
+        } elseif ($basedOn == AllowanceGroups::INDIVIDUAL) {
+            return view('employee.manage.disbursement_allowance.create.individual');
+        } elseif ($basedOn == AllowanceGroups::CATEGORY) {
+            $categories = Allowance::all();
+            return view('employee.manage.disbursement_allowance.create.category')
+                ->with('categories', $categories);
+        } elseif ($basedOn == 'all') {
+            return view('employee.manage.disbursement_allowance.create.all');
+        }
+        return redirect()->with(
+            'error',
+            'Invalid based on parameter provided.'
+        );
     }
 
     /**
@@ -33,7 +53,29 @@ class EmployeeManageDisbursements extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        $basedOn = $request->post('basedOn');
+        if ($basedOn == AllowanceGroups::GROUP) {
+
+        }elseif ($basedOn == AllowanceGroups::INDIVIDUAL) {
+
+        } elseif ($basedOn == AllowanceGroups::CATEGORY) {
+            $categoriesIds = $request->post('categories', []);
+            $categories = Allowance::whereIn('id', $categoriesIds)->get();
+        } elseif ($basedOn == 'all') {
+            // Handle all allowances disbursement logic here
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Invalid based on parameter provided.',
+            ], 400);
+        }
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Disbursement created successfully.',
+            'data' => $request->all(),
+        ])
+            ->setStatusCode(201);
     }
 
     /**
