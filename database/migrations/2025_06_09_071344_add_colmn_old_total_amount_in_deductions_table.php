@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('deductions', function (Blueprint $table) {
-            //
+            $table->dropColumn('old_total_amount');
         });
     }
 };

@@ -32,6 +32,16 @@ class AllowanceGroup extends Model
         });
     }
 
+
+    public function getAllowancesAttribute()
+    {
+        return $this->groupEmployees
+            ->load('allowances')
+            ->flatMap(fn($entry) => $entry->allowances)
+            ->unique('id')
+            ->values();
+    }
+
     protected $fillable = [
         'name',
         'company_id',
@@ -51,7 +61,14 @@ class AllowanceGroup extends Model
 
     public function allowances()
     {
-        return $this->belongsToMany(Allowance::class);
+        return $this->belongsToMany(
+            Allowance::class,
+            'allowance_group_allowance',
+            'allowance_group_id',
+            'allowance_id'
+        )
+            ->withPivot(['isActive'])
+            ->withTimestamps();
     }
 
     public function activeEmployees()
@@ -63,4 +80,29 @@ class AllowanceGroup extends Model
     {
         return $this->employees()->wherePivot('isActive', false);
     }
+
+    public function groupEmployees()
+    {
+        return $this->hasMany(AllowanceGroupEmployeePivot::class, 'allowance_group_id');
+    }
+
+    public function assignedAllowanceEntries($allowanceId)
+    {
+        return $this->groupEmployees
+            ->load('allowances')
+            ->flatMap(
+                fn($entry) =>
+                $entry->allowances
+                    ->where('id', $allowanceId)
+                    ->map(function ($allowance) use ($entry) {
+                        return (object) [
+                            'employee' => $entry->employee,
+                            'allowance' => $allowance,
+                            'pivot' => $allowance->pivot
+                        ];
+                    })
+            );
+    }
+
+
 }

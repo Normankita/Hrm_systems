@@ -35,13 +35,13 @@ class EmployeeAllowanceGroupController extends Controller
             'name' => $request->name,
             'description' => $request->description,
         ]);
-        
+
         return redirect()->back()->with('success', 'Allowance group created successfully');
     }
 
 
     public function edit($id) {
-        $group = AllowanceGroup::findOrFail($id);
+        $group = AllowanceGroup::where('id', $id)->first();
         // Employee That are eligible to be added in the group
         $employees = self::getEmployeeForAdditionSelection($group);
         if(!$group) return redirect()->back()->with('error', 'Allowance group not found');

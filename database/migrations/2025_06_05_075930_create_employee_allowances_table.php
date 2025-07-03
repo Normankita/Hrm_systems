@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->foreignId('allowance_frequency_id');
             $table->foreignId('allowance_id')->constrained()->onDelete('cascade');
             $table->decimal('amount', 12, 2);
-            $table->boolean('status')->default(true); 
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
 
@@ -27,6 +27,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('employee_allowances');
+        Schema::dropIfExists('employee_allowance');
     }
 };

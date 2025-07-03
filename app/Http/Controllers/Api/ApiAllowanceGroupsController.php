@@ -112,7 +112,7 @@ class ApiAllowanceGroupsController extends Controller
             ]);
         }
         foreach ($request->employees as $employee) {
-            $employeeGroup =  DB::table('allowance_group_employee')
+            $employeeGroup = DB::table('allowance_group_employee')
                 ->where('allowance_group_id', $group->id)
                 ->where('employee_id', $employee['id'])
                 ->first();
@@ -122,19 +122,24 @@ class ApiAllowanceGroupsController extends Controller
                     'message' => 'data not found'
                 ]);
             }
-            $employee = $this->createAllowanceForEmployee($employee['id'], ['amount' => $employee['amount'], 'frequency_id' => $employee['frequency_id']], $request->allowance_id, $user);
-            if (!$employee) {
-                return response()->json([
-                    'status' => 'fail',
-                    'message' => 'failed to create in employee'
-                ]);
-            }
-            GroupCategoryEmployeeAllowance::create(
+
+
+            $groupCategoryEmployeeAllowance = GroupCategoryEmployeeAllowance::create(
                 [
-                    'allowance_group_employee_id' => $employeeGroup->id,
-                    'allowance_id' => $request->allowance_id
+                    'allowance_group_employee_pivot_id' => $employeeGroup->id,
+                    'allowance_id' => $request->allowance_id,
+                    'amount' => $employee['amount'],
+                    'allowance_frequency_id' => $employee['frequency_id'],
+                    'effective_from' => now(),
+                    'status' => true
                 ]
             );
+            if (!$groupCategoryEmployeeAllowance) {
+                return response()->json([
+                    'status' => 'fail',
+                    'message' => 'Failed to assign allowance for an employee in the group'
+                ]);
+            }
         }
         return response()->json([
             'status' => 'success',
