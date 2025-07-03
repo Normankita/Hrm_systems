@@ -126,7 +126,7 @@ class ApiAllowanceGroupsController extends Controller
 
             $groupCategoryEmployeeAllowance = GroupCategoryEmployeeAllowance::create(
                 [
-                    'allowance_group_employee_id' => $employeeGroup->id,
+                    'allowance_group_employee_pivot_id' => $employeeGroup->id,
                     'allowance_id' => $request->allowance_id,
                     'amount' => $employee['amount'],
                     'allowance_frequency_id' => $employee['frequency_id'],

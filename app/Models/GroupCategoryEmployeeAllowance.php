@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class GroupCategoryEmployeeAllowance extends Model
 {
     protected $fillable=[
-      'allowance_group_employee_id',
+      'allowance_group_employee_pivot_id',
       'allowance_id',
       'amount',
       'allowance_frequency_id',

@@ -23,9 +23,11 @@ class Allowance extends Model
             ->withTimestamps();
     }
 
-    public function allowance_group_employee(){
-        return $this->belongsToMany(AllowanceGroupEmployeePivot::class,'group_category_employee_allowance')
-        ->withPivot('amount', 'effective_from', 'status')
-        ->withTimestamps();
+    public function groupEmployeeAssignments()
+    {
+        return $this->belongsToMany(AllowanceGroupEmployeePivot::class, 'group_category_employee_allowances')
+            ->withPivot(['amount', 'effective_from', 'status'])
+            ->withTimestamps();
     }
+
 }

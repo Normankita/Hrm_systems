@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('group_category_employee_allowances', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('allowance_group_employee_id');
+            $table->foreignId('allowance_group_employee_pivot_id');
             $table->foreignId('allowance_id');
             $table->foreignId('allowance_frequency_id');
             $table->double('amount');
