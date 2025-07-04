@@ -70,13 +70,6 @@
                         </a>
                         <ul class="collapse" id="allowance-menu" data-parent="#sidebar-menu">
                             <div class="sub-menu">
-                                {{-- @can('create_allowances')
-                                    <li>
-                                        <a class="sidenav-item-link" href="{{ route('employee.manage.allowances.create') }}">
-                                            <span class="nav-text">Allowance Category</span>
-                                        </a>
-                                    </li>
-                                @endcan --}}
                                 @can('view_allowances')
                                     <li>
                                         <a class="sidenav-item-link" href="{{ route('employee.manage.allowances.index') }}">
@@ -94,7 +87,7 @@
                                             class="nav-text">Manage Frequencies</span>
                                     </a>
                                 </li>
-                                   <li>
+                                <li>
                                     <a href="{{ route('employee.manage.disbursements.index') }}"> <span
                                             class="nav-text">Disbursements</span>
                                     </a>
@@ -105,6 +98,34 @@
                     </li>
                 @endcanany
 
+
+                {{-- Begins loans --}}
+                <li class="has-sub">
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                        data-target="#loan-menu" aria-expanded="false" aria-controls="loan-menu">
+                        <i class="mdi mdi-cash-refund"></i>
+                        <span class="nav-text">Manage loans</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="collapse" id="loan-menu" data-parent="#sidebar-menu">
+                        <div class="sub-menu">
+                            @can('view_loans')
+                                <li>
+                                    <a class="sidenav-item-link" href="{{ route('employee.manage.loans.index') }}">
+                                        <span class="nav-text">Employee Loans</span>
+                                    </a>
+                                </li>
+                            @endcan
+                            @can('create_loans')
+                                <li>
+                                    <a class="sidenav-item-link" href="{{ route('employee.manage.loans.index') }}">
+                                        <span class="nav-text">Loan Employee</span>
+                                    </a>
+                                </li>
+                            @endcan
+                        </div>
+                    </ul>
+                </li>
                 {{-- Begins Payroll --}}
                 @canany(['view_payroll', 'create_payroll'])
                     <li class="has-sub">

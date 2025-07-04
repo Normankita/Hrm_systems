@@ -10,6 +10,7 @@ use App\Http\Controllers\EmployeeControllers\EmployeeManageEmployeeAllowancesCon
 use App\Http\Controllers\EmployeeControllers\EmployeeManageEmployeeController;
 use App\Http\Controllers\EmployeeControllers\EmployeeManageLeavesController;
 use App\Http\Controllers\EmployeeControllers\EmployeeManageLeaveTypeController;
+use App\Http\Controllers\EmployeeControllers\EmployeeManageLoansController;
 use App\Http\Controllers\EmployeeControllers\EmployeeManagePayrollController;
 use App\Http\Controllers\EmployeeControllers\EmployeeManagePayrollEmployeeController;
 use App\Http\Controllers\EmployeeControllers\EmployeePayrollController;
@@ -90,6 +91,22 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::get('/{allowance}/edit', 'edit')->name('edit')->middleware(['can:edit_allowances']);
         Route::put('/{allowance}', 'update')->name('update')->middleware(['can:edit_allowances']);
         Route::delete('/{allowance}', 'destroy')->name('destroy')->middleware(['can:delete_allowances']);
+    });
+
+
+    // Managin Loans
+
+Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
+    ->prefix('employee/manage/loans')
+    ->controller(EmployeeManageLoansController::class)
+    ->name('employee.manage.loans.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index')->middleware(['can:view_loans']);
+        Route::get('/create', 'create')->name('create')->middleware(['can:create_loans']);
+        Route::post('/store', 'store')->name('store')->middleware(['can:create_loans']);
+        Route::get('/{loan}/edit', 'edit')->name('edit')->middleware(['can:edit_loans']);
+        Route::put('/{loan}', 'update')->name('update')->middleware(['can:edit_loans']);
+        Route::delete('/{loan}', 'destroy')->name('destroy')->middleware(['can:delete_loans']);
     });
 
 

@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             StatusSeeder::class,
             EmployeeStatusHistorySeeder::class,
             EmployeeStatusPermissions::class,
+            LoansPermissionSeeder::class,
         ]);
         $this->call( LeaveTypeSeeder::class);
         $this->call( AddingPaygradeToDefaultEmployeeSeeder::class );
