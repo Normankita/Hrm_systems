@@ -29,7 +29,7 @@ class AllowanceDisbursementService
             $groups = AllowanceGroup::whereIn('id', $groupsIds)->get();
             return $this->groupBasedDisbursement($groups);
         } elseif ($basedOn === AllowanceGroups::INDIVIDUAL) {
-            $employeesIds = $embeded;
+            $employeesIds = $embeded['employeesIds'];
             $employees = Employee::whereIn('id', $employeesIds)->get();
             return $this->individualBasedDisbursement($employees);
         }
@@ -40,6 +40,7 @@ class AllowanceDisbursementService
             'message' => 'Disbursement created successfully.'
         ];
     }
+
 
     private function categoryBasedDisbursement(Collection $categories): array
     {

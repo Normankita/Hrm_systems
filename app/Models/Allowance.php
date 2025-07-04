@@ -51,7 +51,7 @@ class Allowance extends Model
             'allowance_group_allowance',
             'allowance_id',
             'allowance_group_id'
-        )->withPivot(['isActive'])
+        )->withPivot(['id', 'isActive'])
             ->withTimestamps();
     }
     public function groupEmployeeAssignments()

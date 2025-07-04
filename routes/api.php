@@ -27,4 +27,5 @@ Route::prefix('disbursements')
     ->group(function () {
         Route::get('/categorized', 'fetchCategoryWise')
             ->name('categorized');
+        Route::post('/disburse', 'disburse')->name('disburse');
     });

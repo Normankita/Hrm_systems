@@ -9,6 +9,7 @@ use App\Models\AllowanceGroupEmployeePivot;
 use App\Models\GroupCategoryEmployeeAllowance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Stmt\Catch_;
 use Throwable;
 
 class ApiAllowanceGroupsController extends Controller
@@ -111,35 +112,80 @@ class ApiAllowanceGroupsController extends Controller
                 'message' => 'This Operation was not successful'
             ]);
         }
-        foreach ($request->employees as $employee) {
-            $employeeGroup = DB::table('allowance_group_employee')
-                ->where('allowance_group_id', $group->id)
-                ->where('employee_id', $employee['id'])
-                ->first();
-            if (!$employeeGroup) {
-                return response()->json([
-                    'status' => 'fail',
-                    'message' => 'data not found'
-                ]);
-            }
+        DB::beginTransaction();
+        try {
+            foreach ($request->employees as $employee) {
+                $employeeGroup = AllowanceGroupEmployeePivot::where(
+                    'allowance_group_id',
+                    $group->id
+                )
+                    ->where('employee_id', $employee['id'])
+                    ->first();
+                if (!$employeeGroup) {
+                    return response()->json([
+                        'status' => 'fail',
+                        'message' => 'data not found'
+                    ]);
+                }
 
+                // check if the allowance is already assigned to the group
+                $allowanceExists = $group->allowance()
+                    ->where('allowance_id', $request->allowance_id)
+                    ->first();
+                if (!$allowanceExists) {
+                    // Insert new allowance for the group
+                    $group->allowance()->attach($request->allowance_id);
+                    // Re-fetch the allowance including pivot data
+                    $allowanceExists = $group->allowance()
+                        ->where('allowance_id', $request->allowance_id)
+                        ->first();
+                }
 
-            $groupCategoryEmployeeAllowance = GroupCategoryEmployeeAllowance::create(
-                [
-                    'allowance_group_employee_pivot_id' => $employeeGroup->id,
-                    'allowance_id' => $request->allowance_id,
-                    'amount' => $employee['amount'],
-                    'allowance_frequency_id' => $employee['frequency_id'],
-                    'effective_from' => now(),
-                    'status' => true
-                ]
-            );
-            if (!$groupCategoryEmployeeAllowance) {
-                return response()->json([
-                    'status' => 'fail',
-                    'message' => 'Failed to assign allowance for an employee in the group'
-                ]);
+                // Check if the allowance is already assigned to the employee in the group
+                $exists = GroupCategoryEmployeeAllowance::where(
+                    'allowance_group_employee_pivot_id',
+                    $employeeGroup->id
+                )
+                    ->where(
+                        'allowance_group_allowance_pivot_id',
+                        $allowanceExists->pivot->id
+                    )
+                    ->first();
+                if ($exists) {
+                    // Update the existing allowance if it exists
+                    $exists->update([
+                        'amount' => $employee['amount'],
+                        'allowance_frequency_id' => $employee['frequency_id'],
+                        'effective_from' => now(),
+                        'status' => true,
+                    ]);
+                    continue;
+                }
+
+                $groupCategoryEmployeeAllowance = GroupCategoryEmployeeAllowance::create(
+                    [
+                        'allowance_group_employee_pivot_id' => $employeeGroup->id,
+                        'allowance_group_allowance_pivot_id' => $allowanceExists->pivot->id,
+                        'amount' => $employee['amount'],
+                        'allowance_frequency_id' => $employee['frequency_id'],
+                        'effective_from' => now(),
+                        'status' => true
+                    ]
+                );
+                if (!$groupCategoryEmployeeAllowance) {
+                    return response()->json([
+                        'status' => 'fail',
+                        'message' => 'Failed to assign allowance for an employee in the group'
+                    ]);
+                }
             }
+            DB::commit();
+        } catch (Throwable $throwable) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 'fail',
+                'message' => 'something went wrong - ' . $throwable->getMessage()
+            ]);
         }
         return response()->json([
             'status' => 'success',

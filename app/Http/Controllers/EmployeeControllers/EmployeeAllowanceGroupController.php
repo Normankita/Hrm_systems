@@ -7,20 +7,24 @@ use App\Http\Utils\Traits\AllowanceGroupTrait;
 use App\Models\Allowance;
 use App\Models\AllowanceFrequency;
 use App\Models\AllowanceGroup;
+use App\Models\AllowanceGroupAllowancePivot;
+use App\Models\AllowanceGroupEmployeePivot;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class EmployeeAllowanceGroupController extends Controller
 {
     use AllowanceGroupTrait;
-    public function index() {
+    public function index()
+    {
         $groups = AllowanceGroup::all();
         $allowances = Allowance::all();
         return view('employee.manage.allowance_groups.index')
-            ->with(['groups'=> $groups, 'allowances'=>$allowances]);
+            ->with(['groups' => $groups, 'allowances' => $allowances]);
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $rules = [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:255',
@@ -40,26 +44,65 @@ class EmployeeAllowanceGroupController extends Controller
     }
 
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $group = AllowanceGroup::where('id', $id)->first();
+
         // Employee That are eligible to be added in the group
         $employees = self::getEmployeeForAdditionSelection($group);
-        if(!$group) return redirect()->back()->with('error', 'Allowance group not found');
+        if (!$group)
+            return redirect()->back()->with('error', 'Allowance group not found');
         return view('employee.manage.allowance_groups.edit')
             ->with('group', $group)
             ->with('employees', $employees);
     }
-    public function getGroupMembers (AllowanceGroup $group){
+
+
+    public function getGroupMembers(AllowanceGroup $group)
+    {
         $employees = self::getEmployeeForAdditionSelection($group);
         return view('employee.manage.allowance_groups.members')
-        ->with(['employees'=> $employees, 'group'=>$group]);
+            ->with(['employees' => $employees, 'group' => $group]);
     }
-    public function getGroupMembersToAssignAllowance (AllowanceGroup $group){
-        $frequencies= AllowanceFrequency::all();
-        $allowances= Allowance::all();
-        $group= AllowanceGroup::find($group->id);
+
+
+    public function getGroupMembersToAssignAllowance(AllowanceGroup $group)
+    {
+        // fetching group categories assigned
+        $categories = $group->allowance;
+        $frequencies = AllowanceFrequency::all();
+        $allowances = Allowance::all();
+        $group = AllowanceGroup::find($group->id);
         $employees = $group->activeEmployees()->get();
         return view('employee.manage.allowance_groups.assignAllowance')
-        ->with(['employees'=> $employees, 'group'=>$group, 'frequencies'=>$frequencies,'allowances'=>$allowances]);
+            ->with([
+                'employees' => $employees,
+                'group' => $group,
+                'frequencies' => $frequencies,
+                'allowances' => $allowances,
+                'categories' => $categories
+            ]);
+    }
+
+
+    public function getGroupAllowanceDetails(AllowanceGroup $group, Allowance $allowance)
+    {
+        // group_allowance
+        $gr_allowance = $group->allowance()->where(
+            'allowance_id',
+            $allowance->id
+        )
+            ->first();
+        if (!$gr_allowance) { return redirect()->back()->with('error', 'Allowance not found'); }
+        // group_employee
+        $gr_allowancePivot = AllowanceGroupAllowancePivot::find($gr_allowance->pivot->id);
+        $gr_employeePivot = $gr_allowancePivot->activeGroupEmployeesPivot()->get();
+        return view('employee.manage.allowance_groups.categoryDetails')
+            ->with([
+                'gr_employeePivot' => $gr_employeePivot,
+                'gr_allowancePivot' => $gr_allowancePivot,
+                'group' => $group,
+                'allowance' => $allowance,
+            ]);
     }
 }

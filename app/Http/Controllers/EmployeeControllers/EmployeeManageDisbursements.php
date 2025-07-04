@@ -53,11 +53,10 @@ class EmployeeManageDisbursements extends Controller
      */
     public function store(Request $request)
     {
-        
         $basedOn = $request->post('basedOn');
-        if ($basedOn == AllowanceGroups::GROUP) {
+        if ($basedOn == AllowanceGroups::INDIVIDUAL) {
 
-        }elseif ($basedOn == AllowanceGroups::INDIVIDUAL) {
+        }elseif ($basedOn == AllowanceGroups::GROUP) {
 
         } elseif ($basedOn == AllowanceGroups::CATEGORY) {
             $categoriesIds = $request->post('categories', []);

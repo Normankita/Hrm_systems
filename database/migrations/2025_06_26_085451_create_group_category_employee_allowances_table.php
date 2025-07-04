@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('group_category_employee_allowances', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('al_gr_employee_id');
-            $table->unsignedBigInteger('al_gr_allowance_id');
-            $table->unsignedBigInteger('al_fr_id');
+            $table->unsignedBigInteger('allowance_group_employee_pivot_id');
+            $table->unsignedBigInteger('allowance_group_allowance_pivot_id');
+            $table->unsignedBigInteger('allowance_frequency_id');
             $table->double('amount');
             $table->date('effective_from');
-            $table->boolean('status')->default(false);
+            $table->boolean('isActive')->default(false);
             $table->timestamps();
         });
     }

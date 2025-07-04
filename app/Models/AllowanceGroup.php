@@ -55,11 +55,11 @@ class AllowanceGroup extends Model
         return $this->belongsToMany(
             Employee::class,
             'allowance_group_employee'
-        )->withPivot(['isActive'])
+        )->withPivot(['id', 'isActive'])
             ->withTimestamps();
     }
 
-    public function allowances()
+    public function allowance()
     {
         return $this->belongsToMany(
             Allowance::class,
@@ -67,7 +67,8 @@ class AllowanceGroup extends Model
             'allowance_group_id',
             'allowance_id'
         )
-            ->withPivot(['isActive'])
+            ->withPivot(['isActive', 'id'])
+
             ->withTimestamps();
     }
 

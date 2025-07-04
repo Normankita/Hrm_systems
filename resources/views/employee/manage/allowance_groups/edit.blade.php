@@ -14,10 +14,10 @@
                         <div class="col-md-4">
                             <div class="row justify-content-end">
                                 <a href="{{ route('employee.manage.employee.allowances.groups.members', $group) }}"
-                                    class="btn btn-sm btn-primary col-12 my-2"> Add Members </a>
+                                    class="btn btn-sm btn-primary col-12 "> Add Members </a>
                                 @if (count($group->activeEmployees) > 0)
                                     <a href="{{ route('employee.manage.employee.allowances.groups.assign', $group) }}"
-                                        class="btn btn-primary col-12 my-2"> Assign New Allowance </a>
+                                       class="btn btn-sm btn-primary col-12 mt-2 mb-2"> Assign New Allowance </a>
                                 @endif
                                 <x-system.modal-button
                                 class="btn btn-sm btn-block btn-primary btn-custom" data-bs-toggle="modal"
@@ -90,8 +90,8 @@
         <x-system.modal id="EditAssignedAllowance" form="EditAssignedAllowanceForm"
             title="Choose assgnied allowance to edit" :inside="true">
             <div class="col mb-2 ">
-                @if ($group->allowances)
-                    @foreach ($group->allowances as $allowance )
+                @if ($group->allowance)
+                    @foreach ($group->allowance as $allowance )
                         <div class="bg-white shadow rounded-2xl p-2 mb-2">
                     <h2 class="text-gray-600 text-sm mb-1">{{$allowance->name}}</h2>
                     <p class="text-xl font-semibold text-green-600">

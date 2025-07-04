@@ -120,6 +120,9 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::get('/{id}/edit', 'edit')->name('edit');
         Route::get('/members/{group}', 'getGroupMembers')->name('members');
         Route::get('/assign-allowance/{group}', 'getGroupMembersToAssignAllowance')->name('assign');
+
+        // group allawances details routes
+        Route::get('/{group}/allowances/{allowance}', 'getGroupAllowanceDetails')->name('allowanceDetails');
     });
 
 
@@ -205,8 +208,9 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::post('/{employee}/toggle-status', 'updateStatus')
             ->name('updateStatus')
             ->middleware(['can:edit_employee_status']);
-
     });
+
+
 //Employee Reports
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('employee/manage/employee/reports')

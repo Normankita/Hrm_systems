@@ -17,7 +17,11 @@
                 <div v-if="!empSubmit && !allowance_id" class="col-md-12 alert alert-info text-center ">
                     Please select an allowance to begin assigning values.
                 </div>
-                <div class="col-md-3 ">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="row justify-content-start mb-3">
+                <div class="col-md-6">
                     <label>Choose an Allowance</label>
                     <select class="form-control" v-model="allowance_id">
                         <option value="" disabled>-- Select allowance --</option>
@@ -26,6 +30,7 @@
                         </option>
                     </select>
                 </div>
+
             </div>
         </div>
         <div v-if="!empSubmit && allowance_id" class="col-md-12 mb-4">
@@ -43,42 +48,81 @@
                         </option>
                     </select>
                 </div>
-                <div class="col-md-2 d-flex align-items-end">
+                {{-- <div class="col-md-2 d-flex align-items-end">
                     <button class="btn btn-sm btn-secondary" v-on:click="selectAll">Select All</button>
-                </div>
+                </div> --}}
             </div>
 
-            <table class="table table-bordered table-sm p-5">
-                <thead>
-                    <tr>
-                        <th><input type="checkbox" v-on:change="toggleAll($event)"></th>
-                        <th>Name</th>
-                        <th>Amount</th>
-                        <th>Frequency</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(employee, index) in employees" :key="employee.id">
-                        <td><input type="checkbox" v-model="employee.selected"></td>
-                        <td>@{{ employee.full_name }}</td>
-                        <td><input type="number" class="form-control" v-model="employee.amount"></td>
-                        <td>
-                            <select class="form-control" v-model="employee.frequency_id">
-                                <option value="">--</option>
-                                <option v-for="frequency in frequencies" :key="frequency.id" :value="frequency.id">
-                                    @{{ frequency.name }}
-                                </option>
-                            </select>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="card">
+                <div class="card-body">
+                    <table class="table table-bordered table-sm p-5">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" v-on:change="toggleAll($event)"></th>
+                                <th>Name</th>
+                                <th>Amount</th>
+                                <th>Frequency</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(employee, index) in employees" :key="employee.id">
+                                <td><input type="checkbox" v-model="employee.selected"></td>
+                                <td>@{{ employee.full_name }}</td>
+                                <td><input type="number" class="form-control" v-model="employee.amount"></td>
+                                <td>
+                                    <select class="form-control" v-model="employee.frequency_id">
+                                        <option value="">--</option>
+                                        <option v-for="frequency in frequencies" :key="frequency.id"
+                                            :value="frequency.id">
+                                            @{{ frequency.name }}
+                                        </option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
 
+                </div>
+            </div>
             <div class="text-end mt-2">
                 <button class="btn btn-sm btn-primary" type="button" v-on:click="submitSelectedEmployees"
                     :disabled="empSubmit">
                     Submit
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-start">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <x-system.table class="dt-table">
+                        <x-slot name="head">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Allowance Category</th>
+                                    <th>action</th>
+                                </tr>
+                            </thead>
+                        </x-slot>
+                        <x-slot name="body">
+                            <tbody>
+                                @foreach ($categories as $key => $category)
+                                    <tr>
+                                        <td>{{ ++$key }}</td>
+                                        <td>{{ $category->name }}</td>
+                                        <td>
+                                            <x-system.btn-view
+                                                :route="route('employee.manage.employee.allowances.groups.allowanceDetails', [$group->id, $category->id])" />
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </x-slot>
+                    </x-system.table>
+                </div>
             </div>
         </div>
     </div>
