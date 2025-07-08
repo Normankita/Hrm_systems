@@ -113,12 +113,29 @@ class AllowanceGroupEmployeePivot extends Model
             ->withTimestamps();
     }
 
+
+        public function activeAllowanceGroupAllowancesPivot()
+    {
+        return $this->belongsToMany(
+            AllowanceGroupAllowancePivot::class,
+            'group_category_employee_allowances',
+            'allowance_group_employee_pivot_id',
+            'allowance_group_allowance_pivot_id'
+        )
+            ->withPivot([
+                    'id',
+                    'allowance_frequency_id',
+                    'amount',
+                    'effective_from',
+                    'isActive'
+                ])
+            ->withTimestamps();
+    }
+
     public static function getRealDetails(int $id)
     {
         return AllowanceGroupEmployeePivot::select('id', 'employee_id', 'allowance_group_id')->with(
-            ['employee' => function($query) {
-                $query->select('id', 'full_name', 'phone_number', 'email', 'salary');
-            }, 'group']
+            ['employee', 'group']
         )
             ->find($id);
     }

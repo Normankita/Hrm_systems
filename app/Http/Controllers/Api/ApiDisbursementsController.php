@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Enums\AllowanceGroups;
 use App\Http\Controllers\Controller;
+use App\Http\Services\AllowanceDisbursementService;
 use App\Models\AllowanceGroupEmployeePivot;
 use App\Models\DisbursedAllowance;
 use App\Models\GroupCategoryEmployeeAllowance;
@@ -41,41 +42,15 @@ class ApiDisbursementsController extends Controller
             // fetching group category allowances based of ids
             $results = $this->getGroupCategoryAllawances($ids);
             if ($results['status'] == 'success') {
-                // fetching its corresponding employees with intermediates datas
-                $gr_cat_emp_collection = $results['data'];
-                $gr_cat_emp_collection = $gr_cat_emp_collection->map(
-                    function ($gr_cat_emp) {
-                        return $gr_cat_emp->getRealDetailsDynamic();
-                    }
-                );
-            }
-
-            // checking the durability of the employee to get this allowance
-            /**  LOGIC AWAITED */
-
-            // Give employee the desired allowance
-            DB::beginTransaction();
-            try {
-                $gr_cat_emp_collection->each(function ($disburse) {
-                    DisbursedAllowance::create([
-                        'type' => AllowanceGroups::INDIVIDUAL,
-                        'amount' => $disburse->amount,
-                        'employee_id' => $disburse->employee->id,
-                        'status' => true,
-                        'company_id' => $disburse->employee->company_id
-                    ]);
-                });
-                DB::commit();
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Disbursement created successfully.',
-                ]);
-            } catch (\Throwable $th) {
-                DB::rollBack();
+                $response = AllowanceDisbursementService::disburseWithGroupCategory(
+                    $results['data']);
+                dd($response);
+                // return response()->json($response);
+            } else {
                 return response()->json([
                     'status' => 'error',
-                    'message' => $th
-                ], 500);
+                    'message' => $results['message'],
+                ]);
             }
 
         } elseif ($category == AllowanceGroups::GROUP) {

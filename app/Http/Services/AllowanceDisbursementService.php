@@ -7,8 +7,10 @@ use App\Models\Allowance;
 use App\Models\AllowanceGroup;
 use App\Models\DisbursedAllowance;
 use App\Models\Employee;
+use App\Models\GroupCategoryEmployeeAllowance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class AllowanceDisbursementService
 {
@@ -39,6 +41,65 @@ class AllowanceDisbursementService
             'status' => 'success',
             'message' => 'Disbursement created successfully.'
         ];
+    }
+
+    public static function disburseWithGroupCategory($collection)
+    {
+        $gr_cat_emp_collection = self::formatForGroupCategoryDisburse($collection);
+        // Give employee the desired allowance
+        DB::beginTransaction();
+        try {
+            return $gr_cat_emp_collection->map(function ($disburse) {
+                // checking the employees that are aligible to receijve the allowance
+                $response = self::checkingGroupCategoryEligibilityDisburse(
+                    $disburse);
+                return $response;
+                // DisbursedAllowance::create([
+                //     'type' => AllowanceGroups::INDIVIDUAL,
+                //     'amount' => $disburse->amount,
+                //     'employee_id' => $disburse->employee->id,
+                //     'status' => true,
+                //     'company_id' => $disburse->employee->company_id,
+                //     'disbursable_type' => GroupCategoryEmployeeAllowance::class,
+                //     'disbursable_id' => $disburse->id
+                // ]);
+            });
+            DB::commit();
+            return [
+                'status' => 'success',
+                'message' => 'Disbursement created successfully.',
+            ];
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return [
+                'status' => 'error',
+                'message' => $th
+            ];
+        }
+
+    }
+
+    private static function checkingGroupCategoryEligibilityDisburse($forDisburse   )
+    {
+        $data = GroupCategoryEmployeeAllowance::where(
+            'allowance_group_employee_pivot_id', $forDisburse->group_employee_pivot->id)
+            ->where('allowance_group_allowance_pivot_id', $forDisburse->group_allowance_pivot->id)
+            ->count();
+        return [
+            'status' => 'success',
+            'message' => 'final variable attained',
+            'data' => $data
+        ];
+    }
+
+    private static function formatForGroupCategoryDisburse($collection)
+    {
+        // fetching its corresponding employees with intermediates datas
+        return $collection->map(
+            function ($gr_cat_emp) {
+                return $gr_cat_emp->getRealDetailsDynamic();
+            }
+        );
     }
 
 

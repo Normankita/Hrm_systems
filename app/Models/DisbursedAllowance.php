@@ -42,8 +42,15 @@ class DisbursedAllowance extends Model
         'company_id',
         'employee_id',
         'status',
-        // Add other fields as necessary
+        'disbursable_id',
+        'disbursable_type',
     ];
+
+    public function disbursable()
+    {
+        return $this->morphTo();
+    }
+
 
     public function employee()
     {

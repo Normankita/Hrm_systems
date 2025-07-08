@@ -16,6 +16,7 @@ return new class extends Migration
             $table->enum('type',['group','individual', 'category','custom']);
             $table->double('amount');
             $table->foreignId('company_id');
+            $table->foreignId('employee_id')->constrained();
             $table->morphs('disbursable');
             $table->boolean('status')->default(false);
             $table->timestamps();

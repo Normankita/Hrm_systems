@@ -5,11 +5,15 @@ namespace App\Models;
 use App\Http\Resources\AllowanceGroupAllowancePivotResource;
 use App\Http\Resources\AllowanceGroupEmployeePivotResource;
 use App\Http\Resources\GroupCategoryEmployeeAllowanceResource;
+use App\Http\Utils\Traits\HasAllowanceDisbursements;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
 class GroupCategoryEmployeeAllowance extends Model
 {
+
+    use HasAllowanceDisbursements;
+
     protected $fillable = [
         'allowance_group_employee_pivot_id',
         'allowance_group_allowance_pivot_id',
@@ -49,7 +53,7 @@ class GroupCategoryEmployeeAllowance extends Model
             'id',
             $ids
         )->get();
-        $result = $selfObjectes->map(function ($item) {
+        return $selfObjectes->map(function ($item) {
             return self::getRealDetails($item->id);
         });
     }
@@ -77,7 +81,9 @@ class GroupCategoryEmployeeAllowance extends Model
             'employee' => $output->group_employee_pivot_details->employee,
             'allowance' => $output->group_allowance_pivot_details->allowance,
             'group' => $output->group_allowance_pivot_details->group,
-            'frequency' => $output->frequency
+            'frequency' => $output->frequency,
+            'group_employee_pivot' => $output->group_employee_pivot_details,
+            'group_allowance_pivot' => $output->group_allowance_pivot_details
         ];
     }
 
@@ -105,7 +111,9 @@ class GroupCategoryEmployeeAllowance extends Model
             'employee' => $output->group_employee_pivot_details->employee,
             'allowance' => $output->group_allowance_pivot_details->allowance,
             'group' => $output->group_allowance_pivot_details->group,
-            'frequency' => $output->frequency
+            'frequency' => $output->frequency,
+            'group_employee_pivot' => $output->group_employee_pivot_details,
+            'group_allowance_pivot' => $output->group_allowance_pivot_details
         ];
 
     }
