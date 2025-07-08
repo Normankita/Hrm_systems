@@ -93,10 +93,13 @@ class EmployeeAllowanceGroupController extends Controller
             $allowance->id
         )
             ->first();
-        if (!$gr_allowance) { return redirect()->back()->with('error', 'Allowance not found'); }
+        if (!$gr_allowance) {
+            return redirect()->back()->with('error', 'Allowance not found');
+        }
         // group_employee
         $gr_allowancePivot = AllowanceGroupAllowancePivot::find($gr_allowance->pivot->id);
-        $gr_employeePivot = $gr_allowancePivot->activeGroupEmployeesPivot()->get();
+        $gr_employeePivot = $gr_allowancePivot->activeGroupEmployeesPivot()
+            ->get();
         return view('employee.manage.allowance_groups.categoryDetails')
             ->with([
                 'gr_employeePivot' => $gr_employeePivot,

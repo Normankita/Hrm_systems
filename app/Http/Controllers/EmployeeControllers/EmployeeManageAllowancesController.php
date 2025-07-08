@@ -45,4 +45,7 @@ class EmployeeManageAllowancesController extends Controller
         $allowance->recordEvent('add', $allowance->toArray());
         return redirect()->route('employee.manage.allowances.index')->with('success', 'Allowance created successfully');
     }
+    public function edit(Request $request, Allowance $allowance) {
+        return redirect()->back();
+    }
 }

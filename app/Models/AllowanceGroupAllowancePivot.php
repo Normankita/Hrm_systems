@@ -24,16 +24,44 @@ class AllowanceGroupAllowancePivot extends Model
      * Gets a group_allowance pivot table's allowance object
      * @return Allowance|\Illuminate\Database\Eloquent\Collection<int, Allowance>|null
      */
-    public function getAllowance() {
+    public function allowance()
+    {
+        return $this->belongsTo(Allowance::class);
+    }
+
+    /**
+     * Defines a relationship to the AllowanceGroup model
+     * using 'allowance_group_id' as the foreign key.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<AllowanceGroup>
+     */
+
+    public function group()
+    {
+        return $this->belongsTo(
+            AllowanceGroup::class,
+            'allowance_group_id',
+            'id'
+        );
+    }
+
+
+    /**
+     * Gets a group_allowance pivot table's allowance object
+     * @return Allowance|\Illuminate\Database\Eloquent\Collection<int, Allowance>|null
+     */
+    public function getAllowance()
+    {
         return Allowance::find($this->allowance_id);
     }
 
     /**
      * Gets  group_allowance pivot table's allowance object from collection
- * @param \Illuminate\Support\Collection<int, \App\Models\AllowanceGroupAllowancePivot> $gr_allowances
+     * @param \Illuminate\Support\Collection<int, \App\Models\AllowanceGroupAllowancePivot> $gr_allowances
      * @return \Illuminate\Database\Eloquent\Collection<int, Allowance>
      */
-    public static function getAllowances(Collection $gr_allowance_pivots) {
+    public static function getAllowances(Collection $gr_allowance_pivots)
+    {
         $gr_allowanceIds = $gr_allowance_pivots->pluck('allowance_id');
         return Allowance::whereIn('id', $gr_allowanceIds)->get();
     }
@@ -48,7 +76,7 @@ class AllowanceGroupAllowancePivot extends Model
 
     /**
      * Gets  group_allowance pivot table's allowanceGroup object from collection
- * @param \Illuminate\Support\Collection<int, \App\Models\AllowanceGroupAllowancePivot> $gr_allowances
+     * @param \Illuminate\Support\Collection<int, \App\Models\AllowanceGroupAllowancePivot> $gr_allowances
      * @return \Illuminate\Database\Eloquent\Collection<int, AllowanceGroup>
      */
     public function getGroups(Collection $gr_allowance_pivots)
@@ -70,8 +98,13 @@ class AllowanceGroupAllowancePivot extends Model
             'allowance_group_allowance_pivot_id',
             'allowance_group_employee_pivot_id'
         )
-            ->withPivot(['id', 'allowance_frequency_id', 'amount', 'effective_from',
-            'isActive'])
+            ->withPivot([
+                'id',
+                'allowance_frequency_id',
+                'amount',
+                'effective_from',
+                'isActive'
+            ])
             ->withTimestamps();
     }
 
@@ -93,4 +126,13 @@ class AllowanceGroupAllowancePivot extends Model
             ->wherePivot('isActive', true);
     }
 
+
+    public static function getRealDetails($id)
+    {
+        return AllowanceGroupAllowancePivot::select('id', 'allowance_id')
+            ->with(
+                ['allowance']
+            )
+            ->find($id);
+    }
 }
