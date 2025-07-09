@@ -4,10 +4,10 @@ namespace App\Models;
 
 use App\Http\Resources\AllowanceGroupAllowancePivotResource;
 use App\Http\Resources\AllowanceGroupEmployeePivotResource;
-use App\Http\Resources\GroupCategoryEmployeeAllowanceResource;
 use App\Http\Utils\Traits\HasAllowanceDisbursements;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class GroupCategoryEmployeeAllowance extends Model
 {
@@ -73,18 +73,7 @@ class GroupCategoryEmployeeAllowance extends Model
         }
         $output->group_employee_pivot_details = AllowanceGroupEmployeePivot::getRealDetails($output->group_employee_pivot->id);
         $output->group_allowance_pivot_details = AllowanceGroupAllowancePivot::getRealDetails($output->group_allowance_pivot->id);
-        return (object) [
-            'id' => $output->id,
-            'amount' => $output->amount,
-            'effective_from' => $output->effective_from,
-            'isActive' => $output->isActive,
-            'employee' => $output->group_employee_pivot_details->employee,
-            'allowance' => $output->group_allowance_pivot_details->allowance,
-            'group' => $output->group_allowance_pivot_details->group,
-            'frequency' => $output->frequency,
-            'group_employee_pivot' => $output->group_employee_pivot_details,
-            'group_allowance_pivot' => $output->group_allowance_pivot_details
-        ];
+        return self::realDetailsFormat($output);
     }
 
 
@@ -103,6 +92,11 @@ class GroupCategoryEmployeeAllowance extends Model
         }
         $output->group_employee_pivot_details = new AllowanceGroupEmployeePivotResource(AllowanceGroupEmployeePivot::getRealDetails($output->group_employee_pivot->id));
         $output->group_allowance_pivot_details = new AllowanceGroupAllowancePivotResource(AllowanceGroupAllowancePivot::getRealDetails($output->group_allowance_pivot->id));
+        return $this->realDetailsFormat($output);
+    }
+
+
+    private static function realDetailsFormat($output) {
         return (object) [
             'id' => $output->id,
             'amount' => $output->amount,
@@ -110,12 +104,12 @@ class GroupCategoryEmployeeAllowance extends Model
             'isActive' => $output->isActive,
             'employee' => $output->group_employee_pivot_details->employee,
             'allowance' => $output->group_allowance_pivot_details->allowance,
-            'group' => $output->group_allowance_pivot_details->group,
+            'group' => $output->group_employee_pivot_details->group,
             'frequency' => $output->frequency,
             'group_employee_pivot' => $output->group_employee_pivot_details,
-            'group_allowance_pivot' => $output->group_allowance_pivot_details
+            'group_allowance_pivot' => $output->group_allowance_pivot_details,
+            'created_at' => $output->created_at
         ];
-
     }
 
 }

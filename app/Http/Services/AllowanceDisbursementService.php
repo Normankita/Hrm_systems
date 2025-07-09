@@ -45,44 +45,45 @@ class AllowanceDisbursementService
 
     public static function disburseWithGroupCategory($collection)
     {
-        $gr_cat_emp_collection = self::formatForGroupCategoryDisburse($collection);
-        // Give employee the desired allowance
+        $gr_cat_emp_collection = self::formatForGroupCategoryDisburse(
+            $collection);
+
         DB::beginTransaction();
         try {
-            return $gr_cat_emp_collection->map(function ($disburse) {
-                // checking the employees that are aligible to receijve the allowance
-                $response = self::checkingGroupCategoryEligibilityDisburse(
-                    $disburse);
-                return $response;
-                // DisbursedAllowance::create([
-                //     'type' => AllowanceGroups::INDIVIDUAL,
-                //     'amount' => $disburse->amount,
-                //     'employee_id' => $disburse->employee->id,
-                //     'status' => true,
-                //     'company_id' => $disburse->employee->company_id,
-                //     'disbursable_type' => GroupCategoryEmployeeAllowance::class,
-                //     'disbursable_id' => $disburse->id
-                // ]);
+            $disbursed = $gr_cat_emp_collection->map(function ($disburse) {
+                return DisbursedAllowance::create([
+                    'type' => AllowanceGroups::CATEGORY,
+                    'amount' => $disburse->amount,
+                    'employee_id' => $disburse->employee->id,
+                    'status' => true,
+                    'company_id' => $disburse->employee->company_id,
+                    'disbursable_type' => GroupCategoryEmployeeAllowance::class,
+                    'disbursable_id' => $disburse->id
+                ]);
             });
+
             DB::commit();
+
             return [
                 'status' => 'success',
                 'message' => 'Disbursement created successfully.',
+                'data' => $disbursed,
             ];
         } catch (\Throwable $th) {
             DB::rollBack();
             return [
                 'status' => 'error',
-                'message' => $th
+                'message' => $th->getMessage(),
             ];
         }
-
     }
 
-    private static function checkingGroupCategoryEligibilityDisburse($forDisburse   )
+    private static function checkingGroupCategoryEligibilityDisburse($forDisburse)
     {
         $data = GroupCategoryEmployeeAllowance::where(
-            'allowance_group_employee_pivot_id', $forDisburse->group_employee_pivot->id)
+            'allowance_group_employee_pivot_id',
+            $forDisburse->group_employee_pivot->id
+        )
             ->where('allowance_group_allowance_pivot_id', $forDisburse->group_allowance_pivot->id)
             ->count();
         return [

@@ -37,15 +37,15 @@ class ApiDisbursementsController extends Controller
     public function disburse(Request $request)
     {
         $category = $request->post('basedOn');
-        if ($category == AllowanceGroups::INDIVIDUAL) {
+        $results = [];
+        if ($category == AllowanceGroups::CATEGORY) {
             $ids = $request->post('group_allowance_employee_pivotIds');
             // fetching group category allowances based of ids
             $results = $this->getGroupCategoryAllawances($ids);
             if ($results['status'] == 'success') {
                 $response = AllowanceDisbursementService::disburseWithGroupCategory(
                     $results['data']);
-                dd($response);
-                // return response()->json($response);
+                return response()->json($response);
             } else {
                 return response()->json([
                     'status' => 'error',
@@ -55,13 +55,13 @@ class ApiDisbursementsController extends Controller
 
         } elseif ($category == AllowanceGroups::GROUP) {
             $results = $this->getGroupBasedDisbursement();
-        } elseif ($category == AllowanceGroups::CATEGORY) {
+        } elseif ($category == AllowanceGroups::INDIVIDUAL) {
             $results = $this->getCategorizedDisbursement();
         }
         return response()->json([
             'status' => 'success',
             'message' => 'Disbursement created successfully.',
-            'data' => $request->all()
+            'data' => $results
         ]);
     }
 

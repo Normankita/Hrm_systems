@@ -210,13 +210,18 @@
                             allowance_id: this.allowance_id,
                         })
                         .then(res => {
-                            if (res.data.status === 'success') {
+                           if (res.status == 200) {
+                             if (res.data.status === 'success') {
+                                alert('Employee Added Successfully...');
                                 location.reload();
                             } else {
                                 this.empSubmit = false;
                                 this.error = "Failed to submit.";
                                 alert(this.error);
                             }
+                           }else {
+                            alert('bad request please try again');
+                           }
                         })
                         .catch(() => {
                             this.empSubmit = false;

@@ -67,7 +67,6 @@ class AllowanceGroupAllowancePivot extends Model
     }
 
 
-
     public function getGroup()
     {
         return AllowanceGroup::find($this->allowance_group_id);
@@ -134,5 +133,15 @@ class AllowanceGroupAllowancePivot extends Model
                 ['allowance']
             )
             ->find($id);
+    }
+
+    public static function getRealDetailsFromArray(array $ids)
+    {
+        return AllowanceGroupAllowancePivot::select('id', 'allowance_id')
+            ->with(
+                ['allowance']
+            )
+            ->whereIn('id', $ids)
+            ->get();
     }
 }

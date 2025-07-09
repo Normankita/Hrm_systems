@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\EmployeeControllers;
 
+use App\Enums\AllowanceGroups;
 use App\Http\Controllers\Controller;
 use App\Http\Utils\Traits\AllowanceGroupTrait;
 use App\Models\Allowance;
@@ -9,6 +10,9 @@ use App\Models\AllowanceFrequency;
 use App\Models\AllowanceGroup;
 use App\Models\AllowanceGroupAllowancePivot;
 use App\Models\AllowanceGroupEmployeePivot;
+use App\Models\DisbursedAllowance;
+use App\Models\GroupCategoryEmployeeAllowance;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -71,7 +75,11 @@ class EmployeeAllowanceGroupController extends Controller
         // fetching group categories assigned
         $categories = $group->allowance;
         $frequencies = AllowanceFrequency::all();
-        $allowances = Allowance::all();
+        // select allowance that is absent in the group
+        $gr_allowance_pivots = $categories->pluck('pivot.allowance_id');
+        // fetching the objects of this ids
+        $allowances = Allowance::whereNotIn('id',
+            $gr_allowance_pivots)->get();
         $group = AllowanceGroup::find($group->id);
         $employees = $group->activeEmployees()->get();
         return view('employee.manage.allowance_groups.assignAllowance')
@@ -100,12 +108,30 @@ class EmployeeAllowanceGroupController extends Controller
         $gr_allowancePivot = AllowanceGroupAllowancePivot::find($gr_allowance->pivot->id);
         $gr_employeePivot = $gr_allowancePivot->activeGroupEmployeesPivot()
             ->get();
+            
+        $disbursed = DisbursedAllowance::where('type', AllowanceGroups::CATEGORY)
+                ->where('disbursable_type', GroupCategoryEmployeeAllowance::class)
+                ->get();
+
+        $trueDisburseDetails = $disbursed->map(function($item) use ($allowance) {
+            $GrCatEmpAll = GroupCategoryEmployeeAllowance::find($item->disbursable_id);
+            $details = $GrCatEmpAll->getRealDetailsDynamic();
+            if ($details->allowance->id == $allowance->id) {
+                return $details;
+            }
+            return null;
+        })->filter()->values();
+
+        $disbursementsGroupedByDay = $trueDisburseDetails->groupBy(function ($item) {
+            return Carbon::parse($item->created_at)->format('Y-m-d');
+        });
         return view('employee.manage.allowance_groups.categoryDetails')
             ->with([
                 'gr_employeePivot' => $gr_employeePivot,
                 'gr_allowancePivot' => $gr_allowancePivot,
                 'group' => $group,
                 'allowance' => $allowance,
+                'disbursed' => $disbursementsGroupedByDay
             ]);
     }
 }

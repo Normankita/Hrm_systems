@@ -20,7 +20,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <x-system.table class="dt-table w-100 table-responsive">
+                    <x-system.table class="dt-table w-100">
                         <x-slot name="head">
                             <input type="checkbox" class="all-checker" id="select-all">
                             <b>Select All</b>
@@ -39,7 +39,7 @@
                         <x-slot name="body">
                             <tbody>
                                 @forelse(AllowanceGroupEmployeePivot::withEmployees(
-                                        $gr_employeePivot) as $key => $withEmployee)
+                                                $gr_employeePivot) as $key => $withEmployee)
                                     @php
                                         $employee = $withEmployee->employee;
                                     @endphp
@@ -56,6 +56,53 @@
                                             {{-- <x-system.btn-view :key="$key" :route="route('employee.manage.employees.show', $employee->id)" /> --}}
                                         </td>
                                     </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="10" class="text-center text-muted">No employees found.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </x-slot>
+                    </x-system.table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div>
+                        <h5 class="text-dark font-weight-bold">
+                            Disbursement History for Group-Category
+                        </h5>
+                    </div>
+                    <x-system.table class="dt-table w-100">
+                        <x-slot name="head">
+                            <thead class="table-light text-dark">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Employee</th>
+                                    <th>Amount</th>
+                                    <th>Disbursed On</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </x-slot>
+
+                        <x-slot name="body">
+                            <tbody>
+                                @forelse($disbursed as $date => $items)
+                                    @foreach ($items as $key => $item)
+                                        <tr class="text-dark">
+                                            <td>{{ $item->employee->full_name }}</td>
+                                            <td>{{ $item->employee->phone_number }}</td>
+                                            <td>{{ number_format($item->amount) }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($item->created_at)->format('m-d-Y'); }}</td>
+                                            <td>
+                                                {{-- <x-system.btn-view :key="$key" :route="route('employee.manage.employees.show', $employee->id)" /> --}}
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 @empty
                                     <tr>
                                         <td colspan="10" class="text-center text-muted">No employees found.</td>
@@ -86,11 +133,25 @@
                     console.log(handler1.getSelected());
                     const result = await axios.post(
                         "{{ route('disbursements.disburse') }}", {
-                        basedOn: 'individual',
-                        group_allowance_employee_pivotIds: handler1.getSelected(),
-                        groupId: this.group.id,
-                        allowanceId: this.allowance.id
-                    })
+                            basedOn: 'category',
+                            group_allowance_employee_pivotIds: handler1.getSelected(),
+                            groupId: this.group.id,
+                            allowanceId: this.allowance.id
+                        })
+                        .then(resp => {
+                            if (resp.status == 200) {
+                                if (resp.data) {
+                                 if (resp.data.status == 'success') {
+                                    alert("Data saved successfully!");
+                                    location.reload();
+                                 }else {
+                                   alert("Something went wrong. Please try again...");
+                                 }
+                                }
+                            } else {
+                             alert('Fail to create, plase try again...')
+                            }
+                        })
                 }
             },
         }).mount('#emps');

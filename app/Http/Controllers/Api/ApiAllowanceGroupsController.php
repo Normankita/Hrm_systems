@@ -104,6 +104,10 @@ class ApiAllowanceGroupsController extends Controller
 
     public function assignAllowanceToGroup(Request $request, $groupId)
     {
+        // return response()->json([
+        //     'status' => 'fail',
+        //     'data' => $request->all()
+        // ]);
         $user = $request->user;
         $group = AllowanceGroup::findOrFail($groupId);
         if (!$group) {
@@ -115,6 +119,7 @@ class ApiAllowanceGroupsController extends Controller
         DB::beginTransaction();
         try {
             foreach ($request->employees as $employee) {
+                // checking if the employee is in the group
                 $employeeGroup = AllowanceGroupEmployeePivot::where(
                     'allowance_group_id',
                     $group->id
@@ -124,7 +129,7 @@ class ApiAllowanceGroupsController extends Controller
                 if (!$employeeGroup) {
                     return response()->json([
                         'status' => 'fail',
-                        'message' => 'data not found'
+                        'message' => 'data not valid, please refresh the page and try again.'
                     ]);
                 }
 
@@ -160,18 +165,18 @@ class ApiAllowanceGroupsController extends Controller
                         'status' => true,
                     ]);
                     continue;
+                } else {
+                    $groupCategoryEmployeeAllowance = GroupCategoryEmployeeAllowance::create(
+                        [
+                            'allowance_group_employee_pivot_id' => $employeeGroup->id,
+                            'allowance_group_allowance_pivot_id' => $allowanceExists->pivot->id,
+                            'amount' => $employee['amount'],
+                            'allowance_frequency_id' => $employee['frequency_id'],
+                            'effective_from' => now(),
+                            'isActive' => true
+                        ]
+                    );
                 }
-
-                $groupCategoryEmployeeAllowance = GroupCategoryEmployeeAllowance::create(
-                    [
-                        'allowance_group_employee_pivot_id' => $employeeGroup->id,
-                        'allowance_group_allowance_pivot_id' => $allowanceExists->pivot->id,
-                        'amount' => $employee['amount'],
-                        'allowance_frequency_id' => $employee['frequency_id'],
-                        'effective_from' => now(),
-                        'status' => true
-                    ]
-                );
                 if (!$groupCategoryEmployeeAllowance) {
                     return response()->json([
                         'status' => 'fail',
