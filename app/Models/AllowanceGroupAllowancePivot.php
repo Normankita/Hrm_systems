@@ -120,9 +120,15 @@ class AllowanceGroupAllowancePivot extends Model
             'allowance_group_allowance_pivot_id',
             'allowance_group_employee_pivot_id'
         )
-            ->withPivot(['id', 'allowance_frequency_id', 'amount', 'effective_from', 'isActive'])
-            ->withTimestamps()
-            ->wherePivot('isActive', true);
+            ->withPivot([
+                'id',
+                'allowance_frequency_id',
+                'amount',
+                'effective_from',
+                'isActive'
+            ])
+            ->where('allowance_group_employee.isActive', true)
+            ->withTimestamps();
     }
 
 

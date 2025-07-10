@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Utils\Traits\AllowanceTrait;
 use App\Models\AllowanceGroup;
+use App\Models\AllowanceGroupAllowancePivot;
 use App\Models\AllowanceGroupEmployeePivot;
 use App\Models\GroupCategoryEmployeeAllowance;
 use Illuminate\Http\Request;
@@ -104,20 +105,25 @@ class ApiAllowanceGroupsController extends Controller
 
     public function assignAllowanceToGroup(Request $request, $groupId)
     {
-        // return response()->json([
-        //     'status' => 'fail',
-        //     'data' => $request->all()
-        // ]);
         $user = $request->user;
-        $group = AllowanceGroup::findOrFail($groupId);
-        if (!$group) {
-            return response()->json([
-                'status' => 'fail',
-                'message' => 'This Operation was not successful'
-            ]);
-        }
+
         DB::beginTransaction();
         try {
+            $group = AllowanceGroup::find($groupId);
+
+            // check if the allowance is already assigned to the group
+            $allowanceExists = $group->allowance()
+                ->where('allowance_id', $request->allowance_id)
+                ->first();
+            if (!$allowanceExists) {
+                // Insert new allowance for the group
+                $group->allowance()->attach($request->allowance_id);
+                // Re-fetch the allowance including pivot data
+                $allowanceExists = $group->allowance()
+                    ->where('allowance_id', $request->allowance_id)
+                    ->first();
+            }
+
             foreach ($request->employees as $employee) {
                 // checking if the employee is in the group
                 $employeeGroup = AllowanceGroupEmployeePivot::where(
@@ -132,20 +138,6 @@ class ApiAllowanceGroupsController extends Controller
                         'message' => 'data not valid, please refresh the page and try again.'
                     ]);
                 }
-
-                // check if the allowance is already assigned to the group
-                $allowanceExists = $group->allowance()
-                    ->where('allowance_id', $request->allowance_id)
-                    ->first();
-                if (!$allowanceExists) {
-                    // Insert new allowance for the group
-                    $group->allowance()->attach($request->allowance_id);
-                    // Re-fetch the allowance including pivot data
-                    $allowanceExists = $group->allowance()
-                        ->where('allowance_id', $request->allowance_id)
-                        ->first();
-                }
-
                 // Check if the allowance is already assigned to the employee in the group
                 $exists = GroupCategoryEmployeeAllowance::where(
                     'allowance_group_employee_pivot_id',
@@ -162,7 +154,7 @@ class ApiAllowanceGroupsController extends Controller
                         'amount' => $employee['amount'],
                         'allowance_frequency_id' => $employee['frequency_id'],
                         'effective_from' => now(),
-                        'status' => true,
+                        'isActive' => true,
                     ]);
                     continue;
                 } else {
@@ -176,12 +168,12 @@ class ApiAllowanceGroupsController extends Controller
                             'isActive' => true
                         ]
                     );
-                }
-                if (!$groupCategoryEmployeeAllowance) {
-                    return response()->json([
-                        'status' => 'fail',
-                        'message' => 'Failed to assign allowance for an employee in the group'
-                    ]);
+                    if (!$groupCategoryEmployeeAllowance) {
+                        return response()->json([
+                            'status' => 'fail',
+                            'message' => 'Failed to assign allowance for an employee in the group'
+                        ]);
+                    }
                 }
             }
             DB::commit();

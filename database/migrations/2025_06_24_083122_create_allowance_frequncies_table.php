@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('allowance_frequencies', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->enum('base_category', ['year','month']);
+            $table->enum('base_category', ['year','month', 'week']);
             $table->foreignId('company_id')->constrained()->onDelete('cascade');
             $table->integer('no_base_times');
             $table->integer('no_times');

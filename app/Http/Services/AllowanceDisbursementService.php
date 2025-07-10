@@ -3,17 +3,22 @@
 namespace App\Http\Services;
 
 use App\Enums\AllowanceGroups;
+use App\Http\Utils\Traits\GroupCategoryDisbursementPageTrait;
 use App\Models\Allowance;
 use App\Models\AllowanceGroup;
+use App\Models\AllowanceGroupAllowancePivot;
+use App\Models\AllowanceGroupEmployeePivot;
 use App\Models\DisbursedAllowance;
 use App\Models\Employee;
 use App\Models\GroupCategoryEmployeeAllowance;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class AllowanceDisbursementService
 {
+    use GroupCategoryDisbursementPageTrait;
     /**
      * Handle the disbursement based on the type.
      *
@@ -46,7 +51,8 @@ class AllowanceDisbursementService
     public static function disburseWithGroupCategory($collection)
     {
         $gr_cat_emp_collection = self::formatForGroupCategoryDisburse(
-            $collection);
+            $collection
+        );
 
         DB::beginTransaction();
         try {
@@ -142,4 +148,65 @@ class AllowanceDisbursementService
             'data' => $employees,
         ];
     }
+
+
+    public static function groupAllowancePageDetails(
+        AllowanceGroup $group,
+        Allowance $allowance
+    ) {
+        $gr_allowance = $group->allowance()->where(
+            'allowance_id',
+            $allowance->id
+        )
+            ->first();
+        if (!$gr_allowance) {
+            return ['status' => 'error',
+                'message' => 'Allowance not found'];
+        }
+        $gr_allowancePivot = AllowanceGroupAllowancePivot::find($gr_allowance->pivot->id);
+        $gr_employeePivot = $gr_allowancePivot->activeGroupEmployeesPivot()->get();
+
+        $disbursed = DisbursedAllowance::where('type', AllowanceGroups::CATEGORY)
+            ->where('disbursable_type', GroupCategoryEmployeeAllowance::class)
+            ->get();
+
+        $response = AllowanceDisbursementService::groupDisburseDetails(
+            $allowance,
+            $disbursed
+        );
+
+        $empWithDisCounts = $response['empWithDisCounts'];
+        $trueDisburseDetails = $response['disburseDetails'];
+        $disbursementsGroupedByDay = $trueDisburseDetails->groupBy(function ($item) {
+            return Carbon::parse($item->created_at)->format('Y-m-d');
+        })->sortKeys();
+
+        $groupWithEmp = AllowanceGroupEmployeePivot::withEmployees(
+            $gr_employeePivot
+        );
+        $groupWithEmp->map(function ($pivot) use ($empWithDisCounts) {
+            $empId = $pivot->employee->id;
+            if ($empWithDisCounts->has($empId)) {
+                $pivot->count = $empWithDisCounts[$empId]['count'];
+                $pivot->isEligible = $empWithDisCounts[$empId]['isEligible'];
+            } else {
+                $pivot->count = 0;
+                $pivot->isEligible = true;
+            }
+            return $pivot;
+        });
+        return [
+            'status' => 'success',
+            'details' => [
+                    'gr_employeePivot' => $gr_employeePivot,
+                    'gr_allowancePivot' => $gr_allowancePivot,
+                    'group' => $group,
+                    'allowance' => $allowance,
+                    'groupWithEmp' => $groupWithEmp,
+                    'disbursed' => $disbursementsGroupedByDay
+            ]
+        ];
+    }
+
+
 }

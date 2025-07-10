@@ -4,6 +4,7 @@ namespace App\Http\Controllers\EmployeeControllers;
 
 use App\Enums\AllowanceGroups;
 use App\Http\Controllers\Controller;
+use App\Http\Services\AllowanceDisbursementService;
 use App\Http\Utils\Traits\AllowanceGroupTrait;
 use App\Models\Allowance;
 use App\Models\AllowanceFrequency;
@@ -78,8 +79,10 @@ class EmployeeAllowanceGroupController extends Controller
         // select allowance that is absent in the group
         $gr_allowance_pivots = $categories->pluck('pivot.allowance_id');
         // fetching the objects of this ids
-        $allowances = Allowance::whereNotIn('id',
-            $gr_allowance_pivots)->get();
+        $allowances = Allowance::whereNotIn(
+            'id',
+            $gr_allowance_pivots
+        )->get();
         $group = AllowanceGroup::find($group->id);
         $employees = $group->activeEmployees()->get();
         return view('employee.manage.allowance_groups.assignAllowance')
@@ -93,45 +96,28 @@ class EmployeeAllowanceGroupController extends Controller
     }
 
 
-    public function getGroupAllowanceDetails(AllowanceGroup $group, Allowance $allowance)
-    {
-        // group_allowance
-        $gr_allowance = $group->allowance()->where(
-            'allowance_id',
-            $allowance->id
-        )
-            ->first();
-        if (!$gr_allowance) {
-            return redirect()->back()->with('error', 'Allowance not found');
+    public function getGroupAllowanceDetails(
+        AllowanceGroup $group,
+        Allowance $allowance
+    ) {
+       $response = AllowanceDisbursementService::groupAllowancePageDetails(
+            $group,
+            $allowance
+       );
+        if ($response['status'] === 'error') {
+            return redirect()->back()->with('error', $response['message']);
         }
-        // group_employee
-        $gr_allowancePivot = AllowanceGroupAllowancePivot::find($gr_allowance->pivot->id);
-        $gr_employeePivot = $gr_allowancePivot->activeGroupEmployeesPivot()
-            ->get();
-            
-        $disbursed = DisbursedAllowance::where('type', AllowanceGroups::CATEGORY)
-                ->where('disbursable_type', GroupCategoryEmployeeAllowance::class)
-                ->get();
-
-        $trueDisburseDetails = $disbursed->map(function($item) use ($allowance) {
-            $GrCatEmpAll = GroupCategoryEmployeeAllowance::find($item->disbursable_id);
-            $details = $GrCatEmpAll->getRealDetailsDynamic();
-            if ($details->allowance->id == $allowance->id) {
-                return $details;
-            }
-            return null;
-        })->filter()->values();
-
-        $disbursementsGroupedByDay = $trueDisburseDetails->groupBy(function ($item) {
-            return Carbon::parse($item->created_at)->format('Y-m-d');
-        });
+        // select employees to add in the group
+        
         return view('employee.manage.allowance_groups.categoryDetails')
             ->with([
-                'gr_employeePivot' => $gr_employeePivot,
-                'gr_allowancePivot' => $gr_allowancePivot,
-                'group' => $group,
-                'allowance' => $allowance,
-                'disbursed' => $disbursementsGroupedByDay
-            ]);
+                    'gr_employeePivot' => $response['details']['gr_employeePivot'],
+                    'gr_allowancePivot' => $response['details']['gr_allowancePivot'],
+                    'group' => $group,
+                    'allowance' => $allowance,
+                    'groupWithEmp' => $response['details']['groupWithEmp'],
+                    'disbursed' => $response['details']['disbursed']
+                ]);
     }
+
 }

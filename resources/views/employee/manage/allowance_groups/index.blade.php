@@ -54,7 +54,7 @@
                                     <th>#</th>
                                     <th>Name</th>
                                     <th>Description</th>
-                                    <th>Emp No:</th>
+                                    <th>No: Emp</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -69,7 +69,7 @@
                                     </td>
                                     <td>{{ $group->employees()->count() }}</td>
                                     <td>
-                                        <x-system.btn-edit text="Edit" route="{{ route('employee.manage.employee.allowances.groups.edit', $group->id) }}" />
+                                        <x-system.btn-view text="view" route="{{ route('employee.manage.employee.allowances.groups.edit', $group->id) }}" />
                                     </td>
                                 </tr>
                                 @endforeach

@@ -78,4 +78,8 @@ class DisbursedAllowance extends Model
     }
 
 
+    public function getDisbursementDay() {
+        return $this->create_at;
+    }
+
 }

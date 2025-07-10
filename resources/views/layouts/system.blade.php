@@ -6,6 +6,32 @@
     @include('_partials._link')
 
     @yield('_links')
+
+    <style>
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            margin-left: -125px;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 12px 16px;
+            position: fixed;
+            z-index: 9999;
+            left: 50%;
+            bottom: 30px;
+            font-size: 16px;
+            opacity: 0;
+            transition: all 0.5s ease-in-out;
+        }
+
+        #toast.show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 50px;
+        }
+    </style>
+
 </head>
 
 
@@ -37,6 +63,9 @@
 
                 <div class="content"><!-- For Components documentaion -->
                     <x-system.success-and-error />
+
+                    <div id="toast"></div>
+
                     <div class="row justify-content-between mb-3">
                         <div class="col-md-4">
                             <button onclick="history.back()" class="btn btn-outline-primary">
@@ -76,6 +105,27 @@
     @include('_partials._offCanvas')
 
     @include('_partials._scripts')
+
+    <script>
+        function showToast(message, type = 'success', duration = 3000) {
+            const toast = document.getElementById("toast");
+
+            // Choose color based on type
+            const colors = {
+                success: "#4BB543", // Soft green
+                error: "#e74c3c", // Bright red
+            };
+
+            toast.innerText = message;
+            toast.style.backgroundColor = colors[type] || "#333"; // fallback
+
+            toast.className = "show";
+
+            setTimeout(() => {
+                toast.className = toast.className.replace("show", "");
+            }, duration);
+        }
+    </script>
 
     @yield('scripts')
 

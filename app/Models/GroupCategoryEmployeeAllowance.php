@@ -108,7 +108,8 @@ class GroupCategoryEmployeeAllowance extends Model
             'frequency' => $output->frequency,
             'group_employee_pivot' => $output->group_employee_pivot_details,
             'group_allowance_pivot' => $output->group_allowance_pivot_details,
-            'created_at' => $output->created_at
+            'created_at' => $output->created_at,
+            'object' => $output
         ];
     }
 

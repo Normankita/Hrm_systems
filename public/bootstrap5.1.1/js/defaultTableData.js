@@ -8,16 +8,8 @@ $(document).ready(function () {
             pageLength: 10,
             paging: true,
             searching: true,
-            ordering: true,
+            ordering: false,
             info: true,
-            // "lengthChange": false ,
-            order: [[0, "asc"]],
-            columnDefs: [
-                {
-                    orderable: true,
-                    targets: [0],
-                },
-            ],
         });
     }
 });

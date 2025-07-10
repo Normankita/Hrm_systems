@@ -56,7 +56,6 @@
                                             </th>
                                             <th>Name</th>
                                             <th>Role</th>
-                                            <th>Actions</th>
                                         </tr>
                                     </thead>
                                 </x-slot>
@@ -70,10 +69,6 @@
                                                 </th>
                                                 <th>{{ $employee->full_name }}</th>
                                                 <th>{{ $employee->user->activeRoles()?->name ?? 'N/A' }}</th>
-                                                <th>
-                                                    <x-system.btn-edit text="edit" route="#" />
-                                                    <x-system.btn-delete text="remove" route="#" />
-                                                </th>
                                             </tr>
                                         @endforeach
                                     </tbody>
