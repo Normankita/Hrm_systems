@@ -104,17 +104,17 @@ class AllowanceGroupEmployeePivot extends Model
             'allowance_group_allowance_pivot_id'
         )
             ->withPivot([
-                    'id',
-                    'allowance_frequency_id',
-                    'amount',
-                    'effective_from',
-                    'isActive'
-                ])
+                'id',
+                'allowance_frequency_id',
+                'amount',
+                'effective_from',
+                'isActive'
+            ])
             ->withTimestamps();
     }
 
 
-        public function activeAllowanceGroupAllowancesPivot()
+    public function activeAllowanceGroupAllowancesPivot()
     {
         return $this->belongsToMany(
             AllowanceGroupAllowancePivot::class,
@@ -123,13 +123,32 @@ class AllowanceGroupEmployeePivot extends Model
             'allowance_group_allowance_pivot_id'
         )
             ->withPivot([
-                    'id',
-                    'allowance_frequency_id',
-                    'amount',
-                    'effective_from',
-                    'isActive'
-                ])
+                'id',
+                'allowance_frequency_id',
+                'amount',
+                'effective_from',
+                'isActive'
+            ])
             ->withTimestamps();
+    }
+
+
+    public static function getEligibleToBeAddedInAllowance($allowance, $group)
+    {
+        // Fetching employees that are eligible to be added in the group allowance
+        $groupAllowance = AllowanceGroupAllowancePivot::where('allowance_group_id', $group->id)
+            ->where('allowance_id', $allowance->id)
+            ->first();
+        $groupMemberslWithAllowance = $groupAllowance->groupEmployeesPivot
+            ->where('isActive', true);
+        $groupMembersWithoutAllowance = AllowanceGroupEmployeePivot::where(
+            'allowance_group_id',
+            $group->id
+        )
+            ->where('isActive', true)
+            ->whereNotIn('id', $groupMemberslWithAllowance->pluck('id'))
+            ->get();
+        return $groupMembersWithoutAllowance;
     }
 
     public static function getRealDetails(int $id)

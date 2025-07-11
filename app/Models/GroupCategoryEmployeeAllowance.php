@@ -7,7 +7,6 @@ use App\Http\Resources\AllowanceGroupEmployeePivotResource;
 use App\Http\Utils\Traits\HasAllowanceDisbursements;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 
 class GroupCategoryEmployeeAllowance extends Model
 {
@@ -20,7 +19,7 @@ class GroupCategoryEmployeeAllowance extends Model
         'amount',
         'allowance_frequency_id',
         'effective_from',
-        'status'
+        'isActive'
     ];
 
     public function group_employee_pivot()

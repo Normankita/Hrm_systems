@@ -50,8 +50,29 @@
                         <div class="card-body">
                             <div v-if="!empSubmit" class="col-md-12 mb-4">
                                 <!-- DEFAULT CONTROLS -->
-                                <div class="row mb-3">
-                                    <div class="col-md-5">
+                                <div class="row align-items-end mb-3">
+                                    <div class="col-md-4">
+                                        <label for="frequncy">Frequency</label>
+                                        <select v-model="defaultFrequency" name="frequecny" id="frequency"
+                                            class="form-select">
+                                            @foreach (\App\Models\AllowanceFrequency::all() as $frequency)
+                                                <option value="{{ $frequency }}">
+                                                    {{ $frequency->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="defaultFrequency">Default Amount</label>
+                                        <input name="defaultAmount" class="form-control" v-model="defaultAmount"
+                                            id="defaultAmount" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="effective_from">Effective From</label>
+                                        <input v-model="effectiveFrom" type="date" class="form-control"
+                                            id="effective_from" placeholder="Select date" />
+                                    </div>
+                                    <div class="col-sm-12 col-md-4">
                                         <label>Seach Employee</label>
                                         <div style="position: relative">
                                             <!-- Search input -->
@@ -70,22 +91,26 @@
                                         </div>
                                     </div>
                                     <div class="col-md-2 d-flex align-items-end">
-                                        <button class="btn btn-sm btn-success" v-on:click="addAllEmployees"
+                                        <button class="btn btn-sm btn-success my-2" v-on:click="addAllEmployees"
                                             id="addAllButton">Add All</button>
                                     </div>
                                 </div>
 
                                 <!-- EMPLOYEE TABLE -->
-                                <table class="table table-bordered table-sm">
+                                <table class="table table-bordered table-sm ">
                                     <thead>
                                         <tr>
                                             <th>Name</th>
+                                            <th>Amount</th>
+                                            <th>frequncy</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr v-for="(employee, index) in selectedOptions" :key="employee.id">
                                             <td>@{{ employee.full_name }}</td>
+                                            <td>@{{ employee.amount }}</td>
+                                            <td>@{{ employee.frequency.name }}</td>
                                             <td>
                                                 <button class="btn btn-sm btn-secondary"
                                                     v-on:click="()=> removeFromSelected(employee)">Remove</button>
@@ -118,6 +143,7 @@
         // receive employee data from backend
         const employees = {!! json_encode($employees) !!};
         const allowanceGroup = {!! json_encode($group) !!};
+        const allowance = {!! json_encode($allowance) !!};
         const user = {!! json_encode($user) !!};
 
         const redirectToGroup = (uri) => {
@@ -139,8 +165,11 @@
                 return {
                     employees: employees,
                     defaultFrequency: '',
+                    defaultAmount: '',
                     empSubmit: false,
                     group: allowanceGroup,
+                    allowance: allowance,
+                    effectiveFrom: '',
                     user: user,
                     error: null,
                     selectedOptions: [],
@@ -162,7 +191,7 @@
             },
             methods: {
                 selectAll() {
-                    this.employees.forEach(e => e.selected = true);
+                    this.employees.forEach(e => this.selectItem(e));
                 },
                 toggleAll(event) {
                     const checked = event.target.checked;
@@ -183,16 +212,18 @@
                         return;
                     }
 
-                    axios.post(`/api/groups/add/employees/to/group/${this.group.id}`, {
-                            user: this.user,
-                            employees: selected
-                        })
+                    axios.post(
+                            `/api/groups/add/employees/to/group/${this.group.id}/allowance/${this.allowance.id}`, {
+                                user: this.user,
+                                employees: selected,
+                                effectiveFrom: this.effectiveFrom
+                            })
                         .then(res => {
                             console.log(res.data);
                             if (res.data.status === 'success') {
                                 console.log("I am the one ")
-                                redirectToGroup("/employee/manage/allowances/groups/" + this.group.id + "/edit")
-
+                                this.empSubmit = false;
+                                redirectToGroup(`/employee/manage/allowances/groups/${this.group.id}/allowances/${this.allowance.id}`)
                             } else {
                                 this.empSubmit = false;
                                 this.error = "Failed to submit.";
@@ -230,12 +261,21 @@
                     this.searchTerm = "";
                     this.showDropdown = false;
 
+                    const existing = this.selectedOptions.find(e => e.id === item.id);
 
-                    const doesExists = this.selectedOptions.find(e => e.id === item.id);
-                    if (!doesExists) {
-                        this.selectedOptions.push(item);
-                        this.options = this.options.filter(emp => emp.id != item.id);
+                    if (!existing) {
+                        if (this.defaultAmount && this.defaultFrequency) {
+                            item.amount = this.defaultAmount;
+                            item.frequency = JSON.parse(this.defaultFrequency);
+                            this.selectedOptions.push(item);
+                            this.options = this.options.filter(emp => emp.id !== item.id);
+                        } else {
+                            alert("Please set a default amount and frequency before adding employees.");
+                        }
+                    } else {
+                        existing.amount = this.defaultAmount;
                     }
+
                     document.getElementById('addAllButton').focus();
 
                 },
@@ -249,7 +289,7 @@
                     this.options.push(employee);
                 },
                 addAllEmployees() {
-                    this.options.map(opt => this.selectedOptions.push(opt))
+                    this.options.map(opt => this.selectItem(opt))
                     this.options = [];
                 }
             },

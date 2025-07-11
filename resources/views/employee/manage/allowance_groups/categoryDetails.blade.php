@@ -1,7 +1,3 @@
-@php
-    use App\Models\AllowanceGroupEmployeePivot;
-@endphp
-
 @extends('layouts.system')
 
 @section('content')
@@ -9,35 +5,15 @@
         <div class="col-md-12">
             <div class="row justify-content-start">
                 <div class="col">
-                    <button class="btn btn-sm btn-primary mx-3" type="button" v-on:click="desburseAllowance()">
+                    <button class="btn btn-sm btn-primary mx-1 mt-1" type="button" v-on:click="desburseAllowance()">
                         Disburse to selected
                     </button>
 
-                    <x-system.modal-button class="btn btn-sm btn-primary" id="addEmployeeModal" text="Add Employee" />
-                    <x-system.modal size="modal-lg" id="addEmployeeModal" title="Add Employee to Group">
-                        <div class="row justify-content-start">
-                            <form action="" class="col-sm-12 col-md-12">
-                                <div>
-                                    <label for="employee">Employee</label>
-                                    <select class="select2-multi-search" name="employees[]" multiple style="width: 100%;">
-                                        <option value="1">John Doe</option>
-                                        <option value="2">Jane Smith</option>
-                                        <option value="3">Michael Johnson</option>
-                                        <option value="4">Emily Davis</option>
-                                        <option value="5">David Wilson</option>
-                                        <option value="6">Sarah Thompson</option>
-                                        <option value="7">Chris Evans</option>
-                                        <option value="8">Linda Carter</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <button type="submit" class="mt-4 btn btn-primary btn-sm">
-                                        submit
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </x-system.modal>
+                    <a class="btn btn-sm btn-primary mx-1 mt-1"
+                        href="{{ route('employee.manage.employee.allowances.groups.editMengers',
+                            [$group->id, $allowance->id]) }}">
+                            Add Employee to Group
+                    </a>
                 </div>
             </div>
         </div>

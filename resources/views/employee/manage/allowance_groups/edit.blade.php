@@ -46,7 +46,7 @@
                             </div>
                             <div>
                             </div>
-                            <x-system.table class="dt-table">
+                            <x-system.table class="dt-table table-sm">
                                 <x-slot name="head">
                                     <label for="all">select all</label>
                                     <input class="all-checker m-2" type="checkbox" name="all">

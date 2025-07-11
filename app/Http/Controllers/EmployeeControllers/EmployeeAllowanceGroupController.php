@@ -2,18 +2,14 @@
 
 namespace App\Http\Controllers\EmployeeControllers;
 
-use App\Enums\AllowanceGroups;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Http\Services\AllowanceDisbursementService;
 use App\Http\Utils\Traits\AllowanceGroupTrait;
 use App\Models\Allowance;
 use App\Models\AllowanceFrequency;
 use App\Models\AllowanceGroup;
-use App\Models\AllowanceGroupAllowancePivot;
 use App\Models\AllowanceGroupEmployeePivot;
-use App\Models\DisbursedAllowance;
-use App\Models\GroupCategoryEmployeeAllowance;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -44,7 +40,6 @@ class EmployeeAllowanceGroupController extends Controller
             'name' => $request->name,
             'description' => $request->description,
         ]);
-
         return redirect()->back()->with('success', 'Allowance group created successfully');
     }
 
@@ -100,24 +95,46 @@ class EmployeeAllowanceGroupController extends Controller
         AllowanceGroup $group,
         Allowance $allowance
     ) {
-       $response = AllowanceDisbursementService::groupAllowancePageDetails(
+        $response = AllowanceDisbursementService::groupAllowancePageDetails(
             $group,
             $allowance
-       );
+        );
         if ($response['status'] === 'error') {
             return redirect()->back()->with('error', $response['message']);
         }
         // select employees to add in the group
-        
         return view('employee.manage.allowance_groups.categoryDetails')
             ->with([
-                    'gr_employeePivot' => $response['details']['gr_employeePivot'],
-                    'gr_allowancePivot' => $response['details']['gr_allowancePivot'],
-                    'group' => $group,
-                    'allowance' => $allowance,
-                    'groupWithEmp' => $response['details']['groupWithEmp'],
-                    'disbursed' => $response['details']['disbursed']
-                ]);
+                'gr_employeePivot' => $response['details']['gr_employeePivot'],
+                'gr_allowancePivot' => $response['details']['gr_allowancePivot'],
+                'group' => $group,
+                'allowance' => $allowance,
+                'groupWithEmp' => $response['details']['groupWithEmp'],
+                'disbursed' => $response['details']['disbursed']
+            ]);
+    }
+
+
+    public function editMembers($group, $allowance)
+    {
+        $group = AllowanceGroup::find($group);
+        $allowance = Allowance::find($allowance);
+        if (!$group || !$allowance) {
+            return redirect()->back()->with('error', 'Group or Category not found');
+        }
+        $groupMembersWithoutAllowance = AllowanceGroupEmployeePivot::getEligibleToBeAddedInAllowance(
+            $allowance,
+            $group
+        )->map(function ($item) {
+            return $item->getRealDetails($item->id)->employee;
+        });
+        return view('employee.manage.allowance_groups.editMembers')
+            ->with([
+                'employees' => $groupMembersWithoutAllowance,
+                'user' => new UserResource(auth()->user()),
+                'group' => $group,
+                'allowance' => $allowance
+            ]);
     }
 
 }
