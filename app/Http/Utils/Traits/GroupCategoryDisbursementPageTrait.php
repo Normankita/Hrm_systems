@@ -14,32 +14,45 @@ trait GroupCategoryDisbursementPageTrait
         $forDisburseDate = $forDisburseDate ?? Carbon::now();
         $empWithDisCounts = collect();
         $trueDisburseDetails = collect();
-
-        $disbursed->each(function ($item) use ($allowance, $forDisburseDate, $empWithDisCounts, $trueDisburseDetails) {
+        $disbursed->each(function ($item) use
+            ($allowance, $forDisburseDate, $empWithDisCounts, $trueDisburseDetails) {
             $details = GroupCategoryEmployeeAllowance::getRealDetails($item->disbursable_id);
-            if ($details->allowance->id == $allowance->id) {
-                // checking if the employee is eligible to disburse
-                $isEligible = self::isEligible(
-                    GroupCategoryEmployeeAllowance::class,
-                    $details->id,
-                    $forDisburseDate
-                );
-                $count = self::getCurrentCircleCount($details, $forDisburseDate);
-                $details->isEligible = $isEligible;
-                $details->count = $count;
+            // if the allowance effective_from date is after tody skip it
+            if (!($details->effective_from > $forDisburseDate)) {
+                if ($details->allowance->id == $allowance->id) {
+                    // checking if the employee is eligible to disburse
+                    $isEligible = self::isEligible(
+                        GroupCategoryEmployeeAllowance::class,
+                        $details->id,
+                        $forDisburseDate
+                    );
+                    $count = self::getCurrentCircleCount($details, $forDisburseDate);
+                    $details->isEligible = $isEligible;
+                    $details->count = $count;
+
+                    $empId = ($details->employee->id);
+                    $empWithDisCounts->put($empId, [
+                        'employee' => $details->employee,
+                        'count' => $count,
+                        'isEligible' => $isEligible,
+                        'effective_from' => $details->effective_from
+                    ]);
+                    $trueDisburseDetails->push($details);
+                }
+            } else {
+                $details->isEligible = false;
+                $details->count = 'N/A';
 
                 $empId = ($details->employee->id);
                 $empWithDisCounts->put($empId, [
                     'employee' => $details->employee,
-                    'count' => $count,
-                    'isEligible' => $isEligible
+                    'count' => 'N/A',
+                    'isEligible' => false,
+                    'effective_from' => $details->effective_from
                 ]);
                 $trueDisburseDetails->push($details);
             }
-            return null;
-        })
-            ->filter()
-            ->values();
+        });
         return [
             'disburseDetails' => $trueDisburseDetails,
             'empWithDisCounts' => $empWithDisCounts,

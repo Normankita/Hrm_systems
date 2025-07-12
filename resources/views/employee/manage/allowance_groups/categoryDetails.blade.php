@@ -12,7 +12,7 @@
                     <a class="btn btn-sm btn-primary mx-1 mt-1"
                         href="{{ route('employee.manage.employee.allowances.groups.editMengers',
                             [$group->id, $allowance->id]) }}">
-                            Add Employee to Group
+                            Add Employee to allowance
                     </a>
                 </div>
             </div>
@@ -38,6 +38,7 @@
                                     <th>Current Count</th>
                                     <th>Amount</th>
                                     <th>Department</th>
+                                    <th>Join Date</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -63,6 +64,10 @@
                                         <td style="color:{{ $textColor }}">
                                             {{ number_format($withEmployee->pivotAllowanceAmount) }}</td>
                                         <td style="color:{{ $textColor }}">{{ $employee->department->name ?? 'N/A' }}
+                                        </td>
+                                        <td style="color:{{ $textColor }}">
+                                            {{ \Carbon\Carbon::parse($withEmployee->effective_from)->format('m-d-Y') }}
+
                                         </td>
                                         <td>
                                             {{-- <x-system.btn-view :key="$key" :route="route('employee.manage.employees.show', $employee->id)" /> --}}

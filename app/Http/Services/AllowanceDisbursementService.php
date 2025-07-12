@@ -160,14 +160,22 @@ class AllowanceDisbursementService
         )
             ->first();
         if (!$gr_allowance) {
-            return ['status' => 'error',
-                'message' => 'Allowance not found'];
+            return [
+                'status' => 'error',
+                'message' => 'Allowance not found'
+            ];
         }
-        $gr_allowancePivot = AllowanceGroupAllowancePivot::find($gr_allowance->pivot->id);
-        $gr_employeePivot = $gr_allowancePivot->activeGroupEmployeesPivot()->get();
+        $gr_allowancePivot = AllowanceGroupAllowancePivot::where('allowance_group_id', $group->id)
+            ->where('allowance_id', $allowance->id)
+            ->with('activeGroupEmployeesPivot')
+            ->first();
+
+        $gr_employeePivot = $gr_allowancePivot->activeGroupEmployeesPivot;
+        $groupCategoryEmpAllowance = $gr_employeePivot->pluck('pivot.id');
 
         $disbursed = DisbursedAllowance::where('type', AllowanceGroups::CATEGORY)
             ->where('disbursable_type', GroupCategoryEmployeeAllowance::class)
+            ->whereIn('disbursable_id', $groupCategoryEmpAllowance)
             ->get();
 
         $response = AllowanceDisbursementService::groupDisburseDetails(
@@ -184,17 +192,19 @@ class AllowanceDisbursementService
         $groupWithEmp = AllowanceGroupEmployeePivot::withEmployees(
             $gr_employeePivot
         );
-        $groupWithEmp->map(function ($pivot) use ($empWithDisCounts) {
+        $groupWithEmp = $groupWithEmp->map(function ($pivot) use ($empWithDisCounts) {
             $empId = $pivot->employee->id;
             if ($empWithDisCounts->has($empId)) {
                 $pivot->count = $empWithDisCounts[$empId]['count'];
                 $pivot->isEligible = $empWithDisCounts[$empId]['isEligible'];
             } else {
-                $pivot->count = 0;
-                $pivot->isEligible = true;
+                $timing = $pivot->effective_from <= now();
+                $pivot->count = $timing ? 0 : "N/A";
+                $pivot->isEligible = $timing;
             }
             return $pivot;
         });
+
         return [
             'status' => 'success',
             'details' => [
@@ -204,7 +214,7 @@ class AllowanceDisbursementService
                     'allowance' => $allowance,
                     'groupWithEmp' => $groupWithEmp,
                     'disbursed' => $disbursementsGroupedByDay
-            ]
+                ]
         ];
     }
 

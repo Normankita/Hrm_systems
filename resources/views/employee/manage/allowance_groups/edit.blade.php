@@ -18,7 +18,7 @@
                                 @if (count($group->activeEmployees) > 0)
                                     <a href="{{ route('employee.manage.employee.allowances.groups.assign', $group) }}"
                                        class="btn btn-sm btn-primary col-12 mt-2 mb-2">
-                                       Assign New Allowance
+                                        Group Allowances
                                     </a>
                                 @endif
 

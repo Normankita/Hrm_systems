@@ -61,15 +61,17 @@ class AllowanceGroupEmployeePivot extends Model
         return $this;
     }
 
+
     public static function withEmployees(Collection $gr_employee_pivots): Collection
     {
         $pivotsWithEmployee = $gr_employee_pivots->map(function ($pivot) {
-            $employee = Employee::find($pivot->employee_id);
-            $pivot->employee = $employee;
+            // $employee = Employee::find($pivot->employee_id);
+            // $pivot->employee = $employee;
             if ($pivot->pivot) {
                 $pivot->pivotAllowanceAmount = $pivot->pivot?->amount;
-                $frequency = AllowanceFrequency::find($pivot->pivot->allowance_frequency_id);
-                $pivot->pivotFrequency = $frequency;
+                $pivot->effective_from = $pivot->pivot?->effective_from;
+                // $frequency = AllowanceFrequency::find($pivot->pivot->allowance_frequency_id);
+                // $pivot->pivotFrequency = $frequency;
                 $pivot->pivotId = $pivot->pivot->id;
             }
             return $pivot;

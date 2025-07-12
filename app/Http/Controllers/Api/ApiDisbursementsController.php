@@ -92,7 +92,9 @@ class ApiDisbursementsController extends Controller
         $tableColumns = GroupCategoryEmployeeAllowance::whereIn(
             'id',
             $ids
-        )->get();
+        )
+        ->where('effective_from', '<=', now())
+        ->get();
         return [
             'status' => 'success',
             'data' => $tableColumns

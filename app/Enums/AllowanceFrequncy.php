@@ -6,9 +6,9 @@ namespace App\Enums;
 
 enum AllowanceFrequncy: string
 {
-    case MONTHLY = 'monthly';
+    const MONTHLY = 'monthly';
 
-    case WEEKLY = 'weekly';
+    const WEEKLY = 'weekly';
 
-    case YEARLY = 'yearly';
+    const YEARLY = 'yearly';
 }

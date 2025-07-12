@@ -6,9 +6,9 @@ namespace App\Enums;
 
 enum AllowanceGroups: string
 {
-    case INDIVIDUAL = 'individual';
+    const INDIVIDUAL = 'individual';
 
-    case GROUP = 'group';
+    const GROUP = 'group';
 
-    case CATEGORY = 'category';
+    const CATEGORY = 'category';
 }

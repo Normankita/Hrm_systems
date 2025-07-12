@@ -18,7 +18,7 @@ class ApiAllowanceGroupMembersController extends Controller
 
     public function addMemberToGroupAllowance(Request $request, $groupId, $allowanceId)
     {
-        $effectiveFrom = $request->effectiveFrom ?? now(); // Assuming effective_from is passed in the request
+        $effectiveFrom = $request->effectiveFrom; // Assuming effective_from is passed in the request
         $empCollection = collect($request->employees);
         $employees = $empCollection->pluck('id'); // Assuming employees are passed in the request
         $groupEmployees = AllowanceGroupEmployeePivot::where('allowance_group_id', $groupId)
