@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Http\Utils\Traits\HasAllowanceDisbursements;
 use Illuminate\Database\Eloquent\Model;
 
 class EmployeeAllowance extends Model
 {
+    use HasAllowanceDisbursements;
+    
     protected $table = 'employee_allowance';
 
     protected $fillable = [

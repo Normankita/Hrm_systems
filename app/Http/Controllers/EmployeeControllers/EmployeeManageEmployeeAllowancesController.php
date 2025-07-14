@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Utils\Traits\AllowanceTrait;
 use App\Models\Allowance;
 use App\Models\AllowanceFrequency;
+use App\Models\DisbursedAllowance;
 use App\Models\Employee;
+use App\Models\GroupCategoryEmployeeAllowance;
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -18,12 +21,41 @@ class EmployeeManageEmployeeAllowancesController extends Controller
      */
     public function index(Employee $employee)
     {
+        // select all user individual disbursements
+        $individualDisbursements = $employee->disbursedAllowances()
+            ->where('status', true)
+            ->orderBy('created_at', 'desc')
+            ->get();
+        // select all group category disbursements
+        $categoryDisbursementsAllocations = GroupCategoryEmployeeAllowance::whereHas(
+            'group_employee_pivot',
+            function ($query) use ($employee) {
+                $query->where('employee_id', $employee->id);
+            }
+        )
+            ->with('disbursements')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        // merge the two disbursements collections
+        $disbursements = $individualDisbursements->merge(
+            $categoryDisbursementsAllocations->flatMap(
+                function ($allocation) {
+                    return $allocation->disbursements;
+                }
+            )
+        );
         // Eager load 'allowances' relationship
-        $employee = Employee::with('employeeAllowances.allowance', 'employeeAllowances.frequency')->findOrFail($employee->id);
-       $frequencies= AllowanceFrequency::all();
+        $employee = Employee::with(
+            'employeeAllowances.allowance','employeeAllowances.frequency'
+        )->findOrFail($employee->id);
+        $frequencies = AllowanceFrequency::all();
         $allowances = Allowance::all();
 
-        return view("employee.manage.employee.allowances", compact("employee", "allowances", "frequencies"));
+        return view(
+            "employee.manage.employee.allowances",
+            compact("employee",
+            "allowances", "frequencies", "disbursements")
+        );
     }
 
 
@@ -34,9 +66,13 @@ class EmployeeManageEmployeeAllowancesController extends Controller
             'amount' => ['required', 'numeric', 'min:0'],
             'frequency_id' => ['required'],
         ]);
-        $employee = $this->createAllowanceForEmployee($employeeId, $request, $request->input('allowance_id'));
-        
-        return back()->with('success', 'Allowance added.');
+        $this->createAllowanceForEmployee(
+            $employeeId,
+            $request,
+            $request->input('allowance_id'),
+            Auth::user()
+        );
+        return redirect()->back()->with('success', 'Allowance added.');
     }
 
 

@@ -12,7 +12,7 @@
                             <div>
                                 <div class="form-group">
                                     <button v-on:click="handleDisbursement" type="button"
-                                    class="btn btn-secondary">
+                                    class="btn btn-primary btn-sm">
                                         <i class="mdi mdi-file-excel"></i>
                                         Disburse to selected
                                     </button>

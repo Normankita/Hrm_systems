@@ -2,7 +2,7 @@
 
 @section('content')
     @canany(['edit_allowances', 'view_allowances', 'create_allowances'])
-        <div class="row">
+        <div class="row" id="app">
             <div class="card">
                 <div class="card-body">
                     <div class="row justify-content-start">
@@ -11,12 +11,11 @@
                                 {{ strtoupper($employee->full_name) }}
                             </h3>
                         </div>
-
                     </div>
                     {{-- Create Allowance --}}
                     @can('create_allowances')
                         <x-system.modal-button id="createAllowanceModal" form="createAllowanceForm" title="Create Allowance"
-                            text="Give Allowance" />
+                            text="Allocate Allowance" />
 
                         <x-system.modal size="modal-lg" id="createAllowanceModal" form="createAllowanceForm"
                             title="Assign Allowance" :inside="true">
@@ -72,50 +71,91 @@
                         </x-system.modal>
                     @endcan
 
-                    {{-- Allowances Table --}}
-                    <div class="table-responsive mt-4">
-                        <table class="table dt-table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Allowance</th>
-                                    <th>Amount</th>
-                                    <th>Frequency</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($employee->employeeAllowances as $ea)
-                                    <tr>
-                                        <td>{{ $ea->allowance->name ?? 'N/A' }}</td>
-                                        <td>{{ number_format($ea->amount, 2) }}</td>
-                                        <td>{{ ucfirst($ea->frequency?->name ?? 'N/A') }}</td>
-                                        <td>
-                                            @can('edit_allowances')
-                                                <form
-                                                    action="{{ route('employee.manage.employee.allowances.toggleStatus', [$employee->id, $ea->allowance->id]) }}"
-                                                    method="POST" class="d-inline"
-                                                    onsubmit="return confirm('Are you sure you want to {{ $ea->status ? 'deactivate' : 'activate' }} this allowance?')">
-                                                    @csrf
-                                                    @method('PUT')
-                                                    <input type="hidden" name="status" value="{{ $ea->status ? 0 : 1 }}">
-                                                    <button type="submit"
-                                                        class="btn btn-sm {{ $ea->status ? 'btn-outline-danger' : 'btn-outline-success' }} p-1">
-                                                        {{ $ea->status ? 'Deactivate' : 'Activate' }}
-                                                    </button>
-                                                </form>
-                                            @endcan
+                    <div class="row">
+                        <div class="col-md-12">
+                            {{-- Allowances Table --}}
+                            <div class="table-responsive mt-4">
+                                <table class="table dt-table table-bordered table-responsive">
+                                    <input type="checkbox" id="all-checker" class="form-check" />
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Allowance</th>
+                                            <th>Amount</th>
+                                            <th>Frequency</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($employee->employeeAllowances as $key => $ea)
+                                            <tr>
+                                                <td>
+                                                    <input type="checkbox" id="row-checker" class="form-check"
+                                                        value="{{ $ea->id }}" />
+                                                </td>
+                                                <td>{{ $ea->allowance->name ?? 'N/A' }}</td>
+                                                <td>{{ number_format($ea->amount, 2) }}</td>
+                                                <td>{{ ucfirst($ea->frequency?->name ?? 'N/A') }}</td>
+                                                <td>
+                                                    @can('edit_allowances')
+                                                        <form
+                                                            action="{{ route('employee.manage.employee.allowances.toggleStatus', [$employee->id, $ea->allowance->id]) }}"
+                                                            method="POST" class="d-inline"
+                                                            onsubmit="return confirm('Are you sure you want to {{ $ea->status ? 'deactivate' : 'activate' }} this allowance?')">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <input type="hidden" name="status" value="{{ $ea->status ? 0 : 1 }}">
+                                                            <button type="submit"
+                                                                class="btn btn-sm {{ $ea->status ? 'btn-outline-danger' : 'btn-outline-success' }} p-1">
+                                                                {{ $ea->status ? 'Deactivate' : 'Activate' }}
+                                                            </button>
+                                                        </form>
+                                                    @endcan
 
-                                            @can('edit_allowances')
-                                                <x-system.modal-button class="btn btn-outline-dark btn-sm p-1 m-1"
-                                                    id="editAllowanceModal-{{ $ea->allowance->id }}" text="Edit"
-                                                    textColor="" />
-                                            @endcan
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                                    @can('edit_allowances')
+                                                        <x-system.modal-button class="btn btn-outline-dark btn-sm p-1 m-1"
+                                                            id="editAllowanceModal-{{ $ea->allowance->id }}" text="Edit"
+                                                            textColor="" />
+                                                    @endcan
+                                                </td>
+                                            </tr>
+                                        @endforeach
 
-                            </tbody>
-                        </table>
+                                    </tbody>
+                                </table>
+                                <div>
+                                    <button class="btn btn-primary btn-sm" v-on:click="disburseSelected" type="button">
+                                        Disburse Selected
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            {{-- Pagination --}}
+                            <div class="mt-3">
+                                <h4>Disbursement History</h4>
+                                <x-system.table class="dt-table">
+                                    <x-slot name="head">
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Allowance</th>
+                                            <th>Amount</th>
+                                            <th>Disbursed At</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </x-slot>
+                                    <x-slot name="body">
+                                        @foreach ($disbursements as $disbursement)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $disbursement->allowance->name ?? 'N/A' }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </x-slot>
+                                </x-system.table>
+                            </div>
+                        </div>
                     </div>
                     @can('edit_allowances')
                         @foreach ($employee->allowances as $allowance)
@@ -163,4 +203,44 @@
             </div>
         </div>
     @endcanany
+@endsection
+
+@section('scripts')
+    <script>
+        const handler1 = new TableSelectionHandler('.dt-table', '#all-checker');
+        const app = Vue.createApp({
+            data() {
+                return {
+
+                }
+            },
+            methods: {
+                disburseSelected() {
+                    console.log('reach here')
+                    const selectedAllowances = handler1.getSelected();
+                    if (selectedAllowances.length === 0) {
+                        alert('Please select at least one allowance to disburse.');
+                        return;
+                    }
+                    // Handle the disbursement logic here
+                    const uri = "{{ route('disbursements.disburse') }}";
+                    const details = {
+                        user: "{{ Auth::user()->id }}",
+                        employee: "{{ $employee->id }}",
+                        basedOn: "individual",
+                        allowanceEmployeePivotIds: selectedAllowances
+                    };
+                    console.log("Uri", uri);
+                    axios.post(`${uri}`, details)
+                        .then(response => {
+                            console.log('Disbursement successful:', response.data);
+                            alert('Disbursement successful!');
+                            // Optionally, you can refresh the page or update the UI
+                            location.reload();
+                        })
+                }
+            }
+        });
+        app.mount('#app');
+    </script>
 @endsection

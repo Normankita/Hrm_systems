@@ -7,7 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Services\AllowanceDisbursementService;
 use App\Models\AllowanceGroupEmployeePivot;
 use App\Models\DisbursedAllowance;
+use App\Models\EmployeeAllowance;
 use App\Models\GroupCategoryEmployeeAllowance;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -36,6 +38,7 @@ class ApiDisbursementsController extends Controller
 
     public function disburse(Request $request)
     {
+        $user = User::find($request->user);
         $category = $request->post('basedOn');
         $results = [];
         if ($category == AllowanceGroups::CATEGORY) {
@@ -56,7 +59,17 @@ class ApiDisbursementsController extends Controller
         } elseif ($category == AllowanceGroups::GROUP) {
             $results = $this->getGroupBasedDisbursement();
         } elseif ($category == AllowanceGroups::INDIVIDUAL) {
-            $results = $this->getCategorizedDisbursement();
+          $response = AllowanceDisbursementService::disburseWithIndividualCategory(
+                $request->post('allowanceEmployeePivotIds'),
+                $request->post('employee')
+            );
+            if ($response['status'] == 'error') {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $response['message']
+                ], 500);
+            }
+            return response()->json($response);
         }
         return response()->json([
             'status' => 'success',

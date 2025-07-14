@@ -46,6 +46,12 @@ class GroupCategoryEmployeeAllowance extends Model
     }
 
 
+    public function disbursements() {
+        return $this->hasMany(DisbursedAllowance::class, 'disbursable_id')
+            ->where('disbursable_type', GroupCategoryEmployeeAllowance::class);
+    }
+
+
     public static function getAllInIds(array $ids)
     {
         $selfObjectes = GroupCategoryEmployeeAllowance::whereIn(

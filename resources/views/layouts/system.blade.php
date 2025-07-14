@@ -68,9 +68,16 @@
 
                     <div class="row justify-content-between mb-3">
                         <div class="col-md-4">
-                            <button onclick="history.back()" class="btn btn-outline-primary">
-                                <i class="mdi mdi-arrow-left"></i> Back
-                            </button>
+
+                            @if (isset($_SERVER['HTTP_REFERER']))
+                                <a href="{{ $_SERVER['HTTP_REFERER'] }}" class="btn btn-outline-primary btn-sm">
+                                    <i class="mdi mdi-arrow-left"></i>back
+                                </a>
+                            @else
+                                <a href="#" class="btn btn-primary btn-sm" disabled>
+                                    <i class="mdi mdi-arrow-left"></i> Back
+                                </a>
+                            @endif
                         </div>
 
                         <!-- at right side, add search button with search mdi icon, a toggle buttons and a submit button -->

@@ -44,6 +44,7 @@ class DisbursedAllowance extends Model
         'status',
         'disbursable_id',
         'disbursable_type',
+        'allowance_id',
     ];
 
     public function disbursable()

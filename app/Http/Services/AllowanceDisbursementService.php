@@ -10,6 +10,7 @@ use App\Models\AllowanceGroupAllowancePivot;
 use App\Models\AllowanceGroupEmployeePivot;
 use App\Models\DisbursedAllowance;
 use App\Models\Employee;
+use App\Models\EmployeeAllowance;
 use App\Models\GroupCategoryEmployeeAllowance;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -56,17 +57,20 @@ class AllowanceDisbursementService
 
         DB::beginTransaction();
         try {
-            $disbursed = $gr_cat_emp_collection->map(function ($disburse) {
-                return DisbursedAllowance::create([
-                    'type' => AllowanceGroups::CATEGORY,
-                    'amount' => $disburse->amount,
-                    'employee_id' => $disburse->employee->id,
-                    'status' => true,
-                    'company_id' => $disburse->employee->company_id,
-                    'disbursable_type' => GroupCategoryEmployeeAllowance::class,
-                    'disbursable_id' => $disburse->id
-                ]);
-            });
+            $disbursed = $gr_cat_emp_collection->map(
+                function ($disburse) {
+                    return DisbursedAllowance::create([
+                        'type' => AllowanceGroups::CATEGORY,
+                        'amount' => $disburse->amount,
+                        'employee_id' => $disburse->employee->id,
+                        'status' => true,
+                        'company_id' => $disburse->employee->company_id,
+                        'disbursable_type' => GroupCategoryEmployeeAllowance::class,
+                        'disbursable_id' => $disburse->id,
+                        'allowance_id' => $disburse->allowance->id
+                    ]);
+                }
+            );
 
             DB::commit();
 
@@ -81,6 +85,46 @@ class AllowanceDisbursementService
                 'status' => 'error',
                 'message' => $th->getMessage(),
             ];
+        }
+    }
+
+
+    public static function disburseWithIndividualCategory(
+        $allowanceEmployeePivotIds,
+        $user
+    ) {
+        // select allowance employee pivot ids
+        DB::beginTransaction();
+        try {
+            $allowances = DB::table('employee_allowance')
+                ->whereIn('id', $allowanceEmployeePivotIds)
+                ->get();
+            DisbursedAllowance::insert(
+                $allowances->map(function ($allowance) use ($user) {
+                    return [
+                        'type' => AllowanceGroups::INDIVIDUAL,
+                        'amount' => $allowance->amount,
+                        'company_id' => $user->company_id,
+                        'employee_id' => $allowance->employee_id,
+                        'status' => true,
+                        'disbursable_id' => $allowance->id,
+                        'disbursable_type' => EmployeeAllowance::class,
+                        'allowance__id' => $allowance->allowance_id,
+                        'created_at' => now(),
+                    ];
+                })->toArray()
+            );
+            DB::commit();
+            return [
+                'status' => 'success',
+                'message' => 'Disbursement created successfully.',
+            ];
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to disburse allowances: ' . $e->getMessage(),
+            ]);
         }
     }
 
@@ -208,13 +252,13 @@ class AllowanceDisbursementService
         return [
             'status' => 'success',
             'details' => [
-                    'gr_employeePivot' => $gr_employeePivot,
-                    'gr_allowancePivot' => $gr_allowancePivot,
-                    'group' => $group,
-                    'allowance' => $allowance,
-                    'groupWithEmp' => $groupWithEmp,
-                    'disbursed' => $disbursementsGroupedByDay
-                ]
+                'gr_employeePivot' => $gr_employeePivot,
+                'gr_allowancePivot' => $gr_allowancePivot,
+                'group' => $group,
+                'allowance' => $allowance,
+                'groupWithEmp' => $groupWithEmp,
+                'disbursed' => $disbursementsGroupedByDay
+            ]
         ];
     }
 

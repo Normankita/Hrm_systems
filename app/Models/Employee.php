@@ -143,7 +143,7 @@ class Employee extends Model
     }
 
     /**
-     * Function to return Employees who are currently on a leave 
+     * Function to return Employees who are currently on a leave
      * @return \Illuminate\Database\Eloquent\Collection<int, Employee>
      */
     public static function getRecentLeaveRequest()
@@ -259,6 +259,17 @@ class Employee extends Model
         )
             ->withPivot(['isActive'])
             ->withTimestamps();
+    }
+
+
+    public function disbursedAllowances()
+    {
+        return $this->hasMany(DisbursedAllowance::class);
+    }
+
+
+    public function allowanceGroupEmployeePivots() {
+        return $this->hasMany(AllowanceGroupEmployeePivot::class, 'employee_id');
     }
 
 }
