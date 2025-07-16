@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Utils\Traits\AllowanceTrait;
 use App\Models\Allowance;
 use App\Models\AllowanceFrequency;
-use App\Models\DisbursedAllowance;
 use App\Models\Employee;
 use App\Models\GroupCategoryEmployeeAllowance;
 use Illuminate\Container\Attributes\Auth;
@@ -38,23 +37,29 @@ class EmployeeManageEmployeeAllowancesController extends Controller
             ->get();
         // merge the two disbursements collections
         $disbursements = $individualDisbursements->merge(
-            $categoryDisbursementsAllocations->flatMap(
-                function ($allocation) {
-                    return $allocation->disbursements;
-                }
-            )
+            $categoryDisbursementsAllocations->flatMap(function ($allocation) {
+                return $allocation->disbursements->map(function ($disbursement) {
+                    $disbursement->categoryBased = true; // Add your custom field here
+                    return $disbursement;
+                });
+            })
         );
+
         // Eager load 'allowances' relationship
         $employee = Employee::with(
-            'employeeAllowances.allowance','employeeAllowances.frequency'
+            'employeeAllowances.allowance',
+            'employeeAllowances.frequency'
         )->findOrFail($employee->id);
         $frequencies = AllowanceFrequency::all();
         $allowances = Allowance::all();
-
         return view(
             "employee.manage.employee.allowances",
-            compact("employee",
-            "allowances", "frequencies", "disbursements")
+            compact(
+                "employee",
+                "allowances",
+                "frequencies",
+                "disbursements"
+            )
         );
     }
 
@@ -70,7 +75,7 @@ class EmployeeManageEmployeeAllowancesController extends Controller
             $employeeId,
             $request,
             $request->input('allowance_id'),
-            Auth::user()
+            auth()->user()
         );
         return redirect()->back()->with('success', 'Allowance added.');
     }

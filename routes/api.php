@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\ApiAllowanceGroupMembersController;
 use App\Http\Controllers\Api\ApiAllowanceGroupsController;
 use App\Http\Controllers\Api\ApiDisbursementsController;
+use App\Http\Controllers\Api\ApiEmployeePayrollController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -26,8 +27,10 @@ Route::prefix('groups')
     ->controller(ApiAllowanceGroupMembersController::class)
     ->name('groups.')
     ->group(function () {
-        Route::post('/add/employees/to/group/{group}/allowance/{allowance}',
-            'addMemberToGroupAllowance')->name('add.employees.to.group.allowance');
+        Route::post(
+            '/add/employees/to/group/{group}/allowance/{allowance}',
+            'addMemberToGroupAllowance'
+        )->name('add.employees.to.group.allowance');
     });
 
 
@@ -38,4 +41,14 @@ Route::prefix('disbursements')
         Route::get('/categorized', 'fetchCategoryWise')
             ->name('categorized');
         Route::post('/disburse', 'disburse')->name('disburse');
+    });
+
+
+Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
+    ->prefix('employee/manage/payrolls')
+    ->name('employee.manage.payrolls.')
+    ->controller(ApiEmployeePayrollController::class)
+    ->group(function () {
+        Route::post('/generate', 'generateForSelected')->name('generateSelected');
+        Route::post('/approve/selected', 'approveSelected')->name('approveSelected');
     });

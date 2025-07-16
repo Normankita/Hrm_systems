@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('employee_pay_grade', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('employee_id')->constrained()->onDelete('cascade');
             $table->foreignId('pay_grade_id')->constrained()->onDelete('cascade');
             $table->boolean('status')->default(false);

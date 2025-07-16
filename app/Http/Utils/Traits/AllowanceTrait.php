@@ -2,6 +2,7 @@
 namespace App\Http\Utils\Traits;
 
 use App\Models\Employee;
+use App\Models\EmployeeAllowance;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -20,15 +21,28 @@ trait AllowanceTrait
         $companyId = $employee->company_id;
         DB::beginTransaction();
         try {
-            $employee->allowances()->attach($allowance_id, [
+            $details = [
                 'amount' => $data['amount'],
                 'allowance_frequency_id' => $data['frequency_id'],
                 'status' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]);
-            dd($user);
-            $employee->recordEvent('add', $data, $user['id'], $companyId);
+            ];
+            $employee->allowances()->attach($allowance_id, $details);
+            // Then query the pivot table
+            $pivot = EmployeeAllowance::where('employee_id', $employee->id)
+                ->where('allowance_id', $allowance_id)
+                ->latest('id') // Assuming pivot table has an `id` column
+                ->first();
+            if (!$pivot) {
+                throw new Exception('Failed to create allowance for employee.');
+            }
+            $pivot->recordEvent(
+                'add',
+                $details,
+                $user['id'],
+                $companyId
+            );
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();

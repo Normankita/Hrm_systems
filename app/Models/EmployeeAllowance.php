@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use App\Http\Utils\Traits\HasAllowanceDisbursements;
+use App\Http\Utils\Traits\HasEvents;
 use Illuminate\Database\Eloquent\Model;
 
 class EmployeeAllowance extends Model
 {
-    use HasAllowanceDisbursements;
-    
+    use HasAllowanceDisbursements, HasEvents;
+
     protected $table = 'employee_allowance';
 
     protected $fillable = [
@@ -37,7 +38,8 @@ class EmployeeAllowance extends Model
 
     public function payrolls()
     {
-        return $this->belongsToMany(Payroll::class, 'employee_allowance_payroll');
+        return $this->belongsToMany(Payroll::class,
+         'employee_allowance_payroll');
     }
 
 }

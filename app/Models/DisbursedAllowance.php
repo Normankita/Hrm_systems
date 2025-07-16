@@ -52,6 +52,10 @@ class DisbursedAllowance extends Model
         return $this->morphTo();
     }
 
+    public function allowance()
+    {
+        return $this->belongsTo(Allowance::class);
+    }
 
     public function employee()
     {

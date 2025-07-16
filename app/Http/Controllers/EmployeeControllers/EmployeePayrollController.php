@@ -17,17 +17,19 @@ class EmployeePayrollController extends Controller
      */
     public function index()
     {
-        $payrolls = Payroll::with(['employee', 'pay_grade'])->latest()->get();
-        return view('employee.manage.payroll.index', compact('payrolls'));
+        $payrolls = Payroll::with(['employee', 'pay_grade'])
+            ->latest()->get();
+        return view('employee.manage.payroll.index',
+        compact('payrolls'));
 
     }
     public function generateAll(Request $request)
     {
         $request = [];
         $payrolls = PayrollService::generatePayrollForAllEmployees();
-        
+
         return redirect()->back()->with('success', count($payrolls) . ' payrolls generated.');
-        
+
     }
 
 
@@ -49,30 +51,14 @@ class EmployeePayrollController extends Controller
     }
 
 
-
-
-    public function generateForSelected(Request $request)
-    {
-        $employeeIds = $request->input('selected_employees');
-        if (!$employeeIds) {
-            return back()->with('error', 'No employees selected.');
-        }
-        $payrolls = PayrollService::generatePayrollForSelectedEmployees(
-            false,
-            $employeeIds
-        );
-        return redirect()->route('employee.manage.payrolls.index')
-            ->with('success', count($payrolls) . ' payrolls generated.');
-    }
-
     /**
      * Store a newly created resource in storage.
      */
     public function show(Payroll $payroll)
     {
         $employee= Employee::find($payroll->employee_id);
-      
-        $deductions = $payroll->deductions()->get(); 
+
+        $deductions = $payroll->deductions()->get();
 
         return view('employee.manage.payroll.payments.show', compact('employee', 'payroll', 'deductions'));
     }

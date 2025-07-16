@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Company;
 use App\Models\Contribution;
-use App\Models\Deduction;
 use App\Models\Department;
 use App\Models\Employee;
 use App\Models\PayGrade;
@@ -39,11 +38,12 @@ class UserSeeder extends Seeder
         ]);
 
         // 3. Create default pay grade
-        $payGrade = PayGrade::create([
+        PayGrade::create([
             'name' => 'Default Grade',
             'base_salary' => 50000,
             'max_salary' => 70000,
             'base_month_count' => 12,
+            'company_id' => $company->id,
             'description' => 'Default pay grade for initial employees',
         ]);
 

@@ -109,7 +109,7 @@ class AllowanceDisbursementService
                         'status' => true,
                         'disbursable_id' => $allowance->id,
                         'disbursable_type' => EmployeeAllowance::class,
-                        'allowance__id' => $allowance->allowance_id,
+                        'allowance_id' => $allowance->allowance_id,
                         'created_at' => now(),
                     ];
                 })->toArray()
@@ -121,10 +121,10 @@ class AllowanceDisbursementService
             ];
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json([
+            return [
                 'status' => 'error',
                 'message' => 'Failed to disburse allowances: ' . $e->getMessage(),
-            ]);
+            ];
         }
     }
 

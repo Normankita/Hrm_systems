@@ -61,7 +61,7 @@ class ApiDisbursementsController extends Controller
         } elseif ($category == AllowanceGroups::INDIVIDUAL) {
           $response = AllowanceDisbursementService::disburseWithIndividualCategory(
                 $request->post('allowanceEmployeePivotIds'),
-                $request->post('employee')
+                $user
             );
             if ($response['status'] == 'error') {
                 return response()->json([

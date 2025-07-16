@@ -217,12 +217,12 @@ class EmployeeService
 
         DB::beginTransaction();
         $department = Department::first();
-
-        if (!$department) {
+        $defaultPaygrade = PayGrade::first();
+        if (!$department || !$defaultPaygrade) {
             DB::rollBack();
             return [
                 'status' => 'error',
-                'message' => 'Department not found'
+                'message' => 'Department or Paygrade not found'
             ];
         }
 
@@ -250,14 +250,12 @@ class EmployeeService
                 $company = session('company');
 
                 $salary = $row[11];
+
                 // assign paygrade
                 // select paygrade whose salary is between base_salary and max_salary
                 $paygrade = PayGrade::where('base_salary', '<=', $salary)
                     ->where('max_salary', '>=', $salary)
-                    ->first();
-                if (!$paygrade) {
-                    $paygrade = PayGrade::first();
-                }
+                    ->first() ?? $defaultPaygrade;
 
                 $names = $this->getNamesFromFullName($row[0]);
                 $first_name = $names['first_name'];

@@ -5,7 +5,6 @@ namespace App\Http\Services;
 use App\Http\Utils\Traits\PdfTrait;
 use App\Models\Contribution;
 use App\Models\Employee;
-use App\Models\EmployeeAllowance;
 use App\Models\Payroll;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -36,11 +35,12 @@ class PayrollService
         return self::processPayroll($force, $employees);
     }
 
-    public static function processPayroll(bool $force = false, $employees = []): array
-    {
+    public static function processPayroll(
+        bool $force = false,
+        $employees = []
+    ): array {
         $today = Carbon::today();
         $period = $today->format('Y-m');
-        $todayDate = $today->format('Y-m-d');
 
         $contributions = Contribution::pluck('percent', 'name');
         $generated = [];
@@ -52,34 +52,6 @@ class PayrollService
                 continue;
 
             $basic = $employee->getBaseSalary();
-
-            // Fetch valid employee allowances
-            $employeeAllowances = $employee->allowances()
-                ->wherePivot('status', true)
-                ->wherePivot('effective_from', '<=', $todayDate)
-                ->wherePivot('effective_to', '>=', $todayDate)
-                ->get();
-            $employeeAllowancesTotal = 0;
-            $allowancesToAttach = [];
-
-            foreach ($employeeAllowances as $allowance) {
-                $employeeAllowancesTotal += $allowance->pivot->amount;
-
-                // Fetch the actual pivot row ID (EmployeeAllowance)
-                $employeeAllowance = EmployeeAllowance::where('employee_id', $employee->id)
-                    ->where('allowance_id', $allowance->id)
-                    ->where('status', true)
-                    ->where('effective_from', '<=', $todayDate)
-                    ->where('effective_to', '>=', $todayDate)
-                    ->first();
-
-                if ($employeeAllowance) {
-                    $allowancesToAttach[] = [
-                        'employee_allowance_id' => $employeeAllowance->id,
-                        'amount' => $allowance->pivot->amount,
-                    ];
-                }
-            }
 
             // Handle regeneration
             if ($force) {
@@ -117,13 +89,14 @@ class PayrollService
                 }
             }
 
+            $employeeAllowancesTotal = 0;
             $totalDeductions = $statutory + $customDeductions;
             $gross = $basic + $employeeAllowancesTotal;
             $net = $gross - $totalDeductions;
 
             DB::beginTransaction();
             try {
-                $payrolldata=[
+                $payrolldata = [
                     'employee_id' => $employee->id,
                     'pay_grade_id' => $activePayGrade->id,
                     'payroll_date' => $today,
@@ -147,16 +120,6 @@ class PayrollService
                     ]);
                 }
 
-                // bad zone where allowances in payroll are set to zero
-
-                foreach ($allowancesToAttach as $item) {
-                    $payroll->employeeAllowances()->attach($item['employee_allowance_id'], [
-                        'amount' => $item['amount']
-                    ]);
-                }
-
-                // ends here
-
                 $pdfService = new PayslipPdfService();
 
                 $path = $pdfService->generate($payroll);
@@ -165,10 +128,16 @@ class PayrollService
                 $generated[] = $payroll;
             } catch (\Throwable $e) {
                 DB::rollBack();
-                continue;
+                return [
+                    'status' => 'error',
+                    'message' => 'Failed to generate payroll for employee : '. $employee->full_name
+                ];
             }
         }
-
-        return $generated;
+        return [
+            'status' => 'success',
+            'message' => 'Payrolls generated successfully.',
+            'data' => $generated
+        ];
     }
 }

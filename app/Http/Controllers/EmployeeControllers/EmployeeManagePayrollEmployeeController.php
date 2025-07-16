@@ -38,7 +38,8 @@ class EmployeeManagePayrollEmployeeController extends Controller
     public function rejected()
     {
         $payrolls = Payroll::where('status', 'rejected')->get();
-        return view('employee.manage.payroll.payments.rejected', compact('payrolls'));
+        return view('employee.manage.payroll.payments.rejected',
+        compact('payrolls'));
     }
 
     public function reject(Request $request, Payroll $payroll)
@@ -52,27 +53,7 @@ class EmployeeManagePayrollEmployeeController extends Controller
         ];
         $payroll->update($data);
         $payroll->recordEvent('update', $data);
-        return back()->with('message', 'Payroll rejected successfully.');
+        return back()->with('success', 'Payroll rejected successfully.');
     }
 
-    public function approveAll()
-    {
-        DB::beginTransaction();
-        try {
-            Payroll::where('status', 'pending')->update([
-                'status' => 'approved'
-            ]);
-            Payroll::recordEvent('update', ['Category'=>'Approved all payrolls']);
-        } catch (\Throwable $e) {
-            DB::rollBack();
-            return back()->with([
-                'status' => 'fail',
-                'message' => $e->getMessage(),
-            ]);
-        }
-        return back()->with([
-            'status' => 'success',
-            'message' => 'All pending payrolls approved (excluding rejections)'
-        ]);
-    }
 }

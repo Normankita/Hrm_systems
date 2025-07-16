@@ -78,9 +78,11 @@ class EmployeeManageEmployeeController extends Controller
     {
          Helpers::sanitizeRequestNumbers($request);
 
-        $outcome = $this->employeeService->updateEmployee($request, $id);
+        $outcome = $this->employeeService->updateEmployee(
+            $request, $id);
 
-        return redirect()->route('employee.manage.employees.show', $outcome['employee']->id)
+        return redirect()->route('employee.manage.employees.show',
+            $outcome['employee']->id)
             ->with('success', 'Employee updated successfully');
     }
 

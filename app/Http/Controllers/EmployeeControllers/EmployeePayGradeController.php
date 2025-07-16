@@ -27,8 +27,12 @@ class EmployeePayGradeController extends Controller
     public function store(Request $request)
     {
         Helpers::sanitizeRequestNumbers($request);
-        $this->validatePayGrade($request);
-        // ensure that the new paygrade ranges in not in any of the grade
+        $response = $this->validatePayGrade($request);
+        if ($response['status'] === 'error') {
+            return redirect()->back()
+                ->with('error', $response['message'])
+                ->withInput();
+        }
         // $base = $request->base_salary;
         // $max = $request->max_salary;
         $this->createPayGrade($request);
@@ -58,11 +62,16 @@ class EmployeePayGradeController extends Controller
     public function update(Request $request, PayGrade $payGrade)
     {
         Helpers::sanitizeRequestNumbers($request);
-
-        $this->validatePayGrade($request, $payGrade->id);
+        $response = $this->validatePayGrade($request, $payGrade->id);
+        if ($response['status'] === 'error') {
+            return redirect()->back()
+                ->with('error', $response['message'])
+                ->withInput();
+        }
         $this->updatePayGrade($request, $payGrade);
 
-        return redirect()->route('employee.manage.paygrades.index')->with('success', 'Pay Grade updated successfully');
+        return redirect()->route('employee.manage.paygrades.index')
+            ->with('success', 'Pay Grade updated successfully');
     }
 
     /**

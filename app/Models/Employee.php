@@ -32,6 +32,7 @@ class Employee extends Model
         });
     }
 
+    
     protected $fillable = [
         'user_id',
         'company_id',
@@ -52,30 +53,36 @@ class Employee extends Model
         'salary',
     ];
 
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+
 
     public function company()
     {
         return $this->belongsTo(Company::class);
     }
 
+
     public function department()
     {
         return $this->belongsTo(Department::class);
     }
+
 
     public function designation()
     {
         return $this->belongsTo(DesignationRoleMapping::class);
     }
 
+
     public function contract()
     {
         return $this->hasOne(EmployeeContract::class);
     }
+
 
     public function documents()
     {
@@ -132,6 +139,7 @@ class Employee extends Model
         return $activeGrade;
     }
 
+
     public static function countEmployeesCurrentlyOnLeave(): int
     {
         return static::whereHas('leaves', function ($query) {
@@ -141,6 +149,7 @@ class Employee extends Model
                 ->whereDate('end_date', '>=', $today);
         })->count();
     }
+
 
     /**
      * Function to return Employees who are currently on a leave
@@ -158,12 +167,13 @@ class Employee extends Model
             ->get();
         return $latestEmployeeLeaveRequests;
     }
+
+
     /**
      * Check if the employee is currently on leave
      *
      * @return bool
      */
-
     public function isCurrentlyOnLeave(): bool
     {
         $today = Carbon::today();
@@ -188,6 +198,7 @@ class Employee extends Model
             : $activePayGrade->base_salary;
     }
 
+
     /**
      * Summary of getsSpentLeaves
      * getting the leaves that the employee has taken
@@ -207,19 +218,20 @@ class Employee extends Model
     }
 
 
-
     public function pay_grades()
     {
         return $this->belongsToMany(PayGrade::class)
-            ->withPivot(['status', 'assigned_by', 'effective_from', 'base_salary_override'])->withTimestamps();
+            ->withPivot(['id', 'status', 'assigned_by', 'effective_from', 'base_salary_override'])->withTimestamps();
     }
+
 
     public function allowances()
     {
         return $this->belongsToMany(Allowance::class, 'employee_allowance')
-            ->withPivot(['amount', 'allowance_frequency_id', 'status'])
+            ->withPivot(['id', 'amount', 'allowance_frequency_id', 'status'])
             ->withTimestamps();
     }
+
 
     public function employeeAllowances()
     {
@@ -232,11 +244,13 @@ class Employee extends Model
         return $this->hasMany(EmployeeStatusHistory::class);
     }
 
+
     public function currentStatus()
     {
         return $this->hasOne(EmployeeStatusHistory::class)
             ->where('isActive', true);
     }
+
 
     public function getApprovedMonthPayrolls(Carbon $month)
     {
@@ -246,10 +260,12 @@ class Employee extends Model
             ->first()->net_salary ?? 0;
     }
 
+
     public function leaveApprovals()
     {
         return $this->hasMany(LeaveApproval::class);
     }
+
 
     public function allowance_groups()
     {

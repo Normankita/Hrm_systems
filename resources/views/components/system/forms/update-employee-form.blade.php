@@ -8,7 +8,8 @@
 
 <div class="card">
     <div class="card-body p-30">
-        <form action="{{ route($route, $employee->id) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route($route, $employee->id) }}"
+            method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="row">
@@ -247,7 +248,7 @@
                             PayGrade</option>
                         @foreach ($pay_grades as $pay_grade)
                             <option value="{{ $pay_grade->id }}"
-                                {{ ($employee->getActivePaygrade()->id == $pay_grade->id ? 'selected' : '') }}>
+                                {{ ($employee->getActivePaygrade()?->id == $pay_grade->id ? 'selected' : '') }}>
                                 {{ $pay_grade->name }}
                             </option>
                         @endforeach
@@ -262,7 +263,7 @@
                     <div class="input-group">
                         <span class="input-group-text mdi mdi-calendar"></span>
                         <input type="date" name="effective_from" class="form-control"
-                            value="{{ Carbon\Carbon::parse($employee->getActivePaygrade()->pivot->effective_from)->format('Y-m-d') }}">
+                            value="{{ Carbon\Carbon::parse($employee->getActivePaygrade()?->pivot->effective_from)->format('Y-m-d') }}">
                     </div>
                     @error('effective_from')
                         <span class="text-danger d-block">{{ $message }}</span>
@@ -276,7 +277,7 @@
                         <span class="input-group-text mdi mdi-cash-multiple"></span>
                         <input data-format="number" type="text" name="base_salary_override" class="form-control"
                             placeholder="e.g., 1200000"
-                            value="{{$employee->getActivePaygrade()->pivot->base_salary_override}}">>
+                            value="{{$employee->getActivePaygrade()?->pivot->base_salary_override}}">>
                     </div>
                     @error('base_salary_override')
                         <span class="text-danger d-block">{{ $message }}</span>

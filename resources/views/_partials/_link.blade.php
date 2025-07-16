@@ -4,6 +4,9 @@
 
 <title>hrm system</title>
 
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 <!-- GOOGLE FONTS -->
 <link href="https://fonts.googleapis.com/css?family=Karla:400,700|Roboto" rel="stylesheet">
 <link href="{{ asset('bootstrap5.1.1/plugins/material/css/materialdesignicons.min.css') }}" rel="stylesheet" />
@@ -38,9 +41,6 @@
 <script src="plugins/nprogress/nprogress.js"></script>
 
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
-
-<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <!-- Select2 CSS -->
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />

@@ -87,11 +87,11 @@
                                             class="nav-text">Manage Frequencies</span>
                                     </a>
                                 </li>
-                                <li>
+                                {{-- <li>
                                     <a href="{{ route('employee.manage.disbursements.index') }}"> <span
                                             class="nav-text">Disbursements</span>
                                     </a>
-                                </li>
+                                </li> --}}
                             </div>
 
                         </ul>

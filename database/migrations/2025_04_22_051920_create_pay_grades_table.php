@@ -17,6 +17,8 @@ return new class extends Migration
             $table->double('base_salary');
             $table->double('max_salary');
             $table->integer('base_month_count');
+            $table->unsignedBigInteger('company_id')->nullable();
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->text('description')->nullable();
             $table->timestamps();
         });

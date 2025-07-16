@@ -12,10 +12,13 @@
                             </h3>
                         </div>
                     </div>
+                    <button class="btn btn-primary mx-2" v-on:click="disburseSelected" type="button">
+                        Disburse Selected
+                    </button>
                     {{-- Create Allowance --}}
                     @can('create_allowances')
                         <x-system.modal-button id="createAllowanceModal" form="createAllowanceForm" title="Create Allowance"
-                            text="Allocate Allowance" />
+                            text="ALLOCATE ALLOWANCE" />
 
                         <x-system.modal size="modal-lg" id="createAllowanceModal" form="createAllowanceForm"
                             title="Assign Allowance" :inside="true">
@@ -75,7 +78,8 @@
                         <div class="col-md-12">
                             {{-- Allowances Table --}}
                             <div class="table-responsive mt-4">
-                                <table class="table dt-table table-bordered table-responsive">
+                                <table class="table dt-table table-bordered
+                                 table-responsive">
                                     <input type="checkbox" id="all-checker" class="form-check" />
                                     <thead>
                                         <tr>
@@ -123,11 +127,6 @@
 
                                     </tbody>
                                 </table>
-                                <div>
-                                    <button class="btn btn-primary btn-sm" v-on:click="disburseSelected" type="button">
-                                        Disburse Selected
-                                    </button>
-                                </div>
                             </div>
                         </div>
 
@@ -135,23 +134,33 @@
                             {{-- Pagination --}}
                             <div class="mt-3">
                                 <h4>Disbursement History</h4>
-                                <x-system.table class="dt-table">
+                                <x-system.table class="dt-table table-responsive">
                                     <x-slot name="head">
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Allowance</th>
-                                            <th>Amount</th>
-                                            <th>Disbursed At</th>
-                                            <th>Actions</th>
-                                        </tr>
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Allowance</th>
+                                                <th>From</th>
+                                                <th>Amount</th>
+                                                <th>Disbursed At</th>
+                                            </tr>
+                                        </thead>
                                     </x-slot>
                                     <x-slot name="body">
-                                        @foreach ($disbursements as $disbursement)
-                                            <tr>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $disbursement->allowance->name ?? 'N/A' }}</td>
-                                            </tr>
-                                        @endforeach
+                                        <tbody>
+                                            @foreach ($disbursements as $disbursement)
+                                                <tr>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $disbursement->allowance->name ?? 'N/A' }}</td>
+                                                    <td>
+                                                        {{ $disbursement->categoryBased ? 'Group' : 'Individual' }}
+                                                    </td>
+                                                    <td>{{ number_format($disbursement->amount) }}</td>
+                                                    <td>{{ $disbursement->created_at->format('Y-M-d H:i:s') }}
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
                                     </x-slot>
                                 </x-system.table>
                             </div>

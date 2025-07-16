@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\EmployeeControllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Leave;
 use App\Models\LeaveType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -12,7 +11,7 @@ class EmployeeManageLeaveTypeController extends Controller
 {
     public function index()
     {
-        $leaveTypes = LeaveType::all();
+        $leaveTypes = LeaveType::all()->sortByDesc('created_at');
         return view('employee.manage.leave_type.index')
             ->with('leaveTypes', $leaveTypes);
     }
@@ -20,6 +19,12 @@ class EmployeeManageLeaveTypeController extends Controller
 
     public function store(Request $request)
     {
+        $isCompensated = $request->input('is_compensated') ?? '0';
+        $isDeducted = $request->input('deducts_from_annual_leave');
+        // convert to boolean
+        $isCompensated = $isCompensated == '1' ? true : false;
+        $isDeducted = $isDeducted == '1' ? true : false;
+
         $rules = [
             'name' => 'required|string|max:255|unique:leave_types,name',
             'description' => 'nullable|string|max:255',
@@ -43,7 +48,7 @@ class EmployeeManageLeaveTypeController extends Controller
             'deducts_from_annual_leave' => 'boolean',
         ];
 
-        
+
         Validator::make($request->all(), $rules)->validate();
         $data= [
             'name' => $request->name,

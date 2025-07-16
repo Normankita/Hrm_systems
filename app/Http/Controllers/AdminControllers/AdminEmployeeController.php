@@ -152,7 +152,8 @@ class AdminEmployeeController extends Controller
         $rules = [
             'file' => 'mimes:ods,csv,xlsx|required|max:500',
         ];
-        $validate = Validator::make($request->all(), $rules, $messages = [
+        $validate = Validator::make($request->all(), $rules,
+            $messages = [
             'excel.required' => 'Select Excel sheet First....',
             'excel.max' => 'ExcelSheet must not be greater than 500kb',
         ]);

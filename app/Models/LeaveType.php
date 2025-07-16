@@ -52,7 +52,7 @@ class LeaveType extends Model
         return $this->belongsToMany(Role::class, 'leave_type_role');
     }
 
-    
+
     public function company()
     {
         return $this->belongsTo(Company::class);

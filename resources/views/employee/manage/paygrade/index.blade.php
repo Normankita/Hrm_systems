@@ -22,27 +22,42 @@
                                             <label for="name">PayGrade Name</label>
                                             <input type="text" value="{{ old('name') }}" class="form-control" name="name"
                                                 id="name" required>
+                                            @error('name')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
                                         </div>
                                         <div class="form-group">
                                             <label for="name">PayGrade base Salary</label>
                                             <input data-format="number" type="text" value="{{ old('base_salary') }}" class="form-control"
                                                 name="base_salary" id="base_salary" required>
+                                            @error('base_salary')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
                                         </div>
                                         <div class="form-group">
                                             <label for="name">PayGrade Max Salary</label>
                                             <input data-format="number" type="text" value="{{ old('max_salary') }}" class="form-control"
                                                 name="max_salary" id="max_salary" required>
+                                            @error('max_salary')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
                                         </div>
 
                                         <div class="form-group">
                                             <label for="name">PayGrade base Month count</label>
                                             <input type="number" value="{{ old('base_month_count') }}" class="form-control"
                                                 name="base_month_count" id="base_month_count" required>
+                                            @error('base_month_count')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
                                         </div>
 
                                         <div class="form-group">
                                             <label for="description">PayGrade description</label>
                                             <textarea class="form-control" name="description">{{ old('description') }}</textarea>
+                                            @error('description')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
                                         </div>
                                     </div>
                                 </form>
@@ -71,8 +86,8 @@
                                             <td>{{ $pay_grade->name }}</td>
                                             {{-- <td>{{ \Carbon\Carbon::parse($pay_grade->date_of_birth)->format('d M Y') }}</td>
                                         --}}
-                                            <td>{{ $pay_grade->base_salary }}</td>
-                                            <td>{{ $pay_grade->max_salary }}</td>
+                                            <td>{{ number_format($pay_grade->base_salary); }}</td>
+                                            <td>{{ number_format($pay_grade->max_salary); }}</td>
                                             <td>{{ $pay_grade->base_month_count ?? 'N/A' }}</td>
                                             <td>{{ $pay_grade->description ?? 'N/A' }} </td>
                                             <td class="d-flex p-1 gap-1">
