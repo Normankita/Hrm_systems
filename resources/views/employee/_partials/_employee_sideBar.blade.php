@@ -100,7 +100,7 @@
 
 
                 {{-- Begins loans --}}
-                <li class="has-sub">
+                {{-- <li class="has-sub">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
                         data-target="#loan-menu" aria-expanded="false" aria-controls="loan-menu">
                         <i class="mdi mdi-cash-refund"></i>
@@ -125,7 +125,7 @@
                             @endcan
                         </div>
                     </ul>
-                </li>
+                </li> --}}
                 {{-- Begins Payroll --}}
                 @canany(['view_payroll', 'create_payroll'])
                     <li class="has-sub">

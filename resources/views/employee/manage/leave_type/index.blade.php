@@ -15,8 +15,7 @@
                                 <x-system.modal-button class="btn btn-primary mb-3" id="createLeaveType" text="Create Leave Type" />
                                 <x-system.modal size="modal-lg" id="createLeaveType" title="Create Leave Type"
                                     form="createLeaveTypeForm">
-                                    <form id="createLeaveTypeForm"
-                                        action="{{ route('employee.manage.leave.type.store') }}"
+                                    <form id="createLeaveTypeForm" action="{{ route('employee.manage.leave.type.store') }}"
                                         method="POST">
                                         @csrf
                                         <div class="modal-body">
@@ -105,7 +104,7 @@
             </div>
 
             @can('edit_leaveType')
-                @foreach ($leaveTypes as $leaveType)
+                @foreach ($leaveTypes as $key => $leaveType)
                     <x-system.modal id="updateLeaveType-{{ $leaveType->id }}" title="Update Leave Type"
                         form="updateLeaveTypeForm-{{ $leaveType->id }}">
                         <form id="updateLeaveTypeForm-{{ $leaveType->id }}"
@@ -119,6 +118,16 @@
                                         value="{{ $leaveType->name }}" required>
                                 </div>
                                 <div class="form-group">
+                                    <label for="is_compensated">Is Compensated</label>
+                                    <select class="form-control comp" data-comp="{{ $key }}" name="is_compensated"
+                                        id="is_compensated">
+                                        <option value="1" {{ $leaveType->is_compensated == 'true' ? 'selected' : '' }}>
+                                            Yes</option>
+                                        <option value="0" {{ !$leaveType->is_compensated == 'false' ? 'selected' : '' }}>No
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group deduct-{{ $key }}">
                                     <label for="deducts_from_annual_leave">Is Annual Deducted</label>
                                     <select class="form-control" name="deducts_from_annual_leave" id="deducts_from_annual_leave">
                                         <option value="1"
@@ -143,6 +152,26 @@
 
 @section('scripts')
     <script>
+        let checkingFields = function(e) {
+            let comp = $(e).data('comp');
+            console.log($(e).val(), comp);
+            if ($(e).val() == '0') {
+                $('.deduct-' + comp).show();
+                console.log($('.deduct-' + comp));
+            } else {
+                $('.deduct-' + comp).hide();
+                let deduct = $('.deduct-' + comp).find('select');
+                deduct.val('0');
+            }
+        }
+        $(document).ready(function() {
+            $('.comp').on('change', function() {
+                checkingFields(this);
+            });
+            $('.comp').each(function() {
+                checkingFields(this);
+            })
+        });
         const app = Vue.createApp({
             data() {
                 return {

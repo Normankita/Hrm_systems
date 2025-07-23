@@ -4,7 +4,10 @@ namespace App\Models;
 
 use App\Http\Utils\Traits\HasAllowanceDisbursements;
 use App\Http\Utils\Traits\HasEvents;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+
+use function PHPSTORM_META\map;
 
 class EmployeeAllowance extends Model
 {
@@ -18,6 +21,7 @@ class EmployeeAllowance extends Model
         'allowance_id',
         'amount',
         'status',
+        'effective_from',
     ];
 
     public function employee()
@@ -38,8 +42,34 @@ class EmployeeAllowance extends Model
 
     public function payrolls()
     {
-        return $this->belongsToMany(Payroll::class,
-         'employee_allowance_payroll');
+        return $this->belongsToMany(
+            Payroll::class,
+            'employee_allowance_payroll'
+        );
+    }
+
+    public static function getRealDetails($ids)
+    {
+        $employeeAllowance = EmployeeAllowance::with(
+            [
+                'allowance',
+                'frequency',
+            ]
+        )
+        ->whereIn('id', $ids)
+        ->get();
+        return $employeeAllowance->map(function ($item) {
+            return (object) [
+                'id' => $item->id,
+                'amount' => $item->amount,
+                'effective_from' => $item->effective_from,
+                'isActive' => $item->status,
+                'employee' => $item->employee,
+                'allowance' => $item->allowance,
+                'frequency' => $item->frequency,
+                'object' => $item
+            ];
+        });
     }
 
 }

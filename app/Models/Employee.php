@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Http\Utils\Traits\HasDateFilter;
 use App\Http\Utils\Traits\HasEvents;
+use App\Http\Utils\Traits\LeaveTrait;
 use App\Models\Scopes\AuthUserCompanyScope;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -32,7 +33,7 @@ class Employee extends Model
         });
     }
 
-    
+
     protected $fillable = [
         'user_id',
         'company_id',
@@ -208,15 +209,63 @@ class Employee extends Model
     {
         $thisYear = Carbon::now()->year;
         // select all leaves where created at this year
-        return $this->leaves()
+        $leaves = $this->leaves()
             ->where('status', 'approved')
-            ->with('leaveType', function ($query) {
-                $query->where('is_compensated', false);
+            ->whereHas('leaveType', function ($query) {
+                $query->where('leave_types.deducts_from_annual_leave', true);
             })
+            ->with('leaveType')
             ->whereYear('start_date', $thisYear)
+            ->get();
+        return $leaves;
+    }
+
+
+    public function getLeaveBalance()
+    {
+        $spentLeaves = $this->getSpentLeaves();
+        $leaveDays = session()->get('leave_days', 0);
+        $daysCount = LeaveTrait::getStaticLeaveDaysCount($spentLeaves);
+
+        return max(0, $leaveDays - $daysCount);
+    }
+
+
+    /**
+     * Summary of getUnCompensatedLeaves
+     * @return \Illuminate\Database\Eloquent\Collection<int, Leave>
+     */
+    public function getUnCompensatedLeaves()
+    {
+        return Leave::where(
+            'employee_id',
+            $this->id
+        )
+            ->whereHas('leaveType', function ($query) {
+                $query->where('is_compensated', false)
+                    ->where('deducts_from_annual_leave', false);
+            })
             ->get();
     }
 
+
+    /**
+     * Summary of getCompensatedLeaves
+     * @return \Illuminate\Database\Eloquent\Collection<int, Leave>
+     */
+    public function getCompensatedLeaves()
+    {
+        // require compansation
+        return Leave::where(
+            'employee_id',
+            $this->id
+        )
+            ->whereHas('leaveType', function ($query) {
+                $query->where('is_compensated', false)
+                    ->where('deducts_from_annual_leave', false);
+            })
+            ->get();
+    }
 
     public function pay_grades()
     {
@@ -228,7 +277,7 @@ class Employee extends Model
     public function allowances()
     {
         return $this->belongsToMany(Allowance::class, 'employee_allowance')
-            ->withPivot(['id', 'amount', 'allowance_frequency_id', 'status'])
+            ->withPivot(['id', 'amount', 'allowance_frequency_id', 'status', 'effective_from'])
             ->withTimestamps();
     }
 
@@ -284,8 +333,16 @@ class Employee extends Model
     }
 
 
-    public function allowanceGroupEmployeePivots() {
+    public function allowanceGroupEmployeePivots()
+    {
         return $this->hasMany(AllowanceGroupEmployeePivot::class, 'employee_id');
+    }
+
+
+    public function absentAllowance() {
+        return Allowance::whereNotIn('id',
+         $this->allowances()->pluck('allowance_id'))
+        ->get();
     }
 
 }

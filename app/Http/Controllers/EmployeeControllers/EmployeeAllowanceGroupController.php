@@ -27,7 +27,7 @@ class EmployeeAllowanceGroupController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:allowance_groups,name',
             'description' => 'nullable|string|max:255',
         ];
         $validate = Validator::make($request->all(), $rules);

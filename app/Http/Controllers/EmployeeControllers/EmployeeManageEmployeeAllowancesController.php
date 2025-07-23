@@ -51,7 +51,7 @@ class EmployeeManageEmployeeAllowancesController extends Controller
             'employeeAllowances.frequency'
         )->findOrFail($employee->id);
         $frequencies = AllowanceFrequency::all();
-        $allowances = Allowance::all();
+        $allowances = $employee->absentAllowance();
         return view(
             "employee.manage.employee.allowances",
             compact(

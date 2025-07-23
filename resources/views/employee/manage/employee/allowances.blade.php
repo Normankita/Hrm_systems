@@ -3,7 +3,15 @@
 @section('content')
     @canany(['edit_allowances', 'view_allowances', 'create_allowances'])
         <div class="row" id="app">
-            <div class="card">
+            <div v-if="!pageComplete" id="loader" class="col-md-12">
+                <!-- loader -->
+                <div class="row justify-content-center">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+            <div id="main" class="card d-none">
                 <div class="card-body">
                     <div class="row justify-content-start">
                         <div class="col-md-6">
@@ -12,8 +20,9 @@
                             </h3>
                         </div>
                     </div>
-                    <button class="btn btn-primary mx-2" v-on:click="disburseSelected" type="button">
-                        Disburse Selected
+                    <button v-bind:disabled="isDisbursing" class="btn btn-primary mx-2" v-on:click="disburseSelected"
+                        type="button">
+                        @{{ isDisbursing ? 'Processing...' : 'Disburse selected' }}
                     </button>
                     {{-- Create Allowance --}}
                     @can('create_allowances')
@@ -53,12 +62,13 @@
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-md-6 mb-3 d-none">
                                         <label for="frequency_id" class="form-label">Frequency</label>
                                         <select name="frequency_id" class="form-control" required>
                                             @foreach ($frequencies as $frequency)
-                                                <option value="{{ $frequency->id }}" @selected(old('frequency_id') === '{{ $frequency->id }}')>
+                                                <option selected value="{{ $frequency->id }}" >
                                                     {{ $frequency->name }}</option>
+                                                    @break;
                                             @endforeach
                                         </select>
                                         @error('frequency_id')
@@ -80,27 +90,33 @@
                             <div class="table-responsive mt-4">
                                 <table class="table dt-table table-bordered
                                  table-responsive">
-                                    <input type="checkbox" id="all-checker" class="form-check" />
+                                    <div style="display: inline">
+                                        <input type="checkbox" id="all-checker" />
+                                        <label for="all-checker">select all</label>
+                                    </div>
                                     <thead>
                                         <tr>
                                             <th>#</th>
                                             <th>Allowance</th>
                                             <th>Amount</th>
-                                            <th>Frequency</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($employee->employeeAllowances as $key => $ea)
+                                            @php
+                                                $tdColor = $ea->status ? 'success' : 'danger';
+                                            @endphp
                                             <tr>
-                                                <td>
-                                                    <input type="checkbox" id="row-checker" class="form-check"
-                                                        value="{{ $ea->id }}" />
+                                                <td class="color: {{$tdColor}}">
+                                                    {{ $loop->iteration }}
+                                                    @if ($ea->status )
+                                                        <input type="checkbox" id="row-checker" value="{{ $ea->id }}" />
+                                                    @endif
                                                 </td>
-                                                <td>{{ $ea->allowance->name ?? 'N/A' }}</td>
-                                                <td>{{ number_format($ea->amount, 2) }}</td>
-                                                <td>{{ ucfirst($ea->frequency?->name ?? 'N/A') }}</td>
-                                                <td>
+                                                <td class="text-: {{$tdColor}}">{{ $ea->allowance->name ?? 'N/A' }}</td>
+                                                <td class="color: {{$tdColor}}">{{ number_format($ea->amount, 2) }}</td>
+                                                <td class="color: {{$tdColor}}">
                                                     @can('edit_allowances')
                                                         <form
                                                             action="{{ route('employee.manage.employee.allowances.toggleStatus', [$employee->id, $ea->allowance->id]) }}"
@@ -220,33 +236,45 @@
         const app = Vue.createApp({
             data() {
                 return {
-
+                    isDisbursing: false,
+                    pageComplete: false,
                 }
+            },
+            mounted() {
+                this.pageComplete = true;
+                document.getElementById('main').classList.remove('d-none');
+                document.getElementById('loader').classList.add('d-none');
             },
             methods: {
                 disburseSelected() {
-                    console.log('reach here')
-                    const selectedAllowances = handler1.getSelected();
-                    if (selectedAllowances.length === 0) {
-                        alert('Please select at least one allowance to disburse.');
-                        return;
+                    if (confirm('Are you sure you want to disburse selected allowances?')) {
+                        this.isDisbursing = true;
+                        const selectedAllowances = handler1.getSelected();
+                        if (selectedAllowances.length === 0) {
+                            alert('Please select at least one allowance to disburse.');
+                            this.isDisbursing = false;
+                            return;
+                        }
+                        // Handle the disbursement logic here
+                        const uri = "{{ route('disbursements.disburse') }}";
+                        const details = {
+                            user: "{{ Auth::user()->id }}",
+                            employee: "{{ $employee->id }}",
+                            basedOn: "individual",
+                            allowanceEmployeePivotIds: selectedAllowances
+                        };
+                        axios.post(`${uri}`, details)
+                            .then(response => {
+                                this.isDisbursing = false;
+                                alert('Disbursement successful!');
+                                // Optionally, you can refresh the page or update the UI
+                                location.reload();
+                            })
+                            .catch(error => {
+                                this.isDisbursing = false;
+                                alert('Error occurred during disbursement.');
+                            })
                     }
-                    // Handle the disbursement logic here
-                    const uri = "{{ route('disbursements.disburse') }}";
-                    const details = {
-                        user: "{{ Auth::user()->id }}",
-                        employee: "{{ $employee->id }}",
-                        basedOn: "individual",
-                        allowanceEmployeePivotIds: selectedAllowances
-                    };
-                    console.log("Uri", uri);
-                    axios.post(`${uri}`, details)
-                        .then(response => {
-                            console.log('Disbursement successful:', response.data);
-                            alert('Disbursement successful!');
-                            // Optionally, you can refresh the page or update the UI
-                            location.reload();
-                        })
                 }
             }
         });

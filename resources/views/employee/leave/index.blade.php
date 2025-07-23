@@ -6,7 +6,52 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body ">
-
+                    <div>
+                        <div class="mb-4">
+                            <div class="row">
+                                <div class="col-md-4 mb-2">
+                                    <div class="card border-primary">
+                                        <div class="card-body text-center">
+                                            <h6 class="text-primary mb-1">Leave Balance</h6>
+                                            <h4 class="mb-0">{{ $leaveBalance ?? 0 }}</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <div class="card border-info">
+                                        <div class="card-body text-center">
+                                            <h6 class="text-info mb-1">Total Leave Days</h6>
+                                            <h4 class="mb-0">{{ $totalBalance ?? 0 }}</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <div class="card border-warning">
+                                        <div class="card-body text-center">
+                                            <h6 class="text-warning mb-1">Spent Leave Days</h6>
+                                            <h4 class="mb-0">{{ $leaveDaysUsed ?? 0 }}</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <div class="card border-success">
+                                        <div class="card-body text-center">
+                                            <h6 class="text-success mb-1">UnCompensated Days</h6>
+                                            <h4 class="mb-0">{{ $uncompensatedLeaves ?? 0 }}</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                    <div class="card border-danger">
+                                        <div class="card-body text-center">
+                                            <h6 class="text-danger mb-1">Compensated Days</h6>
+                                            <h4 class="mb-0">{{ $compensatedLeaves ?? 0 }}</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h3 class="mb-0">leave Directory</h3>
                         @can('request_leave')
@@ -60,8 +105,8 @@
                                                    <x-system.btn-edit :key="$key" :route="route('employees.leave.edit', $leave->id)" />
                                                @endcan
                                                @can('delete_leave')
-                                                    <x-system.btn-delete :key="$key" :route="route('employees.leave.destroy', $leave->id)" /> 
-                                               @endcan                                                  
+                                                    <x-system.btn-delete :key="$key" :route="route('employees.leave.destroy', $leave->id)" />
+                                               @endcan
                                                @endif
                                         </tr>
                                     @empty

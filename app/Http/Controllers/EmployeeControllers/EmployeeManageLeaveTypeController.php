@@ -31,7 +31,8 @@ class EmployeeManageLeaveTypeController extends Controller
             'deducts_from_annual_leave' => 'boolean',
         ];
         $request->request->add(
-            ['code' => str_replace(' ', '_', $request->name)]
+            ['code' => str_replace(' ', '_',
+                $request->name)]
         );
         Validator::make($request->all(), $rules)->validate();
        $leaveType= LeaveType::create($request->all());
@@ -48,11 +49,11 @@ class EmployeeManageLeaveTypeController extends Controller
             'deducts_from_annual_leave' => 'boolean',
         ];
 
-
         Validator::make($request->all(), $rules)->validate();
         $data= [
             'name' => $request->name,
             'description' => $request->description,
+            'is_compensated' => $request->is_compensated,
             'deducts_from_annual_leave' => $request->deducts_from_annual_leave,
         ];
         $leaveType->update($data);

@@ -1,86 +1,32 @@
 <?php
+
 namespace App\Http\Utils\Traits;
 
-use App\Models\GroupCategoryEmployeeAllowance;
 use Carbon\Carbon;
 
-trait GroupCategoryDisbursementPageTrait
+class SingleDisbursementTrait
 {
-    private static function groupDisburseDetails(
-        $allowance,
-        $disbursed,
-        $forDisburseDate = null
-    ) {
-        $forDisburseDate = $forDisburseDate ?? Carbon::now();
-        $empWithDisCounts = collect();
-        $trueDisburseDetails = collect();
-        $disbursed->each(function ($item) use
-            ($allowance, $forDisburseDate, $empWithDisCounts, $trueDisburseDetails) {
-            $details = GroupCategoryEmployeeAllowance::getRealDetails($item->disbursable_id);
-            // if the allowance effective_from date is after tody skip it
-            if (!($details->effective_from > $forDisburseDate)) {
-                if ($details->allowance->id == $allowance->id) {
-                    // checking if the employee is eligible to disburse
-                    $isEligible = self::isEligible(
-                        GroupCategoryEmployeeAllowance::class,
-                        $details->id,
-                        $forDisburseDate
-                    );
-                    $count = self::getCurrentCircleCount($details, $forDisburseDate);
-                    $details->isEligible = $isEligible;
-                    $details->count = $count;
 
-                    $empId = ($details->employee->id);
-                    $empWithDisCounts->put($empId, [
-                        'employee' => $details->employee,
-                        'count' => $count,
-                        'isEligible' => $isEligible,
-                        'effective_from' => $details->effective_from
-                    ]);
-                    $trueDisburseDetails->push($details);
-                }
-            } else {
-                $details->isEligible = false;
-                $details->count = 'N/A';
-
-                $empId = ($details->employee->id);
-                $empWithDisCounts->put($empId, [
-                    'employee' => $details->employee,
-                    'count' => 'N/A',
-                    'isEligible' => false,
-                    'effective_from' => $details->effective_from
-                ]);
-                $trueDisburseDetails->push($details);
-            }
-        });
-        return [
-            'disburseDetails' => $trueDisburseDetails,
-            'empWithDisCounts' => $empWithDisCounts,
-            'forDisburseDate' => $forDisburseDate,
-            'disbursed' => $disbursed
-        ];
-    }
-
-
-    private static function isEligible($model, $gr_cat_empl_all_id, $forDisburseDate)
+    public
+     static function isEligible($employeeAllowance_details,
+     $forDisburseDate)
     {
-        $gr_cat_empl_all_id_details = $model::getRealDetails(
-            $gr_cat_empl_all_id);
-        $items = self::timeSpanInspector($gr_cat_empl_all_id_details);
+
+        $items = self::timeSpanInspector($employeeAllowance_details);
         if ($items->isEmpty()) {
             return true;
         }
         return self::canDisburse(
             $items,
             $forDisburseDate,
-            $gr_cat_empl_all_id_details->frequency
+            $employeeAllowance_details->frequency
         );
     }
 
 
     private static function timeSpanInspector($item)
     {
-        $effectiveFrom = Carbon::parse($item->effective_from );
+        $effectiveFrom = Carbon::parse($item->effective_from ?? Carbon::now());
         $daysApart = $item->frequency->days_apart;
         if ($item->object->allowanceDisbursements->isEmpty()) {
             // if there is no disbursement, we can return an empty collection
@@ -165,4 +111,5 @@ trait GroupCategoryDisbursementPageTrait
         }
         return true;
     }
+
 }

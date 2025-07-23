@@ -45,7 +45,10 @@
 
                         <div class="mb-3">
                             <label for="start_date" class="form-label">Start Date</label>
-                            <input type="date" name="start_date" id="start_date" value="{{ old('start_date') }}" class="form-control" required>
+                            <input type="date" name="start_date"
+                                id="start_date"
+                                value="{{ old('start_date') ?? \Carbon\Carbon::now()->format('Y-m-d')}}"
+                                class="form-control" required>
                             @error('start_date')
                                 <div class="text-danger mt-1">{{ $message }}</div>
                             @enderror
@@ -53,7 +56,8 @@
 
                         <div class="mb-3">
                             <label for="end_date" class="form-label">End Date</label>
-                            <input type="date" name="end_date" id="end_date" value="{{ old('end_date') }}" class="form-control" required>
+                            <input type="date" name="end_date" id="end_date"
+                            value="{{ old('end_date') }}" class="form-control" required>
                             @error('end_date')
                                 <div class="text-danger mt-1">{{ $message }}</div>
                             @enderror

@@ -63,6 +63,7 @@ class GroupCategoryEmployeeAllowance extends Model
         });
     }
 
+
     public static function getRealDetails(int $id)
     {
         $output = GroupCategoryEmployeeAllowance::with(
@@ -72,7 +73,7 @@ class GroupCategoryEmployeeAllowance extends Model
                 'frequency'
             ]
         )
-            ->find($id);
+        ->find($id);
         if (!$output) {
             return Collection::make([]);
         }
@@ -91,7 +92,7 @@ class GroupCategoryEmployeeAllowance extends Model
                 'frequency'
             ]
         )
-            ->find($this->id);
+        ->find($this->id);
         if (!$output) {
             return Collection::make([]);
         }

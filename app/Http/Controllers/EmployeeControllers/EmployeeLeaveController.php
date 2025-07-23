@@ -7,7 +7,6 @@ use App\Http\Utils\Traits\LeaveTrait;
 use App\Http\Utils\Traits\UploadFileTrait;
 use App\Models\Leave;
 use App\Models\LeaveType;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class EmployeeLeaveController extends Controller
@@ -19,10 +18,24 @@ class EmployeeLeaveController extends Controller
      */
     public function index()
     {
+        // primary datas
+        $leaveBalance = auth()->user()->employee->getLeaveBalance();
+        $totalBalance = session()->get('leave_days', 0);
+        $leaveDaysUsed = $totalBalance - $leaveBalance;
+
+        // secondary datas
+       $compensatedLeaves = auth()->user()->employee->getCompensatedLeaves()->count();
+        $unCompensatedLeaves = auth()->user()->employee->getUnCompensatedLeaves()->count();
         $leaves = Leave::with(['employee', 'leaveType', 'attachments'])
             ->where('employee_id', auth()->user()->employee->id)
             ->get();
-        return view('employee.leave.index', compact('leaves'));
+        return view('employee.leave.index')
+            ->with('leaves', $leaves)
+            ->with('leaveBalance', $leaveBalance)
+            ->with('totalBalance', $totalBalance)
+            ->with('leaveDaysUsed', $leaveDaysUsed)
+            ->with('compensatedLeaves', $compensatedLeaves)
+            ->with('unCompensatedLeaves', $unCompensatedLeaves);
     }
 
     /**
@@ -31,7 +44,10 @@ class EmployeeLeaveController extends Controller
     public function create()
     {
         $leaveTypes = LeaveType::all();
-        return view('employee.leave.request', compact('leaveTypes'));
+        return view(
+            'employee.leave.request',
+            compact('leaveTypes')
+        );
     }
 
     /**
@@ -40,9 +56,13 @@ class EmployeeLeaveController extends Controller
     public function store(Request $request)
     {
         $this->validateLeaveRequest($request);
-        $employee = auth()->user()->employee;
+        $employee = auth()->user()->employee()->first();
         $leaveType = LeaveType::find($request->leave_type_id);
-        if (!$leaveType?->is_compensated) {
+        if (!$leaveType) {
+            return redirect()->back()
+                ->with('fail', 'Leave type not found.');
+        }
+        if (!$leaveType->deducts_from_annual_leave) {
             $response = $this->checkEligibility($employee);
             if ($response['status'] == 'fail') {
                 return redirect()->back()

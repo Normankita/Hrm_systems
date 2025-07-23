@@ -7,8 +7,7 @@ use App\Http\Services\EmployeeService;
 use App\Http\Utils\Traits\EmployeeTrait;
 use App\Models\Payroll;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Throwable;
+
 
 class EmployeeManagePayrollEmployeeController extends Controller
 {

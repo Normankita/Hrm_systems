@@ -24,7 +24,7 @@ trait LeaveTrait
         if ($daysCount >= $leaveDays) {
             return [
                 'status' => 'fail',
-                'message' => 'You are not eligible to request a leave.'
+                'message' => 'You are not eligible to request a leave. Your Days Count: ' . $daysCount . ' exceeds the allowed limit of ' . $leaveDays . '.'
             ];
         }
         return [
@@ -33,6 +33,20 @@ trait LeaveTrait
         ];
     }
 
+
+    public static function getStaticLeaveDaysCount($employeeLeaves)
+    {
+        $daysCount = 0;
+        // calculate number of days
+        foreach ($employeeLeaves as $leave) {
+            $startDate = Carbon::parse($leave->start_date);
+            $endDate = Carbon::parse($leave->end_date);
+            // calculate the number of days between the two dates
+            $days = ($startDate->diffInDays($endDate));
+            $daysCount += $days;
+        }
+        return $daysCount;
+    }
 
 
     /**
@@ -54,4 +68,5 @@ trait LeaveTrait
         }
         return $daysCount;
     }
+
 }
