@@ -14,18 +14,19 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call( [
-            CompanySeeder::class,
-            RolesSeeder::class,
-            PermissionSeeder::class,
-            AllowancePermissionSeeder::class,
-            UserSeeder::class,
-            StatusSeeder::class,
-            EmployeeStatusHistorySeeder::class,
-            EmployeeStatusPermissions::class,
-            LoansPermissionSeeder::class,
+            // CompanySeeder::class,
+            // RolesSeeder::class,
+            // PermissionSeeder::class,
+            // AllowancePermissionSeeder::class,
+            // UserSeeder::class,
+            // StatusSeeder::class,
+            // EmployeeStatusHistorySeeder::class,
+            // EmployeeStatusPermissions::class,
+            // LoansPermissionSeeder::class,
+            OwnerSeeder::class,
         ]);
-        $this->call( LeaveTypeSeeder::class);
-        $this->call( AddingPaygradeToDefaultEmployeeSeeder::class );
+        // $this->call( LeaveTypeSeeder::class);
+        // $this->call( AddingPaygradeToDefaultEmployeeSeeder::class );
 
     }
 }

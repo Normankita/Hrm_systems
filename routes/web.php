@@ -27,6 +27,8 @@ require __DIR__ . '/payroll.php';
 
 require __DIR__ . '/employee.php';
 
+require __DIR__.'/owner.php';
+
 require __DIR__ . '/auth.php';
 
 require __DIR__ . '/api.php';

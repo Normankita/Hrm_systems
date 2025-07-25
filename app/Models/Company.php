@@ -55,5 +55,14 @@ class Company extends Model
         return $this->hasMany(Setting::class);
     }
 
-}
+    public static function ownerCompanies()
+    {
+        $companyId = auth()->user()->company_id;
+        return self::whereNotIn('id', [$companyId]);
+    }
+
+    public function roles() {
+        return $this->hasMany(Role::class);
+    }
+} 
 

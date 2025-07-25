@@ -14,3 +14,8 @@
 @role('PAYROLL_MANAGER')
     @include('payroll._partials._payroll_header')
 @endrole
+
+
+@role('OWNER')
+    @include('owner._partials._owner_header')
+@endrole

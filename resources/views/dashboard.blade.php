@@ -10,6 +10,9 @@
 @endsection
 
 @section('content')
+    @role('OWNER')
+        @include('owner.dashboard')
+    @endrole
     @role('ADMIN')
         @php
             $dashboard = collect(DashboardDataService::getAdminDashboardData());
