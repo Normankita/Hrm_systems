@@ -2,7 +2,7 @@
 
     return [
         'name' => env('APP_NAME', 'Laravel'),
-        'version' => '0.3.0',
+        'version' => '0.3.1',
         'permissions' =>  array(
             [
                 'name' => 'view_employees',
