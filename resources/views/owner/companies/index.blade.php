@@ -109,7 +109,7 @@
                                                         </span>
                                                     </td>
                                                     <td>
-                                                        <x-system.btn-view route="/" />
+                                                        <x-system.btn-view :route="route('owner.companies.show', $company->id)" />
                                                     </td>
                                                 </tr>
                                             @endforeach

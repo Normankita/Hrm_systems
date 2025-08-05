@@ -11,4 +11,6 @@ Route::middleware(['auth', 'role:OWNER'])
     ->group(function () {
         Route::get('/all', 'companiesAll')->name('all');
         Route::post('/store', 'store')->name('store');
+        Route::get('/show/{id}', 'show')->name('show');
+        Route::post('/addAdmin', 'addAdmin')->name('addAdmin');
     });

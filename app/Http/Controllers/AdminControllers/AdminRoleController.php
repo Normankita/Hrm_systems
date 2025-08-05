@@ -4,6 +4,7 @@ namespace App\Http\Controllers\AdminControllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Employee;
+use App\Models\Role as ModelsRole;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +21,7 @@ class AdminRoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::where('role_type', 'specific')
+        $roles = ModelsRole::where('role_type', 'specific')
             ->orWhere(function ($query) {
                 $query->where('company_id', '!=', null)
                     ->orWhere('company_id', auth()->user()->company_id);
@@ -44,9 +45,8 @@ class AdminRoleController extends Controller
                 'required',
                 'string',
                 'max:255',
-                ValidationRule::unique('roles')->where(function ($query) {
-                    return $query->where('company_id', Auth::user()->company_id);
-                })
+                ValidationRule::notIn(['OWNER', 'EMPLOYEE', 'ADMIN']),
+                ValidationRule::unique('roles'),
             ],
         ]);
         Role::create([
@@ -73,10 +73,8 @@ class AdminRoleController extends Controller
                 'required',
                 'string',
                 'max:255',
-                ValidationRule::unique('roles')->ignore($role->id)
-                    ->where(function ($query) {
-                        return $query->where('company_id', Auth::user()->company_id);
-                    })
+                ValidationRule::notIn(['OWNER', 'EMPLOYEE', 'ADMIN']),
+                ValidationRule::unique('roles'),
             ],
         ]);
         $role->update([
@@ -120,7 +118,9 @@ class AdminRoleController extends Controller
             ->with('employee', $employee);
     }
 
-    public function assignPermissions(Request $request, $id) {
+
+    public function assignPermissions(Request $request, $id)
+    {
         dd($request->all());
     }
 

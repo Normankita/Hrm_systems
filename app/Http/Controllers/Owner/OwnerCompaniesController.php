@@ -32,4 +32,40 @@ class OwnerCompaniesController extends Controller
         return redirect()->route('owner.companies.all')
             ->with('success', 'Company created successfully');
     }
+
+
+    public function show($id)
+    {
+        $company = Company::find($id);
+        return view('owner.companies.show')
+            ->with('company', $company);
+    }
+
+    public function addAdmin(Request $request)
+    {
+        $rules = [
+            'email' => 'required|email',
+            'name' => 'required|string',
+            'gender' => 'required|string',
+            'date_of_birth' => 'required|date',
+            'company_id' => 'required|exists:companies,id',
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ];
+        $validated = Validator::make($request->all(), $rules);
+        if ($validated->fails()) {
+            return redirect()->back()
+                ->withErrors($validated)
+                ->withInput();
+        }
+
+        $response = CompanyService::addAdminToCompany($request->all());
+        if ($response['status'] === 'error') {
+            return redirect()->back()
+                ->with('error', $response['message'])
+                ->withInput();
+        }
+        return redirect()->back()->with('success',
+         "$response[message]");
+
+    }
 }
