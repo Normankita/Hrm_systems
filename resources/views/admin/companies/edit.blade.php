@@ -1,6 +1,6 @@
 @extends('layouts.system')
 @section('content')
-    
+
         <div class="card shadow rounded">
             <div class="card-header bg-primary text-white">
                 <h4 class="mb-0 text-white">Edit Company</h4>
@@ -62,7 +62,7 @@
                                 <div class="mb-3">
                                     <label for="{{ $setting->name }}" class="form-label">{{ $setting->name }}</label>
                                     <input type="day" class="form-control" id="{{ $setting->name }}"
-                                        name="{{ $setting->name }}" value="{{ $setting->value }}" required>
+                                        name="skysetlist-{{ $setting->name }}" value="{{ $setting->value }}" required>
                                 </div>
                             @endforeach
                         </div>
@@ -94,5 +94,5 @@
                 </form>
             </div>
         </div>
-    
+
 @endsection

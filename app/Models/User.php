@@ -65,4 +65,10 @@ class User extends Authenticatable
             ->first();
     }
 
+    public function activeRole()
+    {
+        return $this->roles()->where('name', '!=', 'EMPLOYEE')
+            ->first();
+    }
+
 }

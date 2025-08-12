@@ -68,4 +68,14 @@ class OwnerCompaniesController extends Controller
          "$response[message]");
 
     }
+
+    public function toggleStatus($id)
+    {
+        $company = Company::findOrFail($id);
+        $company->isActive = !$company->isActive;
+        $company->save();
+
+        return redirect()->route('owner.companies.show', $id)
+            ->with('success', 'Company status updated successfully.');
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AdminControllers;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\Contribution;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -40,12 +41,20 @@ class AdminCompanyController extends Controller
             'contributions.*.description' => 'required|string|max:255',
         ]);
 
+        // filtering the settings fields from the form field
+        $formFields = collect($request->all());
+        $settings = $formFields->filter(function ($value, $key) {
+            return str_starts_with($key, 'skysetlist-');
+        })->mapWithKeys(function ($value, $key) {
+            return [str_replace('skysetlist-', '', $key) => $value];
+        });
+
         $company = Company::find($id);
         if (!$company) {
             return redirect()->back()->with('error', 'Company not found.');
         }
 
-        DB::transaction(function () use ($request, $company) {
+        DB::transaction(function () use ($request, $company, $settings) {
             $company->update([
                 'name' => $request->name,
                 'address' => $request->address,
@@ -60,6 +69,17 @@ class AdminCompanyController extends Controller
                     'percent' => $data['percent'],
                     'description' => $data['description'],
                 ]);
+            }
+
+            // update the settings, dont delete them, cause they are being used by the system
+            foreach ($settings as $name => $value) {
+                if ($name == "payment_date" && (empty($value) || $value > 29 || $value < 1)) {
+                    continue; // Skip if payment_date is empty
+                }
+                Setting::updateOrCreate(
+                    ['name' => $name, 'company_id' => $company->id],
+                    ['value' => $value]
+                );
             }
         });
 

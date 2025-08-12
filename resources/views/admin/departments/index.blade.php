@@ -1,6 +1,5 @@
 @extends('layouts.system')
 
-
 @section('content')
     <div class="row">
         <div class="col-12">
@@ -14,7 +13,7 @@
                     </div>
                     <h4 class="card-title">Departments</h4>
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover align-middle
+                        <table class="dt-table table-sm table table-bordered table-hover align-middle
                          text-nowrap">
                             <thead class="table-light text-lime">
                                 <tr>

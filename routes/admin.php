@@ -58,11 +58,11 @@ Route::middleware(['auth', 'role:ADMIN'])
     ->name('admin.companies.')
     ->group(function () {
         Route::get('/edit/{id}', 'edit')->name('edit');
-        Route::put('/update/{id}', 'update')->name('update');
+        Route::put('/update/{id}', 'update')->name('update')->middleware('HasCompanyProfile');
     });
 
 
-Route::middleware(['auth', 'role:ADMIN'])
+Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
     ->prefix('/admin/role')
     ->controller(AdminRoleController::class)
     ->name('admin.roles.')
@@ -89,7 +89,7 @@ Route::middleware(['auth', 'role:ADMIN'])
 
 
 
-Route::middleware(['auth', 'role:ADMIN'])
+Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
     ->prefix('/admin/permission')
     ->controller(ApiRolesController::class)
     ->name('admin.permissions.')
@@ -106,7 +106,7 @@ Route::middleware(['auth', 'role:ADMIN'])
     ->controller(AdminSettingController::class)
     ->name('admin.settings.')
     ->group(function () {
-        Route::post('/store', 'store')->name('store');
-        Route::get('/', 'index')->name('index');
-        Route::put('/update/{id}', 'update')->name('update');
+        Route::post('/store', 'store')->name('store')->middleware('HasCompanyProfile');
+        Route::get('/', 'index')->name('index')->middleware('HasCompanyProfile');
+        Route::put('/update/{id}', 'update')->name('update')->middleware('HasCompanyProfile');
     });

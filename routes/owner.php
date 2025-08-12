@@ -3,7 +3,6 @@
 use App\Http\Controllers\Owner\OwnerCompaniesController;
 use Illuminate\Support\Facades\Route;
 
-
 Route::middleware(['auth', 'role:OWNER'])
     ->prefix('/owner/companies')
     ->controller(OwnerCompaniesController::class)
@@ -13,4 +12,5 @@ Route::middleware(['auth', 'role:OWNER'])
         Route::post('/store', 'store')->name('store');
         Route::get('/show/{id}', 'show')->name('show');
         Route::post('/addAdmin', 'addAdmin')->name('addAdmin');
+        Route::post('/toggleStatus/{id}', 'toggleStatus')->name('toggleStatus');
     });

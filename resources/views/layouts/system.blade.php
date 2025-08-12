@@ -81,8 +81,7 @@
                         </div>
 
                         <!-- at right side, add search button with search mdi icon, a toggle buttons and a submit button -->
-                        <div class="col-md-8">
-                            <!-- aa search button with input search field with date picker -->
+                        {{-- <div class="col-md-8">
                             <form class="d-flex align-items-center gap-2" action="{{ $_SERVER['REQUEST_URI'] }}"
                                 method="GET">
                                 <button class="btn btn-primary btn-sm" type="submit" name="submit" id="submitBtn"
@@ -98,7 +97,7 @@
                                     <label class="form-check-label" for="flexSwitchCheckDefault">Enable Form</label>
                                 </div>
                             </form>
-                        </div>
+                        </div> --}}
                     </div>
                     @yield('content')
                 </div>

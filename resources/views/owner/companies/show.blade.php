@@ -107,6 +107,15 @@
                                     {{ $company->isActive ? 'Active' : 'Inactive' }}
                                 </span>
                             </p>
+                            <div class="">
+                                <form action="{{ route('owner.companies.toggleStatus', $company->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit"
+                                        class="btn btn-sm {{ $company->isActive ? 'btn-danger' : 'btn-success' }}">
+                                        {{ $company->isActive ? 'Deactivate' : 'Activate' }}
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -123,22 +132,51 @@
                                 <div class="mb-3">
                                     <strong>Admin:</strong>
                                     <p>
-                                        <p>
-                                            {{ $admin->name }}
-                                        </p>
+                                    <p>
+                                        {{ $admin->name }}
+                                    </p>
                                     </p>
                                 </div>
 
-                                 <div class="mb-3">
+                                <div class="mb-3">
                                     <strong>Email:</strong>
                                     <p>
-                                        <p>
-                                            {{ $admin->email }}
-                                        </p>
+                                    <p>
+                                        {{ $admin->email }}
+                                    </p>
                                     </p>
                                 </div>
                             </ul>
                         @endif
+                    </div>
+                </div>
+
+                <div class="row mt-5">
+                    <h3>COMPANY EMPLOYEES</h3>
+                    <div class="col-md-12">
+                        <x-system.table class="dt-table">
+                            <x-slot name="head">
+                                <x-system.table-head>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Role</th>
+                                    </tr>
+                                </x-system.table-head>
+                            </x-slot>
+
+                            <x-slot name="body">
+                                <x-system.table-body>
+                                    @foreach ($company->employees as $employee)
+                                        <tr>
+                                            <td>{{ $employee->full_name }}</td>
+                                            <td>
+                                                {{ $employee->user?->activeRole()->name ?? "N/A"}}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </x-system.table-body>
+                            </x-slot>
+                        </x-system.table>
                     </div>
                 </div>
             </div>
