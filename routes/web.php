@@ -16,7 +16,7 @@ Route::middleware(['auth', 'HasCompanyProfile', 'HasDefaultConfigs'])
 Route::controller(OwnerUsersController::class)
     ->prefix('/owner')
     ->group(function () {
-        Route::get('/users/', 'index');
+        Route::get('/users', 'index');
     });
 
 require __DIR__ . '/admin.php';

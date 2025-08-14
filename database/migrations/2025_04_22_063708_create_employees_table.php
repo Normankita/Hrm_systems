@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('company_id')->constrained()->onDelete('cascade');
             $table->foreignId('department_id')->constrained()->onDelete('cascade');
             $table->string('full_name');
-            $table->enum('gender', ['Male', 'Female', 'Other']);
+            $table->enum('gender', ['Male', 'Female']);
             $table->date('date_of_birth');
             $table->string('phone_number');
             $table->string('email')->unique();
@@ -29,6 +29,8 @@ return new class extends Migration
             $table->date('date_of_hire');
             $table->date('date_of_termination')->nullable();
             $table->double('salary')->nullable();
+            $table->boolean('userStatus')->default(true);
+            $table->enum('state', ['suspended', 'active', 'retired', 'terminated', 'leave', 'other']);
             $table->timestamps();
             $table->softDeletes();
         });

@@ -52,6 +52,8 @@ class Employee extends Model
         'date_of_termination',
         'profile_picture',
         'salary',
+        'userStatus',
+        'state',
     ];
 
 
@@ -184,7 +186,6 @@ class Employee extends Model
             ->whereDate('start_date', '<=', $today)
             ->whereDate('end_date', '>=', $today)
             ->exists();
-
     }
 
 

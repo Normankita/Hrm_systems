@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AdminControllers\AdminAttendancesController;
+use App\Http\Controllers\AdminControllers\AdminAttendanceSessionsController;
 use App\Http\Controllers\AdminControllers\AdminRoleController;
 use App\Http\Controllers\AdminControllers\AdminCompanyController;
 use App\Http\Controllers\AdminControllers\AdminDepartmentController;
@@ -7,6 +9,7 @@ use App\Http\Controllers\AdminControllers\AdminEmployeeController;
 use App\Http\Controllers\AdminControllers\AdminPermissionsController;
 use App\Http\Controllers\AdminControllers\AdminSettingController;
 use App\Http\Controllers\Api\ApiRolesController;
+use FontLib\Table\Type\name;
 use Illuminate\Support\Facades\Route;
 
 
@@ -58,7 +61,7 @@ Route::middleware(['auth', 'role:ADMIN'])
     ->name('admin.companies.')
     ->group(function () {
         Route::get('/edit/{id}', 'edit')->name('edit');
-        Route::put('/update/{id}', 'update')->name('update')->middleware('HasCompanyProfile');
+        Route::put('/update/{id}', 'update')->name('update');
     });
 
 
@@ -106,7 +109,36 @@ Route::middleware(['auth', 'role:ADMIN'])
     ->controller(AdminSettingController::class)
     ->name('admin.settings.')
     ->group(function () {
-        Route::post('/store', 'store')->name('store')->middleware('HasCompanyProfile');
-        Route::get('/', 'index')->name('index')->middleware('HasCompanyProfile');
-        Route::put('/update/{id}', 'update')->name('update')->middleware('HasCompanyProfile');
+        Route::post('/store', 'store')->name('store')
+            ->middleware('HasCompanyProfile');
+        Route::get('/', 'index')->name('index')
+            ->middleware('HasCompanyProfile');
+        Route::put('/update/{id}', 'update')->name('update')
+            ->middleware('HasCompanyProfile');
+    });
+
+
+Route::middleware(['auth', 'role:ADMIN'])
+    ->prefix('/admin/attendance')
+    ->controller(AdminAttendancesController::class)
+    ->name('admin.attendances.')
+    ->group(function () {
+        Route::post('/store', 'store')->name('store')
+            ->middleware('HasCompanyProfile');
+        Route::get('/', 'index')->name('index')
+            ->middleware('HasCompanyProfile');
+    });
+
+
+Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
+    ->prefix('/admin/attendance/sessions')
+    ->controller(AdminAttendanceSessionsController::class)
+    ->name('admin.attendances.sessions.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index')
+            ->middleware('HasCompanyProfile');
+        Route::post('/store', 'store')->name('store')
+            ->middleware('HasCompanyProfile');
+        Route::put('/update/{id}', 'update')
+            ->name('update')->middleware('HasCompanyProfile');
     });

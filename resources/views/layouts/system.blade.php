@@ -31,9 +31,7 @@
             bottom: 50px;
         }
     </style>
-
 </head>
-
 
 <body class="navbar-fixed sidebar-fixed" id="body">
     <script>
@@ -98,6 +96,7 @@
                                 </div>
                             </form>
                         </div> --}}
+
                     </div>
                     @yield('content')
                 </div>
@@ -144,7 +143,6 @@
                 $('#dateInput').prop('disabled', !isChecked);
             });
         });
-    </script>
     </script>
 
 </body>

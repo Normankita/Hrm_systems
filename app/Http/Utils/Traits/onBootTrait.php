@@ -1,17 +1,20 @@
 <?php
 
-namespace App\Models;
+namespace App\Http\Utils\Traits;
 
+use App\Models\Company;
 use App\Models\Scopes\AuthUserCompanyScope;
-use Illuminate\Database\Eloquent\Model;
 
-class Setting extends Model
+trait onBootTrait
 {
+    /**
+     * This method can be used to perform actions when the application boots.
+     * It can be used to register services, event listeners, etc.
+     */
     protected static function booted()
     {
         // Automatically apply a global scope to all queries
         static::addGlobalScope(new AuthUserCompanyScope);
-
 
         // Automatically assign the tenant_id when creating a new record
         static::creating(function ($item) {
@@ -28,9 +31,4 @@ class Setting extends Model
         });
     }
 
-    protected $fillable = [
-        'name',
-        'value',
-        'company_id'
-    ];
 }

@@ -33,6 +33,7 @@ class Company extends Model
         return $this->hasMany(Employee::class);
     }
 
+
     public function contributions(){
         return $this->hasMany(Contribution::class);
     }
@@ -64,5 +65,5 @@ class Company extends Model
     public function roles() {
         return $this->hasMany(Role::class);
     }
-} 
+}
 
