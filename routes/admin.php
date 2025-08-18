@@ -9,7 +9,6 @@ use App\Http\Controllers\AdminControllers\AdminEmployeeController;
 use App\Http\Controllers\AdminControllers\AdminPermissionsController;
 use App\Http\Controllers\AdminControllers\AdminSettingController;
 use App\Http\Controllers\Api\ApiRolesController;
-use FontLib\Table\Type\name;
 use Illuminate\Support\Facades\Route;
 
 
@@ -54,7 +53,6 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
     });
 
 
-
 Route::middleware(['auth', 'role:ADMIN'])
     ->prefix('/admin/company')
     ->controller(AdminCompanyController::class)
@@ -89,7 +87,6 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
             ->name('assign.permissions');
 
     });
-
 
 
 Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
@@ -127,6 +124,15 @@ Route::middleware(['auth', 'role:ADMIN'])
             ->middleware('HasCompanyProfile');
         Route::get('/', 'index')->name('index')
             ->middleware('HasCompanyProfile');
+        Route::get('/daily/page', 'dailyAttendancePage')
+            ->name('daily.page')
+            ->middleware('HasCompanyProfile');
+        Route::get('/manual/entry', 'manualEntryPage')
+            ->name('manual.entry.page')
+            ->middleware('HasCompanyProfile');
+        Route::post('/manual/entry/store', 'manualEntryStore')
+            ->name('manual.entry.store')
+            ->middleware('HasCompanyProfile');
     });
 
 
@@ -141,4 +147,6 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
             ->middleware('HasCompanyProfile');
         Route::put('/update/{id}', 'update')
             ->name('update')->middleware('HasCompanyProfile');
+        Route::get('/dashboard', 'getSessionDashboard')
+            ->name('get.dashboard')->middleware('HasCompanyProfile');
     });

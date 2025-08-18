@@ -61,7 +61,7 @@
                         <h2>Weekly Attendance Overview</h2>
                     </div>
                     <div class="card-body">
-                        <div id="attendanceChart"></div> <!-- Hook up JS chart here -->
+                        <canvas id="attendanceChart" height="100"></canvas>
                     </div>
                 </div>
             </div>
@@ -83,7 +83,7 @@
             </div>
         </div>
 
-        <!-- Third Row: Employee Table --> 
+        <!-- Third Row: Employee Table -->
         <div class="row mt-4">
             <div class="col-xl-12">
                 <div class="card card-default">
@@ -118,21 +118,28 @@
     </div>
 </div>
 
-
-<script>
-    // Example for dynamic attendance chart using ApexCharts (replace with real data)
-    var options = {
-        chart: {
-            type: 'bar',
-            height: 300
-        },
-        series: [{
-            name: 'Attendance',
-            data: [140, 135, 132, 138, 142, 145, 148] // Dummy data for 7 days
-        }],
-        xaxis: {
-            categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        }
-    };
-    new ApexCharts(document.querySelector("#attendanceChart"), options).render();
-</script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('attendanceChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: @json($dashboard['daysOfWeek']),
+                datasets: [{
+                    label: 'Present',
+                    data: @json($dashboard['presentData']),
+                    borderColor: 'green',
+                    backgroundColor: 'rgba(0, 128, 0, 0.2)',
+                    fill: true,
+                    tension: 0.3
+                }, {
+                    label: 'Absent',
+                    data: @json($dashboard['absentData']),
+                    borderColor: 'red',
+                    backgroundColor: 'rgba(255, 0, 0, 0.2)',
+                    fill: true,
+                    tension: 0.3
+                }]
+            }
+        });
+    </script>

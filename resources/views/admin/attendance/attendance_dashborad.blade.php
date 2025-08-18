@@ -5,12 +5,12 @@
 @section('content')
     <div class="container-fluid py-4">
         <!-- Page Title -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        {{-- <div class="d-flex justify-content-between align-items-center mb-4">
             <h1 class="h3 mb-0">Attendance Dashboard</h1>
             <a href="#" class="btn btn-primary">
                 <i class="bi bi-plus-circle"></i> Mark Attendance
             </a>
-        </div>
+        </div> --}}
 
         <!-- Quick Stats Cards -->
         <div class="row g-3 mb-4">
@@ -55,6 +55,16 @@
             </div>
         </div>
 
+        <!-- Chart Example (Attendance Trend) -->
+        <div class="card shadow mb-4">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0 text-white">Attendance Trend (Last 7 Days)</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="attendanceChart" height="100"></canvas>
+            </div>
+        </div>
+
         <!-- Attendance Table -->
         <div class="card shadow mb-4">
             <div class="card-header bg-primary text-white">
@@ -63,16 +73,6 @@
 
             <div class="card-body table-responsive">
                 @livewire('admin.attendance-table')
-            </div>
-        </div>
-
-        <!-- Chart Example (Attendance Trend) -->
-        <div class="card shadow mb-4">
-            <div class="card-header bg-secondary text-white">
-                <h5 class="mb-0 text-white">Attendance Trend (Last 7 Days)</h5>
-            </div>
-            <div class="card-body">
-                <canvas id="attendanceChart" height="100"></canvas>
             </div>
         </div>
     </div>

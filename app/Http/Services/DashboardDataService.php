@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Services;
 
+use App\Http\Utils\Traits\AttendanceTrait;
 use App\Models\Deduction;
 use App\Models\Employee;
 use App\Models\Leave;
@@ -11,6 +12,7 @@ use Carbon\Carbon;
 
 class DashboardDataService
 {
+    use AttendanceTrait;
 
     public static function getEmployeeDashboardData($employee)
     {
@@ -46,6 +48,11 @@ class DashboardDataService
     public static function getAdminDashboardData()
     {
         $data = [];
+        // fetching the weekly attendance chart data
+        $attendanceChartData = DailyAttendanceService::getWeeklyChartData();
+        $data['daysOfWeek'] = $attendanceChartData['daysOfWeek'];
+        $data['presentData'] = $attendanceChartData['presentData'];
+        $data['absentData'] = $attendanceChartData['absentData'];
 
         $data['total_employees'] = Employee::count();
         $data['employees_on_leave'] = Employee::countEmployeesCurrentlyOnLeave();

@@ -24,6 +24,7 @@ class User extends Authenticatable
         'password',
         'company_id',
         'is_default_configs',
+        'is_logged_in',
     ];
 
     /**

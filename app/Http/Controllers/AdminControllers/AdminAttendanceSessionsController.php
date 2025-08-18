@@ -94,4 +94,10 @@ class AdminAttendanceSessionsController extends Controller
 
         return redirect()->back()->with('success', 'Session updated successfully');
     }
+
+
+    public function getSessionDashboard()
+    {
+        return view('admin.attendance.sessions.dashboard');
+    }
 }

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->enum('status', ['present', 'absent', 'leave', 'late'])
                 ->default('present');
             $table->text('remarks')->nullable();
+            $table->softDeletes(); // For soft delete functionality
             $table->timestamps();
         });
     }

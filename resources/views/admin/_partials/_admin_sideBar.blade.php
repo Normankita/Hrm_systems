@@ -46,40 +46,29 @@
                     </ul>
                 </li>
 
-                {{-- Attendance Section --}}
                 <li class="has-sub">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                        data-target="#loan-menu" aria-expanded="false" aria-controls="loan-menu">
+                        data-target="#attendance-menu" aria-expanded="false" aria-controls="attendance-menu">
                         <i class="mdi mdi-cash-refund"></i>
                         <span class="nav-text">Attendance</span>
                         <b class="caret"></b>
                     </a>
-                    <ul class="collapse" id="loan-menu" data-parent="#sidebar-menu">
+                    <ul class="collapse" id="attendance-menu" data-parent="#sidebar-menu">
                         <div class="sub-menu">
+                            <!-- Other Attendance Links -->
                             <li>
-                                <a class="sidenav-item-link"
-                                    href="{{ route('admin.attendances.index')}}">
-                                        <span class="nav-text">Attendance Dashboard</span>
+                                <a class="sidenav-item-link" href="{{ route('admin.attendances.index') }}">
+                                    <span class="nav-text">Attendance Dashboard</span>
                                 </a>
                             </li>
                             <li>
-                                <a class="sidenav-item-link" href="
-                                    {{ route('admin.attendances.sessions.index') }}">
-                                    <span class="nav-text">Manage Session</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="sidenav-item-link" href="">
+                                <a class="sidenav-item-link" href="{{ route('admin.attendances.daily.page') }}">
                                     <span class="nav-text">Daily Attendance</span>
                                 </a>
                             </li>
+
                             <li>
-                                <a class="sidenav-item-link" href="">
-                                    <span class="nav-text">Session Attendance</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="sidenav-item-link" href="">
+                                <a class="sidenav-item-link" href="{{ route('admin.attendances.manual.entry.page') }}">
                                     <span class="nav-text">Manual Entry</span>
                                 </a>
                             </li>
@@ -88,6 +77,31 @@
                                     <span class="nav-text">Report & Analysis</span>
                                 </a>
                             </li>
+                                                        <!-- Session Sublist -->
+                            <li class="has-sub">
+                                <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                                    data-target="#session-menu" aria-expanded="false" aria-controls="session-menu">
+                                    <span class="nav-text">Session / Shifts</span>
+                                    <b class="caret"></b>
+                                </a>
+                                <ul class="collapse" id="session-menu" data-parent="#attendance-menu">
+                                    <div class="sub-menu">
+                                        <li>
+                                            <a class="sidenav-item-link"
+                                                href="{{ route('admin.attendances.sessions.index') }}">
+                                                <span class="nav-text">Manage Session</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="sidenav-item-link"
+                                                href="{{ route('admin.attendances.sessions.get.dashboard') }}">
+                                                <span class="nav-text">Session Attendance</span>
+                                            </a>
+                                        </li>
+                                    </div>
+                                </ul>
+                            </li>
+
                         </div>
                     </ul>
                 </li>

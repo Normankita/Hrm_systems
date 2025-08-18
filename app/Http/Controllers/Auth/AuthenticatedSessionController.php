@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,17 +30,11 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         // Check if the user is an owner
-        if (Auth::user()->hasRole('OWNER')) {
-        } else {
-            // save settings to session
-            // $settings = Auth::user()->company->settings()
-                // ->first();
-            // $request->session()->put('settings', $settings);
+        if (!(Auth::user()->hasRole('OWNER'))) {
             $request->session()->put('company', Auth::user()->company);
-            $request->session()->put('leave_days',  30);
-            $request->session()->put('');
+            $request->session()->put('leave_days', 30);
+            $this->userLoggedIn();
         }
-
         return redirect()->intended(route('dashboard', absolute: false));
     }
 
@@ -54,6 +49,31 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
+        $request->session()->forget('company');
+        $request->session()->forget('leave_days');
+        $request->session()->flush();
+        $this->userLoggedOut();
+
         return redirect('/');
+    }
+
+    private function userLoggedIn(): void
+    {
+        $user = User::find(Auth::id());
+        // Assuming you have a User model and the user is authenticated
+        // You can also use Auth::user() if you prefer
+        if ($user) {
+            $user->is_logged_in = true;
+            $user->save();
+        }
+    }
+
+    private function userLoggedOut(): void
+    {
+        $user = User::find(Auth::id());
+        if ($user) {
+            $user->is_logged_in = false;
+            $user->save();
+        }
     }
 }

@@ -33,4 +33,8 @@ class Setting extends Model
         'value',
         'company_id'
     ];
+
+    /**
+     * In attendance, there should be following settings:
+     */
 }
