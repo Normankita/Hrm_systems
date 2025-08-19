@@ -24,10 +24,11 @@ class AdminAttendancesController extends Controller
         $presentData = $attendanceChartData['presentData'];
         $absentData = $attendanceChartData['absentData'];
 
-        $todayAttendance = DailyAttendanceService::getDayBasedAttendance();
-        $absentees = DailyAttendanceService::getDayBasedAbsentees();
-        $presenties = DailyAttendanceService::getDayBasedPresenties();
-        $lateComers = DailyAttendanceService::getDayBasedLateComers();
+        $today = date('Y-m-d');
+        $todayAttendance = DailyAttendanceService::getDayBasedAttendance($today);
+        $absentees = DailyAttendanceService::getDayBasedAbsentees($today );
+        $presenties = DailyAttendanceService::getDayBasedPresenties($today);
+        $lateComers = DailyAttendanceService::getDayBasedLateComers($today);
         $employeesCount = $company->employees()->count();
         return view('admin.attendance.attendance_dashborad')
             ->with('absentees', $absentees->count())
@@ -86,7 +87,10 @@ class AdminAttendancesController extends Controller
     }
 
 
-
+    /**
+     * returns the manual entry page
+     * @return \Illuminate\Contracts\View\View
+     */
     public function manualEntryPage()
     {
         // selecting employees for attendance
@@ -100,6 +104,12 @@ class AdminAttendancesController extends Controller
         ]);
     }
 
+
+    /**
+     * for storing
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function manualEntryStore(Request $request)
     {
         $validate = AttendanceTrait::manualEntryValidation($request);

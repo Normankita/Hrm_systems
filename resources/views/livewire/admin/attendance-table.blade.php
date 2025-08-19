@@ -20,7 +20,7 @@
                 @foreach ($attendances as $attendance)
                     <tr>
                         <td>{{ $attendance->id }}</td>
-                        <td>{{ $attendance->employee->name }}</td>
+                        <td>{{ $attendance->employee->full_name }}</td>
                         <td>{{ $attendance->status }}</td>
                         <td>{{ $attendance->created_at->format('Y-m-d H:i') }}</td>
                     </tr>

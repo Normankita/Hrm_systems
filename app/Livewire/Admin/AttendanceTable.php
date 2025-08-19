@@ -35,7 +35,7 @@ class AttendanceTable extends Component
         $attendances = Attendance::with('employee')
             ->where(function ($query) {
                 $query->whereHas('employee', function ($q) {
-                    $q->where('name', 'like', '%' . $this->search . '%');
+                    $q->where('full_name', 'like', '%' . $this->search . '%');
                 })
                     ->orWhere('status', 'like', '%' . $this->search . '%');
             })

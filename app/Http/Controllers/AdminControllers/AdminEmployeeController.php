@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
-use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class AdminEmployeeController extends Controller
@@ -32,7 +31,6 @@ class AdminEmployeeController extends Controller
         $employees = Auth::user()->company->employees()
             ->orderBy('created_at', 'desc')
             ->get();
-
         return view('admin.employee.index', compact('employees'));
     }
 
@@ -40,19 +38,22 @@ class AdminEmployeeController extends Controller
     {
         $roles = Role::where('name', '!=', 'ADMIN')->get();
         $pay_grades = PayGrade::all();
-
         return view('admin.employee.create', compact('roles', 'pay_grades'));
     }
 
+
+    /**
+     * storing employee datas
+     * @param \App\Http\Requests\StoreEmployeeRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(StoreEmployeeRequest $request)
     {
         Helpers::sanitizeRequestNumbers($request);
-
         $outcome = $this->employeeService->storeEmployee(
             $request,
             self::ATTACHMENT_TYPES
         );
-
         if ($outcome['status'] === 'fails') {
             return redirect()->back()->with([
                 'status' => 'fail',

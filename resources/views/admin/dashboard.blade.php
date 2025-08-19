@@ -91,7 +91,7 @@
                         <h2>Recent Onboarded Employees</h2>
                     </div>
                     <div class="card-body">
-                        <table class="table table-hover">
+                        <table class="table dt-table table-hover">
                             <thead>
                                 <tr>
                                     <th>Name</th>

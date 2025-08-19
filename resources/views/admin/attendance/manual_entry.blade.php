@@ -3,7 +3,7 @@
 @extends('layouts.system')
 
 @section('content')
-    <div class="container">
+    <div class="container" id="app">
         <h2 class="mb-4">Manual Attendance Entry</h2>
 
         <!-- Alert Placeholder -->
@@ -25,23 +25,32 @@
                     <x-system.modal size="modal-xl" id="groupSelection">
                         <div class="row justify-content-center">
                             <div class="col-sm-12 col-md-6">
+                                <div class="mb-3">
+                                    <button class="btn btn-primary btn-sm" v-on:click="markSelected()" type="button">
+                                        mark selected
+                                    </button>
+                                </div>
                                 <table class="table table table-responsive dt-table">
-                                    <label for="allSelector">Select All</label>
+                                    <label class="p-2" for="allSelector">Select All</label>
                                     <input type="checkbox" id="all-checker">
                                     <thead>
                                         <tr>
+                                            <th></th>
                                             <th>#</th>
                                             <th>Name</th>
                                             <th>Department</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($employees as $employee)
+                                        @foreach ($employees as $employee)
                                             <tr>
                                                 <td>
-                                                    @if ($employee->userStatus == 'leave')
-                                                    <input type="checkbox" class="row-checker">
+                                                    @if ($employee->state == 'active')
+                                                        <input value="{{ $employee->id }}" type="checkbox"
+                                                            class="row-checker">
+                                                    @endif
                                                 </td>
+                                                <td>{{ $employee->state }}</td>
                                                 <td>{{ $employee->full_name }}</td>
                                                 <td>{{ $employee->department->name }}</td>
                                             </tr>
@@ -167,5 +176,21 @@
 @section('scripts')
     <script>
         let employeeTable = new TableSelectionHandler(".dt-table", "#all-checker");
+        const app = Vue.createApp({
+            data() {
+                return {
+
+                }
+            },
+            mounted() {
+                console.log("mounted");
+            },
+            methods: {
+                markSelected() {
+                    const employeeIds = employeeTable.getSelected();
+                    console.log(employeeIds);
+                }
+            },
+        }).mount("#app");
     </script>
 @endsection

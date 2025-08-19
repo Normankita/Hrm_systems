@@ -30,7 +30,9 @@ return new class extends Migration
             $table->date('date_of_termination')->nullable();
             $table->double('salary')->nullable();
             $table->boolean('userStatus')->default(true);
-            $table->enum('state', ['suspended', 'active', 'retired', 'terminated', 'leave', 'other']);
+            $table->enum('state',
+             ['suspended', 'active', 'retired', 'terminated', 'leave', 'other'])
+             ->default('active');
             $table->timestamps();
             $table->softDeletes();
         });
