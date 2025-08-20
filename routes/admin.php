@@ -133,6 +133,12 @@ Route::middleware(['auth', 'role:ADMIN'])
         Route::post('/manual/entry/store', 'manualEntryStore')
             ->name('manual.entry.store')
             ->middleware('HasCompanyProfile');
+        Route::delete('/delete/{id}', 'destroy')
+            ->name('delete')
+            ->middleware('HasCompanyProfile');
+        Route::put('/update/{id}', 'update')
+            ->name('update')
+            ->middleware('HasCompanyProfile');
     });
 
 

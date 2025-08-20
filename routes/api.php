@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\ApiAllowanceGroupMembersController;
 use App\Http\Controllers\Api\ApiAllowanceGroupsController;
+use App\Http\Controllers\Api\ApiAttendanceController;
 use App\Http\Controllers\Api\ApiDisbursementsController;
 use App\Http\Controllers\Api\ApiEmployeePayrollController;
 use App\Models\User;
@@ -52,3 +53,15 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::post('/generate', 'generateForSelected')->name('generateSelected');
         Route::post('/approve/selected', 'approveSelected')->name('approveSelected');
     });
+
+
+Route::middleware(['auth', 'role:ADMIN'])
+    ->prefix('/attendance')
+    ->controller(ApiAttendanceController::class)
+    ->name('attendances.')
+    ->group(function () {
+        Route::post('/manual/entry/store', 'manualEntryStore')
+            ->name('manual.entry.store')
+            ->middleware('HasCompanyProfile');
+    });
+

@@ -114,30 +114,28 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (['present' => $present, 'absent' => $absent, 'late' => $late] as $collection)
-                                @foreach ($collection as $attendance)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $attendance->employee->full_name }}</td>
-                                        <td>{{ $attendance->department?->name ?? 'N/A'}}</td>
-                                        <td><span class="badge
-                                            @if($attendance->status == 'present')
-                                                bg-success
+                            @foreach ($attendanceDetails as $attendance)
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $attendance->employee->full_name }}</td>
+                                    <td>{{ $attendance->department?->name ?? 'N/A' }}</td>
+                                    <td><span
+                                            class="badge
+                                            @if ($attendance->status == 'present') bg-success
                                             @elseif($attendance->status == 'late')
                                                 bg-warning
                                             @elseif($attendance->status == 'leave')
                                                 bg-dark text-white
                                             @else
-                                                bg-danger text-white
-                                            @endif
-                                            ">{{ $attendance->status }}</span></td>
-                                        <td>{{ Carbon::parse($attendance->check_in_time)
-                                        ->format('H:ia')  }}</td>
-                                        <td>{{ Carbon::parse($attendance->check_out_time)
-                                        ->format('H:ia') }}</td>
-                                        <td>On time</td>
-                                    </tr>
-                                @endforeach
+                                                bg-danger text-white @endif
+                                            ">{{ $attendance->status }}</span>
+                                    </td>
+                                    <td>{{ Carbon::parse($attendance->check_in_time)->format('H:ia') }}
+                                    </td>
+                                    <td>{{ Carbon::parse($attendance->check_out_time)->format('H:ia') }}
+                                    </td>
+                                    <td>On time</td>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>

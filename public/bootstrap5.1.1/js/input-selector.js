@@ -74,6 +74,9 @@ class TableSelectionHandler {
     }
 
     getSelected() {
-        return this.selectedObject;
+        let selectedItesm = this.selectedObject;
+        // filter out empy, undefined, or null values
+        selectedItesm = selectedItesm.filter(item => item !== "" && item !== undefined && item !== null);
+        return selectedItesm;
     }
 }

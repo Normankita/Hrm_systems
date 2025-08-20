@@ -340,10 +340,59 @@ class Employee extends Model
     }
 
 
-    public function absentAllowance() {
-        return Allowance::whereNotIn('id',
-         $this->allowances()->pluck('allowance_id'))
-        ->get();
+    public function absentAllowance()
+    {
+        return Allowance::whereNotIn(
+            'id',
+            $this->allowances()->pluck('allowance_id')
+        )
+            ->get();
     }
+
+
+
+    /**
+     * The function returns the employees who attended today
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public static function whoAttendToday()
+    {
+        $today = Carbon::now()->format('Y-m-d');
+        $todayAttendance = Attendance::with('employee')
+            ->whereDate('attendance_date', $today)
+            ->get();
+        $employees = $todayAttendance->pluck('employee');
+        return $employees;
+    }
+
+
+    /**
+     * The function checks if the employee was on leave on a specific day
+     * @param mixed $day
+     * @return bool
+     */
+    public function wasOnLeave($day)
+    {
+        $day = Carbon::parse($day)->format('Y-m-d');
+        return $this->leaves()
+            ->where('status', 'approved')
+            ->whereDate('start_date', '<=', $day)
+            ->whereDate('end_date', '>=', $day)
+            ->exists();
+    }
+
+
+    /**
+     * Checks if the employee is on leave today.
+     *
+     * @return bool
+     */
+    public function isOnLeaveToday()
+    {
+        $today = Carbon::now()->format('Y-m-d');
+        return $this->wasOnLeave($today);
+    }
+
+
 
 }

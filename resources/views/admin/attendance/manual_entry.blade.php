@@ -18,17 +18,36 @@
             </div>
             <div class="card-body">
                 <div class="mb-3">
-                    <a href="{{ route('admin.attendances.daily.page') }}" class="btn btn-primary">
+                    <a href="{{ route('admin.attendances.daily.page') }}" class="btn btn-primary mx-2">
                         View Daily Attendance
                     </a>
                     <x-system.modal-button id="groupSelection" text="MARK ALL" />
                     <x-system.modal size="modal-xl" id="groupSelection">
                         <div class="row justify-content-center">
-                            <div class="col-sm-12 col-md-6">
+                            <div v-if="loading" class="col-sm-12 col-md-6">
+                                <div class="text-center">
+                                    <i class="mdi mdi-loading mdi-spin"></i> Loading...
+                                </div>
+
+                            </div>
+                            <div v-if="!loading" class="col-sm-12 col-md-6">
                                 <div class="mb-3">
-                                    <button class="btn btn-primary btn-sm" v-on:click="markSelected()" type="button">
+                                    <button class="btn btn-primary btn-sm mx-2" v-on:click="markSelected()" type="button">
                                         mark selected
                                     </button>
+                                </div>
+                                <div v-if="isCheckIn" class="mb-3">
+                                    <label for="check_in" class="form-label">Check In</label>
+                                    <input type="time" class="form-control" id="check_in" v-model="check_in">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="state form-label">State</label>
+                                    <select v-model="state" class="form-control" id="">
+                                        <option value="present">Present</option>
+                                        <option value="absent">Absent</option>
+                                        <option value="late">Late</option>
+                                        <option value="leave">Leave</option>
+                                    </select>
                                 </div>
                                 <table class="table table table-responsive dt-table">
                                     <label class="p-2" for="allSelector">Select All</label>
@@ -161,15 +180,84 @@
                                 <td>{{ $attendance->check_out_time ? \Carbon\Carbon::parse($attendance->check_out_time)->format('H:i') : '-' }}
                                 </td>
                                 <td>
-                                    <x-system.btn-edit route="#" />
-                                    <x-system.btn-delete route="#" />
+                                    <x-system.modal-button id="editAttendance{{ $attendance->id }}" text="Edit"
+                                        class="btn btn-outline-primary btn-sm" textColor="text-primary"
+                                        icon="mdi mdi-pencil" />
+
+                                    <form action="{{ route('admin.attendances.delete', $attendance->id) }}"
+                                        method="POST" class="d-inline" id="deleteAttendanceForm{{ $attendance->id }}">
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button type="button" class="btn btn-outline-danger btn-sm p-1 mdi mdi-delete"
+                                            onclick="event.preventDefault(); if (confirm('Are you sure you want to delete this attendance record?')) { document.getElementById('deleteAttendanceForm{{ $attendance->id }}').submit(); }">
+                                            Delete
+                                        </button>
+                                    </form>
                                 </td>
+
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
         </div>
+        @foreach ($todayAttendance as $attendance)
+            <x-system.modal size="modal-lg" id="editAttendance{{ $attendance->id }}">
+                <form id="editAttendanceForm{{ $attendance->id }}"
+                    action="{{ route('admin.attendances.update', $attendance->id) }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="mb-3">
+                        <label for="employee_id" class="form-label">Employee</label>
+                        <input type="text" class="form-control" id="employee_id" name="employee_id"
+                            value="{{ $attendance->employee->full_name }}" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="check_in" class="form-label">Check In</label>
+                        <input name="check_in" type="time" class="form-control" id="check_in"
+                            value="{{ $attendance->check_in_time }}">
+                        @error('check_in')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label for="check_out" class="form-label">Check Out</label>
+                        <input name="check_out" type="time" class="form-control" id="check_out"
+                            value="{{ $attendance->check_out_time }}">
+                        @error('check_out')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status</label>
+                        <select name="status" class="form-select" id="status">
+                            <option value="present" {{ $attendance->status == 'present' ? 'selected' : '' }}>Present
+                            </option>
+                            <option value="absent" {{ $attendance->status == 'absent' ? 'selected' : '' }}>Absent
+                            </option>
+                            <option value="late" {{ $attendance->status == 'late' ? 'selected' : '' }}>Late</option>
+                            <option value="leave" {{ $attendance->status == 'leave' ? 'selected' : '' }}>Leave
+                            </option>
+                        </select>
+                        @error('status')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label for="notes" class="form-label">Notes</label>
+                        <textarea name="remarks" class="form-control" id="notes" rows="2">{{ $attendance->remarks }}</textarea>
+                        @error('remarks')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-sm btn-primary">Update
+                            Entry</button>
+                    </div>
+                </form>
+            </x-system.modal>
+        @endforeach
     </div>
 @endsection
 
@@ -179,16 +267,62 @@
         const app = Vue.createApp({
             data() {
                 return {
-
+                    loading: false,
+                    check_in: '', // Bind to the check-in time input
+                    state: 'present',
                 }
             },
             mounted() {
                 console.log("mounted");
             },
+            computed: {
+                // Computed properties can be added here if needed
+                isCheckIn() {
+                    return this.state === 'present' || this.state === 'late';
+                }
+            },
+            watch: {
+                state(newVal) {
+                    if (newVal === 'present' || newVal === 'late') {
+                        this.check_in = ""
+                    }
+                }
+            },
             methods: {
                 markSelected() {
+                    const storeUri = "{{ route('attendances.manual.entry.store') }}";
                     const employeeIds = employeeTable.getSelected();
-                    console.log(employeeIds);
+                    const headers = {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    };
+                    const requestData = {
+                        employees_ids: employeeIds,
+                        check_in: this.check_in, // Use the Vue data property for check-in time
+                        state: this.state // Use the Vue data property for state
+                    };
+                    this.loading = true;
+                    axios.post(storeUri, requestData, {
+                            headers
+                        })
+                        .then(response => {
+                            console.log("Response:", response);
+                            if (response.data.success) {
+                                alert(response.data.message);
+                            } else {
+                                this.loading = false;
+                                alert(response.data.error);
+                            }
+                        })
+                        .catch(error => {
+                            this.loading = false;
+                            console.error("Error:", error);
+                            alert("An error occurred while processing your request.");
+                        })
+                        .finally(() => {
+                            window.location.reload();
+                        });
                 }
             },
         }).mount("#app");

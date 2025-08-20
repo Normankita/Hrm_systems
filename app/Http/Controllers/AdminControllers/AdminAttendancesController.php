@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AdminControllers;
 use App\Http\Controllers\Controller;
 use App\Http\Services\DailyAttendanceService;
 use App\Http\Utils\Traits\AttendanceTrait;
+use App\Models\Attendance;
 use App\Models\Employee;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -57,18 +58,18 @@ class AdminAttendancesController extends Controller
             $getByDate
         );
         // apply the other remaining filters
-        $getByDepartment = $request->get('department');
+        $getByDepartment = strtolower($request->get('department'));
         $status = $request->get('status');
-        if ($getByDepartment) {
+        if ($getByDepartment && $getByDepartment !== 'all') {
             $attendanceDetails = $attendanceDetails->where(
                 'employee.department_id',
                 $getByDepartment
             );
         }
         if ($status) {
-            $attendanceDetails = $attendanceDetails->where('status', $status);
+            $attendanceDetails = $attendanceDetails->where('status',  $status);
         }
-        // Extra details
+        // Extra details to send to view page
         $employees = session('company')->employees;
         $present = DailyAttendanceService::getDayBasedPresenties($getByDate);
         $absent = DailyAttendanceService::getDayBasedAbsentees($getByDate);
@@ -94,7 +95,9 @@ class AdminAttendancesController extends Controller
     public function manualEntryPage()
     {
         // selecting employees for attendance
-        $employees = Employee::all();
+        $employeesToIgnore = Employee::whoAttendToday();
+        $employees = Employee::whereNotIn('id', $employeesToIgnore->pluck('id'))
+            ->get();
         $getByDate = Carbon::now()->format('Y-m-d');
         $attendance = DailyAttendanceService::getDayBasedAttendance($getByDate);
         return view('admin.attendance.manual_entry', [
@@ -112,13 +115,14 @@ class AdminAttendancesController extends Controller
      */
     public function manualEntryStore(Request $request)
     {
+
         $validate = AttendanceTrait::manualEntryValidation($request);
         if ($validate->fails()) {
             return redirect()->back()
                 ->with('error', 'Fail to create attendance record')
                 ->withErrors($validate)->withInput();
         }
-        $attendance = AttendanceTrait::manualEntryStore($request);
+        $attendance = AttendanceTrait::manualEntryStoreTrait($request);
         if (!$attendance) {
             return redirect()->back()->with(
                 'error',
@@ -128,6 +132,38 @@ class AdminAttendancesController extends Controller
         return redirect()->back()->with(
             'success',
             'Attendance record created successfully'
+        );
+    }
+
+
+    public function destroy($attendanceId)
+    {
+        $attendance = AttendanceTrait::deleteAttendance(
+            $attendanceId);
+        if (!$attendance) {
+            return redirect()->back()->with(
+                'error',
+                'Failed to delete attendance record'
+            );
+        }
+        return redirect()->back()->with(
+            'success',
+            'Attendance record deleted successfully'
+        );
+    }
+
+
+    public function update(Request $request, $attendanceId ) {
+        $attendance = AttendanceTrait::updateAttendance($attendanceId, $request->all());
+        if (!$attendance) {
+            return redirect()->back()->with(
+                'error',
+                'Failed to update attendance record'
+            );
+        }
+        return redirect()->back()->with(
+            'success',
+            'Attendance record updated successfully'
         );
     }
 

@@ -10,6 +10,11 @@ use Illuminate\Validation\Rule;
 
 class AdminAttendanceSessionsController extends Controller
 {
+
+    /**
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
     public function index()
     {
         $sessions = AttendanceSession::orderBy('id', 'desc')->get();
@@ -18,6 +23,7 @@ class AdminAttendanceSessionsController extends Controller
         ]);
     }
 
+    
     public function store(Request $request)
     {
         $rules = [
