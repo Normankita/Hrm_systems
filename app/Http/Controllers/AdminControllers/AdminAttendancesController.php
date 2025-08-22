@@ -27,7 +27,7 @@ class AdminAttendancesController extends Controller
 
         $today = date('Y-m-d');
         $todayAttendance = DailyAttendanceService::getDayBasedAttendance($today);
-        $absentees = DailyAttendanceService::getDayBasedAbsentees($today );
+        $absentees = DailyAttendanceService::getDayBasedAbsentees($today);
         $presenties = DailyAttendanceService::getDayBasedPresenties($today);
         $lateComers = DailyAttendanceService::getDayBasedLateComers($today);
         $employeesCount = $company->employees()->count();
@@ -67,7 +67,7 @@ class AdminAttendancesController extends Controller
             );
         }
         if ($status) {
-            $attendanceDetails = $attendanceDetails->where('status',  $status);
+            $attendanceDetails = $attendanceDetails->where('status', $status);
         }
         // Extra details to send to view page
         $employees = session('company')->employees;
@@ -95,15 +95,28 @@ class AdminAttendancesController extends Controller
     public function manualEntryPage()
     {
         // selecting employees for attendance
-        $employeesToIgnore = Employee::whoAttendToday();
-        $employees = Employee::whereNotIn('id', $employeesToIgnore->pluck('id'))
-            ->get();
+        $whoAttendToday = Employee::whoAttendToday();
+        $whoCheckOutToday = Employee::whoCheckoutToday();
+        $whoCheckOutTodayIds = $whoCheckOutToday->pluck('id');
+        $forCheckout = Employee::whoAttendToday()
+            ->where('check_out_time', null);
+        $employees = Employee::where('state', 'active')
+            ->get()
+            ->map(function ($employee) use ($whoAttendToday, $whoCheckOutTodayIds) {
+                if ($whoCheckOutTodayIds->contains($employee->id)) {
+                    return null;
+                }
+                $employee->intend = !$whoAttendToday->contains($employee) ? 'checkIn' : 'checkOut';
+                return $employee;
+            })->filter()->values();
         $getByDate = Carbon::now()->format('Y-m-d');
         $attendance = DailyAttendanceService::getDayBasedAttendance($getByDate);
         return view('admin.attendance.manual_entry', [
             'date' => $getByDate,
             'todayAttendance' => $attendance,
-            'employees' => $employees
+            'employees' => $employees,
+            'whoAttendToday' => $whoAttendToday,
+            'forCheckout' => $forCheckout
         ]);
     }
 
@@ -115,7 +128,6 @@ class AdminAttendancesController extends Controller
      */
     public function manualEntryStore(Request $request)
     {
-
         $validate = AttendanceTrait::manualEntryValidation($request);
         if ($validate->fails()) {
             return redirect()->back()
@@ -139,7 +151,8 @@ class AdminAttendancesController extends Controller
     public function destroy($attendanceId)
     {
         $attendance = AttendanceTrait::deleteAttendance(
-            $attendanceId);
+            $attendanceId
+        );
         if (!$attendance) {
             return redirect()->back()->with(
                 'error',
@@ -153,7 +166,8 @@ class AdminAttendancesController extends Controller
     }
 
 
-    public function update(Request $request, $attendanceId ) {
+    public function update(Request $request, $attendanceId)
+    {
         $attendance = AttendanceTrait::updateAttendance($attendanceId, $request->all());
         if (!$attendance) {
             return redirect()->back()->with(

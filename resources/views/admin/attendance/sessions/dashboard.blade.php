@@ -6,7 +6,8 @@
         {{-- Page Header --}}
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h4 class="fw-bold mb-0">Session Attendance</h4>
-            <a href="{{ route('admin.attendances.sessions.get.dashboard') }}">
+            <a href="{{ route(
+                'admin.attendances.sessions.get.dashboard') }}">
                 <button class="btn btn-sm btn-primary">
                     <i class="bi bi-plus-lg"></i> Add Session
                 </button>

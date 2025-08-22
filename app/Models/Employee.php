@@ -365,6 +365,17 @@ class Employee extends Model
         return $employees;
     }
 
+    public static function whoCheckoutToday()
+    {
+        $today = Carbon::now()->format('Y-m-d');
+        $todayAttendance = Attendance::with('employee')
+            ->whereDate('attendance_date', $today)
+            ->whereNotNull('check_out_time')
+            ->get();
+        $employees = $todayAttendance->pluck('employee');
+        return $employees;
+    }
+
 
     /**
      * The function checks if the employee was on leave on a specific day
