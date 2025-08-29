@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\AttendanceSession;
 use App\Models\Company;
 use App\Models\Contribution;
 use App\Models\Department;
@@ -24,7 +25,7 @@ class UserSeeder extends Seeder
         $settings = [
             ['name' => 'payment_date', 'value' => 27]
         ];
-        foreach($settings as $setting) {
+        foreach ($settings as $setting) {
             $setting = array_merge(['company_id' => $company->id], $setting);
             Setting::create($setting);
         }
@@ -45,6 +46,14 @@ class UserSeeder extends Seeder
             'base_month_count' => 12,
             'company_id' => $company->id,
             'description' => 'Default pay grade for initial employees',
+        ]);
+
+        $defaultSession = AttendanceSession::create([
+            'company_id' => $company->id,
+            'session_type' => 'full_day',
+            'start_time' => '02:00',
+            'end_time' => '17:00',
+            'is_active' => true,
         ]);
 
         // 4. Create Admin user
@@ -72,6 +81,7 @@ class UserSeeder extends Seeder
             'user_id' => $emp->id,
             'company_id' => $company->id,
             'department_id' => $department->id,
+            'attendance_session_id' => $defaultSession->id,
             'full_name' => $emp->name,
             'gender' => 'male',
             'date_of_birth' => '1990-01-01',
@@ -86,7 +96,6 @@ class UserSeeder extends Seeder
             'salary' => 50000,
             'profile_picture' => '',
         ]);
-
 
         // 8. Seed statutory contributions
         $contributions = [

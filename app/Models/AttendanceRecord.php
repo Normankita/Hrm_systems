@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use App\Http\Utils\Traits\onBootTrait;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class AttendanceRecord extends Model
 {
+    use onBootTrait, HasFactory;
+
     protected $fillable = [
         'company_id',
         'employee_id',

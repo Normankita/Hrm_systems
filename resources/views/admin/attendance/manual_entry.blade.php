@@ -344,7 +344,7 @@
                             alert("An error occurred while processing your request.");
                         })
                         .finally(() => {
-                            window.location.reload();
+                            // window.location.reload();
                         });
                 }
             },

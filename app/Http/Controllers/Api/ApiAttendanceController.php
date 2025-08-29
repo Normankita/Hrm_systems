@@ -23,7 +23,7 @@ class ApiAttendanceController extends Controller
         $rules = [
             'employees_ids' => 'required|array',
             'time' => 'required|date_format:H:i',
-            'type' => 'required|in:check_in,check_out',
+            'type' => 'sometimes|in:check_in,check_out',
             'state' => 'required|in:present,absent,late,leave',
         ];
         // validate icoming data first

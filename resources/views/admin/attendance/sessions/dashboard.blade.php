@@ -6,8 +6,7 @@
         {{-- Page Header --}}
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h4 class="fw-bold mb-0">Session Attendance</h4>
-            <a href="{{ route(
-                'admin.attendances.sessions.get.dashboard') }}">
+            <a href="{{ route('admin.attendances.sessions.get.dashboard') }}">
                 <button class="btn btn-sm btn-primary">
                     <i class="bi bi-plus-lg"></i> Add Session
                 </button>
@@ -67,20 +66,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- Example Row --}}
-                        <tr>
-                            <td>1</td>
-                            <td>Morning</td>
-                            <td>08:00 AM</td>
-                            <td>12:00 PM</td>
-                            <td><span class="badge bg-success">Yes</span></td>
-                            <td>25</td>
-                            <td>
-                                <button class="btn btn-sm btn-info"><i class="bi bi-eye"></i></button>
-                                <button class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></button>
-                                <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
-                            </td>
-                        </tr>
+                        @foreach ($attendanceRecords as $record)
+                            <tr>
+                                <td>1</td>
+                                <td>Morning</td>
+                                <td>08:00 AM</td>
+                                <td>12:00 PM</td>
+                                <td><span class="badge bg-success">Yes</span></td>
+                                <td>25</td>
+                                <td>
+                                    <button class="btn btn-sm btn-info"><i class="bi bi-eye"></i></button>
+                                    <button class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></button>
+                                    <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+                                </td>
+                            </tr>
+                        @endforeach
                         {{-- End Example Row --}}
                     </tbody>
                 </table>

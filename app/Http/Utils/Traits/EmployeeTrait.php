@@ -2,6 +2,7 @@
 
 namespace App\Http\Utils\Traits;
 
+use App\Models\AttendanceSession;
 use App\Models\Employee;
 use App\Models\EmployeeStatusHistory;
 use App\Models\PayGrade;
@@ -30,6 +31,10 @@ trait EmployeeTrait
             $roles = $extraRole ? [$employeeRole, $extraRole] : [$employeeRole];
             $user->assignRole($roles);
             $data['user_id'] = $user->id;
+            $defautSession = AttendanceSession::where('is_active', true)
+                ->first();
+            $data['attendance_session_id'] = $data['attendance_session_id'] ??
+                $defautSession->id;
             $employee = Employee::create($data);
             $employee->recordEvent('add', $data);
             $status = Status::where('name', 'Active')->first();

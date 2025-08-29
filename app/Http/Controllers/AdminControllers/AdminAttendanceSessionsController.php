@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\AdminControllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\AttendanceRecord;
 use App\Models\AttendanceSession;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -23,7 +24,7 @@ class AdminAttendanceSessionsController extends Controller
         ]);
     }
 
-    
+
     public function store(Request $request)
     {
         $rules = [
@@ -104,6 +105,11 @@ class AdminAttendanceSessionsController extends Controller
 
     public function getSessionDashboard()
     {
-        return view('admin.attendance.sessions.dashboard');
+        $attendanceRecords = AttendanceRecord::with('employee', 'attendanceSession')
+            ->orderBy('date', 'desc')
+            ->get();
+        return view('admin.attendance.sessions.dashboard', [
+            'attendanceRecords' => $attendanceRecords
+        ]);
     }
 }

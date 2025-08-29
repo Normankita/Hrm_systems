@@ -13,9 +13,15 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('company_id')->constrained()->onDelete('cascade');
-            $table->foreignId('department_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()
+                ->onDelete('cascade');
+            $table->foreignId('company_id')->constrained()
+                ->onDelete('cascade');
+            $table->foreignId('department_id')->constrained()
+                ->onDelete('cascade');
+            $table->foreignId('attendance_session_id')->constrained()
+                ->onDelete('cascade');
+
             $table->string('full_name');
             $table->enum('gender', ['Male', 'Female']);
             $table->date('date_of_birth');

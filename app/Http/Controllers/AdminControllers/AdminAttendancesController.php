@@ -128,13 +128,16 @@ class AdminAttendancesController extends Controller
      */
     public function manualEntryStore(Request $request)
     {
-        $validate = AttendanceTrait::manualEntryValidation($request);
+        $validate = AttendanceTrait::manualEntryValidation(
+            $request);
         if ($validate->fails()) {
             return redirect()->back()
-                ->with('error', 'Fail to create attendance record')
+                ->with('error',
+                'Fail to create attendance record')
                 ->withErrors($validate)->withInput();
         }
-        $attendance = AttendanceTrait::manualEntryStoreTrait($request);
+        $attendance = AttendanceTrait::manualEntryStoreTrait(
+            $request);
         if (!$attendance) {
             return redirect()->back()->with(
                 'error',

@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Http\Controllers\Controller;
+use App\Models\AttendanceSession;
 use App\Models\Company;
 use App\Models\Contribution;
 use App\Models\Department;
@@ -44,6 +45,8 @@ class CompanyService extends Controller
 
             // give the default department to our company
             self::createDefaultDepartment($company->id);
+
+            self::createDefaultAttendanceSession($company->id);
 
             $settings = [
                 ['name' => 'payment_date', 'value' => 27]
@@ -143,6 +146,20 @@ class CompanyService extends Controller
         $data = [
             'name' => 'Default Department',
             'code' => '001',
+            'company_id' => $companyId
+        ];
+        $department = Department::create($data);
+        return $department;
+    }
+
+
+    public static function createDefaultAttendanceSession($companyId)
+    {
+        $data = [
+            'session_type' => 'full_day',
+            'start_time' => '08:00',
+            'end_time' => '17:00',
+            'is_active' => true,
             'company_id' => $companyId
         ];
         $department = Department::create($data);

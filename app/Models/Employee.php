@@ -38,6 +38,7 @@ class Employee extends Model
         'user_id',
         'company_id',
         'department_id',
+        'attendance_session_id',
         'full_name',
         'gender',
         'date_of_birth',
@@ -404,6 +405,11 @@ class Employee extends Model
         return $this->wasOnLeave($today);
     }
 
+
+    public function attendanceSession()
+    {
+        return $this->belongsTo(AttendanceSession::class, 'attendance_session_id');
+    }
 
 
 }

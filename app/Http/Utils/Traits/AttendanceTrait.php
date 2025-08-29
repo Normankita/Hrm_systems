@@ -2,9 +2,12 @@
 namespace App\Http\Utils\Traits;
 
 use App\Models\Attendance;
+use App\Models\AttendanceRecord;
+use App\Models\Employee;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use Throwable;
 
 trait AttendanceTrait
 {
@@ -28,7 +31,7 @@ trait AttendanceTrait
             ->orderByRaw("FIELD(day, 'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday')")
             ->get();
     }
-    
+
 
     public static function manualEntryValidation($request)
     {
@@ -85,15 +88,74 @@ trait AttendanceTrait
         $attendance['check_out_time'] = $request->check_out_time ?? null;
         $attendance['remarks'] = $request->remarks ?? null;
 
+        // fetching employee session start time for default check in time
+        $inTime = self::employeeInTime($request->employee_id);
+        $attendance['check_in_time'] = $attendance['check_in_time'] ?? $inTime;
         // if attendance is not present or late the checkin and out are always ''
         if ($attendance['status'] !== 'present' && $attendance['status'] !== 'late') {
             $attendance['check_in_time'] = null;
             $attendance['check_out_time'] = null;
         }
-        $attendance = Attendance::create($attendance);
+        if (($attendance['status'] == 'present' || $attendance['status'] == 'late')
+                && empty($attendance['check_in_time'])) {
+                    $attendance['check_in_time'] = now()->format('H:i:s');
+        }
+        $attendance = self::createAttendance($attendance);
         return $attendance;
     }
 
+
+    private static function createAttendance($details)
+    {
+        $employee = Employee::find($details['employee_id']);
+        if (!$employee) {
+            return null;
+        }
+        DB::beginTransaction();
+        try {
+            $attendance = Attendance::create($details);
+            if ($details['status'] == "present" || $details['status'] == "late") {
+                AttendanceRecord::create([
+                    'employee_id' => $details['employee_id'],
+                    'attendance_session_id' => $employee->attendance_session_id,
+                    'date' => isset($details['attendance_date']) ?
+                        $details['attendance_date'] : Carbon::now()->format('Y-m-d'),
+                    'status' => $details['status'],
+                    'check_in' => $details['check_in'],
+                    'check_out' => $details['check_out'],
+                    'remarks' => $details['remarks'],
+                ]);
+            }
+            DB::commit();
+            return $attendance;
+        } catch (Throwable $throwable) {
+            log($throwable->getMessage());
+            DB::rollBack();
+            return null;
+        }
+    }
+
+    private static function outTime($employeeId)
+    {
+        $employee = Employee::where('id', $employeeId)
+            ->with('attendanceSession')
+            ->first();
+        $outTime = $employee && $employee->attendanceSession
+            ? Carbon::parse($employee->attendanceSession->end_time)
+            : Carbon::now();
+        return $outTime->format('H:i:s');
+    }
+
+    private static function employeeInTime($employeeId)
+    {
+        $employee = Employee::where('id', $employeeId)
+            ->with('attendanceSession')
+            ->first();
+        $inTime = $employee && $employee->attendanceSession
+            ? Carbon::parse($employee->attendanceSession->start_time)
+            : Carbon::now();
+        return $inTime->format('H:i:s');
+    }
 
 
     public static function manualCheckOutTrait($request)
@@ -107,7 +169,10 @@ trait AttendanceTrait
         if (!$attendance) {
             return null; // No attendance record found for the employee on the given date
         }
-        $attendance->check_out_time = $request->check_out_time ?? now()->format('H:i:s');
+        // fetching the employee from attendance
+        $outTime = self::outTime($request->employee_id);
+        $attendance->check_out_time = $request->check_out_time ?? $outTime;
+        // $attendance
         $attendance->save();
         return $attendance;
     }
@@ -118,10 +183,16 @@ trait AttendanceTrait
     {
         $attendance = Attendance::find($attendanceId);
         if (!$attendance) {
-            return response()->json(['error' => 'Attendance record not found'], 404);
+            return response()->json(
+                ['error' => 'Attendance record not found'],
+                404
+            );
         }
         $attendance->delete();
-        return response()->json(['success' => 'Attendance record deleted successfully'], 200);
+        return response()->json(
+            ['success' => 'Attendance record deleted successfully'],
+            200
+        );
     }
 
 
@@ -130,7 +201,10 @@ trait AttendanceTrait
     {
         $attendance = Attendance::find($attendanceId);
         if (!$attendance) {
-            return response()->json(['error' => 'Attendance record not found'], 404);
+            return response()->json(
+                ['error' => 'Attendance record not found'],
+                404
+            );
         }
         $data = [
             'check_in_time' => $data['check_in'] ?? null,
