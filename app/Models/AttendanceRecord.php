@@ -18,6 +18,7 @@ class AttendanceRecord extends Model
         'status',
         'check_in',
         'check_out',
+        'is_from_attendance',
         'remarks',
     ];
 

@@ -20,6 +20,7 @@ return new class extends Migration {
                 ['present', 'absent', 'late', 'excused'])->default('present');
             $table->time('check_in')->nullable();
             $table->time('check_out')->nullable();
+            $table->boolean('is_from_attendance')->default(true);
             $table->text('remarks')->nullable();
             $table->timestamps();
         });

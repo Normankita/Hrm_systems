@@ -53,37 +53,7 @@
         {{-- Table --}}
         <div class="card">
             <div class="card-body p-0">
-                <table class="table table-hover mb-0">
-                    <thead class="table-light">
-                        <tr>
-                            <th>#</th>
-                            <th>Session Type</th>
-                            <th>Start Time</th>
-                            <th>End Time</th>
-                            <th>Is Active</th>
-                            <th>Attendance Count</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($attendanceRecords as $record)
-                            <tr>
-                                <td>1</td>
-                                <td>Morning</td>
-                                <td>08:00 AM</td>
-                                <td>12:00 PM</td>
-                                <td><span class="badge bg-success">Yes</span></td>
-                                <td>25</td>
-                                <td>
-                                    <button class="btn btn-sm btn-info"><i class="bi bi-eye"></i></button>
-                                    <button class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></button>
-                                    <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
-                                </td>
-                            </tr>
-                        @endforeach
-                        {{-- End Example Row --}}
-                    </tbody>
-                </table>
+                @livewire('admin.attendance-records-table')
             </div>
         </div>
 

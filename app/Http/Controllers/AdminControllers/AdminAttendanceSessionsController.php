@@ -18,6 +18,7 @@ class AdminAttendanceSessionsController extends Controller
      */
     public function index()
     {
+        dd("here");
         $sessions = AttendanceSession::orderBy('id', 'desc')->get();
         return view('admin.attendance.sessions.index', [
             'sessions' => $sessions

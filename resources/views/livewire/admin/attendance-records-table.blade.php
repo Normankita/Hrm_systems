@@ -1,45 +1,54 @@
-<div>
+<div class="p-3">
     <div class="mb-3 d-flex justify-content-between">
-        <input type="text" wire:model.debounce.500ms="search" placeholder="Search..."
-               class="form-control w-25" />
+      <input type="text" wire:model.live="search"
+       placeholder="Search..." class="form-control w-25" />
 
-        <select wire:model="perPage" class="form-control w-25">
+
+        <select wire:model.live="perPage" class="form-control w-25">
             <option value="5">5</option>
             <option value="10">10</option>
             <option value="25">25</option>
         </select>
     </div>
 
-    <table class="table table-bordered table-striped">
-        <thead class="thead-dark">
+    <table class="table table-hover mb-0">
+        <thead class="table-light">
             <tr>
-                <th>Date</th>
+                <th>#</th>
                 <th>Employee</th>
-                <th>Status</th>
-                <th>Check In</th>
-                <th>Check Out</th>
-                <th>Remarks</th>
+                <th>Session Type</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            @forelse ($records as $record)
+            @foreach ($attendanceRecords as $index => $record)
                 <tr>
-                    <td>{{ $record->date }}</td>
-                    <td>{{ $record->employee->name ?? 'N/A' }}</td>
-                    <td>{{ $record->status }}</td>
-                    <td>{{ $record->check_in }}</td>
-                    <td>{{ $record->check_out }}</td>
-                    <td>{{ $record->remarks }}</td>
+                    <td>{{ $attendanceRecords->firstItem() + $index }}</td>
+                    <td>{{ $record->employee->full_name }}</td>
+                    <td>{{ $record->attendanceSession?->session_type }}</td>
+                    <td>{{ \Carbon\Carbon::parse($record->start_time)->format('h:i A') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($record->end_time)->format('h:i A') }}</td>
+                    <td>
+                        @if($record->is_from_attendance)
+                            @continue
+                        @endif
+                        <button class="btn btn-sm btn-info">
+                            edit
+                        </button>
+                        <button class="btn btn-sm btn-danger">
+                             <span class="p-0 m-0">delete</span>
+                        </button>
+                    </td>
                 </tr>
-            @empty
-                <tr>
-                    <td colspan="6" class="text-center">No records found</td>
-                </tr>
-            @endforelse
+            @endforeach
+
+            {{-- End Example Row --}}
         </tbody>
     </table>
 
     <div class="mt-3">
-        {{ $records->links() }}
+        {{ $attendanceRecords->links() }}
     </div>
 </div>

@@ -26,5 +26,5 @@ class AttendanceRecordFactory extends Factory
             'remarks'               => $this->faker->sentence(),
         ];
     }
-}
+}   
 
