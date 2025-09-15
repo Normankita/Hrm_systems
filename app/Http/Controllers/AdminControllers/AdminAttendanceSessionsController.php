@@ -18,7 +18,6 @@ class AdminAttendanceSessionsController extends Controller
      */
     public function index()
     {
-        dd("here");
         $sessions = AttendanceSession::orderBy('id', 'desc')->get();
         return view('admin.attendance.sessions.index', [
             'sessions' => $sessions
@@ -65,6 +64,13 @@ class AdminAttendanceSessionsController extends Controller
         return redirect()->back()->with('success', 'Session created successfully');
     }
 
+
+    /**
+     * 
+     * @param \Illuminate\Http\Request $request
+     * @param mixed $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update(Request $request, $id)
     {
         $session = AttendanceSession::find($id);

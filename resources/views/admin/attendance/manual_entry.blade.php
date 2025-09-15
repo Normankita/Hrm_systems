@@ -23,18 +23,24 @@
                             <a href="{{ route('admin.attendances.daily.page') }}" class="btn btn-primary mx-2">
                                 View Daily Attendance
                             </a>
-                            <x-system.modal-button id="groupSelection" text="MARK ALL" />
+                            <x-system.modal-button id="groupSelection" text="MARK" />
                             <x-system.modal size="modal-xl" id="groupSelection">
                                 <div class="row justify-content-center">
-                                    <div v-if="loading" class="col-sm-12 col-md-6">
-                                        <div class="text-center">
-                                            <i class="mdi mdi-loading mdi-spin"></i> Loading...
+                                    <div class="col-sm-12 col-md-12">
+                                        <div v-if="loading">
+                                            <div class="row justify-content-center">
+                                                <div class="col-md-6">
+                                                    <div class="spinner-border text-primary" role="status">
+                                                        <span class="visually-hidden">Loading...</span>
+                                                    </div>
+                                                    Processing...
+                                                </div>
+                                            </div>
                                         </div>
-
                                     </div>
-                                    <div v-if="!loading" class="col-sm-12 col-md-6">
+                                    <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
-                                            <button class="btn btn-primary btn-sm mx-2" v-on:click="markSelected()"
+                                            <button v-if="!loading" class="btn btn-primary btn-sm mx-2" v-on:click="markSelected()"
                                                 type="button">
                                                 mark selected
                                             </button>
@@ -42,7 +48,8 @@
 
                                         <div v-if="isCheckIn" class="mb-3">
                                             <label for="time" class="form-label">Time</label>
-                                            <input type="time" class="form-control" id="check_in" v-model="time">
+                                            <input type="time" class="form-control" id="check_in"
+                                                v-model="time">
 
                                             <div class="mb-3">
                                                 <label for="state" class="form-label">Type</label>
@@ -205,8 +212,7 @@
                                                 @csrf
                                                 @method('DELETE')
 
-                                                <button type="button"
-                                                    class="btn btn-outline-danger btn-sm p-1 mdi mdi-delete"
+                                                <button type="button" class="btn btn-outline-danger p-1 mdi mdi-delete"
                                                     onclick="event.preventDefault(); if (confirm('Are you sure you want to delete this attendance record?')) { document.getElementById('deleteAttendanceForm{{ $attendance->id }}').submit(); }">
                                                     Delete
                                                 </button>
@@ -344,7 +350,7 @@
                             alert("An error occurred while processing your request.");
                         })
                         .finally(() => {
-                            // window.location.reload();
+                            window.location.reload();
                         });
                 }
             },

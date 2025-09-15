@@ -31,6 +31,7 @@
             bottom: 50px;
         }
     </style>
+    @livewireStyles
 </head>
 
 <body class="navbar-fixed sidebar-fixed" id="body">
@@ -133,6 +134,8 @@
     </script>
 
     @yield('scripts')
+
+    @livewireScripts
 
     <script>
         $(document).ready(function() {

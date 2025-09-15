@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class AttendanceSession extends Model
 {
     use onBootTrait;
-    
+
     protected $fillable = [
         'company_id',
         'session_type',
@@ -21,4 +21,5 @@ class AttendanceSession extends Model
     {
         return $this->hasMany(AttendanceRecord::class);
     }
+
 }

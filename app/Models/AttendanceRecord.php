@@ -5,10 +5,11 @@ namespace App\Models;
 use App\Http\Utils\Traits\onBootTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class AttendanceRecord extends Model
 {
-    use onBootTrait, HasFactory;
+    use onBootTrait, HasFactory, SoftDeletes;
 
     protected $fillable = [
         'company_id',

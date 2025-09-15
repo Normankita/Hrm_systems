@@ -169,9 +169,6 @@ Route::prefix('employee/manage/leave/reports')
     });
 
 
-
-
-
 // PayGrade Routes
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('employee/manage/paygrade')

@@ -5,17 +5,17 @@
 
         {{-- Page Header --}}
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h4 class="fw-bold mb-0">Session Attendance</h4>
-            <a href="{{ route('admin.attendances.sessions.get.dashboard') }}">
+            <h4 class="fw-bold mb-0">Session Attendance Records</h4>
+            {{-- <a href="{{ route('admin.attendances.sessions.index') }}">
                 <button class="btn btn-sm btn-primary">
                     <i class="bi bi-plus-lg"></i> Add Session
                 </button>
-            </a>
+            </a> --}}
         </div>
 
         {{-- Filters --}}
         <div class="card mb-4">
-            <div class="card-body">
+            {{-- <div class="card-body">
                 <form class="row g-3 align-items-end">
                     <div class="col-md-3">
                         <label class="form-label">Session Type</label>
@@ -47,7 +47,7 @@
                         </button>
                     </div>
                 </form>
-            </div>
+            </div> --}}
         </div>
 
         {{-- Table --}}

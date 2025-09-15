@@ -6,6 +6,7 @@ use App\Models\AttendanceRecord;
 use App\Models\Employee;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Throwable;
 
@@ -121,28 +122,32 @@ trait AttendanceTrait
                     'date' => isset($details['attendance_date']) ?
                         $details['attendance_date'] : Carbon::now()->format('Y-m-d'),
                     'status' => $details['status'],
-                    'check_in' => $details['check_in'],
-                    'check_out' => $details['check_out'],
+                    'check_in' => $details['check_in_time'],
+                    'check_out' => $details['check_out_time'],
                     'remarks' => $details['remarks'],
                 ]);
             }
             DB::commit();
             return $attendance;
         } catch (Throwable $throwable) {
-            log($throwable->getMessage());
+            Log::info('Error creating attendance: ' . $throwable->getMessage());
             DB::rollBack();
             return null;
         }
     }
 
+    
     private static function outTime($employeeId)
     {
         $employee = Employee::where('id', $employeeId)
             ->with('attendanceSession')
-            ->first();
+            ->first(); $companyDefaultDefaultShift = $employee && $employee->company
+            ? $employee->company->defaultShift()
+            : null;
         $outTime = $employee && $employee->attendanceSession
             ? Carbon::parse($employee->attendanceSession->end_time)
-            : Carbon::now();
+            : ($companyDefaultDefaultShift ? Carbon::parse($companyDefaultDefaultShift->end_time)
+                 : Carbon::now());
         return $outTime->format('H:i:s');
     }
 
@@ -150,10 +155,15 @@ trait AttendanceTrait
     {
         $employee = Employee::where('id', $employeeId)
             ->with('attendanceSession')
+            ->with('company')
             ->first();
+        $companyDefaultDefaultShift = $employee && $employee->company
+            ? $employee->company->defaultShift()
+            : null;
         $inTime = $employee && $employee->attendanceSession
             ? Carbon::parse($employee->attendanceSession->start_time)
-            : Carbon::now();
+            : ($companyDefaultDefaultShift ? Carbon::parse($companyDefaultDefaultShift->start_time)
+                 : Carbon::now());
         return $inTime->format('H:i:s');
     }
 

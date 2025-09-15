@@ -1,8 +1,8 @@
 $(document).ready(function () {
-    $table = $(".dt-table");
-    for (let i = 0; i < $table.length; i++) {
-        let table = $($table[i]);
-        table.DataTable({
+    let table = $(".dt-table");
+    for (let i = 0; i < table.length; i++) {
+        let loopTable = $(table[i]);
+        loopTable.DataTable({
             responsive: true,
             autoWidth: false,
             pageLength: 10,

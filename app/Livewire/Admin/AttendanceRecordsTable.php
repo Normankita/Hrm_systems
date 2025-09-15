@@ -4,6 +4,7 @@ namespace App\Livewire\Admin;
 
 use App\Models\AttendanceRecord;
 use App\Models\AttendanceSession;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 
@@ -11,8 +12,7 @@ class AttendanceRecordsTable extends Component
 {
     use \Livewire\WithPagination;
 
-    protected $paginationTheme = 'bootstrap';
-
+    public $paginationTheme = 'bootstrap';
     public $search = '';
     public $perPage = 20;
 
@@ -40,7 +40,6 @@ class AttendanceRecordsTable extends Component
             }) // ✅ close the when() closure here
             ->orderBy('id', 'desc')
             ->paginate($this->perPage);
-
         return view('livewire.admin.attendance-records-table', [
             'attendanceRecords' => $attendanceRecords
         ]);

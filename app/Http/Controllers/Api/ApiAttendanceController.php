@@ -7,6 +7,7 @@ use App\Http\Services\DailyAttendanceService;
 use App\Http\Utils\Traits\AttendanceTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class ApiAttendanceController extends Controller
@@ -22,7 +23,6 @@ class ApiAttendanceController extends Controller
     {
         $rules = [
             'employees_ids' => 'required|array',
-            'time' => 'required|date_format:H:i',
             'type' => 'sometimes|in:check_in,check_out',
             'state' => 'required|in:present,absent,late,leave',
         ];
@@ -56,7 +56,7 @@ class ApiAttendanceController extends Controller
                 $reqDetails['employee_id'] = $employeeId;
                 $reqDetails['type'] = $type;
                 $reqDetails[$trueType] = $time ??
-                    ($request->state == 'present' ? now()->format('H:i:s') : null);
+                    ($request->state == 'present' ? null : null);
                 $reqDetails['date'] = $request->date ?? now()->format('Y-m-d');
                 $reqDetails['status'] = $request->state ?? 'present';
                 $reqDetails['remarks'] = $request->remarks ?? '';
@@ -70,7 +70,6 @@ class ApiAttendanceController extends Controller
                         'message' => $validate->errors()->first(),
                     ], 422);
                 }
-
                 // convert $reqDetails to object
                 $attendance = self::manualEntryStoreTrait($reqDetails);
                 if (!$attendance) {

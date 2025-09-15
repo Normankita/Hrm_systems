@@ -8,7 +8,7 @@ use App\Models\Contribution;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use Throwable;
 
 class AdminCompanyController extends Controller
 {
@@ -54,7 +54,8 @@ class AdminCompanyController extends Controller
             return redirect()->back()->with('error', 'Company not found.');
         }
 
-        DB::transaction(function () use ($request, $company, $settings) {
+        DB::beginTransaction();
+        try {
             $company->update([
                 'name' => $request->name,
                 'address' => $request->address,
@@ -81,7 +82,12 @@ class AdminCompanyController extends Controller
                     ['value' => $value]
                 );
             }
-        });
+            DB::commit();
+        } catch (Throwable $throwable) {
+            DB::rollBack();
+            return redirect()->route('admin.companies.edit', $company->id)
+                ->with('fail', 'Company details updated successfully.');
+        }
 
         return redirect()->route('admin.companies.edit', $company->id)
             ->with('success', 'Company details updated successfully.');

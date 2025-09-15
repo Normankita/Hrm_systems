@@ -48,6 +48,9 @@ class CompanyService extends Controller
 
             self::createDefaultAttendanceSession($company->id);
 
+            self::createDefaultAgeRestriction($company->id);
+
+
             $settings = [
                 ['name' => 'payment_date', 'value' => 27]
             ];
@@ -93,6 +96,16 @@ class CompanyService extends Controller
 
     }
 
+    private static function createDefaultAgeRestriction($companyId)
+    {
+        $data = [
+            'name' => 'minimum_age',
+            'value' => 18,
+            'company_id' => $companyId
+        ];
+        Setting::create($data);
+        return;
+    }
 
     public function companyRoles(Company $company)
     {
@@ -162,7 +175,7 @@ class CompanyService extends Controller
             'is_active' => true,
             'company_id' => $companyId
         ];
-        $department = Department::create($data);
+        $department = AttendanceSession::create($data);
         return $department;
     }
 

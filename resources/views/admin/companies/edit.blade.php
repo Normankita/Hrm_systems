@@ -1,4 +1,5 @@
 @extends('layouts.system')
+
 @section('content')
 
         <div class="card shadow rounded">
@@ -61,7 +62,7 @@
                             @foreach (App\Models\Setting::all() as $setting)
                                 <div class="mb-3">
                                     <label for="{{ $setting->name }}" class="form-label">{{ $setting->name }}</label>
-                                    <input type="day" class="form-control" id="{{ $setting->name }}"
+                                    <input type="number" max="29" min="1" class="form-control" id="{{ $setting->name }}"
                                         name="skysetlist-{{ $setting->name }}" value="{{ $setting->value }}" required>
                                 </div>
                             @endforeach

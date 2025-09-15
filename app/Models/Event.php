@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Utils\Traits\onBootTrait;
 use App\Models\Scopes\AuthUserCompanyScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -9,26 +10,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 class Event extends Model
 {
 
-    protected static function booted()
-    {
-        // Automatically apply a global scope to all queries
-        static::addGlobalScope(new AuthUserCompanyScope);
-
-        // Automatically assign the tenant_id when creating a new record
-        static::creating(function ($item) {
-            if (auth()->check()) {
-                if (auth()->user()->hasRole('OWNER')) {
-
-                } else {
-                    $company = Company::find(auth()->user()->company_id);
-                    if ($company) {
-                        $item->company_id = auth()->user()->company_id;
-                    }
-                }
-            }
-        });
-    }
-
+   use onBootTrait;
     protected $fillable = [
         'eventable_id',
         'eventable_type',

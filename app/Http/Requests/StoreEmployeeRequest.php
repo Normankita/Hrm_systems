@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Company;
 use Illuminate\Foundation\Http\FormRequest;
 use Carbon\Carbon;
 
@@ -46,7 +47,7 @@ class StoreEmployeeRequest extends FormRequest
     }
 
     /**
-     * 
+     *
      * custom validator for checking age at hire
      * @param mixed $validator
      * @return void
@@ -61,9 +62,13 @@ class StoreEmployeeRequest extends FormRequest
                 $dob = Carbon::parse($dob);
                 $hire = Carbon::parse($hireDate);
                 $ageAtHire = $dob->diffInYears($hire);
+                // get min age from company settings
+                $company = session()->get('company');
+                $company = Company::find($company->id);
+                $minAge = $company ? $company->getMinimumAge() : 18;
 
-                if ($ageAtHire < 18) {
-                    $validator->errors()->add('date_of_birth', 'The employee must be at least 18 years old at the time of hire.');
+                if ($ageAtHire < $minAge) {
+                    $validator->errors()->add('date_of_birth', 'The employee must be at least ' . $minAge . ' years old at the time of hire.');
                 }
             }
         });

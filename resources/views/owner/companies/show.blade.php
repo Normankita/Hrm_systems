@@ -111,7 +111,7 @@
                                 <form action="{{ route('owner.companies.toggleStatus', $company->id) }}" method="POST">
                                     @csrf
                                     <button type="submit"
-                                        class="btn btn-sm {{ $company->isActive ? 'btn-danger' : 'btn-success' }}">
+                                        class="btn btn-sm p-1 mt-2 {{ $company->isActive ? 'btn-danger' : 'btn-success' }}">
                                         {{ $company->isActive ? 'Deactivate' : 'Activate' }}
                                     </button>
                                 </form>

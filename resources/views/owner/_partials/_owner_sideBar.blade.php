@@ -42,7 +42,7 @@
         <div class="sidebar-footer" style="position: absolute; bottom: 0; width: 100%; padding: 10px;">
             <ul class="nav">
                 <li>
-                    <a class="sidenav-item-link" href="{{ route('employees.profile.index') }}"
+                    <a class="sidenav-item-link" href=""
                         style="color: white; padding: 10px 15px;">
                         <i class="mdi mdi-account-circle"></i>
                         <span class="nav-text">My Profile</span>

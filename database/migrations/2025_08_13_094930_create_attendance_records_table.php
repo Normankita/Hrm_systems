@@ -22,6 +22,7 @@ return new class extends Migration {
             $table->time('check_out')->nullable();
             $table->boolean('is_from_attendance')->default(true);
             $table->text('remarks')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -20,7 +20,7 @@ class OwnerCompaniesController extends Controller
     {
         $response = CompanyService::createCompany($request->all());
         if ($response['status'] === 'error') {
-            if ($response['type'] == 'validation') {
+            if (isset($response['type']) && $response['type'] == 'validation') {
                 return redirect()->back()
                     ->withErrors($response['validated'])
                     ->withInput();

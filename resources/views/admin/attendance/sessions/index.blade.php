@@ -8,7 +8,10 @@
             <div class="card-body">
                 <div class="row justify-content-center">
                     <div class="col-md-12">
-                        <x-system.modal-button id="add-session" text="Add New Session"></x-system.modal-button>
+                        <div class="mb-3">
+                        <x-system.modal-button id="add-session" text="Add New Session">
+                        </x-system.modal-button>
+                        </div>
 
                         <!-- Table -->
                         <div class="table-responsive">

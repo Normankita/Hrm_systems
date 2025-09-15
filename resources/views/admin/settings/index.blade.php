@@ -7,9 +7,9 @@
                 <div class="card-body ">
 
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h3 class="mb-0">Employee Directory</h3>
+                        {{-- <h3 class="mb-0">Employee Directory</h3>
                         <x-system.modal-button class="btn btn-primary mb-3"
-                        id="CreateSetting" text="Add New Setting" />
+                        id="CreateSetting" text="Add New Setting" /> --}}
 
                     <x-system.modal size="modal-lg" id="CreateSetting" title="Create New Setting"
                         form="CreateSettingForm">
@@ -61,7 +61,7 @@
                                             </td>
                                         </tr>
 
-                                    <x-system.modal size="modal-lg" id="editSetting{{ $setting->id }}" title="Edit Pay Grade"
+                                    <x-system.modal size="modal-lg" id="editSetting{{ $setting->id }}" :title="'Edit ' . $setting->name "
                                         form="editSettingForm{{ $setting->id }}">
                                         <form id="editSettingForm{{ $setting->id }}"
                                             action="{{ route('admin.settings.update', $setting->id) }}" method="POST">

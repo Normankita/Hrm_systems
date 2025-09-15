@@ -171,7 +171,8 @@ class AdminAttendancesController extends Controller
 
     public function update(Request $request, $attendanceId)
     {
-        $attendance = AttendanceTrait::updateAttendance($attendanceId, $request->all());
+        $attendance = AttendanceTrait::updateAttendance($attendanceId,
+            $request->all());
         if (!$attendance) {
             return redirect()->back()->with(
                 'error',

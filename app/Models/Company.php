@@ -65,5 +65,18 @@ class Company extends Model
     public function roles() {
         return $this->hasMany(Role::class);
     }
+
+
+    public function defaultShift() {
+        return AttendanceSession::where('company_id', $this->id)
+            ->where('is_active', true)
+            ->first();
+    }
+
+
+    public function getMinimumAge() {
+        return $this->settings()->where('name', 'minimum_age')
+            ->first()->value ?? 18;
+    }
 }
 

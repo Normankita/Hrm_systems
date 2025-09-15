@@ -3,32 +3,14 @@
 namespace App\Models;
 
 use App\Enums\AllowanceGroups;
+use App\Http\Utils\Traits\onBootTrait;
 use App\Models\Scopes\AuthUserCompanyScope;
 use Illuminate\Database\Eloquent\Model;
 
 class DisbursedAllowance extends Model
 {
 
-    protected static function booted()
-    {
-        // Automatically apply a global scope to all queries
-        static::addGlobalScope(new AuthUserCompanyScope);
-
-        // Automatically assign the tenant_id when creating a new record
-        static::creating(function ($item) {
-            if (auth()->check()) {
-                if (auth()->user()->hasRole('OWNER')) {
-
-                } else {
-                    $company = Company::find(auth()->user()->company_id);
-                    if ($company) {
-                        $item->company_id = auth()->user()->company_id;
-                    }
-                }
-            }
-        });
-    }
-
+    use onBootTrait;
     // create a enum that i can user for type ['individual', 'group', '']
 
     public function __construct()
@@ -83,7 +65,8 @@ class DisbursedAllowance extends Model
     }
 
 
-    public function getDisbursementDay() {
+    public function getDisbursementDay()
+    {
         return $this->create_at;
     }
 

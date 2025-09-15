@@ -3,11 +3,13 @@
 namespace App\Http\Utils\Traits;
 
 use App\Models\AttendanceSession;
+use App\Models\Company;
 use App\Models\Employee;
 use App\Models\EmployeeStatusHistory;
 use App\Models\PayGrade;
 use App\Models\Status;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -16,10 +18,27 @@ use Throwable;
 
 trait EmployeeTrait
 {
+
+    private static function isValidateAge($date_of_birth) {
+        $comparingDay = Carbon::now();
+        $company = session()->get('company');
+        $company = Company::find($company->id);
+        $date_of_birth = Carbon::parse($date_of_birth);
+        // taking the company's minimum age requirement or defaulting to 18
+        $minAge = $company ? $company->getMinimumAge() : 18;
+        // counting number of years from counting day
+        $age = $date_of_birth->diffInYears($comparingDay);
+        return $age >= $minAge;
+    }
+
+
     public static function createEmployee($data): Employee
     {
         DB::beginTransaction();
         try {
+            if (!self::isValidateAge($data['date_of_birth'])) {
+                throw new \Exception('Employee does not meet the minimum age requirement.');
+            }
             $user = User::create([
                 'name' => $data['first_name'] . ' ' . $data['last_name'],
                 'email' => $data['email'],
