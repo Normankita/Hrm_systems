@@ -130,28 +130,52 @@
 
 
                 {{-- Attendance Section --}}
-                <li class="has-sub">
-                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                        data-target="#loan-menu" aria-expanded="false" aria-controls="loan-menu">
-                        <i class="mdi mdi-cash-refund"></i>
-                        <span class="nav-text">Attendance</span>
-                        <b class="caret"></b>
-                    </a>
-                    <ul class="collapse" id="loan-menu" data-parent="#sidebar-menu">
-                        <div class="sub-menu">
-                            <li>
-                                <a class="sidenav-item-link" href="">
-                                    <span class="nav-text">Mark Attendance</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="sidenav-item-link" href="">
-                                    <span class="nav-text">Attendance Summary</span>
-                                </a>
-                            </li>
-                        </div>
-                    </ul>
-                </li>
+                @canany(['view_attendances', 'mark_attendance'])
+                    <li class="has-sub">
+                        <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                            data-target="#loan-menu" aria-expanded="false" aria-controls="loan-menu">
+                            <i class="mdi mdi-cash-refund"></i>
+                            <span class="nav-text">Manage Attendance</span>
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="collapse" id="loan-menu" data-parent="#sidebar-menu">
+                            <div class="sub-menu">
+                                @can('view_attendances')
+                                    <li>
+                                        <a class="sidenav-item-link" href="{{ route('employee.manage.attendance.dashboard') }}">
+                                            <span class="nav-text">Attendance Dashboard</span>
+                                        </a>
+                                    </li>
+                                @endcan
+
+                                @canany(abilities: ['view_attendances'])
+                                    <li>
+                                        <a class="sidenav-item-link" href="{{ route('employee.manage.attendance.dailyAttendance') }}">
+                                            <span class="nav-text">Daily Attendance</span>
+                                        </a>
+                                    </li>
+                                @endcan
+
+                                @can(abilities: ['mark_attendance'])
+                                    <li>
+                                        <a class="sidenav-item-link" href="{{ route('employee.manage.attendance.manualEntry') }}">
+                                            <span class="nav-text">Manual Entry</span>
+                                        </a>
+                                    </li>
+                                @endcan
+
+                                @canany(abilities: ['view_attendances'])
+                                    <li>
+                                        <a class="sidenav-item-link" href="">
+                                            <span class="nav-text">Report & Analysis</span>
+                                        </a>
+                                    </li>
+                                @endcan
+
+                            </div>
+                        </ul>
+                    </li>
+                @endcanany
 
                 @canany(['view_payroll', 'create_payroll'])
                     <li class="has-sub">

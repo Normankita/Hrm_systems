@@ -4,6 +4,7 @@ use App\Http\Controllers\EmployeeControllers\EmployeeManageAllowanceFrequencyCon
 use App\Http\Controllers\EmployeeControllers\EmployeeAllowanceGroupController;
 use App\Http\Controllers\EmployeeControllers\EmployeeLeaveController;
 use App\Http\Controllers\EmployeeControllers\EmployeeManageAllowancesController;
+use App\Http\Controllers\EmployeeControllers\EmployeeManageAttendanceController;
 use App\Http\Controllers\EmployeeControllers\EmployeeManageDeductionController;
 use App\Http\Controllers\EmployeeControllers\EmployeeManageDisbursements;
 use App\Http\Controllers\EmployeeControllers\EmployeeManageEmployeeAllowancesController;
@@ -94,7 +95,7 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     });
 
 
-    // Managin Loans
+// Managin Loans
 
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('employee/manage/loans')
@@ -294,3 +295,20 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     });
 
 Route::get('/employees/{employee}/payrolls/{payroll}', [EmployeeManagePayrollController::class, 'show'])->name('payroll.show');
+
+
+// attendance route
+Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
+    ->prefix('employee/manage/attendance')
+    ->name('employee.manage.attendance.')
+    ->controller(EmployeeManageAttendanceController::class)
+    ->group(function () {
+        Route::get('/dashboard', 'dashboard')
+            ->name('dashboard');
+        Route::get('/manual/entry', 'manualEntryPage')
+            ->name('manualEntry');
+        Route::get('/daily/attendance', 'dailyAttendance')
+            ->name('dailyAttendance');
+        Route::post('/manual/entry/store', 'manualEntryStore')
+            ->name('manual.entry.store');
+    });

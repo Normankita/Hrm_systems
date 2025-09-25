@@ -55,7 +55,7 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     });
 
 
-Route::middleware(['auth', 'role:ADMIN'])
+Route::middleware(['auth', 'role:ADMIN|EMPLOYEE'])
     ->prefix('/attendance')
     ->controller(ApiAttendanceController::class)
     ->name('attendances.')

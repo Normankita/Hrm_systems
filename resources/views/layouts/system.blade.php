@@ -66,7 +66,7 @@
                     <div id="toast"></div>
 
                     <div class="row justify-content-between mb-3">
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
 
                             @if (isset($_SERVER['HTTP_REFERER']))
                                 <a href="{{ $_SERVER['HTTP_REFERER'] }}" class="btn btn-outline-primary btn-sm">
@@ -77,7 +77,7 @@
                                     <i class="mdi mdi-arrow-left"></i> Back
                                 </a>
                             @endif
-                        </div>
+                        </div> --}}
 
                         <!-- at right side, add search button with search mdi icon, a toggle buttons and a submit button -->
                         {{-- <div class="col-md-8">
