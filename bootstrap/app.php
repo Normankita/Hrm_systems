@@ -21,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'permission' => PermissionMiddleware::class,
             'HasCompanyProfile' => hasCompanyProfile::class,
             'HasDefaultConfigs' => HasDefaultConfigs::class,
+            'admin-or-attendance' => \App\Http\Middleware\CheckAdminOrAttendancePermission::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
