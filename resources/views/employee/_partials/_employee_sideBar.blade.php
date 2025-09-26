@@ -150,7 +150,8 @@
 
                                 @canany(abilities: ['view_attendances'])
                                     <li>
-                                        <a class="sidenav-item-link" href="{{ route('employee.manage.attendance.dailyAttendance') }}">
+                                        <a class="sidenav-item-link"
+                                            href="{{ route('employee.manage.attendance.dailyAttendance') }}">
                                             <span class="nav-text">Daily Attendance</span>
                                         </a>
                                     </li>
@@ -158,7 +159,8 @@
 
                                 @can(abilities: ['mark_attendance'])
                                     <li>
-                                        <a class="sidenav-item-link" href="{{ route('employee.manage.attendance.manualEntry') }}">
+                                        <a class="sidenav-item-link"
+                                            href="{{ route('employee.manage.attendance.manualEntry') }}">
                                             <span class="nav-text">Manual Entry</span>
                                         </a>
                                     </li>
@@ -176,6 +178,31 @@
                         </ul>
                     </li>
                 @endcanany
+
+
+
+
+                <li class="has-sub">
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                        data-target="#attendance-response-menu" aria-expanded="false"
+                        aria-controls="attendance-response-menu">
+                        <i class="mdi mdi-cash-multiple"></i>
+                        <span class="nav-text">Attendance</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="collapse" id="attendance-response-menu" data-parent="#sidebar-menu">
+                        <div class="sub-menu">
+                            <li>
+                                <a class="sidenav-item-link"
+                                    href="{{ route('employee.attendance.dashboard') }}">
+                                    <i class="mdi mdi-eye-outline mr-1"></i>
+                                    <span class="nav-text">Dashboard</span>
+                                </a>
+                            </li>
+                    </ul>
+                </li>
+
+
 
                 @canany(['view_payroll', 'create_payroll'])
                     <li class="has-sub">

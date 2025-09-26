@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\EmployeeControllers\EmployeeManageAllowanceFrequencyController;
 use App\Http\Controllers\EmployeeControllers\EmployeeAllowanceGroupController;
+use App\Http\Controllers\EmployeeControllers\EmployeeAttendancesController;
 use App\Http\Controllers\EmployeeControllers\EmployeeLeaveController;
 use App\Http\Controllers\EmployeeControllers\EmployeeManageAllowancesController;
 use App\Http\Controllers\EmployeeControllers\EmployeeManageAttendanceController;
@@ -311,4 +312,15 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
             ->name('dailyAttendance');
         Route::post('/manual/entry/store', 'manualEntryStore')
             ->name('manual.entry.store');
+    });
+
+
+
+Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
+    ->prefix('employee/attendance')
+    ->name('employee.attendance.')
+    ->controller(EmployeeAttendancesController::class)
+    ->group(function () {
+        Route::get('/dashboard', 'dashboard')
+            ->name('dashboard');
     });

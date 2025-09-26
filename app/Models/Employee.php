@@ -50,6 +50,7 @@ class Employee extends Model
     }
 
 
+
     public function department()
     {
         return $this->belongsTo(Department::class);
@@ -346,6 +347,7 @@ class Employee extends Model
         return $employees;
     }
 
+
     public static function whoCheckoutToday()
     {
         $today = Carbon::now()->format('Y-m-d');
@@ -391,5 +393,10 @@ class Employee extends Model
         return $this->belongsTo(AttendanceSession::class, 'attendance_session_id');
     }
 
+
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
+    }
 
 }
