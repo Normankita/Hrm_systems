@@ -34,7 +34,7 @@
  <script src="{{ asset('bootstrap5.1.1/js/chart.js') }}"></script>
  <script src="{{ asset('bootstrap5.1.1/js/map.js') }}"></script>
  <script src="{{ asset('bootstrap5.1.1/js/custom.js') }}"></script>
- <script src="{{ asset('bootstrap5.1.1/plugins/nprogress/nprogress.js') }}"></script>
+ {{-- <script src="{{ asset('bootstrap5.1.1/plugins/nprogress/nprogress.js') }}"></script> --}}
  <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 
  <script src="{{ asset('bootstrap5.1.1/js/defaultTableData.js') }}"></script>

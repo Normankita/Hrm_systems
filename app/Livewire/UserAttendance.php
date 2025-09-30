@@ -19,6 +19,10 @@ class UserAttendance extends Component
 
     public $perPage;
 
+    public $sortField = "created_at";
+
+    public $sortDirection = 'desc';
+
 
     public function updatingSearch()
     {
@@ -28,13 +32,23 @@ class UserAttendance extends Component
 
 
 
-    public function render()
-    {
-        $user = Auth::user();
-        $employee = Employee::where('user_id', $user->id)
-            ->first();
-        $attendance = $employee->attendances()->paginate(10);
-        return view('livewire.user-attendance')
-        ->with('attendances', $attendance);
-    }
+public function render()
+{
+    $user = Auth::user();
+    $employee = Employee::where('user_id', $user->id)->first();
+
+    $attendance = $employee->attendances()
+        ->when($this->search, function ($query) {
+            $query->where(function ($q) {
+                $q->where('status', 'like', '%' . $this->search . '%')
+                  ->orWhere('attendance_date', 'like', '%' . $this->search . '%');
+            });
+        })
+        ->orderBy($this->sortField, $this->sortDirection)
+        ->paginate(10);
+
+    return view('livewire.user-attendance', [
+        'attendances' => $attendance
+    ]);
+}
 }

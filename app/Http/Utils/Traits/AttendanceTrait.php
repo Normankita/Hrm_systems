@@ -97,9 +97,11 @@ trait AttendanceTrait
             $attendance['check_in_time'] = null;
             $attendance['check_out_time'] = null;
         }
-        if (($attendance['status'] == 'present' || $attendance['status'] == 'late')
-                && empty($attendance['check_in_time'])) {
-                    $attendance['check_in_time'] = now()->format('H:i:s');
+        if (
+            ($attendance['status'] == 'present' || $attendance['status'] == 'late')
+            && empty($attendance['check_in_time'])
+        ) {
+            $attendance['check_in_time'] = now()->format('H:i:s');
         }
         $attendance = self::createAttendance($attendance);
         return $attendance;
@@ -136,22 +138,34 @@ trait AttendanceTrait
         }
     }
 
-    
-    private static function outTime($employeeId)
+
+    public static function outTime($employeeId)
     {
         $employee = Employee::where('id', $employeeId)
             ->with('attendanceSession')
-            ->first(); $companyDefaultDefaultShift = $employee && $employee->company
+            ->first();
+        $companyDefaultDefaultShift = $employee && $employee->company
             ? $employee->company->defaultShift()
             : null;
         $outTime = $employee && $employee->attendanceSession
             ? Carbon::parse($employee->attendanceSession->end_time)
             : ($companyDefaultDefaultShift ? Carbon::parse($companyDefaultDefaultShift->end_time)
-                 : Carbon::now());
+                : null);
+        if (!$outTime) {
+            throw new \Exception('Out time not found');
+        }
         return $outTime->format('H:i:s');
     }
 
-    private static function employeeInTime($employeeId)
+
+    public static function isLate($employeeId = null, $comparingTime = null) {
+        $employeeId = $employeeId ?? auth()->user()->employee->id;
+        $inTime = self::employeeInTime($employeeId);
+        $comparingTime = $comparingTime ?? now();
+        return $comparingTime->greaterThan($inTime);
+    }
+
+    public static function employeeInTime($employeeId)
     {
         $employee = Employee::where('id', $employeeId)
             ->with('attendanceSession')
@@ -163,7 +177,7 @@ trait AttendanceTrait
         $inTime = $employee && $employee->attendanceSession
             ? Carbon::parse($employee->attendanceSession->start_time)
             : ($companyDefaultDefaultShift ? Carbon::parse($companyDefaultDefaultShift->start_time)
-                 : Carbon::now());
+                : Carbon::now());
         return $inTime->format('H:i:s');
     }
 

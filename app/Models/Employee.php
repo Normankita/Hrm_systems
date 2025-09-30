@@ -348,6 +348,7 @@ class Employee extends Model
     }
 
 
+
     public static function whoCheckoutToday()
     {
         $today = Carbon::now()->format('Y-m-d');
@@ -397,6 +398,19 @@ class Employee extends Model
     public function attendances()
     {
         return $this->hasMany(Attendance::class);
+    }
+
+
+    /**
+     * Summary of getTodayAttendance
+     * @return Attendance|object|null
+     */
+    public function getTodayAttendance()
+    {
+        $today = Carbon::now()->format('Y-m-d');
+        return $this->attendances()
+            ->whereDate('attendance_date', $today)
+            ->first();
     }
 
 }

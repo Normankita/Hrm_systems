@@ -4,6 +4,7 @@ namespace App\Livewire\Admin;
 
 use App\Http\Utils\Traits\Livewire\WithSortingAndSearch;
 use App\Models\Attendance;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class AttendanceTable extends Component
@@ -14,6 +15,14 @@ class AttendanceTable extends Component
     public $perPage = 10;
     public $sortField = 'created_at';
     public $sortDirection = 'desc';
+
+
+    #[On('attendanceUpdated')]
+    public function refreshList()
+    {
+        // This will re-run render()
+        $this->render();
+    }
 
     public function updatingSearch()
     {
