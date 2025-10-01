@@ -56,7 +56,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row mt-5 mb-3">
+                    {{-- <div class="row mt-5 mb-3">
                         <div class="col-sm-12 col-md-6">
                             <h3>Configurations Setups</h3>
                             @foreach (App\Models\Setting::all() as $setting)
@@ -67,7 +67,7 @@
                                 </div>
                             @endforeach
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="row mt-5 mb-3">
                         <div class="row col-sm-12 col-md-12">
                             <h3>Statutory Deductions(%)</h3>

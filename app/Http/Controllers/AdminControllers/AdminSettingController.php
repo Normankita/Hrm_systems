@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\AdminControllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Utils\Traits\SettingsTrait;
 use App\Models\Setting;
+use App\Models\SettingOptions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,6 +19,12 @@ class AdminSettingController extends Controller
     public function index()
     {
         $settings = Auth::user()->company->settings;
+        $options = SettingOptions::all();
+        $settings = $settings->map(function ($setting) use ($options) {
+            $options = SettingsTrait::settingOptions($setting->id);
+            $setting->options = $options;
+            return $setting;
+        });
         return view('admin.settings.index')
             ->with('settings', $settings);
     }

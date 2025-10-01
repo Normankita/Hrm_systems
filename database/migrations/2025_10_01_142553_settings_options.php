@@ -8,14 +8,15 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     * This is for those settings that can have range of values,
+     * here we will have those other values of that particular setting
      */
     public function up(): void
     {
-        Schema::create('settings', function (Blueprint $table) {
+        Schema::create('settings_options', function(Blueprint $table) {
             $table->id();
-            $table->string('name'); // currency
-            $table->string('value'); // usd
-            $table->foreignId('company_id');
+            $table->string('key');
+            $table->json('values');
             $table->timestamps();
         });
     }
@@ -25,7 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('settings');
+        //
     }
 };
-

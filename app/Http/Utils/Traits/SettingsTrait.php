@@ -3,6 +3,7 @@
 namespace App\Http\Utils\Traits;
 
 use App\Models\Setting;
+use App\Models\SettingOptions;
 
 class SettingsTrait
 {
@@ -46,4 +47,10 @@ class SettingsTrait
         return $arrivalTime ? $arrivalTime->value : '8:00 AM';
     }
 
+
+    public static function settingOptions($id) {
+        $setting = Setting::find($id);
+        $options = SettingOptions::where('key', $setting->name)->first();
+        return $options ? json_decode($options->values) : [];
+    }
 }

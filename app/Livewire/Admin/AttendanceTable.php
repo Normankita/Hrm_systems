@@ -17,13 +17,6 @@ class AttendanceTable extends Component
     public $sortDirection = 'desc';
 
 
-    #[On('attendanceUpdated')]
-    public function refreshList()
-    {
-        // This will re-run render()
-        $this->render();
-    }
-
     public function updatingSearch()
     {
         $this->resetPage();

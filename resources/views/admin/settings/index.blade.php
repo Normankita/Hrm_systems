@@ -11,24 +11,23 @@
                         <x-system.modal-button class="btn btn-primary mb-3"
                         id="CreateSetting" text="Add New Setting" /> --}}
 
-                    <x-system.modal size="modal-lg" id="CreateSetting" title="Create New Setting"
-                        form="CreateSettingForm">
-                        <form id="CreateSettingForm" action="{{ route('admin.settings.store') }}" method="POST">
-                            @csrf
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <label for="name">Setting Name</label>
-                                    <input type="text" value="{{ old('name') }}" class="form-control" name="name"
-                                        id="name" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="value">value</label>
-                                    <textarea class="form-control" name="value">
+                        <x-system.modal size="modal-lg" id="CreateSetting" title="Create New Setting" form="CreateSettingForm">
+                            <form id="CreateSettingForm" action="{{ route('admin.settings.store') }}" method="POST">
+                                @csrf
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="name">Setting Name</label>
+                                        <input type="text" value="{{ old('name') }}" class="form-control"
+                                            name="name" id="name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="value">value</label>
+                                        <textarea class="form-control" name="value">
                                         {{ old('value') }}</textarea>
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
-                    </x-system.modal>
+                            </form>
+                        </x-system.modal>
 
                     </div>
 
@@ -55,32 +54,46 @@
                                             <td>{{ $setting->value }}</td>
                                             <td class="d-flex p-1 gap-1">
 
-                                            {{-- Edit Button --}}
-                                            <x-system.modal-button class="btn btn-outline-dark btn-sm p-1 mx-1 mdi mdi-pencil"
-                                                id="editSetting{{ $setting->id }}" text="Edit" textColor="" />
+                                                {{-- Edit Button --}}
+                                                <x-system.modal-button
+                                                    class="btn btn-outline-dark btn-sm p-1 mx-1 mdi mdi-pencil"
+                                                    id="editSetting{{ $setting->id }}" text="Edit" textColor="" />
                                             </td>
                                         </tr>
 
-                                    <x-system.modal size="modal-lg" id="editSetting{{ $setting->id }}" :title="'Edit ' . $setting->name "
-                                        form="editSettingForm{{ $setting->id }}">
-                                        <form id="editSettingForm{{ $setting->id }}"
-                                            action="{{ route('admin.settings.update', $setting->id) }}" method="POST">
-                                            @csrf
-                                            @method('put')
-                                            <div class="modal-body">
-                                                {{-- <div class="form-group">
+                                        <x-system.modal size="modal-lg" id="editSetting{{ $setting->id }}"
+                                            :title="'Edit ' . $setting->name" form="editSettingForm{{ $setting->id }}">
+                                            <form id="editSettingForm{{ $setting->id }}"
+                                                action="{{ route('admin.settings.update', $setting->id) }}" method="POST">
+                                                @csrf
+                                                @method('put')
+                                                <div class="modal-body">
+                                                    {{-- <div class="form-group">
                                                     <label for="name">Setting Name</label>
                                                     <input type="text" value="{{ $setting->name }}" class="form-control"
                                                         name="name" required>
                                                 </div> --}}
-                                                <div class="form-group">
-                                                    <label for="value">value</label>
-                                                    <textarea class="form-control"
-                                                        name="value">{{ $setting->value }}</textarea>
+                                                    @if (count($setting->options))
+                                                        <div class="form-group">
+                                                            <label for="value">value</label>
+                                                            <select class="form-control" name="value">
+                                                                @foreach ($setting->options as $option)
+                                                                    <option value="{{ $option }}"
+                                                                        {{ $option == $setting->value ? 'selected' : '' }}>
+                                                                        {{ $option }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    @else
+                                                        <div class="form-group">
+                                                            <label for="value">value</label>
+                                                            <textarea class="form-control" name="value">{{ $setting->value }}</textarea>
+                                                        </div>
+                                                    @endif
                                                 </div>
-                                            </div>
-                                        </form>
-                                    </x-system.modal>
+                                            </form>
+                                        </x-system.modal>
                                     @endforeach
                                 </x-system.table-body>
                             </x-slot>

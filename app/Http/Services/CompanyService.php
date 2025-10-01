@@ -50,6 +50,7 @@ class CompanyService extends Controller
 
             self::createDefaultAgeRestriction($company->id);
 
+            self::createDefaultAttendanceCheckRestriction($company->id);
 
             $settings = [
                 ['name' => 'payment_date', 'value' => 27]
@@ -101,6 +102,18 @@ class CompanyService extends Controller
         $data = [
             'name' => 'minimum_age',
             'value' => 18,
+            'company_id' => $companyId
+        ];
+        Setting::create($data);
+        return;
+    }
+
+
+        private static function createDefaultAttendanceCheckRestriction($companyId)
+    {
+        $data = [
+            'name' => 'user_check_attendance',
+            'value' => 'no',
             'company_id' => $companyId
         ];
         Setting::create($data);
