@@ -28,13 +28,14 @@ class DatabaseSeeder extends Seeder
         $this->call( LeaveTypeSeeder::class);
         $this->call( AddingPaygradeToDefaultEmployeeSeeder::class );
 
-
         // seeder for factory, remove in production
-        // $this->call( AttendanceSeeder::class );
+        // $this->call( AttendanceSeeder::class );`
 
         $this->call( AttendancePermissionsSeeder::class );
 
         $this->call( SettingsOptionsSeeder::class );
+
+        $this->call( AttencanceIndividualPermissionSeeder::class);
 
     }
 }

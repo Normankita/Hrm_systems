@@ -179,30 +179,26 @@
                     </li>
                 @endcanany
 
-
-
-
-                <li class="has-sub">
-                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                        data-target="#attendance-response-menu" aria-expanded="false"
-                        aria-controls="attendance-response-menu">
-                        <i class="mdi mdi-cash-multiple"></i>
-                        <span class="nav-text">Attendance</span>
-                        <b class="caret"></b>
-                    </a>
-                    <ul class="collapse" id="attendance-response-menu" data-parent="#sidebar-menu">
-                        <div class="sub-menu">
-                            <li>
-                                <a class="sidenav-item-link"
-                                    href="{{ route('employee.attendance.dashboard') }}">
-                                    <i class="mdi mdi-eye-outline mr-1"></i>
-                                    <span class="nav-text">Dashboard</span>
-                                </a>
-                            </li>
-                    </ul>
-                </li>
-
-
+                @canany(['ind_mark_attendance', 'ind_view_attendance'])
+                    <li class="has-sub">
+                        <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                            data-target="#attendance-response-menu" aria-expanded="false"
+                            aria-controls="attendance-response-menu">
+                            <i class="mdi mdi-cash-multiple"></i>
+                            <span class="nav-text">Attendance</span>
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="collapse" id="attendance-response-menu" data-parent="#sidebar-menu">
+                            <div class="sub-menu">
+                                <li>
+                                    <a class="sidenav-item-link" href="{{ route('employee.attendance.dashboard') }}">
+                                        <i class="mdi mdi-eye-outline mr-1"></i>
+                                        <span class="nav-text">Dashboard</span>
+                                    </a>
+                                </li>
+                        </ul>
+                    </li>
+                @endcanany
 
                 @canany(['view_payroll', 'create_payroll'])
                     <li class="has-sub">

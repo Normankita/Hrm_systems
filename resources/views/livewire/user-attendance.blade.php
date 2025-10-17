@@ -63,7 +63,11 @@
                         @endif
                         <div wire:loading.remove wire:target="selecteAttendance">
                             @if ($selecteAttendance)
-                                <table class="table table-bordered table-hover align-middle">
+                                <!-- create a bootstrap loader for refresh waiting -->
+                                <div wire:loading class="">
+                                    <span>Loading...</span>
+                                </div>
+                                <table wire:loading.remove class="table table-bordered table-hover align-middle">
                                     <thead>
                                         <tr>
                                             <th>#</th>
@@ -101,5 +105,14 @@
         // Initialize or get the Bootstrap modal instance
         const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
         modal.hide();
+    });
+</script>
+
+
+<script>
+    document.addEventListener('livewire:initialized', () => {
+        Livewire.on('attendanceUpdate', () => {
+            @this.build();
+        });
     });
 </script>

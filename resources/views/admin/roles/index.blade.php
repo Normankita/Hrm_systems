@@ -27,7 +27,7 @@
                                 @forelse($roles->whereNotIn('name',
                                     ['OWNER', 'EMPLOYEE', 'ADMIN']) as $key => $role)
                                     <tr>
-                                        <td>{{ ++$key }}</td>
+                                        <td>{{ $loop->iteration }}</td>
                                         <td>{{ $role->name }}</td>
                                         <td>
                                             <x-system.modal-button text="Edit"

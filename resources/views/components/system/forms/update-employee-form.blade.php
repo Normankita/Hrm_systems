@@ -228,6 +228,7 @@
                 <div class="col-md-6 mb-4">
                     <label class="text-dark font-weight-medium">Designation (Role)</label>
                     <select name="role_id" class="form-control" >
+                        <option value="">Choose Role</option>
                         @foreach ($roles->whereNotIn('name', ['OWNER', 'ADMIN', 'EMPLOYEE']) as $role)
                             <option value="{{ $role->id }}"
                                 {{ $employee->user->hasRole($role->name) == $role->id ? 'selected' : '' }}

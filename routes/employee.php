@@ -315,12 +315,11 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     });
 
 
-
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('employee/attendance')
     ->name('employee.attendance.')
     ->controller(EmployeeAttendancesController::class)
     ->group(function () {
         Route::get('/dashboard', 'dashboard')
-            ->name('dashboard');
+            ->name('dashboard')->can('ind_view_attendance');
     });

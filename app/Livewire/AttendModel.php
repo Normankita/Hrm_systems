@@ -11,6 +11,7 @@ use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Livewire\Livewire;
 use Throwable;
 
 class AttendModel extends Component
@@ -36,6 +37,15 @@ class AttendModel extends Component
         'notes' => 'nullable|string|max:500',
     ];
 
+
+    /**
+     * This function checks if the attendance is already recorded for the current user
+     * It then updates the form fields with the current attendance details
+     * If the attendance is not recorded, it sets the status to 'late' or 'present'
+     * depending on the current time
+     *
+     * @return bool
+     */
     private function isUpdatingAttendance()
     {
         $checkin = Carbon::now()->format('H:i:s');
@@ -105,7 +115,6 @@ class AttendModel extends Component
             // Reset fields
             $this->reset(['message', 'checkIn', 'checkOut', 'notes', 'status']);
             // Hide modal
-            $this->dispatch('attendanceUpdated');
         } catch (Throwable $throwable) {
             Log::info('Error creating attendance: ' . $throwable->getMessage());
             DB::rollBack();
@@ -113,6 +122,8 @@ class AttendModel extends Component
         } finally {
             $this->dispatch('hideAttendanceModal');
         }
+        $this->dispatch('attendanceUpdated');
+
     }
 
     private function saveRecord()
