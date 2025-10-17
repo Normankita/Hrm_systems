@@ -324,4 +324,3 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::get('/dashboard', 'dashboard')
             ->name('dashboard');
     });
-    

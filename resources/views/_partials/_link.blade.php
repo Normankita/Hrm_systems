@@ -46,3 +46,20 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+    /* Custom smaller badge */
+.custom-badge {
+    font-size: 0.65em !important;  /* Smaller text */
+    padding: 0.25em 0.5em !important;  /* Less padding */
+    border-radius: 0.25rem !important;  /* Smaller radius */
+    line-height: 1 !important;
+    color: white;
+}
+
+/* Or even smaller */
+.tiny-badge {
+    font-size: 0.55em !important;
+    padding: 0.15em 0.35em !important;
+}
+</style>

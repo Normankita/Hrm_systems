@@ -39,6 +39,7 @@
                     </tr>
                 @endforelse
         </table>
+
         <div wire:ignore.self class="modal fade" id="attendance_details" tabindex="-1"
             aria-labelledby="attendanceModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl">

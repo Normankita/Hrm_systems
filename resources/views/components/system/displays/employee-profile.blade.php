@@ -87,8 +87,9 @@
                         <div>
                             <h2 class="mb-0">{{ $employee->full_name }}
                                 <span
-                                    class="badge {{ $employee->currentStatus?->status->name == 'Active' ? 'bg-success' : 'bg-danger' }}">
-                                    {{ $employee->currentStatus?->status->name }}</span>
+                                    class="custom-badge {{ $employee->currentStatus?->status->name == 'Active' ? 'bg-success' : 'bg-danger' }}">
+                                    {{ $employee->currentStatus?->status->name }}
+                                </span>
                             </h2>
                             <span class="lead">Registered AS: <b>
                                     {{ $employee->user->roles->where('name', '!=', 'EMPLOYEE')->first()->name ?? 'No Role' }}
@@ -177,8 +178,7 @@
             @endphp
             <div><strong>Salary:</strong> {{ $salary ? number_format($salary, 2) . ' Tshs' : 'N/A' }}</div>
 
-
-            <div class="mb-4">
+            <div class="mb-4 mt-5">
                 <h4 class="section-title">Other Information</h4>
                 <div class="info-grid">
                     <div><strong>National ID:</strong> {{ $employee->national_id }}</div>
