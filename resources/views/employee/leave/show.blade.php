@@ -8,10 +8,11 @@
             <div class="card-body">
                 <div class="container py-5">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <a href="{{ route('employees.leave.status') }}" class="btn btn-primary">Back to Leave Requests</a>
+                        <a href="{{ route('employees.leave.status') }}"
+                            class="btn btn-sm btn-primary">Back to Leave Requests</a>
                     </div>
                     <h2 class="mb-4">Leave Request Details</h2>
-                    
+
                     @if(session('success'))
                         <div class="alert alert-success">
                             {{ session('success') }}
@@ -42,10 +43,10 @@
                     </div>
 
                     <div class="mb-3">
-                        <strong>Status:</strong> 
-                        <span class="badge 
-                            @if($leave->status == 'approved') badge-success 
-                            @elseif($leave->status == 'pending') badge-warning 
+                        <strong>Status:</strong>
+                        <span class="badge
+                            @if($leave->status == 'approved') badge-success
+                            @elseif($leave->status == 'pending') badge-warning
                             @elseif($leave->status == 'rejected') badge-danger
                             @endif">
                             {{ ucfirst($leave->status) }}
@@ -57,7 +58,7 @@
                         </div>
                         <div class="mb-3">
                             <strong>Approved On:</strong> {{ \Carbon\Carbon::parse($leave->approved_at)->toFormattedDateString() }}
-                        </div> 
+                        </div>
                     @endif
 
                     @if ($leave->comment)

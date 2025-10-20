@@ -16,6 +16,65 @@
                         <span class="nav-text">Dashboard</span>
                     </a>
                 </li>
+
+                <li class="section-title">
+                    PERSONAL
+                </li>
+                {{-- Leave management ends here --}}
+                @canany(['ind_mark_attendance', 'ind_view_attendance'])
+                    <li class="has-sub">
+                        <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                            data-target="#attendance-response-menu" aria-expanded="false"
+                            aria-controls="attendance-response-menu">
+                            <i class="mdi mdi-cash-multiple"></i>
+                            <span class="nav-text">Attendance</span>
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="collapse" id="attendance-response-menu" data-parent="#sidebar-menu">
+                            <div class="sub-menu">
+                                <li>
+                                    <a class="sidenav-item-link" href="{{ route('employee.attendance.dashboard') }}">
+                                        <i class="mdi mdi-eye-outline mr-1"></i>
+                                        <span class="nav-text">Dashboard</span>
+                                    </a>
+                                </li>
+                        </ul>
+                    </li>
+                @endcanany
+
+                @canany(['request_leave', 'view_leave'])
+                    <li class="has-sub">
+                        <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                            data-target="#leave-menu" aria-expanded="false" aria-controls="leave-menu">
+                            <i class="mdi mdi-calendar"></i>
+                            <span class="nav-text">Leave</span>
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="collapse" id="leave-menu" data-parent="#sidebar-menu">
+                            <div class="sub-menu">
+                                @can('request_leave')
+                                    <li>
+                                        <a class="sidenav-item-link" href="{{ route('employees.leave.request') }}">
+                                            <span class="nav-text">Request Leave</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('view_leave')
+                                    <li>
+                                        <a class="sidenav-item-link" href="{{ route('employees.leave.status') }}">
+                                            <span class="nav-text">View Leaves</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                            </div>
+                        </ul>
+                    </li>
+                @endcanany
+
+
+                <li class="section-title">
+                    MaNAGEMENT
+                </li>
                 @php
                     $canCreate = auth()->user()->can('create_employees');
                     $canView = auth()->user()->can('view_employees');
@@ -26,7 +85,7 @@
                         <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
                             data-target="#employee-menu" aria-expanded="false" aria-controls="employee-menu">
                             <i class="mdi mdi-account-multiple"></i>
-                            <span class="nav-text">Employees</span>
+                            <span class="nav-text">Manage Employees</span>
                             <b class="caret"></b>
                         </a>
                         <ul class="collapse" id="employee-menu" data-parent="#sidebar-menu">
@@ -142,7 +201,8 @@
                             <div class="sub-menu">
                                 @can('view_attendances')
                                     <li>
-                                        <a class="sidenav-item-link" href="{{ route('employee.manage.attendance.dashboard') }}">
+                                        <a class="sidenav-item-link"
+                                            href="{{ route('employee.manage.attendance.dashboard') }}">
                                             <span class="nav-text">Attendance Dashboard</span>
                                         </a>
                                     </li>
@@ -175,27 +235,6 @@
                                 @endcan
 
                             </div>
-                        </ul>
-                    </li>
-                @endcanany
-
-                @canany(['ind_mark_attendance', 'ind_view_attendance'])
-                    <li class="has-sub">
-                        <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                            data-target="#attendance-response-menu" aria-expanded="false"
-                            aria-controls="attendance-response-menu">
-                            <i class="mdi mdi-cash-multiple"></i>
-                            <span class="nav-text">Attendance</span>
-                            <b class="caret"></b>
-                        </a>
-                        <ul class="collapse" id="attendance-response-menu" data-parent="#sidebar-menu">
-                            <div class="sub-menu">
-                                <li>
-                                    <a class="sidenav-item-link" href="{{ route('employee.attendance.dashboard') }}">
-                                        <i class="mdi mdi-eye-outline mr-1"></i>
-                                        <span class="nav-text">Dashboard</span>
-                                    </a>
-                                </li>
                         </ul>
                     </li>
                 @endcanany
@@ -350,37 +389,6 @@
                         </ul>
                     </li>
                 @endcan
-
-                {{-- Leave management ends here --}}
-
-                @canany(['request_leave', 'view_leave'])
-                    <li class="has-sub">
-                        <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                            data-target="#leave-menu" aria-expanded="false" aria-controls="leave-menu">
-                            <i class="mdi mdi-calendar"></i>
-                            <span class="nav-text">Leave</span>
-                            <b class="caret"></b>
-                        </a>
-                        <ul class="collapse" id="leave-menu" data-parent="#sidebar-menu">
-                            <div class="sub-menu">
-                                @can('request_leave')
-                                    <li>
-                                        <a class="sidenav-item-link" href="{{ route('employees.leave.request') }}">
-                                            <span class="nav-text">Request Leave</span>
-                                        </a>
-                                    </li>
-                                @endcan
-                                @can('view_leave')
-                                    <li>
-                                        <a class="sidenav-item-link" href="{{ route('employees.leave.status') }}">
-                                            <span class="nav-text">View Leaves</span>
-                                        </a>
-                                    </li>
-                                @endcan
-                            </div>
-                        </ul>
-                    </li>
-                @endcanany
             </ul>
         </div>
 

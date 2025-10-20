@@ -13,7 +13,7 @@
         <div class="media media-sm">
             <div class="media-sm-wrapper">
                 <a href="user-profile.html">
-                    <img src="images/user/user-sm-01.jpg" alt="User Image">
+                    {{-- <img src="images/user/user-sm-01.jpg" alt="User Image"> --}}
                     <span class="active bg-primary"></span>
                 </a>
             </div>
@@ -28,7 +28,7 @@
         <div class="media media-sm">
             <div class="media-sm-wrapper">
                 <a href="user-profile.html">
-                    <img src="images/user/user-sm-02.jpg" alt="User Image">
+                    {{-- <img src="images/user/user-sm-02.jpg" alt="User Image"> --}}
                     <span class="active bg-primary"></span>
                 </a>
             </div>
@@ -43,7 +43,7 @@
         <div class="media media-sm">
             <div class="media-sm-wrapper">
                 <a href="user-profile.html">
-                    <img src="images/user/user-sm-03.jpg" alt="User Image">
+                    {{-- <img src="images/user/user-sm-03.jpg" alt="User Image"> --}}
                 </a>
             </div>
             <div class="media-body">
@@ -57,7 +57,7 @@
         <div class="media media-sm">
             <div class="media-sm-wrapper">
                 <a href="user-profile.html">
-                    <img src="images/user/user-sm-04.jpg" alt="User Image">
+                    {{-- <img src="images/user/user-sm-04.jpg" alt="User Image"> --}}
                 </a>
 
             </div>
@@ -72,7 +72,7 @@
         <div class="media media-sm">
             <div class="media-sm-wrapper">
                 <a href="user-profile.html">
-                    <img src="images/user/user-sm-05.jpg" alt="User Image">
+                    {{-- <img src="images/user/user-sm-05.jpg" alt="User Image"> --}}
                     <span class="active bg-danger"></span>
                 </a>
             </div>
@@ -87,7 +87,7 @@
         <div class="media media-sm">
             <div class="media-sm-wrapper">
                 <a href="user-profile.html">
-                    <img src="images/user/user-sm-06.jpg" alt="User Image">
+                    {{-- <img src="images/user/user-sm-06.jpg" alt="User Image"> --}}
                     <span class="active bg-primary"></span>
                 </a>
             </div>

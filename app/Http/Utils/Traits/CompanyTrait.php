@@ -19,6 +19,7 @@ class CompanyTrait {
     }
 
 
+
     public static function isSetting($key, $value) {
         $authUser = auth()->user();
         $company = $authUser->company;

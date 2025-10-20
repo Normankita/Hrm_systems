@@ -4,7 +4,7 @@
         <button id="sidebar-toggler" class="sidebar-toggle">
             <span class="sr-only">Toggle navigation</span>
         </button>
-
+        <span class="page-title">Role: <b>{{ auth()->user()->activeRole()->name }}</b></span>
 
         <div class="navbar-right ">
             <span>{{ \Carbon\Carbon::now()->format('d M') }}</span>
@@ -25,7 +25,6 @@
                                 <span class="nav-text">My Profile</span>
                             </a>
                         </li>
-
 
                         <li class="dropdown-footer">
                             <form method="POST" action="{{ route('logout') }}">

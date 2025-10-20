@@ -74,18 +74,17 @@
                                             <th scope="col">In Time</th>
                                             <th scope="col">Out Time</th>
                                             <th scope="col">notes</th>
-                                            <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            @foreach ($selecteAttendance?->records ?? [] as $attendance)
+                                        @foreach ($selecteAttendance?->records ?? [] as $attendance)
+                                            <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $attendance->check_in }}</td>
                                                 <td>{{ $attendance->check_out }}</td>
                                                 <td>{{ $attendance->remarks }}</td>
-                                            @endforeach
-                                        </tr>
+                                            </tr>
+                                        @endforeach
                                 </table>
                             @endif
                         </div>

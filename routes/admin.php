@@ -1,11 +1,16 @@
 <?php
 
+use App\Http\Controllers\AdminControllers\AdminAllowanceGroupController;
 use App\Http\Controllers\AdminControllers\AdminAttendancesController;
 use App\Http\Controllers\AdminControllers\AdminAttendanceSessionsController;
+use App\Http\Controllers\AdminControllers\AdminManageEmployeeAllowancesController;
+use App\Http\Controllers\AdminControllers\AdminManageLeaveTypeController;
 use App\Http\Controllers\AdminControllers\AdminRoleController;
 use App\Http\Controllers\AdminControllers\AdminCompanyController;
 use App\Http\Controllers\AdminControllers\AdminDepartmentController;
 use App\Http\Controllers\AdminControllers\AdminEmployeeController;
+use App\Http\Controllers\AdminControllers\AdminManageAllowanceFrequencyController;
+use App\Http\Controllers\AdminControllers\AdminManageLeavesController;
 use App\Http\Controllers\AdminControllers\AdminPermissionsController;
 use App\Http\Controllers\AdminControllers\AdminSettingController;
 use App\Http\Controllers\Api\ApiRolesController;
@@ -155,4 +160,82 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
             ->name('update')->middleware('HasCompanyProfile');
         Route::get('/dashboard', 'getSessionDashboard')
             ->name('get.dashboard')->middleware('HasCompanyProfile');
+    });
+
+
+// Leave Types
+Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
+    ->prefix('admin/leave/type')
+    ->controller(AdminManageLeaveTypeController::class)
+    ->name('admin.leave.type.')
+    ->group(function () {
+        Route::get('/index', 'index')->name('index');
+        Route::post('/store', 'store')->name('store');
+        Route::put('/update/{leaveType}', 'update')->name('update');
+        Route::delete('/destroy/{leaveType}', 'destroy')->name('destroy');
+        // report routes
+    });
+
+
+Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
+    ->prefix('admin/leave')
+    ->controller(AdminManageLeavesController::class)
+    ->name('admin.leave.')
+    ->group(function () {
+        Route::get('/show/{leave}', 'show')->name('show');
+        Route::get('/index', 'index')->name('index');
+        Route::post('/inspect/{leave}', 'inspect')->name('inspect');
+    });
+
+
+Route::prefix('admin/leave/reports')
+    ->controller(AdminManageLeavesController::class)
+    ->name('admin.leave.reports.')
+    ->group(function () {
+        Route::view('/report', 'employee.manage.leaves.reports.index')->name('reports');
+
+        Route::get('/rejected', 'getRejectedLeavesPage')->name('rejected');
+        Route::get('/accepted', 'getAcceptedLeavesPage')->name('accepted');
+        Route::get('/pending', 'getPendingLeavesPage')->name('pending');
+    });
+
+
+Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
+    ->prefix('admin/manage/{employee}/allowances')
+    ->controller(AdminManageEmployeeAllowancesController::class)
+    ->name('admin.manage.allowances.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{allowance_id}/edit', 'edit')->name('edit');
+        Route::put('/{allowance_id}', 'update')->name('update');
+        Route::delete('/{allowance_id}', 'destroy')->name('destroy');
+        Route::put('{allowance}/toggle-status', 'toggleStatus')->name('toggleStatus');
+    });
+
+    Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
+    ->prefix('admin/allowances/groups')
+    ->controller(AdminAllowanceGroupController::class)
+    ->name('admin.employee.allowances.groups.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/{id}/edit', 'edit')->name('edit');
+        Route::get('/members/{group}', 'getGroupMembers')->name('members');
+        Route::get('/assign-allowance/{group}', 'getGroupMembersToAssignAllowance')->name('assign');
+
+        // group allawances details routes
+        Route::get('/{group}/allowances/{allowance}', 'getGroupAllowanceDetails')->name('allowanceDetails');
+        Route::get('/{group}/categories/{category}/edit/members', 'editMembers')->name('editMengers');
+    });
+
+
+Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
+    ->prefix('admin/frequencies')
+    ->controller(AdminManageAllowanceFrequencyController::class)
+    ->name('admin.frequencies.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/store', 'store')->name('store');
     });

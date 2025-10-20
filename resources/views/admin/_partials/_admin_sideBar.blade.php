@@ -48,6 +48,83 @@
 
                 <li class="has-sub">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                        data-target="#leaves-menu" aria-expanded="false" aria-controls="leave-menu">
+                        <i class="mdi mdi-calendar"></i>
+                        <span class="nav-text">Leaves</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="collapse" id="leaves-menu" data-parent="#sidebar-menu">
+                        <div class="sub-menu">
+                            <li>
+                                <a class="sidenav-item-link" href="{{ route('admin.leave.index') }}">
+                                    <span class="nav-text">Manage Leaves</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="sidenav-item-link" href="{{ route('admin.leave.reports.reports') }}">
+                                    <span class="nav-text">Leave Reports</span>
+                                </a>
+                            </li>
+                        </div>
+                    </ul>
+                </li>
+
+                <li class="has-sub">
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                        data-target="#leaveType-menu" aria-expanded="false" aria-controls="leaveType-menu">
+                        <i class="mdi mdi-calendar"></i>
+                        <span class="nav-text">LeaveType</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="collapse" id="leaveType-menu" data-parent="#sidebar-menu">
+                        <div class="sub-menu">
+                            <li>
+                                <a class="sidenav-item-link" href="{{ route('admin.leave.type.index') }}">
+                                    <span class="nav-text">Manage LeaveTypes</span>
+                                </a>
+                            </li>
+                        </div>
+                    </ul>
+                </li>
+
+                <li class="has-sub">
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                        data-target="#allowance-menu" aria-expanded="false" aria-controls="allowance-menu">
+                        <i class="mdi mdi-cash-register"></i>
+                        <span class="nav-text">Allowances</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="collapse" id="allowance-menu" data-parent="#sidebar-menu">
+                        <div class="sub-menu">
+                            @can('view_allowances')
+                                <li>
+                                    {{-- <a class="sidenav-item-link" href="{{ route('admin.manage.allowances.index') }}">
+                                        <span class="nav-text">Allowance Categories</span>
+                                    </a> --}}
+                                </li>
+                            @endcan
+                                                <li>
+                                    <a href="{{ route('admin.employee.allowances.groups.index') }}">
+                                        <span class="nav-text">Allowance Groups</span>
+                                    </a>
+                                </li>
+                            <li>
+                                <a href="{{ route('admin.frequencies.index') }}"> <span
+                                        class="nav-text">Manage Frequencies</span>
+                                </a>
+                            </li>
+                            {{-- <li>
+                                    <a href="{{ route('employee.manage.disbursements.index') }}"> <span
+                                            class="nav-text">Disbursements</span>
+                                    </a>
+                                </li> --}}
+                        </div>
+
+                    </ul>
+                </li>
+
+                <li class="has-sub">
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
                         data-target="#attendance-menu" aria-expanded="false" aria-controls="attendance-menu">
                         <i class="mdi mdi-cash-refund"></i>
                         <span class="nav-text">Attendance</span>
@@ -68,7 +145,8 @@
                             </li>
 
                             <li>
-                                <a class="sidenav-item-link" href="{{ route('admin.attendances.manual.entry.page') }}">
+                                <a class="sidenav-item-link"
+                                    href="{{ route('admin.attendances.manual.entry.page') }}">
                                     <span class="nav-text">Manual Entry</span>
                                 </a>
                             </li>
@@ -77,7 +155,7 @@
                                     <span class="nav-text">Report & Analysis</span>
                                 </a>
                             </li>
-                                                        <!-- Session Sublist -->
+                            <!-- Session Sublist -->
                             <li class="has-sub">
                                 <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
                                     data-target="#session-menu" aria-expanded="false" aria-controls="session-menu">

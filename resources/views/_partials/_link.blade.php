@@ -11,20 +11,20 @@
 <link href="https://fonts.googleapis.com/css?family=Karla:400,700|Roboto" rel="stylesheet">
 <link href="{{ asset('bootstrap5.1.1/plugins/material/css/materialdesignicons.min.css') }}" rel="stylesheet" />
 <link href="{{ asset('bootstrap5.1.1/plugins/simplebar/simplebar.css') }}" rel="stylesheet" />
+
 <!-- PLUGINS CSS STYLE -->
 <link href="{{ asset('bootstrap5.1.1/plugins/nprogress/nprogress.css') }}" rel="stylesheet" />
 <link href="{{ asset('bootstrap5.1.1/plugins/prism/prism.css') }}" rel="stylesheet" />
+
 <!-- MONO CSS -->
 <link id="main-css-href" rel="stylesheet" href="{{ asset('bootstrap5.1.1/css/style.css') }}" />
+
 <!-- FAVICON -->
 <link href="{{ asset('bootstrap5.1.1/images/favicon.png') }}" rel="shortcut icon" />
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
 {{-- My links if exist --}}
-
-
 <link href="{{ asset('bootstrap5.1.1/plugins/jvectormap/jquery-jvectormap-2.0.3.css') }}" rel="stylesheet" />
-
 
 <link href="{{ asset('bootstrap5.1.1/plugins/daterangepicker/daterangepicker.css') }}" rel="stylesheet" />
 
@@ -38,7 +38,7 @@
 <link href="images/favicon.png" rel="shortcut icon" />
 
 
-<script src="plugins/nprogress/nprogress.js"></script>
+<script src="{{  asset('bootstrap5.1.1/plugins/nprogress/nprogress.js') }}"></script>
 
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
 
@@ -49,17 +49,20 @@
 
 <style>
     /* Custom smaller badge */
-.custom-badge {
-    font-size: 0.65em !important;  /* Smaller text */
-    padding: 0.25em 0.5em !important;  /* Less padding */
-    border-radius: 0.25rem !important;  /* Smaller radius */
-    line-height: 1 !important;
-    color: white;
-}
+    .custom-badge {
+        font-size: 0.65em !important;
+        /* Smaller text */
+        padding: 0.25em 0.5em !important;
+        /* Less padding */
+        border-radius: 0.25rem !important;
+        /* Smaller radius */
+        line-height: 1 !important;
+        color: white;
+    }
 
-/* Or even smaller */
-.tiny-badge {
-    font-size: 0.55em !important;
-    padding: 0.15em 0.35em !important;
-}
+    /* Or even smaller */
+    .tiny-badge {
+        font-size: 0.55em !important;
+        padding: 0.15em 0.35em !important;
+    }
 </style>

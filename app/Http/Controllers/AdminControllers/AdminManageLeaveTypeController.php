@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\EmployeeControllers;
+namespace App\Http\Controllers\AdminControllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\LeaveType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class EmployeeManageLeaveTypeController extends Controller
+class AdminManageLeaveTypeController extends Controller
 {
     public function index()
     {
         $leaveTypes = LeaveType::all()->sortByDesc('created_at');
-        return view('employee.manage.leave_type.index')
+        return view('admin.leave_type.index')
             ->with('leaveTypes', $leaveTypes);
     }
 
@@ -31,12 +31,17 @@ class EmployeeManageLeaveTypeController extends Controller
             'deducts_from_annual_leave' => 'boolean',
         ];
         $request->request->add(
-            ['code' => str_replace(' ', '_',
-                $request->name)]
+            [
+                'code' => str_replace(
+                    ' ',
+                    '_',
+                    $request->name
+                )
+            ]
         );
         Validator::make($request->all(), $rules)->validate();
-       $leaveType= LeaveType::create($request->all());
-       $leaveType->recordEvent('add', $request->all());
+        $leaveType = LeaveType::create($request->all());
+        $leaveType->recordEvent('add', $request->all());
         return redirect()->back()
             ->with('success', 'Leave Type created successfully');
     }
@@ -51,14 +56,14 @@ class EmployeeManageLeaveTypeController extends Controller
         ];
 
         Validator::make($request->all(), $rules)->validate();
-        $data= [
+        $data = [
             'name' => $request->name,
             'description' => $request->description,
             'is_compensated' => $request->is_compensated,
             'deducts_from_annual_leave' => $request->deducts_from_annual_leave,
         ];
         $leaveType->update($data);
-       $leaveType->recordEvent('update', $data);
+        $leaveType->recordEvent('update', $data);
         return redirect()->back()
             ->with(
                 'success',
@@ -73,5 +78,4 @@ class EmployeeManageLeaveTypeController extends Controller
         return redirect()->back()
             ->with('success', 'Leave Type deleted successfully');
     }
-
 }
