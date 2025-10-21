@@ -191,7 +191,7 @@
                             console.log(res.data);
                             if (res.data.status === 'success') {
                                 console.log("I am the one ")
-                                redirectToGroup("/employee/manage/allowances/groups/" + this.group.id + "/edit")
+                                redirectToGroup("/admin/allowances/groups/" + this.group.id + "/edit")
 
                             } else {
                                 this.empSubmit = false;
@@ -230,14 +230,12 @@
                     this.searchTerm = "";
                     this.showDropdown = false;
 
-
                     const doesExists = this.selectedOptions.find(e => e.id === item.id);
                     if (!doesExists) {
                         this.selectedOptions.push(item);
                         this.options = this.options.filter(emp => emp.id != item.id);
                     }
                     document.getElementById('addAllButton').focus();
-
                 },
                 hideDropdownWithDelay() {
                     setTimeout(() => {

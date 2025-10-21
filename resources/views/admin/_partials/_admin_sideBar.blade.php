@@ -98,9 +98,9 @@
                         <div class="sub-menu">
                             @can('view_allowances')
                                 <li>
-                                    {{-- <a class="sidenav-item-link" href="{{ route('admin.manage.allowances.index') }}">
+                                    <a class="sidenav-item-link" href="{{ route('admin.allowances.index') }}">
                                         <span class="nav-text">Allowance Categories</span>
-                                    </a> --}}
+                                    </a>
                                 </li>
                             @endcan
                                                 <li>
@@ -113,11 +113,11 @@
                                         class="nav-text">Manage Frequencies</span>
                                 </a>
                             </li>
-                            {{-- <li>
-                                    <a href="{{ route('employee.manage.disbursements.index') }}"> <span
+                            <li>
+                                    <a href="{{ route('admin.disbursements.index') }}"> <span
                                             class="nav-text">Disbursements</span>
                                     </a>
-                                </li> --}}
+                                </li>
                         </div>
 
                     </ul>

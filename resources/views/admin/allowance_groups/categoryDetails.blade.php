@@ -36,6 +36,7 @@
                                     <th>Name</th>
                                     <th>Phone</th>
                                     <th>Current Count</th>
+                                    <th>Target Count</th>
                                     <th>Amount</th>
                                     <th>Department</th>
                                     <th>Join Date</th>
@@ -61,6 +62,7 @@
                                         <td style="color:{{ $textColor }}">{{ $employee->full_name }}</td>
                                         <td style="color:{{ $textColor }}">{{ $employee->phone_number }}</td>
                                         <td style="color:{{ $textColor }}">{{ $withEmployee->count }}</td>
+                                        <td style="color: {{ $textColor }}">{{ $withEmployee->frequency->no_times }}</td>
                                         <td style="color:{{ $textColor }}">
                                             {{ number_format($withEmployee->pivotAllowanceAmount) }}</td>
                                         <td style="color:{{ $textColor }}">{{ $employee->department->name ?? 'N/A' }}
@@ -93,7 +95,7 @@
                             Disbursement History for Group-Category
                         </h5>
                     </div>
-                    <x-system.table class="dt-table w-100 table-responsive">
+                    <x-system.table class="dt-table w-100">
                         <x-slot name="head">
                             <thead class="table-light text-dark">
                                 <tr>

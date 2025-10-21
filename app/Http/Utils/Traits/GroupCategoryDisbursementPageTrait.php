@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Utils\Traits;
 
+use App\Models\AllowanceGroupEmployeePivot;
 use App\Models\GroupCategoryEmployeeAllowance;
 use Carbon\Carbon;
 
@@ -14,8 +15,7 @@ trait GroupCategoryDisbursementPageTrait
         $forDisburseDate = $forDisburseDate ?? Carbon::now();
         $empWithDisCounts = collect();
         $trueDisburseDetails = collect();
-        $disbursed->each(function ($item) use
-            ($allowance, $forDisburseDate, $empWithDisCounts, $trueDisburseDetails) {
+        $disbursed->each(function ($item) use ($allowance, $forDisburseDate, $empWithDisCounts, $trueDisburseDetails) {
             $details = GroupCategoryEmployeeAllowance::getRealDetails($item->disbursable_id);
             // if the allowance effective_from date is after tody skip it
             if (!($details->effective_from > $forDisburseDate)) {
@@ -48,10 +48,11 @@ trait GroupCategoryDisbursementPageTrait
                     'employee' => $details->employee,
                     'count' => 'N/A',
                     'isEligible' => false,
-                    'effective_from' => $details->effective_from
+                    'effective_from' => $details->effective_from,
                 ]);
                 $trueDisburseDetails->push($details);
             }
+
         });
         return [
             'disburseDetails' => $trueDisburseDetails,
@@ -65,7 +66,8 @@ trait GroupCategoryDisbursementPageTrait
     private static function isEligible($model, $gr_cat_empl_all_id, $forDisburseDate)
     {
         $gr_cat_empl_all_id_details = $model::getRealDetails(
-            $gr_cat_empl_all_id);
+            $gr_cat_empl_all_id
+        );
         $items = self::timeSpanInspector($gr_cat_empl_all_id_details);
         if ($items->isEmpty()) {
             return true;
@@ -80,7 +82,7 @@ trait GroupCategoryDisbursementPageTrait
 
     private static function timeSpanInspector($item)
     {
-        $effectiveFrom = Carbon::parse($item->effective_from );
+        $effectiveFrom = Carbon::parse($item->effective_from);
         $daysApart = $item->frequency->days_apart;
         if ($item->object->allowanceDisbursements->isEmpty()) {
             // if there is no disbursement, we can return an empty collection
@@ -161,7 +163,7 @@ trait GroupCategoryDisbursementPageTrait
         if ($isBetween) {
             // count the numbers of disbursement and check if we can add more
             $disbursementCount = $lastItem->count();
-            return $disbursementCount >= $frequency->no_base_times ? false : true;
+            return $disbursementCount >= $frequency->no_times ? false : true;
         }
         return true;
     }

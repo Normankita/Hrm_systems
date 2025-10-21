@@ -3,6 +3,8 @@
 use App\Http\Controllers\AdminControllers\AdminAllowanceGroupController;
 use App\Http\Controllers\AdminControllers\AdminAttendancesController;
 use App\Http\Controllers\AdminControllers\AdminAttendanceSessionsController;
+use App\Http\Controllers\AdminControllers\AdminManageAllowancesController;
+use App\Http\Controllers\AdminControllers\AdminManageDisbursements;
 use App\Http\Controllers\AdminControllers\AdminManageEmployeeAllowancesController;
 use App\Http\Controllers\AdminControllers\AdminManageLeaveTypeController;
 use App\Http\Controllers\AdminControllers\AdminRoleController;
@@ -192,7 +194,7 @@ Route::prefix('admin/leave/reports')
     ->controller(AdminManageLeavesController::class)
     ->name('admin.leave.reports.')
     ->group(function () {
-        Route::view('/report', 'employee.manage.leaves.reports.index')->name('reports');
+        Route::view('/report', 'admin.leaves.reports.index')->name('reports');
 
         Route::get('/rejected', 'getRejectedLeavesPage')->name('rejected');
         Route::get('/accepted', 'getAcceptedLeavesPage')->name('accepted');
@@ -201,20 +203,20 @@ Route::prefix('admin/leave/reports')
 
 
 Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
-    ->prefix('admin/manage/{employee}/allowances')
-    ->controller(AdminManageEmployeeAllowancesController::class)
-    ->name('admin.manage.allowances.')
+    ->prefix('admin/allowance')
+    ->controller(AdminManageAllowancesController::class)
+    ->name('admin.allowances.')
     ->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
-        Route::post('/', 'store')->name('store');
-        Route::get('/{allowance_id}/edit', 'edit')->name('edit');
-        Route::put('/{allowance_id}', 'update')->name('update');
-        Route::delete('/{allowance_id}', 'destroy')->name('destroy');
-        Route::put('{allowance}/toggle-status', 'toggleStatus')->name('toggleStatus');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/{allowance}/edit', 'edit')->name('edit');
+        Route::put('/{allowance}', 'update')->name('update');
+        Route::delete('/{allowance}', 'destroy')->name('destroy');
     });
 
-    Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
+
+Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
     ->prefix('admin/allowances/groups')
     ->controller(AdminAllowanceGroupController::class)
     ->name('admin.employee.allowances.groups.')
@@ -238,4 +240,19 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
     ->group(function () {
         Route::get('/', 'index')->name('index');
         Route::post('/store', 'store')->name('store');
+    });
+
+
+    Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
+    ->prefix('admin/disbursements')
+    ->controller(AdminManageDisbursements::class)
+    ->name('admin.disbursements.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create')
+            ->middleware(['password.confirm']);
+        Route::post('/', 'store')->name('store');
+        // Route::get('/{disbursement}', 'show')->name('show')->middleware(['can:view_disbursement']);            // Show a single disbursement
+        // Route::put('/{disbursement}', 'update')->name('update')->middleware(['can:edit_disbursement']);        // Update disbursement
+        // Route::delete('/{disbursement}', 'destroy')->name('destroy')->middleware(['can:delete_disbursement']);   // Delete disbursement
     });

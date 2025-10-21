@@ -94,6 +94,7 @@ class AdminAllowanceGroupController extends Controller
     }
 
 
+
     public function getGroupAllowanceDetails(
         AllowanceGroup $group,
         Allowance $allowance

@@ -2,9 +2,12 @@
 
 namespace App\Http\Services;
 
+use App\Enums\AllowanceFrequncy;
 use App\Enums\AllowanceGroups;
+use App\Http\Utils\Traits\AllowanceGroupEmployeePivotTrait;
 use App\Http\Utils\Traits\GroupCategoryDisbursementPageTrait;
 use App\Models\Allowance;
+use App\Models\AllowanceFrequency;
 use App\Models\AllowanceGroup;
 use App\Models\AllowanceGroupAllowancePivot;
 use App\Models\AllowanceGroupEmployeePivot;
@@ -19,7 +22,7 @@ use Illuminate\Support\Facades\DB;
 
 class AllowanceDisbursementService
 {
-    use GroupCategoryDisbursementPageTrait;
+    use GroupCategoryDisbursementPageTrait, AllowanceGroupEmployeePivotTrait;
     /**
      * Handle the disbursement based on the type.
      *
@@ -201,8 +204,7 @@ class AllowanceDisbursementService
         $gr_allowance = $group->allowance()->where(
             'allowance_id',
             $allowance->id
-        )
-            ->first();
+        )->first();
         if (!$gr_allowance) {
             return [
                 'status' => 'error',
@@ -246,6 +248,8 @@ class AllowanceDisbursementService
                 $pivot->count = $timing ? 0 : "N/A";
                 $pivot->isEligible = $timing;
             }
+            $freq = AllowanceFrequency::find($pivot->pivot->allowance_frequency_id);
+            $pivot->frequency = $freq;
             return $pivot;
         });
 

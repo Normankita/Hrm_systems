@@ -90,13 +90,13 @@ class AllowanceGroupEmployeePivot extends Model
         return $this->belongsTo(AllowanceGroup::class, 'allowance_group_id');
     }
 
-    public function frequencies()
-    {
-        return $this->belongsToMany(AllowanceFrequency::class, 'group_category_employee_allowances', 'allowance_group_employee_pivot_id', 'allowance_frequency_id')
-            ->withPivot(['id', 'amount', 'effective_from', 'status', 'allowance_id']) // optional
-            ->withTimestamps();
-    }
-
+    // public function frequencies()
+    // {
+    //     return $this->belongsToMany(AllowanceFrequency::class, 'group_category_employee_allowances', 'allowance_group_employee_pivot_id', 'allowance_frequency_id')
+    //         ->withPivot(['id', 'amount', 'effective_from', 'status', 'allowance_id']) // optional
+    //         ->withTimestamps();
+    // }
+    
     public function allowanceGroupAllowancesPivot()
     {
         return $this->belongsToMany(
