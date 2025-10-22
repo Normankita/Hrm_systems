@@ -120,7 +120,7 @@
                                             <td>{{ $item->employee->full_name }}</td>
                                             <td>{{ $item->employee->phone_number }}</td>
                                             <td>{{ number_format($item->amount) }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($item->created_at)->format('m-d-Y') }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($item->created_at)->format('m-d-Y H:ia') }}</td>
                                             <td>
                                                 {{-- <x-system.btn-view :key="$key" :route="route('admin.employees.show', $employee->id)" /> --}}
                                             </td>

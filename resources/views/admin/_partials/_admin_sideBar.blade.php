@@ -18,14 +18,22 @@
                     </a>
                 </li>
 
-                <li class="has-sub">
+
+                @php
+                    $isPageEmployee = Route::is(
+                        'admin.employees.create',
+                        'admin.employees.index',
+                        'admin.employees.permissions.all',
+                    );
+                @endphp
+                <li class="has-sub {{ $isPageEmployee ? 'active expand' : '' }}">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                        data-target="#employee-menu" aria-expanded="false" aria-controls="employee-menu">
+                        data-target="#employee-menu" aria-expanded="{{ $isPageEmployee ? 'true' : 'false' }}" aria-controls="employee-menu">
                         <i class="mdi mdi-account-multiple"></i>
                         <span class="nav-text">Employees</span>
                         <b class="caret"></b>
                     </a>
-                    <ul class="collapse" id="employee-menu" data-parent="#sidebar-menu">
+                    <ul class="collapse {{ $isPageEmployee ? 'show' : ''}}" id="employee-menu" data-parent="#sidebar-menu">
                         <div class="sub-menu">
                             <li>
                                 <a class="sidenav-item-link" href="{{ route('admin.employees.create') }}">
@@ -46,14 +54,19 @@
                     </ul>
                 </li>
 
-                <li class="has-sub">
+
+                @php
+                    $isPageLeave = Route::is('admin.leave.index', 'admin.leave.reports.reports');
+                @endphp
+                <li class="has-sub {{ $isPageLeave ? 'active expand' : '' }}">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                        data-target="#leaves-menu" aria-expanded="false" aria-controls="leave-menu">
+                        data-target="#leaves-menu" aria-expanded="{{ $isPageLeave ? 'true' : 'false' }}"
+                        aria-controls="leave-menu">
                         <i class="mdi mdi-calendar"></i>
                         <span class="nav-text">Leaves</span>
                         <b class="caret"></b>
                     </a>
-                    <ul class="collapse" id="leaves-menu" data-parent="#sidebar-menu">
+                    <ul class="collapse {{ $isPageLeave ? 'show' : '' }}" id="leaves-menu" data-parent="#sidebar-menu">
                         <div class="sub-menu">
                             <li>
                                 <a class="sidenav-item-link" href="{{ route('admin.leave.index') }}">
@@ -69,14 +82,20 @@
                     </ul>
                 </li>
 
-                <li class="has-sub">
+
+                @php
+                    $isPageLeaveType = Route::is('admin.leave.type.index');
+                @endphp
+                <li class="has-sub {{ $isPageLeaveType ? 'active expand' : '' }}">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                        data-target="#leaveType-menu" aria-expanded="false" aria-controls="leaveType-menu">
+                        data-target="#leaveType-menu" aria-expanded="{{ $isPageLeaveType ? 'true' : 'false' }}"
+                        aria-controls="leaveType-menu">
                         <i class="mdi mdi-calendar"></i>
                         <span class="nav-text">LeaveType</span>
                         <b class="caret"></b>
                     </a>
-                    <ul class="collapse" id="leaveType-menu" data-parent="#sidebar-menu">
+                    <ul class="collapse {{ $isPageLeaveType ? 'show' : '' }}" id="leaveType-menu"
+                        data-parent="#sidebar-menu">
                         <div class="sub-menu">
                             <li>
                                 <a class="sidenav-item-link" href="{{ route('admin.leave.type.index') }}">
@@ -87,14 +106,25 @@
                     </ul>
                 </li>
 
-                <li class="has-sub">
+
+                @php
+                    $isPageAllowance = Route::is(
+                        'admin.allowances.index',
+                        'admin.employee.allowances.groups.index',
+                        'admin.frequencies.index',
+                        'admin.disbursements.index',
+                    );
+                @endphp
+                <li class="has-sub {{ $isPageAllowance ? 'active expand' : '' }}">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                        data-target="#allowance-menu" aria-expanded="false" aria-controls="allowance-menu">
+                        data-target="#allowance-menu" aria-expanded="{{ $isPageAllowance ? 'true' : 'false' }}"
+                        aria-controls="allowance-menu">
                         <i class="mdi mdi-cash-register"></i>
                         <span class="nav-text">Allowances</span>
                         <b class="caret"></b>
                     </a>
-                    <ul class="collapse" id="allowance-menu" data-parent="#sidebar-menu">
+                    <ul class="collapse {{ $isPageAllowance ? 'show' : '' }}" id="allowance-menu"
+                        data-parent="#sidebar-menu">
                         <div class="sub-menu">
                             @can('view_allowances')
                                 <li>
@@ -103,34 +133,45 @@
                                     </a>
                                 </li>
                             @endcan
-                                                <li>
-                                    <a href="{{ route('admin.employee.allowances.groups.index') }}">
-                                        <span class="nav-text">Allowance Groups</span>
-                                    </a>
-                                </li>
                             <li>
-                                <a href="{{ route('admin.frequencies.index') }}"> <span
-                                        class="nav-text">Manage Frequencies</span>
+                                <a href="{{ route('admin.employee.allowances.groups.index') }}">
+                                    <span class="nav-text">Allowance Groups</span>
                                 </a>
                             </li>
                             <li>
-                                    <a href="{{ route('admin.disbursements.index') }}"> <span
-                                            class="nav-text">Disbursements</span>
-                                    </a>
-                                </li>
+                                <a href="{{ route('admin.frequencies.index') }}"> <span class="nav-text">Manage
+                                        Frequencies</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.disbursements.index') }}"> <span
+                                        class="nav-text">Disbursements</span>
+                                </a>
+                            </li>
                         </div>
 
                     </ul>
                 </li>
 
-                <li class="has-sub">
+
+                @php
+                    $isPageAttendance = Route::is(
+                        'admin.attendances.index',
+                        'admin.attendances.daily.page',
+                        'admin.attendances.manual.entry.page',
+                        'admin.attendances.sessions.index',
+                        'admin.attendances.sessions.get.dashboard',
+                    );
+                @endphp
+                <li class="has-sub {{ $isPageAttendance ? 'active expand' : '' }}">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                        data-target="#attendance-menu" aria-expanded="false" aria-controls="attendance-menu">
+                        data-target="#attendance-menu" aria-expanded="{{ $isPageAttendance ? 'true' : 'false' }}"
+                            aria-controls="attendance-menu">
                         <i class="mdi mdi-cash-refund"></i>
                         <span class="nav-text">Attendance</span>
                         <b class="caret"></b>
                     </a>
-                    <ul class="collapse" id="attendance-menu" data-parent="#sidebar-menu">
+                    <ul class="collapse {{ $isPageAttendance ? 'show' : '' }}" id="attendance-menu" data-parent="#sidebar-menu">
                         <div class="sub-menu">
                             <!-- Other Attendance Links -->
                             <li>
@@ -156,13 +197,19 @@
                                 </a>
                             </li>
                             <!-- Session Sublist -->
-                            <li class="has-sub">
+                            @php
+                                $isPageSession = Route::is(
+                                    'admin.attendances.sessions.index',
+                                    'admin.attendances.sessions.get.dashboard',
+                                );
+                            @endphp
+                            <li class="has-sub {{ $isPageSession ? 'active expand' : '' }}">
                                 <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                                    data-target="#session-menu" aria-expanded="false" aria-controls="session-menu">
+                                    data-target="#session-menu" aria-expanded="{{ $isPageSession ? 'true' : 'false' }}" aria-controls="session-menu">
                                     <span class="nav-text">Session / Shifts</span>
                                     <b class="caret"></b>
                                 </a>
-                                <ul class="collapse" id="session-menu" data-parent="#attendance-menu">
+                                <ul class="collapse {{ $isPageSession ? 'show' : '' }}" id="session-menu" data-parent="#attendance-menu">
                                     <div class="sub-menu">
                                         <li>
                                             <a class="sidenav-item-link"
@@ -179,19 +226,22 @@
                                     </div>
                                 </ul>
                             </li>
-
                         </div>
                     </ul>
                 </li>
 
-                <li class="has-sub">
+
+                @php
+                    $isPageRole = Route::is('admin.roles.index');
+                @endphp
+                <li class="has-sub {{ $isPageRole ? 'active expand' : '' }}">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                        data-target="#roles_menu" aria-expanded="false" aria-controls="roles_menu">
+                        data-target="#roles_menu" aria-expanded="{{ $isPageRole ? 'true' : 'false' }}" aria-controls="roles_menu">
                         <i class="mdi mdi-account-multiple"></i>
                         <span class="nav-text">Roles</span>
                         <b class="caret"></b>
                     </a>
-                    <ul class="collapse" id="roles_menu" data-parent="#sidebar-menu">
+                    <ul class="collapse {{ $isPageRole ? 'show' : '' }}" id="roles_menu" data-parent="#sidebar-menu">
                         <div class="sub-menu">
                             <li>
                                 <a class="sidenav-item-link"
@@ -204,14 +254,18 @@
                     </ul>
                 </li>
 
-                <li class="has-sub">
+
+                @php
+                    $isPageDepartment = Route::is('admin.departments.index');
+                @endphp
+                <li class="has-sub {{ $isPageDepartment ? 'active expand' : '' }}">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                        data-target="#department_menu" aria-expanded="false" aria-controls="department_menu">
+                        data-target="#department_menu" aria-expanded="{{ $isPageDepartment ? 'true' : 'false' }}" aria-controls="department_menu">
                         <i class="mdi mdi-sitemap"></i>
                         <span class="nav-text">Departments</span>
                         <b class="caret"></b>
                     </a>
-                    <ul class="collapse" id="department_menu" data-parent="#sidebar-menu">
+                    <ul class="collapse {{ $isPageDepartment ? 'show' : '' }}" id="department_menu" data-parent="#sidebar-menu">
                         <div class="sub-menu">
                             <li>
                                 <a class="sidenav-item-link" href="{{ route('admin.departments.index') }}">

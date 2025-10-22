@@ -104,7 +104,6 @@
 
 
                     <div class="row justify-content-start">
-
                         {{-- Profile Image Update (ADMIN, HR_OFFICER) --}}
                         @can('edit_own_employees')
                             @hasrole('EMPLOYEE')
@@ -123,31 +122,42 @@
                                 </div>
                             @endhasrole
                         @endcan
+
+                        @php
+                            // limiting employee to edit its status
+                            $authEmployee = auth()->user()->employee;
+                            $allow = $authEmployee->id != $employee->id;
+                        @endphp
                         {{-- Employee Status update --}}
-                        @can('edit_employee_status')
-                            @hasrole('EMPLOYEE')
-                                <div class="col-md-6 mt-2">
-                                    <x-system.modal-button class="btn btn-block btn-primary btn-custom me-2"
-                                        data-bs-toggle="modal" id="UpdateEmployeeStatus" text="UPDATE EMPLOYEE STATUS" />
-                                </div>
-                            @endhasrole
-                        @endcan
+                        @if($allow)
+                            @can('edit_employee_status')
+                                @hasrole('EMPLOYEE')
+                                    <div class="col-md-6 mt-2">
+                                        <x-system.modal-button class="btn btn-block btn-primary btn-custom me-2"
+                                            data-bs-toggle="modal" id="UpdateEmployeeStatus" text="UPDATE EMPLOYEE STATUS" />
+                                    </div>
+                                @endhasrole
+                            @endcan
+                        @endif
 
                         {{-- Manage Allowances Button --}}
                         @canany(['edit_allowances', 'view_allowances', 'create_allowances'])
                             @hasrole('EMPLOYEE')
                                 <div class="col-md-6 mt-2">
-                                    <x-system.btn-view class="btn btn-block btn-primary btn-custom me-2" :route="route('employee.manage.employee.allowances.index', $employee)"
+                                    <x-system.btn-view class="btn btn-block btn-primary btn-custom me-2" 
+                                        :route="route('employee.manage.employee.allowances.index', $employee)"
                                         text="Manage Allowances" />
                                 </div>
                             @endhasrole
                         @endcanany
                         {{-- Manage Loans Button --}}
+
                         {{-- Manage Deductions Button --}}
                         @canany(['edit_deductions', 'view_deductions', 'create_deductions'])
                             @hasrole('EMPLOYEE')
                                 <div class="col-md-6 mt-2">
-                                    <x-system.btn-view class="btn btn-block btn-primary btn-custom me-2" :route="route('employee.manage.deductions.index', $employee)"
+                                    <x-system.btn-view class="btn btn-block btn-primary btn-custom me-2" 
+                                        :route="route('employee.manage.deductions.index', $employee)"
                                         text="Manage Deductions" />
                                 </div>
                             @endhasrole

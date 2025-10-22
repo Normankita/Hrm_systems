@@ -20,17 +20,23 @@
                 <li class="section-title">
                     PERSONAL
                 </li>
+
+
+                @php
+                    $isPageAttendance = Route::is('employee.attendance.dashboard');
+                @endphp
                 {{-- Leave management ends here --}}
                 @canany(['ind_mark_attendance', 'ind_view_attendance'])
-                    <li class="has-sub">
+                    <li class="has-sub {{ $isPageAttendance ? 'active expand' : '' }}">
                         <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                            data-target="#attendance-response-menu" aria-expanded="false"
+                            data-target="#attendance-response-menu" aria-expanded="{{ $isPageAttendance ? 'true' : 'false' }}"
                             aria-controls="attendance-response-menu">
                             <i class="mdi mdi-cash-multiple"></i>
                             <span class="nav-text">Attendance</span>
                             <b class="caret"></b>
                         </a>
-                        <ul class="collapse" id="attendance-response-menu" data-parent="#sidebar-menu">
+                        <ul class="collapse {{ $isPageAttendance ? 'show' : '' }}" id="attendance-response-menu" 
+                                data-parent="#sidebar-menu">
                             <div class="sub-menu">
                                 <li>
                                     <a class="sidenav-item-link" href="{{ route('employee.attendance.dashboard') }}">
@@ -42,15 +48,21 @@
                     </li>
                 @endcanany
 
+
+                @php
+                    $isLeavePage = Route::is('employees.leave.request') ||
+                        Route::is('employees.leave.status');
+                @endphp
                 @canany(['request_leave', 'view_leave'])
-                    <li class="has-sub">
+                    <li class="has-sub {{ $isLeavePage ? 'active expand' : '' }}">
                         <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                            data-target="#leave-menu" aria-expanded="false" aria-controls="leave-menu">
+                            data-target="#leave-menu" aria-expanded="{{ $isLeavePage ? 'true' : 'false' }}" 
+                                aria-controls="leave-menu">
                             <i class="mdi mdi-calendar"></i>
                             <span class="nav-text">Leave</span>
                             <b class="caret"></b>
                         </a>
-                        <ul class="collapse" id="leave-menu" data-parent="#sidebar-menu">
+                        <ul class="collapse {{ $isLeavePage ? 'show' : '' }}" id="leave-menu" data-parent="#sidebar-menu">
                             <div class="sub-menu">
                                 @can('request_leave')
                                     <li>
@@ -78,17 +90,22 @@
                 @php
                     $canCreate = auth()->user()->can('create_employees');
                     $canView = auth()->user()->can('view_employees');
+
+                    $isManageEmp = Route::is('employee.manage.employees.create') ||
+                        Route::is('employee.manage.employees.index') ||
+                        Route::is('employee.manage.employees.reports.index');
                 @endphp
 
                 @if ($canCreate || $canView)
-                    <li class="has-sub">
+                    <li class="has-sub {{ $isManageEmp ? 'active expalnd' : '' }}">
                         <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                            data-target="#employee-menu" aria-expanded="false" aria-controls="employee-menu">
+                            data-target="#employee-menu" aria-expanded="{{ $isManageEmp ? 'true' : 'false' }}" 
+                                aria-controls="employee-menu">
                             <i class="mdi mdi-account-multiple"></i>
                             <span class="nav-text">Manage Employees</span>
                             <b class="caret"></b>
                         </a>
-                        <ul class="collapse" id="employee-menu" data-parent="#sidebar-menu">
+                        <ul class="collapse {{ $isManageEmp ? 'show' : '' }}" id="employee-menu" data-parent="#sidebar-menu">
                             <div class="sub-menu">
                                 @if ($canCreate)
                                     <li>
@@ -118,16 +135,23 @@
                     </li>
                 @endif
 
+
+                @php
+                    $isManageAllowance = Route::is('employee.manage.allowances.*') ||
+                        Route::is('employee.manage.frequencies.*') ||
+                        Route::is('employee.manage.employee.allowances.groups.*') ||
+                        Route::is('employee.manage.disbursements.*');
+                @endphp
                 {{-- Begins Allowances --}}
                 @canany(['view_allowances', 'create_allowances'])
-                    <li class="has-sub">
+                    <li class="has-sub {{ $isManageAllowance ? 'active expand' : '' }}">
                         <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                            data-target="#allowance-menu" aria-expanded="false" aria-controls="allowance-menu">
+                            data-target="#allowance-menu" aria-expanded="{{ $isManageAllowance ? 'true' : 'false' }}" aria-controls="allowance-menu">
                             <i class="mdi mdi-cash-register"></i>
                             <span class="nav-text">Manage allowances</span>
                             <b class="caret"></b>
                         </a>
-                        <ul class="collapse" id="allowance-menu" data-parent="#sidebar-menu">
+                        <ul class="collapse {{ $isManageAllowance ? 'show' : '' }}" id="allowance-menu" data-parent="#sidebar-menu">
                             <div class="sub-menu">
                                 @can('view_allowances')
                                     <li>
@@ -188,16 +212,21 @@
                 {{-- Begins Payroll --}}
 
 
+                @php
+                    $isManageAttendance = Route::is('employee.manage.attendance.*');
+                @endphp
                 {{-- Attendance Section --}}
                 @canany(['view_attendances', 'mark_attendance'])
-                    <li class="has-sub">
+                    <li class="has-sub {{ $isManageAttendance ? 'active expand' : '' }}">
                         <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                            data-target="#loan-menu" aria-expanded="false" aria-controls="loan-menu">
+                            data-target="#loan-menu" aria-expanded="{{ $isManageAttendance ? 'true' : 'false' }}"
+                                aria-controls="loan-menu">
                             <i class="mdi mdi-cash-refund"></i>
                             <span class="nav-text">Manage Attendance</span>
                             <b class="caret"></b>
                         </a>
-                        <ul class="collapse" id="loan-menu" data-parent="#sidebar-menu">
+                        <ul class="collapse {{ $isManageAttendance ? 'show' : '' }}" id="loan-menu" 
+                                data-parent="#sidebar-menu">
                             <div class="sub-menu">
                                 @can('view_attendances')
                                     <li>
@@ -239,15 +268,21 @@
                     </li>
                 @endcanany
 
+
+                @php
+                    $isManagePayrolls = Route::is('employee.manage.payrolls.*');
+                @endphp
                 @canany(['view_payroll', 'create_payroll'])
-                    <li class="has-sub">
+                    <li class="has-sub {{ $isManagePayrolls ? 'active expland' : '' }}">
                         <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                            data-target="#payroll-menu" aria-expanded="false" aria-controls="payroll-menu">
+                            data-target="#payroll-menu" aria-expanded="{{ $isManagePayrolls ? 'true' : 'false' }}" 
+                                aria-controls="payroll-menu">
                             <i class="mdi mdi-cash-register"></i>
                             <span class="nav-text">Manage Payrolls</span>
                             <b class="caret"></b>
                         </a>
-                        <ul class="collapse" id="payroll-menu" data-parent="#sidebar-menu">
+                        <ul class="collapse {{ $isManagePayrolls ? 'show' : '' }}" id="payroll-menu" 
+                            data-parent="#sidebar-menu">
                             <div class="sub-menu">
                                 @can('create_payroll')
                                     <li>
@@ -270,16 +305,21 @@
                     </li>
                 @endcanany
 
+
+                @php
+                    $isManagePayments = Route::is('employee.manage.payroll.employees.*');
+                @endphp
                 @canany(['view_payment', 'create_payment', 'edit_payment'])
-                    <li class="has-sub">
+                    <li class="has-sub {{ $isManagePayments ? 'active expand' : '' }}">
                         <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                            data-target="#payroll-response-menu" aria-expanded="false"
+                            data-target="#payroll-response-menu" aria-expanded="{{ $isManagePayments ? 'true' : 'false' }}"
                             aria-controls="payroll-response-menu">
                             <i class="mdi mdi-cash-multiple"></i>
                             <span class="nav-text">Manage Payments</span>
                             <b class="caret"></b>
                         </a>
-                        <ul class="collapse" id="payroll-response-menu" data-parent="#sidebar-menu">
+                        <ul class="collapse {{ $isManagePayments ? 'show' : '' }}" id="payroll-response-menu" 
+                                data-parent="#sidebar-menu">
                             <div class="sub-menu">
                                 <li>
                                     <a class="sidenav-item-link"
@@ -320,15 +360,21 @@
                         </ul>
                     </li>
                 @endcanany
+
+
+                @php
+                    $isManagePaygrade = Route::is('employee.manage.paygrades.*');
+                @endphp
                 @can('view_paygrade')
-                    <li class="has-sub">
+                    <li class="has-sub {{ $isManagePaygrade ? 'active expand' : '' }}">
                         <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                            data-target="#paygrade-menu" aria-expanded="false" aria-controls="employee-menu">
+                            data-target="#paygrade-menu" aria-expanded="{{ $isManagePaygrade ? 'true' : 'false' }}" 
+                                aria-controls="employee-menu">
                             <i class="mdi mdi-cash-multiple"></i>
                             <span class="nav-text">Manage PayGrade</span>
                             <b class="caret"></b>
                         </a>
-                        <ul class="collapse" id="paygrade-menu" data-parent="#sidebar-menu">
+                        <ul class="collapse {{ $isManagePaygrade ? 'show' : '' }}" id="paygrade-menu" data-parent="#sidebar-menu">
                             <div class="sub-menu">
                                 <li>
                                     <a class="sidenav-item-link" href="{{ route('employee.manage.paygrades.index') }}">
@@ -340,17 +386,22 @@
                     </li>
                 @endcan
 
-                {{-- LeaveType management starts here  --}}
 
+                @php
+                    $isManageLeaveTypes = Route::is('employee.manage.leave.type.*');
+                @endphp
+                {{-- LeaveType management starts here  --}}
                 @can('view_leaveTypes')
-                    <li class="has-sub">
+                    <li class="has-sub {{ $isManageLeaveTypes ? 'active expand' : '' }}">
                         <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                            data-target="#leaveType-menu" aria-expanded="false" aria-controls="leaveType-menu">
+                            data-target="#leaveType-menu" aria-expanded="{{ $isManageLeaveTypes ? 'true' : 'false' }}" 
+                                aria-controls="leaveType-menu">
                             <i class="mdi mdi-calendar"></i>
                             <span class="nav-text">LeaveType</span>
                             <b class="caret"></b>
                         </a>
-                        <ul class="collapse" id="leaveType-menu" data-parent="#sidebar-menu">
+                        <ul class="collapse {{ $isManageLeaveTypes ? 'show' : '' }}" id="leaveType-menu" 
+                                data-parent="#sidebar-menu">
                             <div class="sub-menu">
                                 <li>
                                     <a class="sidenav-item-link" href="{{ route('employee.manage.leave.type.index') }}">
@@ -362,17 +413,23 @@
                     </li>
                 @endcan
 
-                {{-- LEave management starts here  --}}
 
+                @php
+                    $isPageLeaveManagement = Route::is('employee.manage.leave.index',
+                        'employee.manage.leave.reports.reports');
+                @endphp
+                {{-- LEave management starts here  --}}
                 @can('view_leave_requests')
-                    <li class="has-sub">
+                    <li class="has-sub {{ $isPageLeaveManagement ? 'active expand' : '' }}">
                         <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                            data-target="#leaves-menu" aria-expanded="false" aria-controls="leave-menu">
+                            data-target="#leaves-menu" aria-expanded="{{ $isPageLeaveManagement ? 'true' : 'false' }}" 
+                                aria-controls="leave-menu">
                             <i class="mdi mdi-calendar"></i>
                             <span class="nav-text">Leaves Management</span>
                             <b class="caret"></b>
                         </a>
-                        <ul class="collapse" id="leaves-menu" data-parent="#sidebar-menu">
+                        <ul class="collapse {{ $isPageLeaveManagement ? 'show' : '' }}" id="leaves-menu" 
+                                data-parent="#sidebar-menu">
                             <div class="sub-menu">
                                 <li>
                                     <a class="sidenav-item-link" href="{{ route('employee.manage.leave.index') }}">
