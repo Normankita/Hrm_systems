@@ -17,6 +17,7 @@ class AllowanceGroupEmployeePivot extends Model
         'isActive'
     ];
 
+
     public function allowances()
     {
         return $this->belongsToMany(Allowance::class, 'group_category_employee_allowances')
@@ -24,10 +25,12 @@ class AllowanceGroupEmployeePivot extends Model
             ->withTimestamps();
     }
 
+
     public function getGroup()
     {
         return AllowanceGroup::find($this->allowance_group_id);
     }
+
 
     public function getGroups(Collection $gr_employee_pivots)
     {
@@ -40,6 +43,7 @@ class AllowanceGroupEmployeePivot extends Model
     {
         return Employee::find($this->employee_id);
     }
+
 
     /**
      * Summary of getEmployees
@@ -85,10 +89,12 @@ class AllowanceGroupEmployeePivot extends Model
         return $this->belongsTo(Employee::class);
     }
 
+
     public function group()
     {
         return $this->belongsTo(AllowanceGroup::class, 'allowance_group_id');
     }
+
 
     // public function frequencies()
     // {
@@ -96,6 +102,7 @@ class AllowanceGroupEmployeePivot extends Model
     //         ->withPivot(['id', 'amount', 'effective_from', 'status', 'allowance_id']) // optional
     //         ->withTimestamps();
     // }
+
     
     public function allowanceGroupAllowancesPivot()
     {

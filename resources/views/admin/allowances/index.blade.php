@@ -30,7 +30,7 @@
                                 <tbody>
                                     @forelse($allowances as $key => $allowance)
                                         <tr class="text-dark">
-                                            <td>{{ ++$key }}</td>
+                                            <td>{{ $loop->iteration }}</td>
                                             <td>{{ $allowance->name }}</td>
                                             <td>{{ $allowance->description }}</td>
                                             <td>

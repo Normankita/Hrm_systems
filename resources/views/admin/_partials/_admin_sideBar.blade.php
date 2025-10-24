@@ -28,12 +28,14 @@
                 @endphp
                 <li class="has-sub {{ $isPageEmployee ? 'active expand' : '' }}">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                        data-target="#employee-menu" aria-expanded="{{ $isPageEmployee ? 'true' : 'false' }}" aria-controls="employee-menu">
+                        data-target="#employee-menu" aria-expanded="{{ $isPageEmployee ? 'true' : 'false' }}"
+                        aria-controls="employee-menu">
                         <i class="mdi mdi-account-multiple"></i>
                         <span class="nav-text">Employees</span>
                         <b class="caret"></b>
                     </a>
-                    <ul class="collapse {{ $isPageEmployee ? 'show' : ''}}" id="employee-menu" data-parent="#sidebar-menu">
+                    <ul class="collapse {{ $isPageEmployee ? 'show' : '' }}" id="employee-menu"
+                        data-parent="#sidebar-menu">
                         <div class="sub-menu">
                             <li>
                                 <a class="sidenav-item-link" href="{{ route('admin.employees.create') }}">
@@ -134,13 +136,13 @@
                                 </li>
                             @endcan
                             <li>
-                                <a href="{{ route('admin.employee.allowances.groups.index') }}">
-                                    <span class="nav-text">Allowance Groups</span>
+                                <a href="{{ route('admin.frequencies.index') }}"> <span class="nav-text">Manage
+                                        Frequencies</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('admin.frequencies.index') }}"> <span class="nav-text">Manage
-                                        Frequencies</span>
+                                <a href="{{ route('admin.employee.allowances.groups.index') }}">
+                                    <span class="nav-text">Allowance Groups</span>
                                 </a>
                             </li>
                             <li>
@@ -166,12 +168,13 @@
                 <li class="has-sub {{ $isPageAttendance ? 'active expand' : '' }}">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
                         data-target="#attendance-menu" aria-expanded="{{ $isPageAttendance ? 'true' : 'false' }}"
-                            aria-controls="attendance-menu">
+                        aria-controls="attendance-menu">
                         <i class="mdi mdi-cash-refund"></i>
                         <span class="nav-text">Attendance</span>
                         <b class="caret"></b>
                     </a>
-                    <ul class="collapse {{ $isPageAttendance ? 'show' : '' }}" id="attendance-menu" data-parent="#sidebar-menu">
+                    <ul class="collapse {{ $isPageAttendance ? 'show' : '' }}" id="attendance-menu"
+                        data-parent="#sidebar-menu">
                         <div class="sub-menu">
                             <!-- Other Attendance Links -->
                             <li>
@@ -205,11 +208,14 @@
                             @endphp
                             <li class="has-sub {{ $isPageSession ? 'active expand' : '' }}">
                                 <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                                    data-target="#session-menu" aria-expanded="{{ $isPageSession ? 'true' : 'false' }}" aria-controls="session-menu">
+                                    data-target="#session-menu"
+                                    aria-expanded="{{ $isPageSession ? 'true' : 'false' }}"
+                                    aria-controls="session-menu">
                                     <span class="nav-text">Session / Shifts</span>
                                     <b class="caret"></b>
                                 </a>
-                                <ul class="collapse {{ $isPageSession ? 'show' : '' }}" id="session-menu" data-parent="#attendance-menu">
+                                <ul class="collapse {{ $isPageSession ? 'show' : '' }}" id="session-menu"
+                                    data-parent="#attendance-menu">
                                     <div class="sub-menu">
                                         <li>
                                             <a class="sidenav-item-link"
@@ -236,12 +242,14 @@
                 @endphp
                 <li class="has-sub {{ $isPageRole ? 'active expand' : '' }}">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                        data-target="#roles_menu" aria-expanded="{{ $isPageRole ? 'true' : 'false' }}" aria-controls="roles_menu">
+                        data-target="#roles_menu" aria-expanded="{{ $isPageRole ? 'true' : 'false' }}"
+                        aria-controls="roles_menu">
                         <i class="mdi mdi-account-multiple"></i>
                         <span class="nav-text">Roles</span>
                         <b class="caret"></b>
                     </a>
-                    <ul class="collapse {{ $isPageRole ? 'show' : '' }}" id="roles_menu" data-parent="#sidebar-menu">
+                    <ul class="collapse {{ $isPageRole ? 'show' : '' }}" id="roles_menu"
+                        data-parent="#sidebar-menu">
                         <div class="sub-menu">
                             <li>
                                 <a class="sidenav-item-link"
@@ -260,12 +268,14 @@
                 @endphp
                 <li class="has-sub {{ $isPageDepartment ? 'active expand' : '' }}">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                        data-target="#department_menu" aria-expanded="{{ $isPageDepartment ? 'true' : 'false' }}" aria-controls="department_menu">
+                        data-target="#department_menu" aria-expanded="{{ $isPageDepartment ? 'true' : 'false' }}"
+                        aria-controls="department_menu">
                         <i class="mdi mdi-sitemap"></i>
                         <span class="nav-text">Departments</span>
                         <b class="caret"></b>
                     </a>
-                    <ul class="collapse {{ $isPageDepartment ? 'show' : '' }}" id="department_menu" data-parent="#sidebar-menu">
+                    <ul class="collapse {{ $isPageDepartment ? 'show' : '' }}" id="department_menu"
+                        data-parent="#sidebar-menu">
                         <div class="sub-menu">
                             <li>
                                 <a class="sidenav-item-link" href="{{ route('admin.departments.index') }}">

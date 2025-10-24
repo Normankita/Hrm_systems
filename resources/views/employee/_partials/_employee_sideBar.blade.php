@@ -35,7 +35,7 @@
                             <span class="nav-text">Attendance</span>
                             <b class="caret"></b>
                         </a>
-                        <ul class="collapse {{ $isPageAttendance ? 'show' : '' }}" id="attendance-response-menu" 
+                        <ul class="collapse {{ $isPageAttendance ? 'show' : '' }}" id="attendance-response-menu"
                                 data-parent="#sidebar-menu">
                             <div class="sub-menu">
                                 <li>
@@ -56,7 +56,7 @@
                 @canany(['request_leave', 'view_leave'])
                     <li class="has-sub {{ $isLeavePage ? 'active expand' : '' }}">
                         <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                            data-target="#leave-menu" aria-expanded="{{ $isLeavePage ? 'true' : 'false' }}" 
+                            data-target="#leave-menu" aria-expanded="{{ $isLeavePage ? 'true' : 'false' }}"
                                 aria-controls="leave-menu">
                             <i class="mdi mdi-calendar"></i>
                             <span class="nav-text">Leave</span>
@@ -99,7 +99,7 @@
                 @if ($canCreate || $canView)
                     <li class="has-sub {{ $isManageEmp ? 'active expalnd' : '' }}">
                         <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                            data-target="#employee-menu" aria-expanded="{{ $isManageEmp ? 'true' : 'false' }}" 
+                            data-target="#employee-menu" aria-expanded="{{ $isManageEmp ? 'true' : 'false' }}"
                                 aria-controls="employee-menu">
                             <i class="mdi mdi-account-multiple"></i>
                             <span class="nav-text">Manage Employees</span>
@@ -170,13 +170,12 @@
                                             class="nav-text">Manage Frequencies</span>
                                     </a>
                                 </li>
-                                {{-- <li>
+                                <li>
                                     <a href="{{ route('employee.manage.disbursements.index') }}"> <span
                                             class="nav-text">Disbursements</span>
                                     </a>
-                                </li> --}}
+                                </li>
                             </div>
-
                         </ul>
                     </li>
                 @endcanany
@@ -225,7 +224,7 @@
                             <span class="nav-text">Manage Attendance</span>
                             <b class="caret"></b>
                         </a>
-                        <ul class="collapse {{ $isManageAttendance ? 'show' : '' }}" id="loan-menu" 
+                        <ul class="collapse {{ $isManageAttendance ? 'show' : '' }}" id="loan-menu"
                                 data-parent="#sidebar-menu">
                             <div class="sub-menu">
                                 @can('view_attendances')
@@ -275,13 +274,13 @@
                 @canany(['view_payroll', 'create_payroll'])
                     <li class="has-sub {{ $isManagePayrolls ? 'active expland' : '' }}">
                         <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                            data-target="#payroll-menu" aria-expanded="{{ $isManagePayrolls ? 'true' : 'false' }}" 
+                            data-target="#payroll-menu" aria-expanded="{{ $isManagePayrolls ? 'true' : 'false' }}"
                                 aria-controls="payroll-menu">
                             <i class="mdi mdi-cash-register"></i>
                             <span class="nav-text">Manage Payrolls</span>
                             <b class="caret"></b>
                         </a>
-                        <ul class="collapse {{ $isManagePayrolls ? 'show' : '' }}" id="payroll-menu" 
+                        <ul class="collapse {{ $isManagePayrolls ? 'show' : '' }}" id="payroll-menu"
                             data-parent="#sidebar-menu">
                             <div class="sub-menu">
                                 @can('create_payroll')
@@ -318,7 +317,7 @@
                             <span class="nav-text">Manage Payments</span>
                             <b class="caret"></b>
                         </a>
-                        <ul class="collapse {{ $isManagePayments ? 'show' : '' }}" id="payroll-response-menu" 
+                        <ul class="collapse {{ $isManagePayments ? 'show' : '' }}" id="payroll-response-menu"
                                 data-parent="#sidebar-menu">
                             <div class="sub-menu">
                                 <li>
@@ -368,7 +367,7 @@
                 @can('view_paygrade')
                     <li class="has-sub {{ $isManagePaygrade ? 'active expand' : '' }}">
                         <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                            data-target="#paygrade-menu" aria-expanded="{{ $isManagePaygrade ? 'true' : 'false' }}" 
+                            data-target="#paygrade-menu" aria-expanded="{{ $isManagePaygrade ? 'true' : 'false' }}"
                                 aria-controls="employee-menu">
                             <i class="mdi mdi-cash-multiple"></i>
                             <span class="nav-text">Manage PayGrade</span>
@@ -394,13 +393,13 @@
                 @can('view_leaveTypes')
                     <li class="has-sub {{ $isManageLeaveTypes ? 'active expand' : '' }}">
                         <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                            data-target="#leaveType-menu" aria-expanded="{{ $isManageLeaveTypes ? 'true' : 'false' }}" 
+                            data-target="#leaveType-menu" aria-expanded="{{ $isManageLeaveTypes ? 'true' : 'false' }}"
                                 aria-controls="leaveType-menu">
                             <i class="mdi mdi-calendar"></i>
                             <span class="nav-text">LeaveType</span>
                             <b class="caret"></b>
                         </a>
-                        <ul class="collapse {{ $isManageLeaveTypes ? 'show' : '' }}" id="leaveType-menu" 
+                        <ul class="collapse {{ $isManageLeaveTypes ? 'show' : '' }}" id="leaveType-menu"
                                 data-parent="#sidebar-menu">
                             <div class="sub-menu">
                                 <li>
@@ -422,13 +421,13 @@
                 @can('view_leave_requests')
                     <li class="has-sub {{ $isPageLeaveManagement ? 'active expand' : '' }}">
                         <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
-                            data-target="#leaves-menu" aria-expanded="{{ $isPageLeaveManagement ? 'true' : 'false' }}" 
+                            data-target="#leaves-menu" aria-expanded="{{ $isPageLeaveManagement ? 'true' : 'false' }}"
                                 aria-controls="leave-menu">
                             <i class="mdi mdi-calendar"></i>
                             <span class="nav-text">Leaves Management</span>
                             <b class="caret"></b>
                         </a>
-                        <ul class="collapse {{ $isPageLeaveManagement ? 'show' : '' }}" id="leaves-menu" 
+                        <ul class="collapse {{ $isPageLeaveManagement ? 'show' : '' }}" id="leaves-menu"
                                 data-parent="#sidebar-menu">
                             <div class="sub-menu">
                                 <li>

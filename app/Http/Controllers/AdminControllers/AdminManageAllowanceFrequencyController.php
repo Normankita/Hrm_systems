@@ -15,7 +15,7 @@ class AdminManageAllowanceFrequencyController extends Controller
      */
     public function index()
     {
-        $frequencies = AllowanceFrequency::all();
+        $frequencies = AllowanceFrequency::all()->sortByDesc('created_at');
         return view('admin.allowances.frequencies',
             compact('frequencies'));
     }

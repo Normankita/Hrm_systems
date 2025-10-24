@@ -30,6 +30,7 @@ class AllowanceGroup extends Model
         'description',
     ];
 
+
     public function employees()
     {
         return $this->belongsToMany(
@@ -65,6 +66,11 @@ class AllowanceGroup extends Model
     public function groupEmployees()
     {
         return $this->hasMany(AllowanceGroupEmployeePivot::class, 'allowance_group_id');
+    }
+
+    public function activeGroups() {
+        return $this->where('isActive', true)
+            ->get();
     }
 
     public function assignedAllowanceEntries($allowanceId)

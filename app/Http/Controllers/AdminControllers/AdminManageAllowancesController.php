@@ -13,7 +13,7 @@ class AdminManageAllowancesController extends Controller
      */
     public function index()
     {
-        $allowances = Allowance::all();
+        $allowances = Allowance::all()->sortByDesc('created_at');
         return view("admin.allowances.index",
             compact("allowances"));
     }

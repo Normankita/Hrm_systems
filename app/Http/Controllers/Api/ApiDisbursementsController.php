@@ -79,10 +79,29 @@ class ApiDisbursementsController extends Controller
     }
 
 
+    public function disburseGrouped(Request $request)
+    {
+        $allowanceDisbursementService = new AllowanceDisbursementService();
+        $groupIds = $request->post('groupIds', []);
+        $response = $allowanceDisbursementService->handleDisbursement(
+            AllowanceGroups::GROUP,
+            $groupIds
+        );
+        if ($response['status'] == 'error') {
+            return response()->json([
+                'status' => 'error',
+                'message' => $response['message']
+            ], 500);
+        }
+        return response()->json($response);
+    }
+
+
     private function getIndividualBasedDisbursement()
     {
         return DisbursedAllowance::getIndividialDisbursements();
     }
+
 
     private function getGroupBasedDisbursement()
     {

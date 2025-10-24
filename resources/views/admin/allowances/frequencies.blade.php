@@ -30,7 +30,7 @@
                                 <tbody>
                                     @forelse($frequencies as $key => $frequency)
                                         <tr class="text-dark">
-                                            <td>{{ ++$key }}</td>
+                                            <td>{{ $loop->iteration }}</td>
                                             <td>{{ $frequency->name }}</td>
                                             <td>{{ $frequency->base_category }}</td>
                                             <td>{{ $frequency->no_times }}</td>

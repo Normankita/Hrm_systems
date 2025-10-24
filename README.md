@@ -14,3 +14,7 @@ run php artisan db:seed EmployeeStatusPermissions
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+// System isues that need to be fixed
+-------------------------------------
+    - assign allowance has some sirious error (page assignAllowance)

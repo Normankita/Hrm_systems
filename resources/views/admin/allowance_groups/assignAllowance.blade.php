@@ -40,7 +40,7 @@
                 </div>
             </div>
             <div v-if="!empSubmit && allowance_id" class="col-md-12 mb-4">
-                <div class="row mb-3">
+                <div class="row mb-3"  v-if="selectedEmployees.length > 0">
                     <div class="col-md-3">
                         <label>Default Amount</label>
                         <input type="number" class="form-control" v-model="defaultAmount" v-on:input="applyDefaultAmount">
@@ -91,8 +91,8 @@
                     </div>
                 </div>
                 <div class="text-end mt-2">
-                    <button class="btn btn-sm btn-primary" type="button" v-on:click="submitSelectedEmployees"
-                        :disabled="empSubmit">
+                    <button v-if="selectedEmployees.length > 0" class="btn btn-sm btn-primary" type="button" v-on:click="submitSelectedEmployees"
+                        :disabled="empSubmit">                      
                         Submit
                     </button>
                 </div>
@@ -161,6 +161,11 @@
                     document.getElementById('loader').classList.remove('d-block');
                 });
             },
+            computed: {
+                selectedEmployees() {
+                    return this.employees.filter(e => e.selected);
+                }
+            },
             data() {
                 return {
                     employees: employees.map(e => ({
@@ -177,7 +182,7 @@
                     empSubmit: false,
                     group: allowanceGroup,
                     user: user,
-                    error: null,
+                    error: null
                 };
             },
             methods: {

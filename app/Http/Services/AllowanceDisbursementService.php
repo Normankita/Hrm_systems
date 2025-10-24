@@ -36,9 +36,7 @@ class AllowanceDisbursementService
             $categories = Allowance::whereIn('id', $categoriesIds)->get();
             return $this->categoryBasedDisbursement($categories);
         } elseif ($basedOn === AllowanceGroups::GROUP) {
-            $groupsIds = $embeded;
-            $groups = AllowanceGroup::whereIn('id', $groupsIds)->get();
-            return $this->groupBasedDisbursement($groups);
+            return $this->groupBasedDisbursement($embeded);
         } elseif ($basedOn === AllowanceGroups::INDIVIDUAL) {
             $employeesIds = $embeded['employeesIds'];
             $employees = Employee::whereIn('id', $employeesIds)->get();
@@ -131,6 +129,7 @@ class AllowanceDisbursementService
         }
     }
 
+
     private static function checkingGroupCategoryEligibilityDisburse($forDisburse)
     {
         $data = GroupCategoryEmployeeAllowance::where(
@@ -175,9 +174,25 @@ class AllowanceDisbursementService
     }
 
 
-    private function groupBasedDisbursement(Collection $groups): array
+    private function groupBasedDisbursement($groupsIds): array
     {
-        // Logic to handle group-based disbursement
+        // fetching all allowances under the group
+        $groups = AllowanceGroup::with('allowance')
+            ->with('employees', function ($query) {
+                $query->where('isActive', true);
+            })
+            ->whereIn('allowance_groups.id', $groupsIds)
+            ->get();
+        // fetching the eligible user to receiver the allowance
+        $groups->forEach(function ($group) {
+            $employees = $group->employees;
+            $employees->foreach(function ($employee) {
+                // checking the employee and his group allowance and disburse
+
+            });
+        });
+        // disburse to the eligible employees
+
         return [
             'status' => 'success',
             'message' => 'Group-based disbursement handled successfully.',
@@ -211,7 +226,8 @@ class AllowanceDisbursementService
                 'message' => 'Allowance not found'
             ];
         }
-        $gr_allowancePivot = AllowanceGroupAllowancePivot::where('allowance_group_id', $group->id)
+        $gr_allowancePivot = AllowanceGroupAllowancePivot::where(
+            'allowance_group_id', $group->id)
             ->where('allowance_id', $allowance->id)
             ->with('activeGroupEmployeesPivot')
             ->first();

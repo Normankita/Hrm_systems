@@ -21,8 +21,8 @@ class AdminAllowanceGroupController extends Controller
     use AllowanceGroupTrait;
     public function index()
     {
-        $groups = AllowanceGroup::all();
-        $allowances = Allowance::all();
+        $groups = AllowanceGroup::all()->sortByDesc('created_at');
+        $allowances = Allowance::all()->sortByDesc('created_at');
         return view('admin.allowance_groups.index')
             ->with(['groups' => $groups, 'allowances' => $allowances]);
     }

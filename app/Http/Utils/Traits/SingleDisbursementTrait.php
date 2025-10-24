@@ -8,10 +8,10 @@ class SingleDisbursementTrait
 {
 
     public
-     static function isEligible($employeeAllowance_details,
-     $forDisburseDate)
-    {
-
+        static function isEligible(
+        $employeeAllowance_details,
+        $forDisburseDate
+    ) {
         $items = self::timeSpanInspector($employeeAllowance_details);
         if ($items->isEmpty()) {
             return true;

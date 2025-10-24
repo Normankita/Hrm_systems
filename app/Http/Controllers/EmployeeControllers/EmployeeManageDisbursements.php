@@ -4,12 +4,21 @@ namespace App\Http\Controllers\EmployeeControllers;
 
 use App\Enums\AllowanceGroups;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AllowanceGroupResource;
 use App\Models\Allowance;
+use App\Models\AllowanceGroup;
 use App\Models\DisbursedAllowance;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 
 class EmployeeManageDisbursements extends Controller
 {
+    private $employeeModelObject;
+
+    public function __construct(Employee $employeeModelObject)
+    {
+
+    }
     /**
      * Display a listing of the resource.
      */
@@ -31,9 +40,22 @@ class EmployeeManageDisbursements extends Controller
         if (!$basedOn) {
             return redirect()->back()->withErrors(['basedOn' => 'Based on parameter is required.']);
         }
+
+
         if ($basedOn == AllowanceGroups::GROUP) {
-            return view('employee.manage.disbursement_allowance.create.grouped');
-        } elseif ($basedOn == AllowanceGroups::INDIVIDUAL) {
+            // All groups pointing to the company
+            $groups = AllowanceGroup::where('isActive', true)
+                ->with('allowance')
+                ->get();
+            $groups = $groups->map(function ($group) {
+                return new AllowanceGroupResource($group);
+            });
+            return view('employee.manage.disbursement_allowance.create.grouped')
+                ->with('groups', $groups);
+        }
+
+
+        elseif ($basedOn == AllowanceGroups::INDIVIDUAL) {
             return view('employee.manage.disbursement_allowance.create.individual');
         } elseif ($basedOn == AllowanceGroups::CATEGORY) {
             $categories = Allowance::all();
@@ -56,7 +78,7 @@ class EmployeeManageDisbursements extends Controller
         $basedOn = $request->post('basedOn');
         if ($basedOn == AllowanceGroups::INDIVIDUAL) {
 
-        }elseif ($basedOn == AllowanceGroups::GROUP) {
+        } elseif ($basedOn == AllowanceGroups::GROUP) {
 
         } elseif ($basedOn == AllowanceGroups::CATEGORY) {
             $categoriesIds = $request->post('categories', []);

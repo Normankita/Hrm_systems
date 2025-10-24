@@ -19,8 +19,10 @@ class EmployeePayrollController extends Controller
     {
         $payrolls = Payroll::with(['employee', 'pay_grade'])
             ->latest()->get();
-        return view('employee.manage.payroll.index',
-        compact('payrolls'));
+        return view(
+            'employee.manage.payroll.index',
+            compact('payrolls')
+        );
 
     }
     public function generateAll(Request $request)
@@ -56,23 +58,25 @@ class EmployeePayrollController extends Controller
      */
     public function show(Payroll $payroll)
     {
-        $employee= Employee::find($payroll->employee_id);
+        $employee = Employee::find($payroll->employee_id);
 
         $deductions = $payroll->deductions()->get();
 
         return view('employee.manage.payroll.payments.show', compact('employee', 'payroll', 'deductions'));
     }
 
+
+
     public function downloadPayslip($id)
-{
-    $payroll = Payroll::findOrFail($id);
+    {
+        $payroll = Payroll::findOrFail($id);
 
-    if (!$payroll->payslip_path || !Storage::exists($payroll->payslip_path)) {
-        abort(404, 'Payslip not found.');
+        if (!$payroll->payslip_path || !Storage::exists($payroll->payslip_path)) {
+            abort(404, 'Payslip not found.');
+        }
+
+        return Storage::download($payroll->payslip_path, 'Payslip_' . $payroll->id . '.pdf');
     }
-
-    return Storage::download($payroll->payslip_path, 'Payslip_' . $payroll->id . '.pdf');
-}
 
 
 }

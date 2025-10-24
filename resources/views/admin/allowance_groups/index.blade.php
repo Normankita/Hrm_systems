@@ -61,7 +61,7 @@
                             <tbody>
                                 @foreach ($groups as $key => $group)
                                 <tr>
-                                    <td>{{ $key + 1 }}</td>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>{{  $group->name }}</td>
                                     <td>
                                         <!-- make the group desc less than 50 words -->

@@ -65,3 +65,10 @@ Route::middleware('auth', 'admin-or-attendance')
             ->middleware('HasCompanyProfile');
     });
 
+
+Route::middleware([])->group(function () {
+    // Additional authenticated API routes can be added here
+    Route::post('/disburse/allowance/grouped', [ApiDisbursementsController::class, 'disburseGrouped'])
+        ->name('disburse.allowance.grouped');
+});
+
