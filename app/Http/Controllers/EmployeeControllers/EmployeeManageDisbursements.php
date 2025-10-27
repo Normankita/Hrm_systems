@@ -19,6 +19,8 @@ class EmployeeManageDisbursements extends Controller
     {
 
     }
+
+
     /**
      * Display a listing of the resource.
      */
@@ -31,6 +33,7 @@ class EmployeeManageDisbursements extends Controller
             ->with('category', $category);
     }
 
+
     /**
      * Show the form for creating a new resource.
      */
@@ -40,22 +43,19 @@ class EmployeeManageDisbursements extends Controller
         if (!$basedOn) {
             return redirect()->back()->withErrors(['basedOn' => 'Based on parameter is required.']);
         }
-
-
         if ($basedOn == AllowanceGroups::GROUP) {
             // All groups pointing to the company
             $groups = AllowanceGroup::where('isActive', true)
                 ->with('allowance')
                 ->get();
+            $allowance = Allowance::all();
             $groups = $groups->map(function ($group) {
                 return new AllowanceGroupResource($group);
             });
             return view('employee.manage.disbursement_allowance.create.grouped')
-                ->with('groups', $groups);
-        }
-
-
-        elseif ($basedOn == AllowanceGroups::INDIVIDUAL) {
+                ->with('groups', $groups)
+                ->with('allowances', $allowance);
+        } elseif ($basedOn == AllowanceGroups::INDIVIDUAL) {
             return view('employee.manage.disbursement_allowance.create.individual');
         } elseif ($basedOn == AllowanceGroups::CATEGORY) {
             $categories = Allowance::all();
@@ -64,11 +64,12 @@ class EmployeeManageDisbursements extends Controller
         } elseif ($basedOn == 'all') {
             return view('employee.manage.disbursement_allowance.create.all');
         }
-        return redirect()->with(
+        return redirect()->back()->with(
             'error',
             'Invalid based on parameter provided.'
         );
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -99,6 +100,7 @@ class EmployeeManageDisbursements extends Controller
             ->setStatusCode(201);
     }
 
+
     /**
      * Display the specified resource.
      */
@@ -106,6 +108,7 @@ class EmployeeManageDisbursements extends Controller
     {
         //
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -115,6 +118,7 @@ class EmployeeManageDisbursements extends Controller
         //
     }
 
+
     /**
      * Update the specified resource in storage.
      */
@@ -122,6 +126,7 @@ class EmployeeManageDisbursements extends Controller
     {
         //
     }
+
 
     /**
      * Remove the specified resource from storage.

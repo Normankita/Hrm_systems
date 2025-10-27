@@ -83,9 +83,12 @@ class ApiDisbursementsController extends Controller
     {
         $allowanceDisbursementService = new AllowanceDisbursementService();
         $groupIds = $request->post('groupIds', []);
+        $allowanceIds = $request->post('allowanceIds', []);
+
         $response = $allowanceDisbursementService->handleDisbursement(
             AllowanceGroups::GROUP,
-            $groupIds
+            $groupIds,
+            $allowanceIds
         );
         if ($response['status'] == 'error') {
             return response()->json([

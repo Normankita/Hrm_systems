@@ -19,7 +19,7 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <label for="basedOn">Disburse Based On</label>
-                                                    <select class="form-control"
+                                                    <select v-model="categoryOpted" v-on:change="fetchRecentCategory($event)" class="form-control"
                                                     name="basedOn" id="basedOn"
                                                         required>
                                                         <option value="all">All</option>
@@ -37,6 +37,10 @@
                                                         <span class="text-danger">{{ $message }}</span>
                                                     @enderror
                                                 </div>
+                                                <div v-if="optionsEmployees.length > 0" class="col-md-12">
+                                                    <label for="employees">Choose Employees</label>
+                                                    <input type="text" v-on:change="searchEmployee($event)">
+                                                </div>
                                                 <div class="col-md-12 mt-3">
                                                     <button type="submit" class="btn btn-primary btn-sm">
                                                         start
@@ -52,7 +56,7 @@
                         <!-- at right side, add search button with search mdi icon, a toggle buttons and a submit button -->
                         <div class="col-md-8">
                             <!-- aa search button with input search field with date picker -->
-                            <select v-on:change="fetchRecentCategory($event)" class="form-control" name="basedOn"
+                            <select class="form-control" name="basedOn"
                                 id="basedOn" required>
                                 <option value="all"
                                     {{ session('category') == 'all' || session('category') == null ? 'selected' : '' }}>All
@@ -112,41 +116,26 @@
         const app = Vue.createApp({
             data() {
                 return {
+                    categoryOpted: null,
                     category: category,
                     individualBased: [],
                     groupBased: [],
                     categoryBased: null,
+                    optionsEmployees: [],
+                    selectedEmployees: [],
                 }
             },
             methods: {
+                searchEmployee(event) {
+                    console.log(event.target.value);
+                },
                 async fetchRecentCategory(event) {
                     const selectedCategory = event.target.value;
-                    console.log('Selected Category:', selectedCategory);
-                    this.category = selectedCategory;
                     const response = await axios
-                        .get('{{ route('disbursements.categorized') }}', {
-                            params: {
-                                category: this.category,
-                            }
-                        });
+                        .post("{{ route('fetch.employees') }}");
                     if (response.status === 200) {
-                        const {
-                            data
-                        } = response;
-                        console.log('Response Data:', data);
-                        if (data.status == "success") {
-                            if (response.data.category === 'individual') {
-                                this.individualBased = response.data.allowances;
-                            } else if (response.data.category === 'group') {
-                                this.groupBased = response.data.allowances;
-                            } else if (response.data.category === 'category') {
-                                this.categoryBased = response.data.allowances;
-                            } else {
-                                this.individualBased = [];
-                                this.groupBased = [];
-                                this.categoryBased = [];
-                            }
-                        }
+                        const {data} = response;
+                        this.optionsEmployees = data;
                     }
                 },
             },

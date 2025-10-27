@@ -11,19 +11,6 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row justify-content-between">
-                        <div class="col-md-4">
-                            <div class="row justify-content-end">
-                                <a href="{{ route('employee.manage.employee.allowances.groups.members', $group) }}"
-                                    class="btn btn-sm btn-primary col-12 "> Add Members </a>
-                                @if (count($group->activeEmployees) > 0)
-                                    <a href="{{ route('employee.manage.employee.allowances.groups.assign', $group) }}"
-                                       class="btn btn-sm btn-primary col-12 mt-2 mb-2">
-                                        Group Allowances
-                                    </a>
-                                @endif
-
-                            </div>
-                        </div>
                         <div class="col-md-6">
                             <div class="mb-4">
                                 <h2>Allowance Group</h2>
@@ -36,6 +23,19 @@
                                 <h3 class="card-title lead" style="text-transform: capitalize;">
                                     {{ $group->description }}
                                 </h3>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row justify-content-end">
+                                <a href="{{ route('employee.manage.employee.allowances.groups.members', $group) }}"
+                                    class="btn btn-sm btn-primary col-12 "> Add Members </a>
+                                @if (count($group->activeEmployees) > 0)
+                                    <a href="{{ route('employee.manage.employee.allowances.groups.assign', $group) }}"
+                                        class="btn btn-sm btn-primary col-12 mt-2 mb-2">
+                                        Group Allowances
+                                    </a>
+                                @endif
+
                             </div>
                         </div>
                     </div>

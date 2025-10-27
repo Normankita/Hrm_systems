@@ -16,7 +16,9 @@ trait GroupCategoryDisbursementPageTrait
         $empWithDisCounts = collect();
         $trueDisburseDetails = collect();
         $disbursed->each(function ($item) use ($allowance, $forDisburseDate, $empWithDisCounts, $trueDisburseDetails) {
-            $details = GroupCategoryEmployeeAllowance::getRealDetails($item->disbursable_id);
+            $details = GroupCategoryEmployeeAllowance::getRealDetails(
+                $item->disbursable_id
+            );
             // if the allowance effective_from date is after tody skip it
             if (!($details->effective_from > $forDisburseDate)) {
                 if ($details->allowance->id == $allowance->id) {
@@ -30,6 +32,7 @@ trait GroupCategoryDisbursementPageTrait
                     $details->isEligible = $isEligible;
                     $details->count = $count;
 
+
                     $empId = ($details->employee->id);
                     $empWithDisCounts->put($empId, [
                         'employee' => $details->employee,
@@ -37,6 +40,8 @@ trait GroupCategoryDisbursementPageTrait
                         'isEligible' => $isEligible,
                         'effective_from' => $details->effective_from
                     ]);
+                    $details->type = $item->type;
+                    $details->disburseId = $item->id;
                     $trueDisburseDetails->push($details);
                 }
             } else {
@@ -50,9 +55,10 @@ trait GroupCategoryDisbursementPageTrait
                     'isEligible' => false,
                     'effective_from' => $details->effective_from,
                 ]);
+                $details->type = $item->type;
+                $details->disburseId = $item->id;
                 $trueDisburseDetails->push($details);
             }
-
         });
         return [
             'disburseDetails' => $trueDisburseDetails,
@@ -63,8 +69,18 @@ trait GroupCategoryDisbursementPageTrait
     }
 
 
-    private static function isEligible($model, $gr_cat_empl_all_id, $forDisburseDate)
-    {
+    /**
+     * Summary of isEligible
+     * @param mixed $model // eg GroupCategoryEmployeeAllowance::class
+     * @param mixed $gr_cat_empl_all_id // the id of the group category employee allowance
+     * @param mixed $forDisburseDate // the date to check eligibility against
+     * @return bool
+     */
+    private static function isEligible(
+        $model,
+        $gr_cat_empl_all_id,
+        $forDisburseDate
+    ) {
         $gr_cat_empl_all_id_details = $model::getRealDetails(
             $gr_cat_empl_all_id
         );

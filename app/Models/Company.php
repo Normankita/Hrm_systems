@@ -18,15 +18,18 @@ class Company extends Model
         'isActive'
     ];
 
+
     public function departments()
     {
         return $this->hasMany(Department::class);
     }
 
+
     public function designations()
     {
         return $this->hasMany(Designation::class);
     }
+
 
     public function employees()
     {
@@ -38,6 +41,7 @@ class Company extends Model
         return $this->hasMany(Contribution::class);
     }
 
+
     public function admin()
     {
         return $this->hasOne(User::class, 'company_id', 'id')
@@ -46,15 +50,18 @@ class Company extends Model
             });
     }
 
+
     public function leaveTypes()
     {
         return $this->hasMany(LeaveType::class);
     }
 
+
     public function settings()
     {
         return $this->hasMany(Setting::class);
     }
+
 
     public static function ownerCompanies()
     {
@@ -62,6 +69,7 @@ class Company extends Model
         return self::whereNotIn('id', [$companyId]);
     }
 
+    
     public function roles() {
         return $this->hasMany(Role::class);
     }

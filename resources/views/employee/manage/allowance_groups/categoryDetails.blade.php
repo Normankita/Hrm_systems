@@ -36,6 +36,7 @@
                                     <th>Name</th>
                                     <th>Phone</th>
                                     <th>Current Count</th>
+                                    <th>Target Count</th>
                                     <th>Amount</th>
                                     <th>Department</th>
                                     <th>Join Date</th>
@@ -43,7 +44,6 @@
                                 </tr>
                             </thead>
                         </x-slot>
-
                         <x-slot name="body">
                             <tbody>
                                 @forelse($groupWithEmp as $key => $withEmployee)
@@ -62,6 +62,9 @@
                                         <td style="color:{{ $textColor }}">{{ $employee->phone_number }}</td>
                                         <td style="color:{{ $textColor }}">{{ $withEmployee->count }}</td>
                                         <td style="color:{{ $textColor }}">
+                                          {{ $withEmployee->frequency->no_times }}
+                                        </td>
+                                        <td style="color:{{ $textColor }}">
                                             {{ number_format($withEmployee->pivotAllowanceAmount) }}</td>
                                         <td style="color:{{ $textColor }}">{{ $employee->department->name ?? 'N/A' }}
                                         </td>
@@ -75,7 +78,9 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="10" class="text-center text-muted">No Disbursements.</td>
+                                        <td colspan="10" class="text-center text-muted">
+                                            No Disbursements.
+                                        </td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -101,6 +106,7 @@
                                     <th>Employee</th>
                                     <th>Phone</th>
                                     <th>Amount</th>
+                                    <th>Disbursement Origin</th>
                                     <th>Disbursed On</th>
                                     <th></th>
                                 </tr>
@@ -118,6 +124,7 @@
                                             <td>{{ $item->employee->full_name }}</td>
                                             <td>{{ $item->employee->phone_number }}</td>
                                             <td>{{ number_format($item->amount) }}</td>
+                                            <td>{{ $item->type }}</td>
                                             <td>{{ \Carbon\Carbon::parse($item->created_at)->format('m-d-Y') }}</td>
                                             <td>
                                                 {{-- <x-system.btn-view :key="$key" :route="route('employee.manage.employees.show', $employee->id)" /> --}}

@@ -97,7 +97,6 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
 
 
 // Managin Loans
-
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('employee/manage/loans')
     ->controller(EmployeeManageLoansController::class)

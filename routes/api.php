@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\ApiAllowanceGroupsController;
 use App\Http\Controllers\Api\ApiAttendanceController;
 use App\Http\Controllers\Api\ApiDisbursementsController;
 use App\Http\Controllers\Api\ApiEmployeePayrollController;
+use App\Http\Controllers\Api\ApiEmployeesController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -68,7 +69,20 @@ Route::middleware('auth', 'admin-or-attendance')
 
 Route::middleware([])->group(function () {
     // Additional authenticated API routes can be added here
-    Route::post('/disburse/allowance/grouped', [ApiDisbursementsController::class, 'disburseGrouped'])
+    Route::post('/disburse/allowance/grouped', [
+        ApiDisbursementsController::class,
+        'disburseGrouped'
+    ])
         ->name('disburse.allowance.grouped');
+});
+
+
+Route::middleware(['auth'])->group(function () {
+    // Additional authenticated API routes can be added here
+    Route::post('/fetch/employees', [
+        ApiEmployeesController::class,
+        'fetchEmployees'
+    ])
+        ->name('fetch.employees');
 });
 
