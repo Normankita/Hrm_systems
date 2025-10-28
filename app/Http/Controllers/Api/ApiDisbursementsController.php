@@ -47,7 +47,8 @@ class ApiDisbursementsController extends Controller
             $results = $this->getGroupCategoryAllawances($ids);
             if ($results['status'] == 'success') {
                 $response = AllowanceDisbursementService::disburseWithGroupCategory(
-                    $results['data']);
+                    $results['data']
+                );
                 return response()->json($response);
             } else {
                 return response()->json([
@@ -59,7 +60,7 @@ class ApiDisbursementsController extends Controller
         } elseif ($category == AllowanceGroups::GROUP) {
             $results = $this->getGroupBasedDisbursement();
         } elseif ($category == AllowanceGroups::INDIVIDUAL) {
-          $response = AllowanceDisbursementService::disburseWithIndividualCategory(
+            $response = AllowanceDisbursementService::disburseWithIndividualCategory(
                 $request->post('allowanceEmployeePivotIds'),
                 $user
             );
@@ -100,6 +101,31 @@ class ApiDisbursementsController extends Controller
     }
 
 
+
+    public function disburseIndividualInGroup(Request $request)
+    {
+        $allowanceDisbursementService = new AllowanceDisbursementService();
+        $groupIds = $request->post('groupIds', []);
+        $allowanceIds = $request->post('allowanceIds', []);
+        $employeesIds = $request->post('employeesIds', []);
+
+        $response = $allowanceDisbursementService->handleDisbursement(
+            AllowanceGroups::GROUP,
+            $groupIds,
+            $allowanceIds,
+            null,
+            $employeesIds
+        );
+        if ($response['status'] == 'error') {
+            return response()->json([
+                'status' => 'error',
+                'message' => $response['message']
+            ], 500);
+        }
+        return response()->json($response);
+    }
+
+
     private function getIndividualBasedDisbursement()
     {
         return DisbursedAllowance::getIndividialDisbursements();
@@ -128,8 +154,8 @@ class ApiDisbursementsController extends Controller
             'id',
             $ids
         )
-        ->where('effective_from', '<=', now())
-        ->get();
+            ->where('effective_from', '<=', now())
+            ->get();
         return [
             'status' => 'success',
             'data' => $tableColumns

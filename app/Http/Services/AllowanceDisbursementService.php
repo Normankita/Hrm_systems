@@ -29,7 +29,8 @@ class AllowanceDisbursementService
      * @param Request $request
      * @return array
      */
-    public function handleDisbursement($basedOn, $embeded, $allowanceIds = [], $date = null): array
+    public function handleDisbursement($basedOn, $embeded, $allowanceIds = [], $date = null,
+        Array|null $employeeIds = null): array
     {
         if ($basedOn === AllowanceGroups::CATEGORY) {
             $categoriesIds = $embeded;
@@ -45,6 +46,13 @@ class AllowanceDisbursementService
             $employeesIds = $embeded['employeesIds'];
             $employees = Employee::whereIn('id', $employeesIds)->get();
             return $this->individualBasedDisbursement($employees);
+        } elseif ($basedOn == "individialGroup") {
+            return $this->groupBasedDisbursement(
+                $embeded,
+                $allowanceIds,
+                $date ?? Carbon::now(),
+                $employeeIds
+            );
         }
         // Logic to handle disbursement based on the type
         // This is a placeholder for actual implementation
@@ -73,8 +81,12 @@ class AllowanceDisbursementService
     }
 
 
-    private function groupBasedDisbursement($groupsIds, $allowanceIds, $date): array
-    {
+    private function groupBasedDisbursement(
+        array $groupsIds,
+        array $allowanceIds,
+        Carbon $date,
+        array|null $employeeIds = null
+    ): array {
         // fetching all allowances under the group
         $groups = AllowanceGroup::with('allowance')
             ->with('employees', function ($query) {
@@ -85,8 +97,16 @@ class AllowanceDisbursementService
         DB::beginTransaction();
         try {
             // fetching the eligible user to receiver the allowance
-            $groups->each(function ($group) use ($allowanceIds, $date) {
+            $groups->each(function ($group) use ($allowanceIds, $date, $employeeIds) {
                 $employees = $group->employees;
+                if ($employeeIds) {
+                    $employees = $employees->map(function ($employee, $employeeIds) {
+                        if (in_array($employee->id, $employeeIds)) {
+                            return $employee;
+                        }
+                        return null;
+                    })->filter()->values();
+                }
                 $employees->each(function ($employee) use ($group, $allowanceIds, $date) {
                     // checking the employee and his group allowance and disburse
                     $groupEmployeePivot = AllowanceGroupEmployeePivot::where(

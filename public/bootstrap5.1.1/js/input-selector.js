@@ -1,4 +1,11 @@
 class TableSelectionHandler {
+    /**
+     *The constructor for TableSelectionHandler
+     * This will receive the table selector as a first parameter
+     * and the all checker selector as the second parameter
+     * @param {*} tableSelector
+     * @param {*} allCheckerSelector
+     */
     constructor(tableSelector, allCheckerSelector) {
         this.tableSelector = tableSelector;
         this.allCheckerSelector = allCheckerSelector;

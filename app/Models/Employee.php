@@ -284,6 +284,19 @@ class Employee extends Model
     }
 
 
+    public static function getActiveEmployees()
+    {
+        return self::where('state', 'active')
+            ->where('userStatus', true)
+            ->get()
+            ->map(function ($employee) {
+                return $employee->isCurrentlyOnLeave() ? null : $employee;
+            })
+            ->filter()
+            ->values();
+    }
+
+
     public function getApprovedMonthPayrolls(Carbon $month)
     {
         return $this->payrolls()

@@ -28,7 +28,7 @@
             <div class="col-md-12">
                 <div class="row justify-content-start mb-3">
                     <div class="col-md-6">
-                        <label>Choose an Allowance</label>
+                        <label>Register New Allowance</label>
                         <select class="form-control" v-model="allowance_id">
                             <option value="" disabled>-- Select allowance --</option>
                             <option v-for="allowance in allowances" :key="allowance.id" :value="allowance.id">
@@ -40,7 +40,7 @@
                 </div>
             </div>
             <div v-if="!empSubmit && allowance_id" class="col-md-12 mb-4">
-                <div class="row mb-3">
+                <div class="row mb-3" v-if="isEmployeeSelected">
                     <div class="col-md-3">
                         <label>Default Amount</label>
                         <input type="number" class="form-control" v-model="defaultAmount" v-on:input="applyDefaultAmount">
@@ -61,6 +61,7 @@
 
                 <div class="card">
                     <div class="card-body">
+                        <h3><b class="lead mb-3">Choose Employee To Add In The New Allowance</b></h3>
                         <table class="table table-bordered table-sm p-5">
                             <thead>
                                 <tr>
@@ -156,10 +157,16 @@
                     let domObject = document.getElementById('emps');
                     domObject.classList.remove('d-none');
                     domObject.classList.add('d-block');
-                    
+
                     document.getElementById('loader').classList.add('d-none');
                     document.getElementById('loader').classList.remove('d-block');
                 });
+            },
+            computed: {
+                isEmployeeSelected() {
+                    const list = this.employees.filter(e => e.selected);
+                    return list.length > 0;
+                }
             },
             data() {
                 return {

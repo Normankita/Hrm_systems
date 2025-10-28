@@ -19,7 +19,7 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <label for="basedOn">Disburse Based On</label>
-                                                    <select v-model="categoryOpted" v-on:change="fetchRecentCategory($event)" class="form-control"
+                                                    <select class="form-control"
                                                     name="basedOn" id="basedOn"
                                                         required>
                                                         <option value="all">All</option>
@@ -36,10 +36,6 @@
                                                     @error('basedOn')
                                                         <span class="text-danger">{{ $message }}</span>
                                                     @enderror
-                                                </div>
-                                                <div v-if="optionsEmployees.length > 0" class="col-md-12">
-                                                    <label for="employees">Choose Employees</label>
-                                                    <input type="text" v-on:change="searchEmployee($event)">
                                                 </div>
                                                 <div class="col-md-12 mt-3">
                                                     <button type="submit" class="btn btn-primary btn-sm">
@@ -126,18 +122,7 @@
                 }
             },
             methods: {
-                searchEmployee(event) {
-                    console.log(event.target.value);
-                },
-                async fetchRecentCategory(event) {
-                    const selectedCategory = event.target.value;
-                    const response = await axios
-                        .post("{{ route('fetch.employees') }}");
-                    if (response.status === 200) {
-                        const {data} = response;
-                        this.optionsEmployees = data;
-                    }
-                },
+
             },
         }).mount('#emps');
     </script>

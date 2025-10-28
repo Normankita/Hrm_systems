@@ -91,5 +91,4 @@ class AllowanceGroup extends Model
             );
     }
 
-
 }

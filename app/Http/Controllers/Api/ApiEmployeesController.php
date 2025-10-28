@@ -4,19 +4,27 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\EmployeeResource;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 
 class ApiEmployeesController extends Controller
 {
-    public function fetchEmployees() {
+    public function __construct(Employee $Employee)
+    {
+    }
+    public function fetchEmployees()
+    {
         // Fetch employees from the database
-        $employees = \App\Models\Employee::all();
+        $employees = $this->Employee->getActiveEmployees();
 
         // Format employees for select options
         $formattedEmployees = $employees->map(function ($employee) {
             return EmployeeResource::make($employee);
         });
-
-        return response()->json($formattedEmployees);
+        $response = [
+            'status' => 'success',
+            'employees' => $formattedEmployees,
+        ];
+        return response()->json($response, 200);
     }
 }

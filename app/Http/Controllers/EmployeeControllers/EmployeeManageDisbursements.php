@@ -15,7 +15,7 @@ class EmployeeManageDisbursements extends Controller
 {
     private $employeeModelObject;
 
-    public function __construct(Employee $employeeModelObject)
+    public function __construct(protected Employee $Employee, protected AllowanceGroup $group)
     {
 
     }
@@ -56,7 +56,13 @@ class EmployeeManageDisbursements extends Controller
                 ->with('groups', $groups)
                 ->with('allowances', $allowance);
         } elseif ($basedOn == AllowanceGroups::INDIVIDUAL) {
-            return view('employee.manage.disbursement_allowance.create.individual');
+            $allowances = Allowance::all();
+            $employees = $this->Employee->getActiveEmployees();
+            $groups = $this->group->activeGroups();
+            return view('employee.manage.disbursement_allowance.create.individual')
+                ->with('employees', $employees)
+                ->with('allowances', $allowances)
+                ->with('groups', $groups);
         } elseif ($basedOn == AllowanceGroups::CATEGORY) {
             $categories = Allowance::all();
             return view('employee.manage.disbursement_allowance.create.category')
