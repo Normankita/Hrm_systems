@@ -110,7 +110,7 @@ class ApiDisbursementsController extends Controller
         $employeesIds = $request->post('employeesIds', []);
 
         $response = $allowanceDisbursementService->handleDisbursement(
-            AllowanceGroups::GROUP,
+            'individialGroup',
             $groupIds,
             $allowanceIds,
             null,

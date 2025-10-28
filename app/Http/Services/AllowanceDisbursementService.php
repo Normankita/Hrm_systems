@@ -29,23 +29,30 @@ class AllowanceDisbursementService
      * @param Request $request
      * @return array
      */
-    public function handleDisbursement($basedOn, $embeded, $allowanceIds = [], $date = null,
-        Array|null $employeeIds = null): array
-    {
+    public function handleDisbursement(
+        $basedOn,
+        $embeded,
+        $allowanceIds = [],
+        $date = null,
+        array|null $employeeIds = null
+    ): array {
         if ($basedOn === AllowanceGroups::CATEGORY) {
             $categoriesIds = $embeded;
             $categories = Allowance::whereIn('id', $categoriesIds)->get();
             return $this->categoryBasedDisbursement($categories);
+
         } elseif ($basedOn === AllowanceGroups::GROUP) {
             return $this->groupBasedDisbursement(
                 $embeded,
                 $allowanceIds,
                 $date ?? Carbon::now()
             );
+
         } elseif ($basedOn === AllowanceGroups::INDIVIDUAL) {
             $employeesIds = $embeded['employeesIds'];
             $employees = Employee::whereIn('id', $employeesIds)->get();
             return $this->individualBasedDisbursement($employees);
+
         } elseif ($basedOn == "individialGroup") {
             return $this->groupBasedDisbursement(
                 $embeded,
@@ -57,8 +64,8 @@ class AllowanceDisbursementService
         // Logic to handle disbursement based on the type
         // This is a placeholder for actual implementation
         return [
-            'status' => 'success',
-            'message' => 'Disbursement created successfully.'
+            'status' => 'error',
+            'message' => 'Something went wrong with the request.'
         ];
     }
 
@@ -96,12 +103,14 @@ class AllowanceDisbursementService
             ->get();
         DB::beginTransaction();
         try {
+            $employeeIds = collect($employeeIds);
             // fetching the eligible user to receiver the allowance
-            $groups->each(function ($group) use ($allowanceIds, $date, $employeeIds) {
+            $groups->each(function ($group) use (
+                $allowanceIds, $date, $employeeIds) {
                 $employees = $group->employees;
-                if ($employeeIds) {
-                    $employees = $employees->map(function ($employee, $employeeIds) {
-                        if (in_array($employee->id, $employeeIds)) {
+                if ($employeeIds != null) {
+                    $employees = $employees->map(function ($employee) use ($employeeIds) {
+                        if ($employeeIds->contains($employee->id)) {
                             return $employee;
                         }
                         return null;

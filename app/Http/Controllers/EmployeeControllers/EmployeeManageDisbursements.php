@@ -49,11 +49,11 @@ class EmployeeManageDisbursements extends Controller
                 ->with('allowance')
                 ->get();
             $allowance = Allowance::all();
-            $groups = $groups->map(function ($group) {
-                return new AllowanceGroupResource($group);
+            $responseData = $groups->map(function ($group) {
+                return AllowanceGroupResource::make($group)->resolve();
             });
             return view('employee.manage.disbursement_allowance.create.grouped')
-                ->with('groups', $groups)
+                ->with('groups', $responseData)
                 ->with('allowances', $allowance);
         } elseif ($basedOn == AllowanceGroups::INDIVIDUAL) {
             $allowances = Allowance::all();

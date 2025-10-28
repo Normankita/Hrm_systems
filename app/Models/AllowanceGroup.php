@@ -55,7 +55,8 @@ class AllowanceGroup extends Model
 
     public function activeEmployees()
     {
-        return $this->employees()->wherePivot('isActive', true);
+        return $this->employees()
+            ->wherePivot('isActive', true);
     }
 
     public function inActiveEmployees()

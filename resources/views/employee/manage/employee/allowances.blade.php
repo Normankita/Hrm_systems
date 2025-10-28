@@ -89,7 +89,7 @@
                             {{-- Allowances Table --}}
                             <div class="table-responsive mt-4">
                                 <table class="table dt-table table-bordered
-                                 table-responsive">
+                                 table">
                                     <div style="display: inline">
                                         <input type="checkbox" id="all-checker" />
                                         <label for="all-checker">select all</label>
@@ -150,7 +150,7 @@
                             {{-- Pagination --}}
                             <div class="mt-3">
                                 <h4>Disbursement History</h4>
-                                <x-system.table class="dt-table table-responsive">
+                                <x-system.table class="dt-table table">
                                     <x-slot name="head">
                                         <thead>
                                             <tr>

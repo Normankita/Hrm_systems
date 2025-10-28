@@ -260,7 +260,7 @@ class Employee extends Model
     public function allowances()
     {
         return $this->belongsToMany(Allowance::class, 'employee_allowance')
-            ->withPivot(['id', 'amount', 'allowance_frequency_id', 'status', 'effective_from'])
+            ->withPivot(['id', 'amount', 'allowance_frequency_id', 'status', 'effective_date'])
             ->withTimestamps();
     }
 

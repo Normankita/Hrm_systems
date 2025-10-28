@@ -25,6 +25,9 @@
                         </thead>
                         <tbody>
                             @foreach ($groups as $group)
+                            @php
+                                $group = (object) $group;
+                            @endphp
                                 <tr>
                                     <td>{{ $loop->iteration }}
                                         <input type="checkbox" id="input-checker" value="{{ $group->id }}">
@@ -125,17 +128,22 @@
 
                     // Filter IDs of the selected groups
                     const groups = this.pluckIds(this.SelectedGroups, 'id');
-                    console.log(groups);
 
                     // Sending an axios request to disburse the allowances
-                    if (false) {
+                    if (true) {
+                        NProgress.start();
+                        let requestGroupIds = this.pluckIds(this.SelectedGroups, 'id');
                         axios.post("{{ route('disburse.allowance.grouped') }}", {
-                            groupIds: this.SelectedGroups,
+                            groupIds: requestGroupIds,
                             allowanceIds: this.selectedAllowances
                         }).then(response => {
                             alert("Disbursement successful!");
+                            location.reload();
                         }).catch(error => {
                             alert("An error occurred during disbursement.");
+                        }).finally(() => {
+                            NProgress.done();
+                            $('#chooseAllowance').modal('hide');
                         });
                     }
                 },

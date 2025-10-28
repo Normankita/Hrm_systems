@@ -79,7 +79,7 @@ Route::middleware([])->group(function () {
 
 
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware([])->group(function () {
     // Additional authenticated API routes can be added here
     Route::post('/disburse/allowance/individual/in/grouped', [
         ApiDisbursementsController::class,

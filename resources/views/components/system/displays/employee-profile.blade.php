@@ -125,11 +125,15 @@
 
                         @php
                             // limiting employee to edit its status
-                            $authEmployee = auth()->user()->employee;
-                            $allow = $authEmployee->id != $employee->id;
+                            $authUser = auth()->user();
+                            $allow = true;
+                            if ($authUser->activeRole()->name != 'ADMIN') {
+                                $authEmployee = $authUser->employee;
+                                $allow = $authEmployee->id != $employee->id;
+                            }
                         @endphp
                         {{-- Employee Status update --}}
-                        @if($allow)
+                        @if ($allow)
                             @can('edit_employee_status')
                                 @hasrole('EMPLOYEE')
                                     <div class="col-md-6 mt-2">
@@ -144,8 +148,7 @@
                         @canany(['edit_allowances', 'view_allowances', 'create_allowances'])
                             @hasrole('EMPLOYEE')
                                 <div class="col-md-6 mt-2">
-                                    <x-system.btn-view class="btn btn-block btn-primary btn-custom me-2" 
-                                        :route="route('employee.manage.employee.allowances.index', $employee)"
+                                    <x-system.btn-view class="btn btn-block btn-primary btn-custom me-2" :route="route('employee.manage.employee.allowances.index', $employee)"
                                         text="Manage Allowances" />
                                 </div>
                             @endhasrole
@@ -156,8 +159,7 @@
                         @canany(['edit_deductions', 'view_deductions', 'create_deductions'])
                             @hasrole('EMPLOYEE')
                                 <div class="col-md-6 mt-2">
-                                    <x-system.btn-view class="btn btn-block btn-primary btn-custom me-2" 
-                                        :route="route('employee.manage.deductions.index', $employee)"
+                                    <x-system.btn-view class="btn btn-block btn-primary btn-custom me-2" :route="route('employee.manage.deductions.index', $employee)"
                                         text="Manage Deductions" />
                                 </div>
                             @endhasrole

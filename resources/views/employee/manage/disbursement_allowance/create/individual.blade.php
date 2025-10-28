@@ -115,6 +115,10 @@
                     $('#disburseModal').modal('show');
                 },
                 confirmDisbursement() {
+                    if (this.selectedAllowance.length < 1) {
+                        alert("You need to select at leat one allowance");
+                        return;
+                    }
                     let groupIds = this.groups.map(group => group.id);
                     NProgress.start();
                     const details = {
@@ -133,6 +137,8 @@
                         .finally(() => {
                             NProgress.done();
                             $('#disburseModal').modal('hide');
+                            this.setsetToDefault();
+                            window.location.reload(true);
                         });
 
                 },
@@ -147,6 +153,11 @@
                         this.selectedAllowance.splice(index, 1);
                     }
                 },
+                setsetToDefault() {
+                    // 1. Reset Vue/Alpine data
+                    this.selectAllowance = [];
+                    this.selectedEmployees = [];
+                }
             }
         }).mount('#app');
     </script>
