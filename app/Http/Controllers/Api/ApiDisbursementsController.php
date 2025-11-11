@@ -163,20 +163,13 @@ class ApiDisbursementsController extends Controller
         $results = $this->getIndividualBasedDisbursement();
         switch ($category) {
             case ('group'):
-                $results = $this->getGroupBasedDisbursement();
+                    $results = $this->getGroupBasedDisbursement();
                 break;
             case ('category'):
-                $results = $this->getCategorizedDisbursement();
+                    $results = $this->getCategorizedDisbursement();
                 break;
             case ('individual'):
-                $paginated = $this->getIndividualBasedDisbursement();
-                $results = [
-                    'data' => $paginated->items(),
-                    'current_page' => $paginated->currentPage(),
-                    'last_page' => $paginated->lastPage(),
-                    'total' => $paginated->total(),
-                    'per_page' => $paginated->perPage(),
-                ];
+                    $results = $this->getIndividualBasedDisbursement();
                 break;
         }
         return response()->json([
@@ -188,7 +181,7 @@ class ApiDisbursementsController extends Controller
 
     private function getIndividualBasedDisbursement()
     {
-        return DisbursedAllowance::getIndividualMinuteGrouped();
+        return DisbursedAllowance::paginate(20);
     }
 
 

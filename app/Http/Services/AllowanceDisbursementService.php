@@ -106,6 +106,7 @@ class AllowanceDisbursementService
         Carbon $date,
         array|null $employeeIds = null
     ): array {
+        $entrence_reference = uniqid('', true);
         // fetching all allowances under the group
         $groups = AllowanceGroup::with('allowance')
             ->with('employees', function ($query) {
@@ -117,7 +118,8 @@ class AllowanceDisbursementService
         try {
             $employeeIds = collect($employeeIds);
             // fetching the eligible user to receiver the allowance
-            $groups->each(function ($group) use ($allowanceIds, $date, $employeeIds) {
+            $groups->each(function ($group) use (
+                $entrence_reference, $allowanceIds, $date, $employeeIds) {
                 $employees = $group->employees;
                 // if employees are provided filter them, to get only those with
                 // the provided ids
@@ -129,7 +131,8 @@ class AllowanceDisbursementService
                         return null;
                     })->filter()->values();
                 }
-                $employees->each(function ($employee) use ($group, $allowanceIds, $date) {
+                $employees->each(function ($employee) use (
+                    $group, $allowanceIds, $date, $entrence_reference) {
                     // checking the employee if he is part of the group
                     $groupEmployeePivot = AllowanceGroupEmployeePivot::where(
                         'employee_id',
@@ -150,7 +153,8 @@ class AllowanceDisbursementService
                     if (!$groupAllowancePivot) {
                         return;
                     }
-                    $groupAllowancePivot->each(function ($allowancePivot) use ($groupEmployeePivot, $employee, $groupAllowancePivot, $date) {
+                    $groupAllowancePivot->each(function ($allowancePivot) use (
+                        $groupEmployeePivot, $employee, $groupAllowancePivot, $date, $entrence_reference) {
                         // query the intermediate pivot between this two to get the
                         // employee allowance under this group, this will give use the information
                         // of how much to disburse and frequency
@@ -182,7 +186,8 @@ class AllowanceDisbursementService
                                 'company_id' => $employee->company_id,
                                 'disbursable_type' => GroupCategoryEmployeeAllowance::class,
                                 'disbursable_id' => $groupCategoryEmployeeAllowance->id,
-                                'allowance_id' => $allowancePivot->allowance_id
+                                'allowance_id' => $allowancePivot->allowance_id,
+                                'entrence_reference' => $entrence_reference,
                             ]);
                         }
                     });
@@ -214,7 +219,6 @@ class AllowanceDisbursementService
             'data' => $employees,
         ];
     }
-
 
 
     public static function groupAllowancePageDetails(
@@ -298,14 +302,15 @@ class AllowanceDisbursementService
 
     public static function disburseWithGroupCategory($collection)
     {
+        $entrence_reference = uniqid('', true);
+
         $gr_cat_emp_collection = self::formatForGroupCategoryDisburse(
             $collection
         );
-
         DB::beginTransaction();
         try {
             $disbursed = $gr_cat_emp_collection->map(
-                function ($disburse) {
+                function ($disburse) use ($entrence_reference) {
                     return DisbursedAllowance::create([
                         'type' => AllowanceGroups::CATEGORY,
                         'amount' => $disburse->amount,
@@ -314,7 +319,8 @@ class AllowanceDisbursementService
                         'company_id' => $disburse->employee->company_id,
                         'disbursable_type' => GroupCategoryEmployeeAllowance::class,
                         'disbursable_id' => $disburse->id,
-                        'allowance_id' => $disburse->allowance->id
+                        'allowance_id' => $disburse->allowance->id,
+                        'entrence_reference' => $entrence_reference,
                     ]);
                 }
             );
@@ -340,6 +346,7 @@ class AllowanceDisbursementService
         $allowanceEmployeePivotIds,
         $user
     ) {
+        $entrence_reference = uniqid('', true);
         // select allowance employee pivot ids
         DB::beginTransaction();
         try {
@@ -347,7 +354,8 @@ class AllowanceDisbursementService
                 ->whereIn('id', $allowanceEmployeePivotIds)
                 ->get();
             DisbursedAllowance::insert(
-                $allowances->map(function ($allowance) use ($user) {
+                $allowances->map(function ($allowance) use (
+                    $user, $entrence_reference) {
                     return [
                         'type' => AllowanceGroups::INDIVIDUAL,
                         'amount' => $allowance->amount,
@@ -357,6 +365,7 @@ class AllowanceDisbursementService
                         'disbursable_id' => $allowance->id,
                         'disbursable_type' => EmployeeAllowance::class,
                         'allowance_id' => $allowance->allowance_id,
+                        'entrence_reference' => $entrence_reference,
                         'created_at' => now(),
                     ];
                 })->toArray()

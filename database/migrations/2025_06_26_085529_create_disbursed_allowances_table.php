@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('employee_id')->constrained();
             $table->morphs('disbursable');
             $table->boolean('status')->default(false);
+            $table->string('entrence_reference');
             $table->foreignId('allowance_id')->constrained()
                 ->onDelete('cascade');
             $table->timestamps();

@@ -27,7 +27,7 @@
                     {{-- Create Allowance --}}
                     @can('create_allowances')
                         <x-system.modal-button id="createAllowanceModal" form="createAllowanceForm" title="Create Allowance"
-                            text="ALLOCATE ALLOWANCE" />
+                            text="ALLOCATE ALLOWANCE"/>
 
                         <x-system.modal size="modal-lg" id="createAllowanceModal" form="createAllowanceForm"
                             title="Assign Allowance" :inside="true">
@@ -77,7 +77,9 @@
                                     </div>
 
                                     <div class="col-12 text-end">
-                                        <button type="submit" class="btn btn-primary">Add Allowance</button>
+                                        <button type="submit" 
+                                            id="addAllowance"
+                                            class="btn btn-primary">Add Allowance</button>
                                     </div>
                                 </div>
                             </form>
@@ -279,5 +281,15 @@
             }
         });
         app.mount('#app');
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#addAllowance').click(function(e) {
+                // disable the button on click
+                $(this).prop('disabled', true);
+                // submit the first ancestor form
+                $(this).closest('form').submit();
+            })
+        })
     </script>
 @endsection

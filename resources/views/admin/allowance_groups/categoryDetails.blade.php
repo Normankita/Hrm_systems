@@ -26,7 +26,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <x-system.table class="dt-table w-100 table-responsive">
+                    <x-system.table class="dt-table s-table w-100 table-responsive">
                         <x-slot name="head">
                             <input type="checkbox" class="all-checker" id="select-all">
                             <b>Select All</b>
@@ -156,7 +156,7 @@
 
 
     <script>
-        const handler1 = new TableSelectionHandler('.dt-table', '.all-checker');
+        const handler1 = new TableSelectionHandler('.s-table', '.all-checker');
         const app = Vue.createApp({
             data() {
                 return {

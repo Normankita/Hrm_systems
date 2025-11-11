@@ -33,6 +33,7 @@ class DisbursedAllowance extends Model
         'disbursable_id',
         'disbursable_type',
         'allowance_id',
+        'entrence_reference'
     ];
 
     public function disbursable()

@@ -30,6 +30,12 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         // Check if the user is an owner
+        if (Auth::user()->roles()->count() < 2) {
+            $this->logoutLogic($request);
+            return redirect()->back()->withErrors([
+                'error' => 'Access denied. You have No Role in this Company.']
+            );
+        }
         if (!(Auth::user()->hasRole('OWNER'))) {
             $request->session()->put('company', Auth::user()->company);
             $request->session()->put('leave_days', 30);
@@ -43,6 +49,13 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        $this->logoutLogic($request);
+        return redirect('/');
+    }
+
+
+    private function logoutLogic(Request $request): void
+    {
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
@@ -53,8 +66,6 @@ class AuthenticatedSessionController extends Controller
         $request->session()->forget('leave_days');
         $request->session()->flush();
         $this->userLoggedOut();
-
-        return redirect('/');
     }
 
     private function userLoggedIn(): void

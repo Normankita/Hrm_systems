@@ -71,6 +71,10 @@ class EmployeeManageEmployeeAllowancesController extends Controller
             'allowance_id' => ['required', 'exists:allowances,id'],
             'amount' => ['required', 'numeric', 'min:0'],
             'frequency_id' => ['required'],
+            Rule::unique('employee_allowance')->where(function ($query) use ($employeeId, $request) {
+                return $query->where('employee_id', $employeeId)
+                    ->where('allowance_id', $request->input('allowance_id'));
+            }),
         ]);
         $this->createAllowanceForEmployee(
             $employeeId,

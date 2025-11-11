@@ -17,13 +17,16 @@ class AdminCompanyController extends Controller
         // Fetch the company data from the database using the provided ID
         $company = Company::find($id);
         // Render deductions too
-        $contributions = Contribution::where("company_id", $company->id)->get();
+        $contributions = Contribution::where(
+            "company_id", $company->id)->get();
         // Check if the company exists
         if (!$company) {
-            return redirect()->back()->with('error', 'Company not found.');
+            return redirect()->back()->with(
+                'error', 'Company not found.');
         }
         // Return the edit view with the company data
-        return view('admin.companies.edit', compact('company', 'contributions'));
+        return view('admin.companies.edit', compact(
+            'company', 'contributions'));
     }
 
 
@@ -51,7 +54,8 @@ class AdminCompanyController extends Controller
 
         $company = Company::find($id);
         if (!$company) {
-            return redirect()->back()->with('error', 'Company not found.');
+            return redirect()->back()->with(
+                'error', 'Company not found.');
         }
 
         DB::beginTransaction();
