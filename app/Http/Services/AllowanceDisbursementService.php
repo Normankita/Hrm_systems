@@ -25,7 +25,9 @@ class AllowanceDisbursementService
     use GroupCategoryDisbursementPageTrait, AllowanceGroupEmployeePivotTrait;
     /**
      * Handle the disbursement based on the type.
-     *
+     * @param $basedOn // (this can be group, category, individual)
+     * @param $embeded // (this can be groups ids, category ids, employee ids)
+     * @param array $allowanceIds
      * @param Request $request
      * @return array
      */
@@ -37,9 +39,11 @@ class AllowanceDisbursementService
         array|null $employeeIds = null
     ): array {
         if ($basedOn === AllowanceGroups::CATEGORY) {
-            $categoriesIds = $embeded;
-            $categories = Allowance::whereIn('id', $categoriesIds)->get();
-            return $this->categoryBasedDisbursement($categories);
+            $groupIds = $embeded;
+            return $this->categoryBasedDisbursement(
+                $allowanceIds,
+                $groupIds
+            );
 
         } elseif ($basedOn === AllowanceGroups::GROUP) {
             return $this->groupBasedDisbursement(
@@ -60,6 +64,7 @@ class AllowanceDisbursementService
                 $date ?? Carbon::now(),
                 $employeeIds
             );
+
         }
         // Logic to handle disbursement based on the type
         // This is a placeholder for actual implementation
@@ -70,24 +75,31 @@ class AllowanceDisbursementService
     }
 
 
-    private function categoryBasedDisbursement(Collection $categories): array
-    {
-        // Logic to handle category-based disbursement
-        /**
-         * Step 1
-         * Fetching all groups that has this selected categories
-         */
-        $groups = AllowanceGroup::whereHas('allowances', function ($query) use ($categories) {
-            $query->whereIn('id', $categories->pluck('id')->toArray());
-        })->get();
-        return [
-            'status' => 'success',
-            'message' => 'Category-based disbursement handled successfully.',
-            'data' => $groups,
-        ];
+    /**
+     * This function handles category based disbursement to
+     * all people in the selected groups
+     */
+    private function categoryBasedDisbursement(
+        array $categoriesIds,
+        array $groupsIds
+    ): array {
+        return $this->groupBasedDisbursement(
+            $groupsIds,
+            $categoriesIds,
+            $date ?? Carbon::now()
+        );
     }
 
 
+    /**
+     * This function will disburse allowance to all groups under the selected
+     * allowances.
+     * @param array $groupsIds
+     * @param array $allowanceIds
+     * @param \Carbon\Carbon $date
+     * @param array|null $employeeIds
+     * @return array{data: \Illuminate\Database\Eloquent\Collection<int, AllowanceGroup>, message: string, status: string|array{message: string, status: string}}
+     */
     private function groupBasedDisbursement(
         array $groupsIds,
         array $allowanceIds,
@@ -105,9 +117,10 @@ class AllowanceDisbursementService
         try {
             $employeeIds = collect($employeeIds);
             // fetching the eligible user to receiver the allowance
-            $groups->each(function ($group) use (
-                $allowanceIds, $date, $employeeIds) {
+            $groups->each(function ($group) use ($allowanceIds, $date, $employeeIds) {
                 $employees = $group->employees;
+                // if employees are provided filter them, to get only those with
+                // the provided ids
                 if ($employeeIds != null) {
                     $employees = $employees->map(function ($employee) use ($employeeIds) {
                         if ($employeeIds->contains($employee->id)) {
@@ -117,7 +130,7 @@ class AllowanceDisbursementService
                     })->filter()->values();
                 }
                 $employees->each(function ($employee) use ($group, $allowanceIds, $date) {
-                    // checking the employee and his group allowance and disburse
+                    // checking the employee if he is part of the group
                     $groupEmployeePivot = AllowanceGroupEmployeePivot::where(
                         'employee_id',
                         $employee->id
@@ -127,7 +140,7 @@ class AllowanceDisbursementService
                     if (!$groupEmployeePivot) {
                         return;
                     }
-                    // if found then we query allowance group pivot
+                    // if found then we check for the allowances under the group
                     $groupAllowancePivot = AllowanceGroupAllowancePivot::where(
                         'allowance_group_id',
                         $group->id
@@ -139,7 +152,8 @@ class AllowanceDisbursementService
                     }
                     $groupAllowancePivot->each(function ($allowancePivot) use ($groupEmployeePivot, $employee, $groupAllowancePivot, $date) {
                         // query the intermediate pivot between this two to get the
-                        // employee allowance under this group
+                        // employee allowance under this group, this will give use the information
+                        // of how much to disburse and frequency
                         $groupCategoryEmployeeAllowance = GroupCategoryEmployeeAllowance::where(
                             'allowance_group_employee_pivot_id',
                             $groupEmployeePivot->id
@@ -246,10 +260,10 @@ class AllowanceDisbursementService
         $disbursementsGroupedByDay = $trueDisburseDetails
             ->sortByDesc('disburseId')
             ->groupBy(
-                function ($item) {
-                    return Carbon::parse($item->created_at)->format('Y-m-d');
-                }
-            );
+            function ($item) {
+                return Carbon::parse($item->created_at)->format('Y-m-d');
+            }
+        );
 
         $groupWithEmp = AllowanceGroupEmployeePivot::withEmployees(
             $gr_employeePivot

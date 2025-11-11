@@ -4,47 +4,44 @@
     <div class="row justify content-center" id="emps">
         <div class="col-12">
             <!-- Card for displaying three catregories of allawances
-                                        which are group, individual, category allowances -->
+                                            which are group, individual, category allowances -->
             <div class="card">
                 <div class="card-body">
                     <div class="mb-3">
                         <div class="col-12">
                             <div class="mb-3">
-                                <x-system.modal-button text="Disburse Allowance" id="disburse-allowance"></x-system.modal-button>
-                                    <x-system.modal title="Disburse Based On" id="disburse-allowance">
-                                        <form
-                                        action="{{ route('employee.manage.disbursements.create') }}"
-                                        method="GET">
-                                            @csrf
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <label for="basedOn">Disburse Based On</label>
-                                                    <select class="form-control"
-                                                    name="basedOn" id="basedOn"
-                                                        required>
-                                                        <option value="all">All</option>
-                                                        <option value="group"
-                                                            {{ session('category') == 'group' ? 'selected' : '' }}>
-                                                            Group</option>
-                                                        <option value="individual"
-                                                            {{ session('category') == 'individual' ? 'selected' : '' }}>
-                                                            Individual</option>
-                                                        <option value="category"
-                                                            {{ session('category') == 'category' ? 'selected' : '' }}>
-                                                            Category</option>
-                                                    </select>
-                                                    @error('basedOn')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                    @enderror
-                                                </div>
-                                                <div class="col-md-12 mt-3">
-                                                    <button type="submit" class="btn btn-primary btn-sm">
-                                                        start
-                                                    </button>
-                                                </div>
+                                <x-system.modal-button text="Disburse Allowance"
+                                    id="disburse-allowance"></x-system.modal-button>
+                                <x-system.modal title="Disburse Based On" id="disburse-allowance">
+                                    <form action="{{ route('employee.manage.disbursements.create') }}" method="GET">
+                                        @csrf
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <label for="basedOn">Disburse Based On</label>
+                                                <select class="form-control" name="basedOn" id="basedOn" required>
+                                                    <option value="all">All</option>
+                                                    <option value="group"
+                                                        {{ session('category') == 'group' ? 'selected' : '' }}>
+                                                        Group</option>
+                                                    <option value="individual"
+                                                        {{ session('category') == 'individual' ? 'selected' : '' }}>
+                                                        Individual</option>
+                                                    <option value="category"
+                                                        {{ session('category') == 'category' ? 'selected' : '' }}>
+                                                        Category</option>
+                                                </select>
+                                                @error('basedOn')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
                                             </div>
-                                        </form>
-                                    </x-system.modal>
+                                            <div class="col-md-12 mt-3">
+                                                <button type="submit" class="btn btn-primary btn-sm">
+                                                    start
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </x-system.modal>
                             </div>
                             <h3 class="mb-2">Allowance Disbursement Directory</h3>
                         </div>
@@ -52,8 +49,7 @@
                         <!-- at right side, add search button with search mdi icon, a toggle buttons and a submit button -->
                         <div class="col-md-8">
                             <!-- aa search button with input search field with date picker -->
-                            <select class="form-control" name="basedOn"
-                                id="basedOn" required>
+                            <select class="form-control" name="basedOn" id="basedOn" required>
                                 <option value="all"
                                     {{ session('category') == 'all' || session('category') == null ? 'selected' : '' }}>All
                                 </option>
@@ -72,31 +68,23 @@
                                     text-nowrap">
                                 <thead class="table-light text-dark">
                                     <tr>
+                                        <th>#</th>
                                         <th>Allowance</th>
                                         <th>Amount</th>
+                                        <th>Employee</th>
                                         <th>Disbursed Date</th>
-                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(allowance, index) in individualBased" :key="index">
-                                        <td>@{{ allowance.name }}</td>
+                                    <tr v-for="(allowance, index) in disbursements" :key="index">
+                                        <td>@{{ ++index }}</td>
+                                        <td>@{{ allowance.allowance.name }}</td>
                                         <td>@{{ allowance.amount }}</td>
-                                        <td>@{{ allowance.disbursed_date }}</td>
-                                        <td>
-                                            <!-- Add action buttons if needed -->
-                                        </td>
+                                        <td>@{{ allowance.employee.full_name }}</td>
+                                        <td>@{{ allowance.created_at }}</td>
                                     </tr>
                                 </tbody>
                             </table>
-                        </div>
-
-                        <div class="col-12" id="group">
-
-                        </div>
-
-                        <div class="col-12" id="category">
-
                         </div>
                     </div>
                 </div>
@@ -113,16 +101,23 @@
             data() {
                 return {
                     categoryOpted: null,
-                    category: category,
-                    individualBased: [],
-                    groupBased: [],
-                    categoryBased: null,
+                    category: 'individual',
+                    disbursements: [],
                     optionsEmployees: [],
                     selectedEmployees: [],
                 }
             },
+            mounted() {
+                this.fetchDisbursements();
+            },
             methods: {
-
+                async fetchDisbursements() {
+                    const uri = "{{ route('disbursements.fetch') }}?category=" + this.category;
+                    console.log(uri);
+                    let request = await axios.get(uri);
+                    this.disbursements = request.data.disbursements;
+                    console.log(this.disbursements);
+                }
             },
         }).mount('#emps');
     </script>

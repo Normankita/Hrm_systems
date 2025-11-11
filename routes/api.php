@@ -77,6 +77,17 @@ Route::middleware([])->group(function () {
 });
 
 
+Route::middleware([])
+    ->prefix('disbursements')
+    ->name('disbursements.')
+    ->group(function () {
+    // Additional authenticated API routes can be added here
+    Route::get('/fetch', [
+        ApiDisbursementsController::class,
+        'fetchDisbursements'
+    ])
+        ->name('fetch');
+});
 
 
 Route::middleware([])->group(function () {

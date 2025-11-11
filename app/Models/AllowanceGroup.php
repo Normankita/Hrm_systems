@@ -49,7 +49,6 @@ class AllowanceGroup extends Model
             'allowance_id'
         )
             ->withPivot(['isActive', 'id'])
-
             ->withTimestamps();
     }
 
