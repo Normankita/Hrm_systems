@@ -18,12 +18,13 @@ class IndividualDisbursementResource extends JsonResource
         return [
             'id' => $this->id,
             'type' => $this->type,
-            'amount' => number_format($this->amount),
+            'amount' => $this->amount,
             'company' => $this->company,
             'employee' => $this->employee,
             'status' => $this->status,
             'allowance' => $this->allowance,
-            'created_at' => Carbon::parse($this->created_at)->format('Y-m-d H:i:s'),
+            'created_at' => Carbon::parse(
+                $this->created_at)->format('Y-m-d H:i:s'),
         ];
     }
 }

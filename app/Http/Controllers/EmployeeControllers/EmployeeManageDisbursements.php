@@ -5,6 +5,9 @@ namespace App\Http\Controllers\EmployeeControllers;
 use App\Enums\AllowanceGroups;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AllowanceGroupResource;
+use App\Http\Resources\CategoryDisbursementResource;
+use App\Http\Resources\GroupedDisbursementResource;
+use App\Http\Resources\IndividualDisbursementResource;
 use App\Models\Allowance;
 use App\Models\AllowanceGroup;
 use App\Models\DisbursedAllowance;
@@ -15,9 +18,9 @@ class EmployeeManageDisbursements extends Controller
 {
     private $employeeModelObject;
 
+
     public function __construct(protected Employee $Employee, protected AllowanceGroup $group)
     {
-
     }
 
 
@@ -42,7 +45,8 @@ class EmployeeManageDisbursements extends Controller
         $basedOn = $request->get('basedOn');
         if (!$basedOn) {
             return redirect()->back()->withErrors(
-                ['basedOn' => 'Based on parameter is required.']);
+                ['basedOn' => 'Based on parameter is required.']
+            );
         }
         if ($basedOn == AllowanceGroups::GROUP) {
             // All groups pointing to the company
@@ -79,6 +83,39 @@ class EmployeeManageDisbursements extends Controller
         );
     }
 
+
+    public function viewDisbursementsGroup(Request $request)
+    {
+        $ref = $request->query('ref');
+        $basedOn = $request->query('basedOn');
+        $disbursements = DisbursedAllowance::where(
+            'entrence_reference',
+            $ref
+        )->get();
+        switch ($basedOn) {
+            case AllowanceGroups::INDIVIDUAL:
+                $disbursements = IndividualDisbursementResource::collection(
+                    $disbursements
+                )->resolve();
+                return view('employee.manage.disbursement_allowance.individual_view')
+                    ->with('disbursements', $disbursements)
+                    ->with('basedOn', $basedOn);
+            case AllowanceGroups::CATEGORY:
+                $disbursements = CategoryDisbursementResource::collection(
+                    $disbursements
+                )->resolve();
+                return view('employee.manage.disbursement_allowance.category_view')
+                    ->with('disbursements', $disbursements)
+                    ->with('basedOn', $basedOn);
+            case AllowanceGroups::GROUP:
+                $disbursements = GroupedDisbursementResource::collection(
+                    $disbursements
+                )->resolve();
+                return view('employee.manage.disbursement_allowance.group_view')
+                    ->with('disbursements', $disbursements)
+                    ->with('basedOn', $basedOn);
+        }
+    }
 
 
     /**

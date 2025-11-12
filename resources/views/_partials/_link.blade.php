@@ -38,7 +38,7 @@
 <link href="images/favicon.png" rel="shortcut icon" />
 
 
-<script src="{{  asset('bootstrap5.1.1/plugins/nprogress/nprogress.js') }}"></script>
+<script src="{{ asset('bootstrap5.1.1/plugins/nprogress/nprogress.js') }}"></script>
 
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
 
@@ -46,6 +46,10 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Font Awesome 6 (Free) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <style>
     /* Custom smaller badge */

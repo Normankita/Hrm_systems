@@ -269,6 +269,8 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         // Route::get('/{disbursement}', 'show')->name('show')->middleware(['can:view_disbursement']);            // Show a single disbursement
         // Route::put('/{disbursement}', 'update')->name('update')->middleware(['can:edit_disbursement']);        // Update disbursement
         // Route::delete('/{disbursement}', 'destroy')->name('destroy')->middleware(['can:delete_disbursement']);   // Delete disbursement
+        Route::get('/view/disbursed/group', 'viewDisbursementsGroup')
+            ->name('group.view');
     });
 
 

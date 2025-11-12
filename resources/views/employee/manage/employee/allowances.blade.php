@@ -77,7 +77,7 @@
                                     </div>
 
                                     <div class="col-12 text-end">
-                                        <button type="submit" 
+                                        <button type="submit"
                                             id="addAllowance"
                                             class="btn btn-primary">Add Allowance</button>
                                     </div>

@@ -150,7 +150,7 @@ class ApiDisbursementsController extends Controller
     {
         // define the parameters rules
         $rules = [
-            'category' => 'required|string|in:individual,group,category',
+            'category' => 'required|string|in:individual,group,category,all',
         ];
         $validated = Validator::make($request->all(), $rules);
         if ($validated->fails()) {
@@ -160,16 +160,29 @@ class ApiDisbursementsController extends Controller
             ], 400);
         }
         $category = $request->get('category');
-        $results = $this->getIndividualBasedDisbursement();
+        $results = $this->getDisbursements([AllowanceGroups::INDIVIDUAL]);
         switch ($category) {
             case ('group'):
-                    $results = $this->getGroupBasedDisbursement();
+                $results = $this->getDisbursements(
+                    [AllowanceGroups::GROUP]
+                );
                 break;
             case ('category'):
-                    $results = $this->getCategorizedDisbursement();
+                $results = $this->getDisbursements(
+                    [AllowanceGroups::CATEGORY]
+                );
                 break;
             case ('individual'):
-                    $results = $this->getIndividualBasedDisbursement();
+                $results = $this->getDisbursements(
+                    [AllowanceGroups::INDIVIDUAL]
+                );
+                break;
+            case ('all'):
+                $results = $this->getDisbursements([
+                    AllowanceGroups::INDIVIDUAL,
+                    AllowanceGroups::GROUP,
+                    AllowanceGroups::CATEGORY
+                ]);
                 break;
         }
         return response()->json([
@@ -179,9 +192,17 @@ class ApiDisbursementsController extends Controller
     }
 
 
-    private function getIndividualBasedDisbursement()
+    private function getDisbursements($basedOn)
     {
-        return DisbursedAllowance::paginate(20);
+        return DisbursedAllowance::select(
+                'entrence_reference',
+                DB::raw("MAX(type) as type"),
+                DB::raw("COUNT(*) as total_disbursements"),
+                DB::raw('SUM(amount) as total'
+            ))
+            ->whereIn('type', $basedOn)
+            ->groupBy('entrence_reference')
+            ->paginate(20);
     }
 
 
