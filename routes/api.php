@@ -73,7 +73,7 @@ Route::middleware([])->group(function () {
         ApiDisbursementsController::class,
         'disburseGrouped'
     ])
-        ->name('disburse.allowance.grouped');
+    ->name('disburse.allowance.grouped');
 });
 
 

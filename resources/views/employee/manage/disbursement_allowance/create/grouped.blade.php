@@ -80,8 +80,12 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-sm btn-primary"
-                                v-on:click="confirmDisburse">disburse</button>
-                            <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">cancel</button>
+                                v-on:click="confirmDisburse">
+                                disburse
+                            </button>
+                            <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">
+                                cancel
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -125,10 +129,8 @@
                 },
                 confirmDisburse() {
                     $('#chooseAllowance').modal('hide');
-
                     // Filter IDs of the selected groups
                     const groups = this.pluckIds(this.SelectedGroups, 'id');
-
                     // Sending an axios request to disburse the allowances
                     if (true) {
                         NProgress.start();
@@ -138,7 +140,8 @@
                             allowanceIds: this.selectedAllowances
                         }).then(response => {
                             alert("Disbursement successful!");
-                            location.reload();
+                            const indexRoute = "{{ route('employee.manage.disbursements.index') }}";
+                            window.location.href = indexRoute + "?default=group";
                         }).catch(error => {
                             alert("An error occurred during disbursement.");
                         }).finally(() => {

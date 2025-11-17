@@ -8,6 +8,7 @@ use App\Http\Resources\IndividualDisbursementResource;
 use App\Http\Services\AllowanceDisbursementService;
 use App\Models\AllowanceGroupEmployeePivot;
 use App\Models\DisbursedAllowance;
+use App\Models\Employee;
 use App\Models\EmployeeAllowance;
 use App\Models\GroupCategoryEmployeeAllowance;
 use App\Models\User;
@@ -106,10 +107,14 @@ class ApiDisbursementsController extends Controller
         $groupIds = $request->post('groupIds', []);
         $allowanceIds = $request->post('allowanceIds', []);
 
+        $employeeIds = Employee::getActiveEmployees()->pluck('id')->toArray();
+
         $response = $allowanceDisbursementService->handleDisbursement(
             AllowanceGroups::GROUP,
             $groupIds,
-            $allowanceIds
+            $allowanceIds,
+            null,
+            $employeeIds
         );
         if ($response['status'] == 'error') {
             return response()->json([
@@ -202,6 +207,7 @@ class ApiDisbursementsController extends Controller
             ))
             ->whereIn('type', $basedOn)
             ->groupBy('entrence_reference')
+            ->orderBy('entrence_reference', 'desc')
             ->paginate(20);
     }
 

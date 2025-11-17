@@ -104,23 +104,25 @@ trait GroupCategoryDisbursementPageTrait
             // if there is no disbursement, we can return an empty collection
             return collect();
         }
-        $disbursements = $item->object->allowanceDisbursements->groupBy(function ($disbursement) use ($effectiveFrom, $daysApart) {
-            $disburseOn = Carbon::parse($disbursement->getDisbursementDay());
-            // Calculate the difference in days between effectiveFrom and disburseOn
-            $daysDiff = $effectiveFrom->diffInDays($disburseOn);
-            // If the difference is negative, it means the disbursement date is before the effective date
-            if ($daysDiff < 0) {
-                // invali data that contain date older than what exoected
-                return '1971-07-10 - 1971-08-08';
-            }
-            // Calculate which span the createdAt falls into
-            $spanIndex = floor($daysDiff / $daysApart);
-            // Optional: use actual span date as label
-            $spanStart = $effectiveFrom->copy()->addDays($spanIndex * $daysApart);
-            $spanEnd = $spanStart->copy()->addDays($daysApart - 1);
+        $disbursements = $item->object->allowanceDisbursements->groupBy(
+            function ($disbursement) use ($effectiveFrom, $daysApart) {
+                $disburseOn = Carbon::parse($disbursement->getDisbursementDay());
+                // Calculate the difference in days between effectiveFrom and disburseOn
+                $daysDiff = $effectiveFrom->diffInDays($disburseOn);
+                // If the difference is negative, it means the disbursement date is before the effective date
+                if ($daysDiff < 0) {
+                    // invali data that contain date older than what exoected
+                    return '1971-07-10 - 1971-08-08';
+                }
+                // Calculate which span the createdAt falls into
+                $spanIndex = floor($daysDiff / $daysApart);
+                // Optional: use actual span date as label
+                $spanStart = $effectiveFrom->copy()->addDays($spanIndex * $daysApart);
+                $spanEnd = $spanStart->copy()->addDays($daysApart - 1);
 
-            return $spanStart->toDateString() . ' - ' . $spanEnd->toDateString();
-        });
+                return $spanStart->toDateString() . ' - ' . $spanEnd->toDateString();
+            }
+        );
         return $disbursements;
     }
 
@@ -146,11 +148,14 @@ trait GroupCategoryDisbursementPageTrait
         $lastItem = $elementsFromInspector->last();
         $lastItemStartDate = Carbon::parse(explode(' - ', $lastItemKey)[0]);
         $lastItemEndDate = Carbon::parse(explode(' - ', $lastItemKey)[1]);
-        // checking if the current date is between the first and the last
+        // checking if the current date is between the first and the last or is the start date
+        // or if it is the end date
         $isBetween = $currentDisbursementDate->between(
             $lastItemStartDate,
             $lastItemEndDate
-        );
+        ) || $currentDisbursementDate->isSameDay($lastItemStartDate)
+            || $currentDisbursementDate->isSameDay($lastItemEndDate);
+
         if ($isBetween) {
             // count the numbers of disbursement and check if we can add more
             return $lastItem->count();
@@ -171,11 +176,14 @@ trait GroupCategoryDisbursementPageTrait
         $lastItem = $elementsFromInspector->last();
         $lastItemStartDate = Carbon::parse(explode(' - ', $lastItemKey)[0]);
         $lastItemEndDate = Carbon::parse(explode(' - ', $lastItemKey)[1]);
-        // checking if the current date is between the first and the last
+        // checking if the current date is between the first and the last or is the start date
+        // or if it is the end date
         $isBetween = $currentDisbursementDate->between(
             $lastItemStartDate,
             $lastItemEndDate
-        );
+        ) || $currentDisbursementDate->isSameDay($lastItemStartDate)
+            || $currentDisbursementDate->isSameDay($lastItemEndDate);
+
         if ($isBetween) {
             // count the numbers of disbursement and check if we can add more
             $disbursementCount = $lastItem->count();

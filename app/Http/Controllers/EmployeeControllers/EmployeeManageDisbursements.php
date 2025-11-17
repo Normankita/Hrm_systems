@@ -6,12 +6,14 @@ use App\Enums\AllowanceGroups;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AllowanceGroupResource;
 use App\Http\Resources\CategoryDisbursementResource;
+use App\Http\Resources\GroupCategoryEmployeeAllowanceResource;
 use App\Http\Resources\GroupedDisbursementResource;
 use App\Http\Resources\IndividualDisbursementResource;
 use App\Models\Allowance;
 use App\Models\AllowanceGroup;
 use App\Models\DisbursedAllowance;
 use App\Models\Employee;
+use App\Models\GroupCategoryEmployeeAllowance;
 use Illuminate\Http\Request;
 
 class EmployeeManageDisbursements extends Controller
@@ -101,9 +103,15 @@ class EmployeeManageDisbursements extends Controller
                     ->with('disbursements', $disbursements)
                     ->with('basedOn', $basedOn);
             case AllowanceGroups::CATEGORY:
-                $disbursements = CategoryDisbursementResource::collection(
+                // fetching the groupcategoryemployeeallowancedetails first
+                $objs = GroupCategoryEmployeeAllowance::whereIn(
+                    'id',
+                    $disbursements->pluck('disbursable_id')
+                )->get();
+                $disbursements = GroupCategoryEmployeeAllowanceResource::collection(
                     $disbursements
                 )->resolve();
+                dd($disbursements);
                 return view('employee.manage.disbursement_allowance.category_view')
                     ->with('disbursements', $disbursements)
                     ->with('basedOn', $basedOn);

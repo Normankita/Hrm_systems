@@ -49,7 +49,8 @@ class AllowanceDisbursementService
             return $this->groupBasedDisbursement(
                 $embeded,
                 $allowanceIds,
-                $date ?? Carbon::now()
+                $date ?? Carbon::now(),
+                $employeeIds
             );
 
         } elseif ($basedOn === AllowanceGroups::INDIVIDUAL) {
@@ -83,10 +84,12 @@ class AllowanceDisbursementService
         array $categoriesIds,
         array $groupsIds
     ): array {
+        $employeeIds = Employee::getActiveEmployees()->pluck('id')->toArray();
         return $this->groupBasedDisbursement(
             $groupsIds,
             $categoriesIds,
-            $date ?? Carbon::now()
+            $date ?? Carbon::now(),
+            $employeeIds
         );
     }
 
@@ -106,6 +109,7 @@ class AllowanceDisbursementService
         Carbon $date,
         array|null $employeeIds = null
     ): array {
+
         $entrence_reference = uniqid('', true);
         // fetching all allowances under the group
         $groups = AllowanceGroup::with('allowance')
@@ -116,14 +120,13 @@ class AllowanceDisbursementService
             ->get();
         DB::beginTransaction();
         try {
-            $employeeIds = collect($employeeIds);
             // fetching the eligible user to receiver the allowance
-            $groups->each(function ($group) use (
-                $entrence_reference, $allowanceIds, $date, $employeeIds) {
+            $groups->each(function ($group) use ($entrence_reference, $allowanceIds, $date, $employeeIds) {
                 $employees = $group->employees;
                 // if employees are provided filter them, to get only those with
                 // the provided ids
                 if ($employeeIds != null) {
+                    $employeeIds = collect($employeeIds);
                     $employees = $employees->map(function ($employee) use ($employeeIds) {
                         if ($employeeIds->contains($employee->id)) {
                             return $employee;
@@ -131,8 +134,8 @@ class AllowanceDisbursementService
                         return null;
                     })->filter()->values();
                 }
-                $employees->each(function ($employee) use (
-                    $group, $allowanceIds, $date, $entrence_reference) {
+
+                $employees->each(function ($employee) use ($group, $allowanceIds, $date, $entrence_reference) {
                     // checking the employee if he is part of the group
                     $groupEmployeePivot = AllowanceGroupEmployeePivot::where(
                         'employee_id',
@@ -153,8 +156,7 @@ class AllowanceDisbursementService
                     if (!$groupAllowancePivot) {
                         return;
                     }
-                    $groupAllowancePivot->each(function ($allowancePivot) use (
-                        $groupEmployeePivot, $employee, $groupAllowancePivot, $date, $entrence_reference) {
+                    $groupAllowancePivot->each(function ($allowancePivot) use ($groupEmployeePivot, $employee, $groupAllowancePivot, $date, $entrence_reference) {
                         // query the intermediate pivot between this two to get the
                         // employee allowance under this group, this will give use the information
                         // of how much to disburse and frequency
@@ -264,15 +266,16 @@ class AllowanceDisbursementService
         $disbursementsGroupedByDay = $trueDisburseDetails
             ->sortByDesc('disburseId')
             ->groupBy(
-            function ($item) {
-                return Carbon::parse($item->created_at)->format('Y-m-d');
-            }
-        );
+                function ($item) {
+                    return Carbon::parse($item->created_at)->format('Y-m-d');
+                }
+            );
 
         $groupWithEmp = AllowanceGroupEmployeePivot::withEmployees(
             $gr_employeePivot
         );
-        $groupWithEmp = $groupWithEmp->map(function ($pivot) use ($empWithDisCounts) {
+        $groupWithEmp = $groupWithEmp->map(function ($pivot) use (
+            $empWithDisCounts) {
             $empId = $pivot->employee->id;
             if ($empWithDisCounts->has($empId)) {
                 $pivot->count = $empWithDisCounts[$empId]['count'];
@@ -289,13 +292,13 @@ class AllowanceDisbursementService
         return [
             'status' => 'success',
             'details' => [
-                'gr_employeePivot' => $gr_employeePivot,
-                'gr_allowancePivot' => $gr_allowancePivot,
-                'group' => $group,
-                'allowance' => $allowance,
-                'groupWithEmp' => $groupWithEmp,
-                'disbursed' => $disbursementsGroupedByDay
-            ]
+                    'gr_employeePivot' => $gr_employeePivot,
+                    'gr_allowancePivot' => $gr_allowancePivot,
+                    'group' => $group,
+                    'allowance' => $allowance,
+                    'groupWithEmp' => $groupWithEmp,
+                    'disbursed' => $disbursementsGroupedByDay
+                ]
         ];
     }
 
@@ -354,8 +357,7 @@ class AllowanceDisbursementService
                 ->whereIn('id', $allowanceEmployeePivotIds)
                 ->get();
             DisbursedAllowance::insert(
-                $allowances->map(function ($allowance) use (
-                    $user, $entrence_reference) {
+                $allowances->map(function ($allowance) use ($user, $entrence_reference) {
                     return [
                         'type' => AllowanceGroups::INDIVIDUAL,
                         'amount' => $allowance->amount,

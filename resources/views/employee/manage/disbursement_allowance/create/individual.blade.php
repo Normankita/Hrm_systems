@@ -76,7 +76,7 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button type="button" v-on:click="confirmDisbursement"
-                            class="btn btn-primary">disburse</button>
+                                class="btn btn-primary">disburse</button>
                         </div>
                     </div>
                 </div>
@@ -138,7 +138,8 @@
                             NProgress.done();
                             $('#disburseModal').modal('hide');
                             this.setsetToDefault();
-                            window.location.reload(true);
+                            const indexRoute = "{{ route('employee.manage.disbursements.index') }}";
+                            window.location.href = indexRoute + "?default=group";
                         });
 
                 },
