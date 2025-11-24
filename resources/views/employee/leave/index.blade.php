@@ -37,7 +37,7 @@
                                     <div class="card border-success">
                                         <div class="card-body text-center">
                                             <h6 class="text-success mb-1">UnCompensated Days</h6>
-                                            <h4 class="mb-0">{{ $uncompensatedLeaves ?? 0 }}</h4>
+                                            <h4 class="mb-0">{{ $unCompensatedLeaves ?? 0 }}</h4>
                                         </div>
                                     </div>
                                 </div>

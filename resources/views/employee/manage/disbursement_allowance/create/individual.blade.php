@@ -1,6 +1,11 @@
 @extends('layouts.system')
 
 @section('content')
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <x-back-button :route="route('employee.manage.disbursements.index')"></x-back-button>
+        </div>
+    </div>
     <div class="row justify-contant-start" id="app">
         <div class="col-md-12">
             <div class="card">

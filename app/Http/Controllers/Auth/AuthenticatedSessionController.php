@@ -30,11 +30,13 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         // Check if the user is an owner
-        if (Auth::user()->roles()->count() < 2) {
-            $this->logoutLogic($request);
-            return redirect()->back()->withErrors([
-                'error' => 'Access denied. You have No Role in this Company.']
-            );
+        if (!Auth::user()->hasRole('OWNER') && !Auth::user()->hasRole('ADMIN')) {
+            if (Auth::user()->roles()->count() < 2) {
+                $this->logoutLogic($request);
+                return redirect()->back()->withErrors([
+                    'error' => 'Access denied. You have No Role in this Company.']
+                );
+            }
         }
         if (!(Auth::user()->hasRole('OWNER'))) {
             $request->session()->put('company', Auth::user()->company);

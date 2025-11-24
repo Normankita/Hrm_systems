@@ -228,6 +228,26 @@ class EmployeeService
 
         try {
             foreach ($rows as $row) {
+                // Get the role name from the 12th column in excel
+                $company = Auth::user()->company;
+                $roleNameFromExcel = trim($row[12] ?? '');
+                $companyRoles = $company->roles()->pluck('name')->toArray();
+                $roleToAssign = null;
+
+                if ($roleNameFromExcel) {
+                    if (in_array($roleNameFromExcel, $companyRoles)) {
+                        $roleToAssign = \Spatie\Permission\Models\Role::where('company_id', $company->id)
+                            ->where('name', $roleNameFromExcel)
+                            ->first();
+                    } else {
+                        DB::rollBack();
+                        return [
+                            'status' => 'error',
+                            'message' => "Role '{$roleNameFromExcel}' does not exist for the company. Please define this role before importing employees.",
+                        ];
+                    }
+                }
+                
                 // start creating user first
                 $gender = $row[1] == 0 ? 'female' : 'male';
                 $marital_status = $row[6] == 1 ? 'married' : 'single';
@@ -250,6 +270,7 @@ class EmployeeService
                 $company = session('company');
 
                 $salary = $row[11];
+                $email = $row[4] ?? '';
 
                 // assign paygrade
                 // select paygrade whose salary is between base_salary and max_salary
@@ -269,8 +290,7 @@ class EmployeeService
                 $dateStrReplace = str_replace('/', '-', $row[10]);
                 $dateOfHire = Carbon::parse($dateStrReplace)->format('Y-m-d') ?? '';
 
-
-                EmployeeTrait::createEmployee([
+                $employee = EmployeeTrait::createEmployee([
                     'full_name' => $row[0],
                     'pay_grade_id' => $paygrade->id,
                     'base_salary_override' => $salary,
@@ -282,7 +302,7 @@ class EmployeeService
                     'gender' => $gender,
                     'date_of_birth' => $birthDate,
                     'phone_number' => $row[3] ?? '',
-                    'email' => $row[4] ?? '',
+                    'email' => $email,
                     'national_id' => $row[5] ?? '',
                     'marital_status' => ucfirst($marital_status),
                     'residential_address' => $row[7] ?? '',
@@ -290,9 +310,12 @@ class EmployeeService
                     'employee_type' => $employee_type,
                     'date_of_hire' => $dateOfHire,
                 ]);
-
-                DB::commit();
+                // Assign role to the newly created employee's user
+                if ($roleToAssign && $employee->user) {
+                    $employee->user->assignRole($roleToAssign);
+                }
             }
+            DB::commit();
         } catch (Throwable $throwable) {
             DB::rollBack();
             return ([

@@ -109,7 +109,7 @@ class CompanyService extends Controller
     }
 
 
-        private static function createDefaultAttendanceCheckRestriction($companyId)
+    private static function createDefaultAttendanceCheckRestriction($companyId)
     {
         $data = [
             'name' => 'user_check_attendance',

@@ -24,8 +24,12 @@ class EmployeeLeaveController extends Controller
         $leaveDaysUsed = $totalBalance - $leaveBalance;
 
         // secondary datas
-       $compensatedLeaves = auth()->user()->employee->getCompensatedLeaves()->count();
-        $unCompensatedLeaves = auth()->user()->employee->getUnCompensatedLeaves()->count();
+       $compensatedLeaves = $this->getStaticLeaveDaysCount(
+        auth()->user()->employee->getCompensatedLeaves()
+       );
+        $unCompensatedLeaves = $this->getStaticLeaveDaysCount(
+            auth()->user()->employee->getUnCompensatedLeaves()
+        );
         $leaves = Leave::with(['employee', 'leaveType', 'attachments'])
             ->where('employee_id', auth()->user()->employee->id)
             ->get();

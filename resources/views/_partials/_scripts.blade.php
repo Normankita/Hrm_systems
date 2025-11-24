@@ -24,13 +24,34 @@
          input.value = parts.join('.');
      };
  </script>
+ <script>
+     document.addEventListener("DOMContentLoaded", function() {
+
+         const trtButtons = document.querySelectorAll('button.trt');
+
+         trtButtons.forEach(function(button) {
+             button.addEventListener('click', function(event) {
+
+                 // Allow natural form submit
+                 const form = button.closest('form');
+
+                 // Disable AFTER submit begins
+                 setTimeout(() => {
+                     button.disabled = true;
+                 }, 0);
+             });
+         });
+
+     });
+ </script>
+
 
  <script src="{{ asset('bootstrap5.1.1/plugins/jquery/jquery.min.js') }}"></script>
  <script src="{{ asset('bootstrap5.1.1/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
  <script src="{{ asset('bootstrap5.1.1/plugins/simplebar/simplebar.min.js') }}"></script>
- <script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
+
  <script src="{{ asset('bootstrap5.1.1/plugins/prism/prism.js') }}"></script>
- <script src="{{ asset('bootstrap5.1.1/js/mono.js') }}"></script>
+ {{-- <script src="{{ asset('bootstrap5.1.1/js/mono.js') }}"></script> --}}
  <script src="{{ asset('bootstrap5.1.1/js/chart.js') }}"></script>
  <script src="{{ asset('bootstrap5.1.1/js/map.js') }}"></script>
  <script src="{{ asset('bootstrap5.1.1/js/custom.js') }}"></script>
@@ -47,7 +68,6 @@
 
  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-
 
  <script>
      $(document).ready(function() {

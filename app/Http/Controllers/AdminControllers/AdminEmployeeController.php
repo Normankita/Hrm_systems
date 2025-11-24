@@ -150,6 +150,16 @@ class AdminEmployeeController extends Controller
 
     public function excelImport(Request $request)
     {
+        $company = Auth::user()->company;
+        $companyRoles = $company->roles()->pluck('name');
+
+        if ($companyRoles->isEmpty()) {
+            return redirect()->back()->with([
+                'status' => 'error',
+                'message' => 'No roles are defined for the company. Please define roles before importing employees.',
+            ]);
+        }
+
         $rules = [
             'file' => 'mimes:ods,csv,xlsx|required|max:500',
         ];

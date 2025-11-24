@@ -244,7 +244,7 @@ class Employee extends Model
             $this->id
         )
             ->whereHas('leaveType', function ($query) {
-                $query->where('is_compensated', false)
+                $query->where('is_compensated', true)
                     ->where('deducts_from_annual_leave', false);
             })
             ->get();

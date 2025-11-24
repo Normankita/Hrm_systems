@@ -96,7 +96,28 @@
                         </div>
 
                         <div class="col-12" id="category">
-
+                            <table
+                                class="table table-bordered table-hover align-middle
+                                    text-nowrap">
+                                <thead class="table-light text-dark">
+                                    <tr>
+                                        <th>Allowance</th>
+                                        <th>Amount</th>
+                                        <th>Disbursed Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(allowance, index) in categoryBased" :key="index">
+                                        <td>@{{ allowance.name }}</td>
+                                        <td>@{{ allowance.amount }}</td>
+                                        <td>@{{ allowance.disbursed_date }}</td>
+                                        <td>
+                                            <!-- Add action buttons if needed -->
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -123,8 +144,7 @@
                     const selectedCategory = event.target.value;
                     console.log('Selected Category:', selectedCategory);
                     this.category = selectedCategory;
-                    const response = await axios
-                        .get('{{ route('disbursements.categorized') }}', {
+                    const response = await axios.get('{{ route('disbursements.categorized') }}', {
                             params: {
                                 category: this.category,
                             }
@@ -133,14 +153,14 @@
                         const {
                             data
                         } = response;
-                        console.log('Response Data:', data);
+                        console.log('Response Data:', data.response);
                         if (data.status == "success") {
                             if (response.data.category === 'individual') {
-                                this.individualBased = response.data.allowances;
+                                this.individualBased = response.data.response;
                             } else if (response.data.category === 'group') {
-                                this.groupBased = response.data.allowances;
+                                this.groupBased = response.data.response;
                             } else if (response.data.category === 'category') {
-                                this.categoryBased = response.data.allowances;
+                                this.categoryBased = response.data.response;
                             } else {
                                 this.individualBased = [];
                                 this.groupBased = [];

@@ -89,7 +89,8 @@ class AllowanceDisbursementService
             $groupsIds,
             $categoriesIds,
             $date ?? Carbon::now(),
-            $employeeIds
+            $employeeIds,
+            AllowanceGroups::CATEGORY
         );
     }
 
@@ -107,7 +108,8 @@ class AllowanceDisbursementService
         array $groupsIds,
         array $allowanceIds,
         Carbon $date,
-        array|null $employeeIds = null
+        array|null $employeeIds = null,
+        string $type = AllowanceGroups::GROUP   
     ): array {
 
         $entrence_reference = uniqid('', true);
@@ -121,7 +123,7 @@ class AllowanceDisbursementService
         DB::beginTransaction();
         try {
             // fetching the eligible user to receiver the allowance
-            $groups->each(function ($group) use ($entrence_reference, $allowanceIds, $date, $employeeIds) {
+            $groups->each(function ($group) use ($entrence_reference, $allowanceIds, $date, $employeeIds, $type) {
                 $employees = $group->employees;
                 // if employees are provided filter them, to get only those with
                 // the provided ids
@@ -135,7 +137,7 @@ class AllowanceDisbursementService
                     })->filter()->values();
                 }
 
-                $employees->each(function ($employee) use ($group, $allowanceIds, $date, $entrence_reference) {
+                $employees->each(function ($employee) use ($group, $allowanceIds, $date, $entrence_reference, $type) {
                     // checking the employee if he is part of the group
                     $groupEmployeePivot = AllowanceGroupEmployeePivot::where(
                         'employee_id',
@@ -156,7 +158,7 @@ class AllowanceDisbursementService
                     if (!$groupAllowancePivot) {
                         return;
                     }
-                    $groupAllowancePivot->each(function ($allowancePivot) use ($groupEmployeePivot, $employee, $groupAllowancePivot, $date, $entrence_reference) {
+                    $groupAllowancePivot->each(function ($allowancePivot) use ($groupEmployeePivot, $employee, $groupAllowancePivot, $date, $entrence_reference, $type) {
                         // query the intermediate pivot between this two to get the
                         // employee allowance under this group, this will give use the information
                         // of how much to disburse and frequency
@@ -181,7 +183,7 @@ class AllowanceDisbursementService
                         if ($isEligible) {
                             // disburse the allowance
                             DisbursedAllowance::create([
-                                'type' => AllowanceGroups::GROUP,
+                                'type' => $type,
                                 'amount' => $groupCategoryEmployeeAllowance->amount,
                                 'employee_id' => $employee->id,
                                 'status' => true,

@@ -3,8 +3,7 @@
 @section('content')
     <div class="row justify content-center" id="emps">
         <div class="col-12">
-            <!-- Card for displaying three catregories of allawances
-                                                                                which are group, individual, category allowances -->
+            <!-- Card for displaying three catregories of allawances                                                   which are group, individual, category allowances -->
             <div class="card">
                 <div class="card-body">
                     <div class="mb-3">
@@ -19,16 +18,15 @@
                                             <div class="col-md-12">
                                                 <label for="basedOn">Disburse Based On</label>
                                                 <select class="form-control" name="basedOn" id="basedOn" required>
-                                                    <option value="all">All</option>
                                                     <option value="group"
                                                         {{ session('category') == 'group' ? 'selected' : '' }}>
                                                         Group</option>
-                                                    <option value="individual"
-                                                        {{ session('category') == 'individual' ? 'selected' : '' }}>
-                                                        Individual</option>
                                                     <option value="category"
                                                         {{ session('category') == 'category' ? 'selected' : '' }}>
                                                         Category</option>
+                                                    <option value="individual"
+                                                        {{ session('category') == 'individual' ? 'selected' : '' }}>
+                                                        Custom</option>
                                                 </select>
                                                 @error('basedOn')
                                                     <span class="text-danger">{{ $message }}</span>
@@ -69,7 +67,7 @@
                             <table
                                 class="table table-bordered table-hover align-middle
                                     text-nowrap">
-                                <thead class="table-light text-dark">
+                                <thead class="table-light table-sm text-dark">
                                     <tr>
                                         <th>#</th>
                                         <th>Total Disbursememnts</th>
@@ -200,7 +198,6 @@
                 },
                 async fetchDisbursements() {
                     await this.fetchPage();
-                    console.log(this.paginated.data);
                 },
                 async fetchPage(page = 1) {
                     this.loading = true;

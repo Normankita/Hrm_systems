@@ -58,7 +58,7 @@
 
                             {{-- Submit Button --}}
                             <div class="col-md-12 text-end mt-6">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary trt">
                                     <i class="mdi mdi-content-save"></i> Save Allowance
                                 </button>
                             </div>

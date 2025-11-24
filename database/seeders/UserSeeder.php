@@ -20,6 +20,19 @@ class UserSeeder extends Seeder
     {
         // 1. Create company
         $company = Company::first();
+        $data = [
+            'name' => 'user_check_attendance',
+            'value' => 'no',
+            'company_id' => $company->id
+        ];
+        Setting::create($data);
+
+        $data = [
+            'name' => 'minimum_age',
+            'value' => 18,
+            'company_id' => $company->id
+        ];
+        Setting::create($data);
 
         // 1.5 create company payment date
         $settings = [

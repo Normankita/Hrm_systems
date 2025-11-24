@@ -96,12 +96,15 @@ class GroupCategoryEmployeeAllowance extends Model
         if (!$output) {
             return Collection::make([]);
         }
-        $output->group_employee_pivot_details = new AllowanceGroupEmployeePivotResource(AllowanceGroupEmployeePivot::getRealDetails($output->group_employee_pivot->id));
-        $output->group_allowance_pivot_details = new AllowanceGroupAllowancePivotResource(AllowanceGroupAllowancePivot::getRealDetails($output->group_allowance_pivot->id));
+        $output->group_employee_pivot_details = new AllowanceGroupEmployeePivotResource(
+            AllowanceGroupEmployeePivot::getRealDetails($output->group_employee_pivot->id));
+        $output->group_allowance_pivot_details = new AllowanceGroupAllowancePivotResource(
+            AllowanceGroupAllowancePivot::getRealDetails($output->group_allowance_pivot->id));
         return $this->realDetailsFormat($output);
     }
 
 
+    
     private static function realDetailsFormat($output) {
         return (object) [
             'id' => $output->id,

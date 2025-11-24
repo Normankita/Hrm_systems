@@ -102,22 +102,29 @@ class EmployeeManageDisbursements extends Controller
                 return view('employee.manage.disbursement_allowance.individual_view')
                     ->with('disbursements', $disbursements)
                     ->with('basedOn', $basedOn);
+                    
             case AllowanceGroups::CATEGORY:
                 // fetching the groupcategoryemployeeallowancedetails first
                 $objs = GroupCategoryEmployeeAllowance::whereIn(
                     'id',
                     $disbursements->pluck('disbursable_id')
-                )->get();
+                )->orderBy('allowance_group_allowance_pivot_id')
+                ->get();
                 $disbursements = GroupCategoryEmployeeAllowanceResource::collection(
-                    $disbursements
+                    $objs
                 )->resolve();
-                dd($disbursements);
                 return view('employee.manage.disbursement_allowance.category_view')
                     ->with('disbursements', $disbursements)
                     ->with('basedOn', $basedOn);
+
             case AllowanceGroups::GROUP:
-                $disbursements = GroupedDisbursementResource::collection(
-                    $disbursements
+                $objs = GroupCategoryEmployeeAllowance::whereIn(
+                    'id',
+                    $disbursements->pluck('disbursable_id')
+                )->orderBy('allowance_group_allowance_pivot_id')
+                ->get();
+                $disbursements = GroupCategoryEmployeeAllowanceResource::collection(
+                    $objs
                 )->resolve();
                 return view('employee.manage.disbursement_allowance.group_view')
                     ->with('disbursements', $disbursements)

@@ -29,7 +29,7 @@
                         </div>
                         <div class="col-md-12">
                             <table
-                                class="table dt-table cat-table table-bordered 
+                                class="table dt-table cat-table table-bordered
                                 table-hover align-middle text-nowrap">
                                 <label for="all">select all</label>
                                 <input class="all-checker m-2" type="checkbox" name="all">
@@ -71,7 +71,7 @@
                             <div class="col-md-11">
                                 <h4>Choose Groups</h4>
                                 <table
-                                    class="table dt-table group-table table-bordered 
+                                    class="table dt-table group-table table-bordered
                                 table-hover align-middle text-nowrap">
                                     <label for="all">select all</label>
                                     <input class="all-group-checker m-2" type="checkbox" name="all">
@@ -167,7 +167,6 @@
                             console.error('Error sending disbursement request', request);
                         }
                     }
-
                 }
             }
         }).mount('#emps');
