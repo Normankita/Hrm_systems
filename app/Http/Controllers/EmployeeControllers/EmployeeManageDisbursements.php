@@ -18,8 +18,6 @@ use Illuminate\Http\Request;
 
 class EmployeeManageDisbursements extends Controller
 {
-    private $employeeModelObject;
-
 
     public function __construct(protected Employee $Employee, protected AllowanceGroup $group)
     {
@@ -102,7 +100,7 @@ class EmployeeManageDisbursements extends Controller
                 return view('employee.manage.disbursement_allowance.individual_view')
                     ->with('disbursements', $disbursements)
                     ->with('basedOn', $basedOn);
-                    
+
             case AllowanceGroups::CATEGORY:
                 // fetching the groupcategoryemployeeallowancedetails first
                 $objs = GroupCategoryEmployeeAllowance::whereIn(
