@@ -10,7 +10,7 @@
         <table class="table td-table table-hover table-bordered align-middle">
             <thead>
                 <tr>
-                    <th wire:click="sortBy('id')">ID</th>
+                    <th>#</th>
                     <th wire:click="sortBy('employee_id')">Employee</th>
                     <th wire:click="sortBy('status')">Status</th>
                     <th wire:click="sortBy('created_at')">Date</th>
@@ -19,7 +19,7 @@
             <tbody>
                 @foreach ($attendances as $attendance)
                     <tr>
-                        <td>{{ $attendance->id }}</td>
+                        <td>{{ $loop->iteration + ($attendances->currentPage() - 1) * $attendances->perPage() }}</td>
                         <td>{{ $attendance->employee->full_name }}</td>
                         <td>{{ $attendance->status }}</td>
                         <td>{{ $attendance->created_at->format('Y-m-d H:i') }}</td>

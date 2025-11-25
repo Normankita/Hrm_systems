@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Services\DailyAttendanceService;
 use App\Http\Utils\Traits\AttendanceTrait;
 use App\Models\Attendance;
+use App\Models\ClosedDay;
 use App\Models\Employee;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -23,7 +24,8 @@ class AdminAttendancesController extends Controller
         $attendanceChartData = DailyAttendanceService::getWeeklyChartData();
         $daysOfWeek = $attendanceChartData['daysOfWeek'];
         $presentData = $attendanceChartData['presentData'];
-        $absentData = $attendanceChartData['absentData'];
+        $absentData = $attendanceChartData['absentData']; 
+        $lateData = $attendanceChartData['lateData'];
 
         $today = date('Y-m-d');
         $todayAttendance = DailyAttendanceService::getDayBasedAttendance($today);
@@ -31,6 +33,7 @@ class AdminAttendancesController extends Controller
         $presenties = DailyAttendanceService::getDayBasedPresenties($today);
         $lateComers = DailyAttendanceService::getDayBasedLateComers($today);
         $employeesCount = $company->employees()->count();
+
         return view('admin.attendance.attendance_dashborad')
             ->with('absentees', $absentees->count())
             ->with('presenties', $presenties->count())
@@ -39,7 +42,8 @@ class AdminAttendancesController extends Controller
             ->with('todayAttendance', $todayAttendance)
             ->with('daysOfWeek', $daysOfWeek)
             ->with('presentData', $presentData)
-            ->with('absentData', $absentData);
+            ->with('absentData', $absentData)
+            ->with('lateData', $lateData);
     }
 
 
@@ -60,20 +64,24 @@ class AdminAttendancesController extends Controller
         // apply the other remaining filters
         $getByDepartment = strtolower($request->get('department'));
         $status = $request->get('status');
-        if ($getByDepartment && $getByDepartment !== 'all') {
+        if ($getByDepartment && strtolower($getByDepartment) !== 'all') {
             $attendanceDetails = $attendanceDetails->where(
                 'employee.department_id',
                 $getByDepartment
             );
         }
-        if ($status) {
+        if ($status && strtolower($status) !== 'all') {
             $attendanceDetails = $attendanceDetails->where('status', $status);
         }
+        // fetching the closing status of the current date
+        $closed = ClosedDay::whereDate('closed_date', 'like', $getByDate)
+            ->exists();
         // Extra details to send to view page
         $employees = session('company')->employees;
         $present = DailyAttendanceService::getDayBasedPresenties($getByDate);
         $absent = DailyAttendanceService::getDayBasedAbsentees($getByDate);
         $late = DailyAttendanceService::getDayBasedLateComers($getByDate);
+
         return view('admin.attendance.daily_attendance', [
             'attendanceDetails' => $attendanceDetails,
             'date' => $getByDate,
@@ -83,7 +91,8 @@ class AdminAttendancesController extends Controller
             'employees' => $employees,
             'present' => $present,
             'absent' => $absent,
-            'late' => $late
+            'late' => $late,
+            'isClosed' => $closed
         ]);
     }
 

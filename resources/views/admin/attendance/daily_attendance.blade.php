@@ -10,14 +10,23 @@
 @section('title', 'Daily Attendance')
 
 @section('content')
-    <div class="container-fluid">
+    <div class="container-fluid" id="app">
 
         {{-- Page Header --}}
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="h3">Daily Attendance</h1>
-            <button class="btn btn-primary">
-                <i class="bi bi-download"></i> Export
-            </button>
+            <div class="col-sm-12 col-md-4">
+                <h1 class="h3">Daily Attendance</h1>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                @if (!$isClosed)
+                    <button class="btn btn-danger btn-sm trt" v-on:click="closeAttendance()">
+                        Close Entrence
+                    </button>
+                @endif
+                <button class="btn btn-primary btn-sm">
+                    <i class="bi bi-download"></i> Export
+                </button>
+            </div>
         </div>
 
         {{-- Filters --}}
@@ -144,4 +153,41 @@
         </div>
 
     </div>
+@endsection
+
+@section('scripts')
+    <script>
+        const app = Vue.createApp({
+            mounted() {
+                console.log('vue starts')
+            },
+            methods: {
+                closeAttendance() {
+                    if (confirm('Are you sure you want to close attendance for this day?')) {
+                        NProgress.start();
+                        axios.post('{{ route('attendances.close') }}', {
+                                date: '{{ $date }}',
+                                id: '{{ auth()->user()->id }}',
+                            }, {
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Content-Type': 'application/json'
+                                }
+                            })
+                            .then(response => {
+                                alert(response.data.message);
+                                location.reload();
+                            })
+                            .catch(error => {
+                                NProgress.done();
+                                console.error('Error:', error);
+                                alert('An error occurred while closing attendance.');
+                            });
+                    }
+                }
+
+            }
+        });
+        app.mount('#app');
+    </script>
 @endsection

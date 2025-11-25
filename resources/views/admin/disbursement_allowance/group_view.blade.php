@@ -3,7 +3,7 @@
 @section('content')
     <div class="row">
         <div class="col-sm-12 col-md-12">
-            <x-back-button :route="route('employee.manage.disbursements.index')"></x-back-button>
+            <x-back-button :route="route('admin.disbursements.index')"></x-back-button>
         </div>
     </div>
     <div class="row justify-content-start">

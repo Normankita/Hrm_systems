@@ -287,6 +287,7 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
 
         Route::post('/{payroll}/reject', 'reject')->name('reject');
     });
+    
 // payroll report routes
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('employee/manage/payroll/employee/reports')
@@ -296,7 +297,9 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::view('/', 'employee.manage.payroll.reports.index')->name('index');
     });
 
-Route::get('/employees/{employee}/payrolls/{payroll}', [EmployeeManagePayrollController::class, 'show'])->name('payroll.show');
+Route::get('/employees/{employee}/payrolls/{payroll}', 
+    [EmployeeManagePayrollController::class, 'show'])
+        ->name('payroll.show');
 
 
 // attendance route

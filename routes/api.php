@@ -56,7 +56,7 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     });
 
 
-Route::middleware('auth', 'admin-or-attendance')
+Route::middleware([])
     ->prefix('/attendance')
     ->controller(ApiAttendanceController::class)
     ->name('attendances.')
@@ -64,6 +64,9 @@ Route::middleware('auth', 'admin-or-attendance')
         Route::post('/manual/entry/store', 'manualEntryStore')
             ->name('manual.entry.store')
             ->middleware('HasCompanyProfile');
+        Route::post('/close', 'closeAttendance')
+            ->name('close')
+           ;
     });
 
 
@@ -73,7 +76,7 @@ Route::middleware([])->group(function () {
         ApiDisbursementsController::class,
         'disburseGrouped'
     ])
-    ->name('disburse.allowance.grouped');
+        ->name('disburse.allowance.grouped');
 });
 
 
@@ -81,13 +84,13 @@ Route::middleware([])
     ->prefix('disbursements')
     ->name('disbursements.')
     ->group(function () {
-    // Additional authenticated API routes can be added here
-    Route::get('/fetch', [
-        ApiDisbursementsController::class,
-        'fetchDisbursements'
-    ])
-        ->name('fetch');
-});
+        // Additional authenticated API routes can be added here
+        Route::get('/fetch', [
+            ApiDisbursementsController::class,
+            'fetchDisbursements'
+        ])
+            ->name('fetch');
+    });
 
 
 Route::middleware([])->group(function () {

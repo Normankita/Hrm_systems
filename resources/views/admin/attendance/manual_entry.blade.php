@@ -203,7 +203,7 @@
                                         </td>
                                         <td>
                                             <x-system.modal-button id="editAttendance{{ $attendance->id }}" text="Edit"
-                                                class="btn btn-outline-primary btn-sm" textColor="text-primary"
+                                                class="btn btn-outline-primary btn-sm p-0 px-1" textColor="text-primary"
                                                 icon="mdi mdi-pencil" />
 
                                             <form action="{{ route('admin.attendances.delete', $attendance->id) }}"
@@ -212,7 +212,7 @@
                                                 @csrf
                                                 @method('DELETE')
 
-                                                <button type="button" class="btn btn-outline-danger p-1 mdi mdi-delete"
+                                                <button type="button" class="btn btn-sm p-0 px-1 btn-outline-danger mdi mdi-delete"
                                                     onclick="event.preventDefault(); if (confirm('Are you sure you want to delete this attendance record?')) { document.getElementById('deleteAttendanceForm{{ $attendance->id }}').submit(); }">
                                                     Delete
                                                 </button>

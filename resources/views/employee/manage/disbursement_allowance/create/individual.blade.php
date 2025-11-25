@@ -12,7 +12,7 @@
                 <div class="card-body">
                     <div class="row justify-content-start">
                         <div class="col-md-12 mb-3">
-                            <h4>Disburse Allowance to Individual Employees</h4>
+                            <h4>Disburse Allowance to Custom Selection</h4>
                             <button v-on:click="disburseAllowance" v-if="true"
                                 class="btn btn-primary btn-sm mt-2">disburse</button>
                             <!-- Button trigger modal -->

@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Services\DailyAttendanceService;
 use App\Http\Utils\Traits\AttendanceTrait;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -92,6 +94,33 @@ class ApiAttendanceController extends Controller
                 'message' => $e->getMessage(),
             ], 500);
         }
+    }
+
+
+    public function closeAttendance(Request $request)
+    {
+        $rules = [
+            'id' => 'required',
+            'date' => 'required'
+        ];
+        $validate = Validator::make($request->all(), $rules);
+        if($validate->fails()) {
+            return response()->json([
+                'error' => 'bad parameter given'  
+            ],  401);
+        }
+        $user = User::find($request->input('id'));
+        $date = $request->input('date');
+        $response = AttendanceTrait::closeAttendanceForTheDay($date,
+            $user->company->id);
+        if ($response['status'] == 'fail') {
+            return response()->json([
+                'error' => $response['message'],
+            ], 500);
+        }
+        return response()->json([
+            'message' => 'Attendance closed for the day successfully',
+        ], 200);
     }
 }
 

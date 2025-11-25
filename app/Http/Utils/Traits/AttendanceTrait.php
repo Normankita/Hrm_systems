@@ -3,8 +3,10 @@ namespace App\Http\Utils\Traits;
 
 use App\Models\Attendance;
 use App\Models\AttendanceRecord;
+use App\Models\ClosedDay;
 use App\Models\Employee;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
@@ -24,8 +26,9 @@ trait AttendanceTrait
     {
         return Attendance::select(
             DB::raw('DAYNAME(attendance_date) as day'),
-            DB::raw("SUM(CASE WHEN status = 'Present' THEN 1 ELSE 0 END) as presentCount"),
-            DB::raw("SUM(CASE WHEN status = 'Absent' THEN 1 ELSE 0 END) as absentCount")
+            DB::raw("SUM(CASE WHEN status IN ('present', 'late') THEN 1 ELSE 0 END) as presentCount"),
+            DB::raw("SUM(CASE WHEN status = 'absent' THEN 1 ELSE 0 END) as absentCount"),
+            DB::raw("SUM(CASE WHEN status = 'late' THEN 1 ELSE 0 END) as lateCount")
         )
             ->whereBetween('attendance_date', [$startFrom, $endIn])
             ->groupBy('day')
@@ -158,7 +161,8 @@ trait AttendanceTrait
     }
 
 
-    public static function isLate($employeeId = null, $comparingTime = null) {
+    public static function isLate($employeeId = null, $comparingTime = null)
+    {
         $employeeId = $employeeId ?? auth()->user()->employee->id;
         $inTime = self::employeeInTime($employeeId);
         $comparingTime = $comparingTime ?? now();
@@ -246,6 +250,61 @@ trait AttendanceTrait
         }
         $attendance->update($data);
         return response()->json(['success' => 'Attendance record updated successfully'], 200);
+    }
+
+
+    public static function closeAttendanceForTheDay(
+        $date,
+        $company_id
+    ) {
+        // fetch user qualified to be filled in attendance
+        $employees = Employee::whereDoesntHave('attendances', function ($query) use ($date) {
+            $query->whereDate('attendance_date', 'like', $date . "%");
+        })
+            ->where('state', 'active')
+            ->where('userStatus', 1)
+            ->get();
+        // mark them all as absentees
+        DB::beginTransaction();
+        try {
+            // checking if the date is already closed
+            $attendance = ClosedDay::whereDate('closed_date', 'like',  $date."%")
+                ->first();
+            if ($attendance) {
+                // change status to true
+                $attendance->update([
+                    'is_active' => false
+                ]);
+                DB::commit();
+                return ['status' => 'success'];
+            }
+            // otherwise close the day
+            $closedDay = ClosedDay::create([
+                'company_id' => $company_id,
+                'closed_date' => $date
+            ]);
+            $employees->each(function ($employee) use ($company_id, $date) {
+                $attendance = [
+                    'company_id' => $company_id,
+                    'employee_id' => $employee->id,
+                    'attendance_date' => $date,
+                    'status' => 'absent',
+                    'check_in_time' => null,
+                    'check_out_time' => null,
+                    'remarks' => 'default fro system close'
+                ];
+                $attendance = self::createAttendance($attendance);
+                if (!$attendance) {
+                    DB::rollBack();
+                    throw new Exception('Unable to fill Attendance');
+                }
+            });
+            DB::commit();
+            return ['status' => 'success'];
+        } catch (Exception $e) {
+            DB::rollBack();
+            return ['status' => 'fail', 'message' => $e->getMessage()];
+        }
     }
 
 

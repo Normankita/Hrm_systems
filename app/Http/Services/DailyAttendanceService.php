@@ -36,16 +36,16 @@ class DailyAttendanceService
 
     public static function getDayBasedAbsentees($date)
     {
-        return self::dated($date)
-            ->where('status', 'absent')
+        $return = self::dated($date)
             ->get();
+        return $return->where('status', 'absent');
     }
 
     public static function getDayBasedPresenties($date)
     {
-        return self::dated($date)
-            ->where('status', 'present')
+        $return = self::dated($date)
             ->get();
+        return $return->whereIn('status', ['present', 'late']);
     }
 
 
@@ -56,39 +56,42 @@ class DailyAttendanceService
             return Attendance::where('status', 'late')
                 ->get();
         }
-        return self::dated($date)
-            ->where('status', 'late')
+        $response = self::dated($date)
             ->get();
+        return $response->where('status', 'late');
     }
 
     private static function dated($date)
     {
-        // Helper function to format the date
-        return Attendance::whereDate('attendance_date', $date)
+        return Attendance::where('attendance_date', 'like', $date . '%') // for datetime/timestamp columns
+            ->orWhereDate('attendance_date', $date) // fallback for date columns
             ->orderBy('id', 'desc')
             ->with('employee');
     }
 
     public static function getWeeklyChartData()
     {
-                $company = session('company');
+        $company = session('company');
         $today = date('Y-m-d');
         // chart details starts
         $chart_7days = self::getChart_7days();
 
         // Make sure all days are present
-        $daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        $daysOfWeek = ['Monday', 'Tuesday', 'Wednesday',
+            'Thursday', 'Friday', 'Saturday', 'Sunday'];
         $presentData = [];
         $absentData = [];
         foreach ($daysOfWeek as $day) {
             $match = $chart_7days->firstWhere('day', $day);
             $presentData[] = $match ? $match->presentCount : 0;
             $absentData[] = $match ? $match->absentCount : 0;
+            $lateData[] = $match ? $match->lateCount : 0;
         }
         return [
             'daysOfWeek' => $daysOfWeek,
             'presentData' => $presentData,
             'absentData' => $absentData,
+            'lateData' => $lateData
         ];
     }
 }

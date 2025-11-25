@@ -94,15 +94,24 @@
                     backgroundColor: 'rgba(0, 128, 0, 0.2)',
                     fill: true,
                     tension: 0.3
-                }, {
+                },
+                {
                     label: 'Absent',
                     data: @json($absentData),
                     borderColor: 'red',
                     backgroundColor: 'rgba(255, 0, 0, 0.2)',
                     fill: true,
                     tension: 0.3
-                }]
-            }
+                },
+                {
+                    label: 'Late',
+                    data: @json($lateData),
+                    borderColor: 'orange',
+                    backgroundColor: 'rgba(255, 165, 0, 0.2)',
+                    fill: true,
+                    tension: 0.3
+                }
+            ]}
         });
     </script>
 @endsection
