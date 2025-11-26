@@ -5,6 +5,7 @@ namespace App\Http\Controllers\EmployeeControllers;
 use App\Http\Controllers\Controller;
 use App\Http\Services\DailyAttendanceService;
 use App\Http\Utils\Traits\AttendanceTrait;
+use App\Models\ClosedDay;
 use App\Models\Employee;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -78,20 +79,24 @@ class EmployeeManageAttendanceController extends Controller
         // apply the other remaining filters
         $getByDepartment = strtolower($request->get('department'));
         $status = $request->get('status');
-        if ($getByDepartment && $getByDepartment !== 'all') {
+        if ($getByDepartment && strtolower($getByDepartment) !== 'all') {
             $attendanceDetails = $attendanceDetails->where(
                 'employee.department_id',
                 $getByDepartment
             );
         }
-        if ($status) {
+        if ($status && strtolower($status) !== 'all') {
             $attendanceDetails = $attendanceDetails->where('status', $status);
         }
+        // fetching the closing status of the current date
+        $closed = ClosedDay::whereDate('closed_date', 'like', $getByDate)
+            ->exists();
         // Extra details to send to view page
         $employees = session('company')->employees;
         $present = DailyAttendanceService::getDayBasedPresenties($getByDate);
         $absent = DailyAttendanceService::getDayBasedAbsentees($getByDate);
         $late = DailyAttendanceService::getDayBasedLateComers($getByDate);
+
         return view('employee.manage.attendance.daily_attendance', [
             'attendanceDetails' => $attendanceDetails,
             'date' => $getByDate,
@@ -101,7 +106,8 @@ class EmployeeManageAttendanceController extends Controller
             'employees' => $employees,
             'present' => $present,
             'absent' => $absent,
-            'late' => $late
+            'late' => $late,
+            'isClosed' => $closed
         ]);
     }
 

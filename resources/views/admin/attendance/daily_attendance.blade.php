@@ -19,8 +19,9 @@
             </div>
             <div class="col-sm-12 col-md-4">
                 @if (!$isClosed)
-                    <button class="btn btn-danger btn-sm trt" v-on:click="closeAttendance()">
-                        Close Entrence
+                    <button class="btn btn-danger btn-sm trt"
+                        v-on:click="closeAttendance()">
+                            Close Entrence
                     </button>
                 @endif
                 <button class="btn btn-primary btn-sm">
@@ -139,11 +140,11 @@
                                                 bg-danger text-white @endif
                                             ">{{ $attendance->status }}</span>
                                     </td>
-                                    <td>{{ Carbon::parse($attendance->check_in_time)->format('H:ia') }}
+                                    <td>{{ $attendance->check_in_time ? Carbon::parse($attendance->check_in_time)->format('H:ia') : "--" }}
                                     </td>
-                                    <td>{{ Carbon::parse($attendance->check_out_time)->format('H:ia') }}
+                                    <td>{{ $attendance->check_out_time ? Carbon::parse($attendance->check_out_time)->format('H:ia') : "--" }}
                                     </td>
-                                    <td>On time</td>
+                                    <td>{{ $attendance->remarks ? substr($attendance->remarks, 0, 20) . '...' : '--' }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

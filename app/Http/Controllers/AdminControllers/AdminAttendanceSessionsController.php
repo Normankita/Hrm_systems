@@ -66,7 +66,7 @@ class AdminAttendanceSessionsController extends Controller
 
 
     /**
-     * 
+     *
      * @param \Illuminate\Http\Request $request
      * @param mixed $id
      * @return \Illuminate\Http\RedirectResponse
@@ -112,7 +112,8 @@ class AdminAttendanceSessionsController extends Controller
 
     public function getSessionDashboard()
     {
-        $attendanceRecords = AttendanceRecord::with('employee', 'attendanceSession')
+        $attendanceRecords = AttendanceRecord::with('employee',
+         'attendanceSession')
             ->orderBy('date', 'desc')
             ->get();
         return view('admin.attendance.sessions.dashboard', [

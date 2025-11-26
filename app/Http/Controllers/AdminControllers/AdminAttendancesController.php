@@ -24,7 +24,7 @@ class AdminAttendancesController extends Controller
         $attendanceChartData = DailyAttendanceService::getWeeklyChartData();
         $daysOfWeek = $attendanceChartData['daysOfWeek'];
         $presentData = $attendanceChartData['presentData'];
-        $absentData = $attendanceChartData['absentData']; 
+        $absentData = $attendanceChartData['absentData'];
         $lateData = $attendanceChartData['lateData'];
 
         $today = date('Y-m-d');

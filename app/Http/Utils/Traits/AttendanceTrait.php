@@ -291,7 +291,7 @@ trait AttendanceTrait
                     'status' => 'absent',
                     'check_in_time' => null,
                     'check_out_time' => null,
-                    'remarks' => 'default fro system close'
+                    'remarks' => 'default from system close'
                 ];
                 $attendance = self::createAttendance($attendance);
                 if (!$attendance) {

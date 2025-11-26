@@ -1,6 +1,7 @@
 <div class="p-3">
     <div class="mb-3 d-flex justify-content-between">
         <input type="text" wire:model.live="search" placeholder="Search..." class="form-control w-25" />
+        <input type="date" wire:model.live="dateFilter" placeholder="Search..." class="form-control float-left w-25" />
 
         <div wire:loading wire:target="search" class="text-center py-3">
             <span class="spinner-border text-primary" role="status"></span>
