@@ -1,4 +1,4 @@
-@props(['payrolls', 'title'])
+@props(['payrolls', 'title', 'backRoute' => null])
 @can('view_payment')
     <div class="row">
         <div v-if="!pageComplete" class="col-md-12">
@@ -66,7 +66,7 @@
 
                                         <td>{{ $payroll->created_at->format('d M Y') }}</td>
                                         <td>
-                                            <x-system.btn-view :route="route('employee.manage.payrolls.show', $payroll)" text="View" />
+                                            <x-system.btn-view :route="route('employee.manage.payrolls.show', $payroll).'?back='.$backRoute" text="View" />
                                             @can('reject_payment')
                                                 @if ($payroll->status !== 'approved' && $payroll->status !== 'rejected')
                                                     <x-system.modal-button

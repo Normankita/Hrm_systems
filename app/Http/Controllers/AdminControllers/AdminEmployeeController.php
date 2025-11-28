@@ -73,6 +73,10 @@ class AdminEmployeeController extends Controller
     public function show($id): View
     {
         $employee = $this->getEmployeeById($id);
+
+        $groupedPayrolls = $employee->payrolls->groupBy(function ($payroll) {
+            return \Carbon\Carbon::parse($payroll->created_at)->format('Y-m-d');
+        });
         $attachments = $employee->attachments()->get();
         return view(
             'admin.employee.show',
@@ -98,7 +102,7 @@ class AdminEmployeeController extends Controller
 
     public function update(UpdateEmployeeRequest $request, $id)
     {
-                Helpers::sanitizeRequestNumbers($request);
+        Helpers::sanitizeRequestNumbers($request);
 
         $outcome = $this->employeeService->updateEmployee($request, $id);
 
@@ -106,6 +110,7 @@ class AdminEmployeeController extends Controller
             ->route('admin.employees.show', $outcome['employee']->id)
             ->with('success', 'Employee updated successfully');
     }
+
 
     public function updatePassword(Request $request, $id)
     {
@@ -132,6 +137,7 @@ class AdminEmployeeController extends Controller
         ]);
     }
 
+
     public function updatePassportPhoto(Request $request, $id)
     {
         $outcome = $this->employeeService->updateProfilePhoto($request, $id);
@@ -145,7 +151,6 @@ class AdminEmployeeController extends Controller
             'message' => 'Invalid passport photo upload'
         ]);
     }
-
 
 
     public function excelImport(Request $request)
@@ -163,11 +168,14 @@ class AdminEmployeeController extends Controller
         $rules = [
             'file' => 'mimes:ods,csv,xlsx|required|max:500',
         ];
-        $validate = Validator::make($request->all(), $rules,
+        $validate = Validator::make(
+            $request->all(),
+            $rules,
             $messages = [
-            'excel.required' => 'Select Excel sheet First....',
-            'excel.max' => 'ExcelSheet must not be greater than 500kb',
-        ]);
+                'excel.required' => 'Select Excel sheet First....',
+                'excel.max' => 'ExcelSheet must not be greater than 500kb',
+            ]
+        );
 
         if ($validate->fails()) {
 

@@ -16,18 +16,32 @@ class EmployeeManagePayrollEmployeeController extends Controller
     {
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $backRoute = route('employee.manage.payroll.employees.index');
         $payrolls = Payroll::latest()->get();
-        return view('employee.manage.payroll.payments.index', compact('payrolls'));
+        return view('employee.manage.payroll.payments.index',
+         compact('payrolls', 'backRoute'));
     }
 
+
+    /**
+     * This will return the page for pending payrolls ready to be
+     * approved or rejected by someone that were created
+     *
+     * @return void
+     */
     public function pending()
     {
         $payrolls = Payroll::where('status', 'pending')->get();
         return view('employee.manage.payroll.payments.pending', compact('payrolls'));
     }
 
+
+    /**
+     * This function will return page for approved payrolls
+     * @return \Illuminate\Contracts\View\View
+     */
     public function approved()
     {
         $payrolls = Payroll::where('status', 'approved')->get();
@@ -41,6 +55,13 @@ class EmployeeManagePayrollEmployeeController extends Controller
         compact('payrolls'));
     }
 
+
+    /**
+     * This will give the payrolls page that are rejected
+     * @param Request $request
+     * @param Payroll $payroll
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function reject(Request $request, Payroll $payroll)
     {
         $request->validate([

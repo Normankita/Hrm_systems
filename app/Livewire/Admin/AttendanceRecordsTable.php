@@ -22,8 +22,12 @@ class AttendanceRecordsTable extends Component
         $this->resetPage();
     }
 
-    public function updateDateFilter()
+    public function updateDateFilter($value)
     {
+        if ($value && !Carbon::hasFormat($value, 'Y-m-d')) {
+        $this->reset('dateFilter');
+        $this->addError('dateFilter', 'Please enter a valid date.');
+    }
         $this->resetPage();
     }
 

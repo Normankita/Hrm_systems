@@ -50,7 +50,6 @@ class AdminAllowanceGroupController extends Controller
     public function edit($id)
     {
         $group = AllowanceGroup::where('id', $id)->first();
-
         // Employee That are eligible to be added in the group
         $employees = self::getEmployeeForAdditionSelection($group);
         if (!$group)

@@ -8,6 +8,7 @@ use App\Http\Services\PayslipPdfService;
 use App\Models\Employee;
 use App\Models\Payroll;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class EmployeePayrollController extends Controller
@@ -17,14 +18,29 @@ class EmployeePayrollController extends Controller
      */
     public function index()
     {
-        $payrolls = Payroll::with(['employee', 'pay_grade'])
-            ->latest()->get();
+        $payrolls = Payroll::select(
+            DB::raw("entrence_reference"),
+            DB::raw("MAX(created_at) as latest_creation"),
+            DB::raw("COUNT(*) as payroll_count")
+        )
+            ->with(['employee', 'pay_grade'])
+            ->groupBy('entrence_reference')
+            ->get();
         return view(
             'employee.manage.payroll.index',
             compact('payrolls')
         );
-
     }
+
+    public function singleGroupShow($entrence_reference)
+    {
+        $payrolls = Payroll::where('entrence_reference', $entrence_reference)
+            ->with(['employee', 'pay_grade'])
+            ->get();
+        return view('employee.manage.payroll.singleGroupShow',
+         compact('payrolls', 'entrence_reference'));
+    }
+
     public function generateAll(Request $request)
     {
         $request = [];
@@ -56,13 +72,17 @@ class EmployeePayrollController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function show(Payroll $payroll)
+    public function show(Payroll $payroll, Request $request)
     {
+        $backRoute = $request->input('back', route('employee.manage.payrolls.index')    );
         $employee = Employee::find($payroll->employee_id);
 
         $deductions = $payroll->deductions()->get();
 
-        return view('employee.manage.payroll.payments.show', compact('employee', 'payroll', 'deductions'));
+        return view('employee.manage.payroll.payments.show',
+         compact('employee',
+         'payroll', 'deductions'))
+         ->with('backRoute', $backRoute);
     }
 
 

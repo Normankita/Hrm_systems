@@ -193,10 +193,12 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::get('/', 'index')->name('index')->middleware(['can:view_payroll']);
         Route::post('/generate-all', 'generateAll')->name('generateAll')->middleware(['can:create_payroll']);
         Route::get('/{payroll}/edit', 'edit')->name('edit')->middleware(['can:edit_payroll']);
+        Route::get('/{payroll}', 'show')
+            ->name('show')->middleware(['can:view_payroll']);
         Route::get('/employees', 'getEmployees')->name('getEmployees')->middleware(['can:create_payroll']);
         Route::put('/{payroll}', 'update')->name('update')->middleware(['can:edit_payroll']);
         Route::delete('/{payroll}', 'destroy')->name('destroy')->middleware(['can:delete_payroll']);
-        Route::get('/{payroll}', 'show')->name('show')->middleware(['can:view_payroll']);
+        Route::get('/single/group/{reference}', 'singleGroupShow')->name('singleGroup.show')->middleware(['can:view_payroll']);
     });
 
 
@@ -287,7 +289,7 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
 
         Route::post('/{payroll}/reject', 'reject')->name('reject');
     });
-    
+
 // payroll report routes
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('employee/manage/payroll/employee/reports')
@@ -297,9 +299,11 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::view('/', 'employee.manage.payroll.reports.index')->name('index');
     });
 
-Route::get('/employees/{employee}/payrolls/{payroll}', 
-    [EmployeeManagePayrollController::class, 'show'])
-        ->name('payroll.show');
+Route::get(
+    '/employees/{employee}/payrolls/{payroll}',
+    [EmployeeManagePayrollController::class, 'show']
+)
+    ->name('payroll.show');
 
 
 // attendance route

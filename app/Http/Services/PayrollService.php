@@ -39,6 +39,8 @@ class PayrollService
         bool $force = false,
         $employees = []
     ): array {
+        // generate a unique reference number for this payroll batch
+        $ref = uniqid('', true);
         $today = Carbon::today();
         $period = $today->format('Y-m');
 
@@ -111,6 +113,7 @@ class PayrollService
                     'psssf' => $psssf,
                     'sdl' => $sdl,
                     'wcf' => $wcf,
+                    'entrence_reference' => $ref,
                 ];
                 $payroll = Payroll::create($payrolldata);
                 $payroll->recordEvent('add', $payrolldata);

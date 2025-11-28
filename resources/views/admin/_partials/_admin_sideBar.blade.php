@@ -285,12 +285,8 @@
                         </div>
                     </ul>
                 </li>
-            </ul>
-        </div>
-        <!-- Bottom Section -->
-        <div class="sidebar-footer" style="position: absolute; bottom: 0; width: 100%; padding: 10px;">
-            <ul class="nav">
-                <li>
+
+                <li class="mt-3">
                     <a class="sidenav-item-link" style="color: white; padding: 10px 15px;"
                         href="{{ route('admin.companies.edit', auth()->user()->company_id) }}">
                         <i class="mdi mdi-account-circle"></i>
@@ -306,6 +302,5 @@
                 </li>
             </ul>
         </div>
-
     </div>
 </aside>

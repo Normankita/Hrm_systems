@@ -20,46 +20,31 @@
                         </div>
 
                         <div class="table-responsive">
-                            <span>Total Payrolls: {{ $payrolls->count() }}</span>
-                            <table class="table table-bordered table-hover align-middle text-nowrap">
+                            <table class="dt-table table table-bordered table-hover align-middle text-nowrap table-sm">
                                 <thead class="table-light text-dark">
                                     <tr>
                                         <th>#</th>
-                                        <th>Employee</th>
-                                        <th>Pay Grade</th>
-                                        <th>Base Salary</th>
-                                        <th>Period</th>
-                                        <th>Status</th>
-                                        <th>Created At</th>
+                                        <th>Ref#</th>
+                                        <th>Payroll Count</th>
+                                        <th>Date Created</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse($payrolls as $key => $payroll)
+                                    @foreach ($payrolls as $key => $payroll)
                                         <tr class="text-dark">
-                                            <td>{{ $key + 1 }}</td>
-                                            <td>{{ $payroll->employee->full_name ?? 'N/A' }}</td>
-                                            <td>{{ $payroll->pay_grade->name ?? 'N/A' }}</td>
-                                            <td>{{ number_format($payroll->basic_salary, 2) }}</td>
-                                            <td>{{ $payroll->period ?? 'N/A' }}</td>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $payroll->entrence_reference }}</td>
+                                            <td>{{ $payroll->payroll_count }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($payroll->latest_creation)->format('d M Y') }}</td>
                                             <td>
-                                                <span
-                                                    class="badge {{ $payroll->status === 'paid' ? 'bg-success' : 'bg-warning text-dark' }}">
-                                                    {{ ucfirst($payroll->status) }}
-                                                </span>
-                                            </td>
-                                            <td>{{ $payroll->created_at->format('d M Y') }}</td>
-                                            <td>
-                                                <x-system.btn-view :route="route('employee.manage.payrolls.show', $payroll)" text="View" />
+                                                <x-system.btn-view class="p-0" :route="route(
+                                                    'employee.manage.payrolls.singleGroup.show',
+                                                    $payroll->entrence_reference,
+                                                )" text="View" />
                                             </td>
                                         </tr>
-
-
-                                    @empty
-                                        <tr>
-                                            <td colspan="8" class="text-center text-muted">No payrolls found.</td>
-                                        </tr>
-                                    @endforelse
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

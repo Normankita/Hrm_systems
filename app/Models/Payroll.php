@@ -31,6 +31,7 @@ class Payroll extends Model
         'approved_by',
         'approved_at',
         'rejection_reason',
+        'entrence_reference',
     ];
     protected $casts = [
         'approved_at' => 'datetime',

@@ -2,6 +2,11 @@
 
 
 @section('content')
+    <div class="row">
+        <div class="col">
+            <x-back-button :route="$backRoute" />
+        </div>
+    </div>
     @can('view_payroll')
         <div class="container mt-4">
             <div class="card shadow-sm border-0">
@@ -119,11 +124,11 @@
                     @endif
 
                     {{-- Back Button --}}
-                    <div class="mt-4">
+                    {{-- <div class="mt-4">
                         <a href="{{ url()->previous() }}" class="btn btn-outline-secondary "
                             style="text-decoration: none; border: 1px dashed">← Back </a>
 
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
