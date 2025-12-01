@@ -262,6 +262,84 @@
                     </ul>
                 </li>
 
+                @php
+                    $isPagePaygrade = Route::is('admin.paygrades.*');
+                @endphp
+                <li class="has-sub {{ $isPagePaygrade ? 'active expand' : '' }}">
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                        data-target="#paygrade-menu" aria-expanded="{{ $isPagePaygrade ? 'true' : 'false' }}"
+                        aria-controls="employee-menu">
+                        <i class="mdi mdi-cash-multiple"></i>
+                        <span class="nav-text">PayGrade</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="collapse {{ $isPagePaygrade ? 'show' : '' }}" id="paygrade-menu"
+                        data-parent="#sidebar-menu">
+                        <div class="sub-menu">
+                            <li>
+                                <a class="sidenav-item-link" href="{{ route('admin.paygrades.index') }}">
+                                    <span class="nav-text">View PayGrades</span>
+                                </a>
+                            </li>
+                        </div>
+                    </ul>
+                </li>
+
+
+                @php
+                    $isManagePayments = Route::is('admin.payroll.employees.*');
+                @endphp
+                <li class="has-sub {{ $isManagePayments ? 'active expand' : '' }}">
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                        data-target="#payroll-response-menu"
+                        aria-expanded="{{ $isManagePayments ? 'true' : 'false' }}"
+                        aria-controls="payroll-response-menu">
+                        <i class="mdi mdi-cash-multiple"></i>
+                        <span class="nav-text">Manage Payments</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="collapse {{ $isManagePayments ? 'show' : '' }}" id="payroll-response-menu"
+                        data-parent="#sidebar-menu">
+                        <div class="sub-menu">
+                            <li>
+                                <a class="sidenav-item-link"
+                                    href="{{ route('admin.payroll.employees.index') }}">
+                                    <i class="mdi mdi-eye-outline mr-1"></i>
+                                    <span class="nav-text">View All payrolls</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="sidenav-item-link"
+                                    href="{{ route('admin.payroll.employees.pending') }}">
+                                    <i class="mdi mdi-clock-outline mr-1"></i>
+                                    <span class="nav-text">Pending payrolls</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="sidenav-item-link"
+                                    href="{{ route('admin.payroll.employees.approved') }}">
+                                    <i class="mdi mdi-check-circle-outline mr-1"></i>
+                                    <span class="nav-text">Approved payrolls</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="sidenav-item-link"
+                                    href="{{ route('admin.payroll.employees.rejected') }}">
+                                    <i class="mdi mdi-close-circle-outline mr-1"></i>
+                                    <span class="nav-text">Rejected payrolls</span>
+                                </a>
+                            </li>
+                            {{-- <li>
+                                <a class="sidenav-item-link"
+                                    href="{{ route('admin.payroll.employees.reports.index') }}">
+                                    <i class="mdi mdi-close-circle-outline mr-1"></i>
+                                    <span class="nav-text">Payroll Reports</span>
+                                </a>
+                            </li> --}}
+                        </div>
+                    </ul>
+                </li>
+
 
                 @php
                     $isPageDepartment = Route::is('admin.departments.index');

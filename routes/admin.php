@@ -13,9 +13,12 @@ use App\Http\Controllers\AdminControllers\AdminDepartmentController;
 use App\Http\Controllers\AdminControllers\AdminEmployeeController;
 use App\Http\Controllers\AdminControllers\AdminManageAllowanceFrequencyController;
 use App\Http\Controllers\AdminControllers\AdminManageLeavesController;
+use App\Http\Controllers\AdminControllers\AdminPayGradeController;
+use App\Http\Controllers\AdminControllers\AdminPayrollEmployeeController;
 use App\Http\Controllers\AdminControllers\AdminPermissionsController;
 use App\Http\Controllers\AdminControllers\AdminSettingController;
 use App\Http\Controllers\Api\ApiRolesController;
+use App\Http\Controllers\EmployeeControllers\EmployeePayGradeController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -179,6 +182,21 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
     });
 
 
+// PayGrade Routes
+Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
+    ->prefix('admin/paygrade')
+    ->name('admin.paygrades.')
+    ->controller(AdminPayGradeController::class)
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/show/{payGrade}', 'show')->name('show');
+        Route::post('/store', 'store')->name('store');
+        Route::patch('/update/{payGrade}', 'update')->name('update');
+        Route::delete('/delete/{payGrade}', 'destroy')->name('delete');
+        Route::get('/edit/{payGrade}', 'edit')->name('edit');
+    });
+
+
 Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
     ->prefix('admin/leave')
     ->controller(AdminManageLeavesController::class)
@@ -189,6 +207,22 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
         Route::post('/inspect/{leave}', 'inspect')->name('inspect');
     });
 
+
+// Payroll Employee Routes
+Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
+    ->prefix('admin/payroll/employee')
+    ->name('admin.payroll.employees.')
+    ->controller(AdminPayrollEmployeeController::class)
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/pending', 'pending')->name('pending');
+        Route::get('/approved', 'approved')->name('approved');
+        Route::get('/rejected', 'rejected')->name('rejected');
+
+        Route::post('/{payroll}/reject', 'reject')->name('reject');
+        Route::view('/', 'employees.reports.index')->name('index');
+
+    });
 
 Route::prefix('admin/leave/reports')
     ->controller(AdminManageLeavesController::class)
@@ -243,7 +277,7 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
     });
 
 
-    Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
+Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
     ->prefix('admin/disbursements')
     ->controller(AdminManageDisbursements::class)
     ->name('admin.disbursements.')
@@ -253,5 +287,5 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
             ->middleware(['password.confirm']);
         Route::post('/store', 'store')->name('store');
         Route::get('/view/disbursed/group', 'viewDisbursementsGroup')
-        ->name('group.view');
+            ->name('group.view');
     });
