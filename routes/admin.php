@@ -208,6 +208,24 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
     });
 
 
+// Payroll Routes
+Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
+    ->prefix('admin/payrolls')
+    ->name('admin.payrolls.')
+    ->controller(AdminPayrollEmployeeController::class)
+    ->group(function () {
+        Route::get('/', 'manageIndex')->name('index');
+        Route::post('/generate-all', 'generateAll')->name('generateAll');
+        Route::get('/{payroll}/edit', 'edit')->name('edit');
+        Route::get('/{payroll}', 'show')
+            ->name('show');
+        Route::get('/employees', 'getEmployees')->name('getEmployees');
+        Route::put('/{payroll}', 'update')->name('update');
+        Route::delete('/{payroll}', 'destroy')->name('destroy');
+        Route::get('/single/group/{reference}', 'singleGroupShow')->name('singleGroup.show');
+    });
+
+
 // Payroll Employee Routes
 Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
     ->prefix('admin/payroll/employee')
@@ -215,14 +233,14 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
     ->controller(AdminPayrollEmployeeController::class)
     ->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::get('/pending', 'pending')->name('pending');
-        Route::get('/approved', 'approved')->name('approved');
-        Route::get('/rejected', 'rejected')->name('rejected');
+        Route::get('/display/pending', 'pending')->name('pending');
+        Route::get('/display/approved', 'approved')->name('approved');
+        Route::get('/display/rejected', 'rejected')->name('rejected');
 
         Route::post('/{payroll}/reject', 'reject')->name('reject');
-        Route::view('/', 'employees.reports.index')->name('index');
-
+        Route::view('/reports', 'admin.payroll.reports.index')->name('manageIndex');
     });
+
 
 Route::prefix('admin/leave/reports')
     ->controller(AdminManageLeavesController::class)

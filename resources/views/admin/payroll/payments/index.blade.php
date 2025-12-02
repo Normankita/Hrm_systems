@@ -4,7 +4,9 @@
     <div class="row" id="page">
         <div class="col-12">
             <x-system.tables.payroll-table-card
-               :backRoute="$backRoute" :payrolls="$payrolls" title='All' />
+               :backRoute="route('admin.payroll.employees.index')"
+               :payrolls="$payrolls" title='All'
+               viewRoute="admin.payrolls.show" />
         </div>
     </div>
 @endsection

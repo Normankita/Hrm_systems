@@ -1,4 +1,6 @@
-@props(['payrolls', 'title', 'backRoute' => null])
+@props(['payrolls', 'title', 'backRoute' => null,
+'viewRoute' => 'employee.manage.payrolls.show'])
+
 @can('view_payment')
     <div class="row">
         <div v-if="!pageComplete" class="col-md-12">
@@ -11,14 +13,15 @@
                 <div class="card-body ">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h3 class="mb-0">{{ $title ?? '' }} Payroll List</h3>
-                        @can('create_payment')
+                        @if(auth()->user()->roles()->has('ADMIN') ||
+                                auth()->user()->hasPermissionTo('create_payment'))
                             @if ($title === 'Pending' || $title === 'All')
                                 <button v-if="!formSubmmitted" type="button" v-on:click="approveSelected"
                                     class="btn btn-primary" @if ($payrolls->count() < 1) disabled @endif>
                                     <i class="mdi mdi-cash-multiple"></i> Approve Selected
                                 </button>
                             @endif
-                        @endcan
+                        @endif
                     </div>
                     <div class="table-responsive">
                         <span>Total Payrolls: {{ $payrolls->count() }}</span>
@@ -66,15 +69,16 @@
 
                                         <td>{{ $payroll->created_at->format('d M Y') }}</td>
                                         <td>
-                                            <x-system.btn-view :route="route('employee.manage.payrolls.show', $payroll).'?back='.$backRoute" text="View" />
-                                            @can('reject_payment')
+                                            <x-system.btn-view
+                                                :route="route($viewRoute, $payroll).'?back='.$backRoute" text="View" />
+                                            @if(auth()->user()->roles()->has('ADMIN') ||
+                                                auth()->user()->hasPermissionTo('reject_payment'))
                                                 @if ($payroll->status !== 'approved' && $payroll->status !== 'rejected')
                                                     <x-system.modal-button
                                                         class="btn btn-outline-danger p-1 btn-sm mdi mdi-close"
                                                         id="rejectPayroll{{ $payroll->id }}" text="Reject" textColor="" />
                                                 @endif
-                                            @endcan
-
+                                            @endif
                                         </td>
                                     </tr>
                                 @empty
@@ -86,7 +90,8 @@
                         </table>
                         @foreach ($payrolls as $payroll)
                             @if ($payroll->status == 'pending')
-                                @can('reject_payment')
+                             @if(auth()->user()->roles()->has('ADMIN') ||
+                                                auth()->user()->hasPermissionTo('reject_payment'))
                                     <x-system.modal id="rejectPayroll{{ $payroll->id }}" title="Reject Payroll">
                                         <div>
                                             <h3>Reject: <b>{{ $payroll->employee->full_name }}'s</b> Payroll</h3>
@@ -105,7 +110,7 @@
                                             </div>
                                         </form>
                                     </x-system.modal>
-                                @endcan
+                                @endif
                             @endif
                         @endforeach
                     </div>
