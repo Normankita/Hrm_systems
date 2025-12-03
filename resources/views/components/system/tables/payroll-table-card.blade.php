@@ -13,7 +13,7 @@
                 <div class="card-body ">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h3 class="mb-0">{{ $title ?? '' }} Payroll List</h3>
-                        @if(auth()->user()->roles()->has('ADMIN') ||
+                        @if(auth()->user()->hasRole('ADMIN') ||
                                 auth()->user()->hasPermissionTo('create_payment'))
                             @if ($title === 'Pending' || $title === 'All')
                                 <button v-if="!formSubmmitted" type="button" v-on:click="approveSelected"
@@ -71,7 +71,7 @@
                                         <td>
                                             <x-system.btn-view
                                                 :route="route($viewRoute, $payroll).'?back='.$backRoute" text="View" />
-                                            @if(auth()->user()->roles()->has('ADMIN') ||
+                                            @if(auth()->user()->hasRole('ADMIN') ||
                                                 auth()->user()->hasPermissionTo('reject_payment'))
                                                 @if ($payroll->status !== 'approved' && $payroll->status !== 'rejected')
                                                     <x-system.modal-button
@@ -90,7 +90,7 @@
                         </table>
                         @foreach ($payrolls as $payroll)
                             @if ($payroll->status == 'pending')
-                             @if(auth()->user()->roles()->has('ADMIN') ||
+                             @if(auth()->user()->hasRole('ADMIN') ||
                                                 auth()->user()->hasPermissionTo('reject_payment'))
                                     <x-system.modal id="rejectPayroll{{ $payroll->id }}" title="Reject Payroll">
                                         <div>

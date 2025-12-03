@@ -3,7 +3,10 @@
 @section('content')
     <div class="row" id="page">
         <div class="col-12">
-            <x-system.tables.payroll-table-card :payrolls="$payrolls" title="Pending" />
+            <x-system.tables.payroll-table-card
+            :backRoute="route('admin.payroll.employees.index')"
+            :payrolls="$payrolls"
+            title="Pending" />
         </div>
     </div>
 @endsection
