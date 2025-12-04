@@ -25,6 +25,7 @@ class EmployeePayrollController extends Controller
         )
             ->with(['employee', 'pay_grade'])
             ->groupBy('entrence_reference')
+            ->orderBy('latest_creation', 'desc')
             ->get();
         return view(
             'employee.manage.payroll.index',
@@ -34,6 +35,7 @@ class EmployeePayrollController extends Controller
 
     public function singleGroupShow($entrence_reference)
     {
+        $backRoute = route('employee.manage.payrolls.index');
         $payrolls = Payroll::where('entrence_reference', $entrence_reference)
             ->with(['employee', 'pay_grade'])
             ->get();

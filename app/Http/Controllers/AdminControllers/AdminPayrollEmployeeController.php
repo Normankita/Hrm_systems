@@ -105,9 +105,10 @@ class AdminPayrollEmployeeController extends Controller
         )
             ->with(['employee', 'pay_grade'])
             ->groupBy('entrence_reference')
+            ->orderBy('latest_creation', 'desc')
             ->get();
         return view(
-            'employee.manage.payroll.index',
+            'admin.payroll.index',
             compact('payrolls')
         );
     }
@@ -119,7 +120,7 @@ class AdminPayrollEmployeeController extends Controller
             ->with(['employee', 'pay_grade'])
             ->get();
         return view(
-            'employee.manage.payroll.singleGroupShow',
+            'admin.payroll.singleGroupShow',
             compact('payrolls', 'entrence_reference')
         );
     }
@@ -150,7 +151,7 @@ class AdminPayrollEmployeeController extends Controller
                 'deductions'
             ])
             ->get();
-        return view('employee.manage.payroll.select-pay',
+        return view('admin.payroll.select-pay',
          compact('employees'));
     }
 
@@ -160,7 +161,8 @@ class AdminPayrollEmployeeController extends Controller
      */
     public function show(Payroll $payroll, Request $request)
     {
-        $backRoute = $request->input('back', route('employee.manage.payrolls.index'));
+        $backRoute = $request->input('back',
+        route('admin.payrolls.index'));
         $employee = Employee::find($payroll->employee_id);
 
         $deductions = $payroll->deductions()->get();
@@ -185,7 +187,8 @@ class AdminPayrollEmployeeController extends Controller
             abort(404, 'Payslip not found.');
         }
 
-        return Storage::download($payroll->payslip_path, 'Payslip_' . $payroll->id . '.pdf');
+        return Storage::download($payroll->payslip_path,
+         'Payslip_' . $payroll->id . '.pdf');
     }
 
 

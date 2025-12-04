@@ -11,7 +11,7 @@
                             @can('create_payroll')
                                 {{-- <form action="{{ route('employee.manage.payrolls.generateAll') }}" method="POST" class="mb-0"> --}}
                                 {{-- @csrf --}}
-                                <a href="{{ route('employee.manage.payrolls.getEmployees') }}" class="btn btn-primary">
+                                <a href="{{ route('admin.payrolls.getEmployees') }}" class="btn btn-primary">
                                     <i class="mdi mdi-cash-multiple"></i>
                                     Generate Payroll
                                 </a>
@@ -39,7 +39,7 @@
                                             <td>{{ \Carbon\Carbon::parse($payroll->latest_creation)->format('d M Y') }}</td>
                                             <td>
                                                 <x-system.btn-view class="p-0" :route="route(
-                                                    'employee.manage.payrolls.singleGroup.show',
+                                                    'admin.payrolls.singleGroup.show',
                                                     $payroll->entrence_reference,
                                                 )" text="View" />
                                             </td>

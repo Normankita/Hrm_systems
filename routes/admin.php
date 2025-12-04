@@ -214,12 +214,13 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
     ->name('admin.payrolls.')
     ->controller(AdminPayrollEmployeeController::class)
     ->group(function () {
+        Route::get('/employees', 'getEmployees')
+            ->name('getEmployees');
         Route::get('/', 'manageIndex')->name('index');
         Route::post('/generate-all', 'generateAll')->name('generateAll');
         Route::get('/{payroll}/edit', 'edit')->name('edit');
         Route::get('/{payroll}', 'show')
             ->name('show');
-        Route::get('/employees', 'getEmployees')->name('getEmployees');
         Route::put('/{payroll}', 'update')->name('update');
         Route::delete('/{payroll}', 'destroy')->name('destroy');
         Route::get('/single/group/{reference}', 'singleGroupShow')->name('singleGroup.show');

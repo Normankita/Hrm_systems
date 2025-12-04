@@ -46,7 +46,7 @@ Route::prefix('disbursements')
     });
 
 
-Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
+Route::middleware(['auth', 'HasCompanyProfile'])
     ->prefix('employee/manage/payrolls')
     ->name('employee.manage.payrolls.')
     ->controller(ApiEmployeePayrollController::class)

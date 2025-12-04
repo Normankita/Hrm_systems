@@ -4,7 +4,7 @@
     @can('view_payroll')
         <div class="row">
             <div class="col-12">
-                <x-back-button :route="route('employee.manage.payrolls.index')" />
+                <x-back-button :route="route('admin.payrolls.index')" />
             </div>
         </div>
         <div class="row">
@@ -46,7 +46,9 @@
                                             </td>
                                             <td>{{ $payroll->created_at->format('d M Y') }}</td>
                                             <td>
-                                                <x-system.btn-view :route="route('employee.manage.payrolls.show', $payroll)" text="View" />
+                                                <x-system.btn-view
+                                                    :route="route('admin.payrolls.show', $payroll)"
+                                                    text="View" />
                                             </td>
                                         </tr>
 

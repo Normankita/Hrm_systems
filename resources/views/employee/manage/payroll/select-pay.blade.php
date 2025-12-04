@@ -9,6 +9,11 @@
                         <span class="sr-only">Loading...</span>
                     </div>
                 </div>
+                <div v-if="loading" class="col-4">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
             </div>
             <div class="d-none" class="row" id="entry">
                 <div class="col-12" v-if="showLoader">
@@ -89,7 +94,8 @@
             data() {
                 return {
                     pageComplete: false,
-                    formSubmmitted: false
+                    formSubmmitted: false,
+                    loading: false
                 }
             },
             mounted() {
@@ -108,6 +114,7 @@
                 // Define any methods if needed
                 async submitForPayment() {
                     if (confirm('Confirm to disburse ')) {
+                        this.loading = true;
                         this.formSubmmitted = true;
                         const selected = handler1.getSelected();
                         const uri = "{{ route('employee.manage.payrolls.generateSelected') }}";
@@ -124,11 +131,13 @@
                                     this.formSubmmitted = false;
                                     alert(response.data.message);
                                 }
+                                this.loading = false;
                             })
                             .catch(error => {
                                 this.formSubmmitted = false;
                                 console.error('Error generating payroll:', error);
                                 alert('An error occurred while generating payroll.');
+                                this.loading = false;
                             });
                     }
                 }

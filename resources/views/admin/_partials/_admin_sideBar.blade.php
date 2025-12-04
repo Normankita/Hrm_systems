@@ -287,6 +287,37 @@
 
 
                 @php
+                    $isManagePayrolls = Route::is('admin.payrolls.*');
+                @endphp
+                <li class="has-sub {{ $isManagePayrolls ? 'active expland' : '' }}">
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                        data-target="#payroll-menu" aria-expanded="{{ $isManagePayrolls ? 'true' : 'false' }}"
+                        aria-controls="payroll-menu">
+                        <i class="mdi mdi-cash-register"></i>
+                        <span class="nav-text">Manage Payrolls</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="collapse {{ $isManagePayrolls ? 'show' : '' }}" id="payroll-menu"
+                        data-parent="#sidebar-menu">
+                        <div class="sub-menu">
+                            <li>
+                                <a class="sidenav-item-link"
+                                href="{{ route('admin.payrolls.getEmployees') }}">
+                                    <span class="nav-text">Select Employees</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="sidenav-item-link" href="{{ route('admin.payrolls.index') }}">
+                                    <span class="nav-text">View Payrolls</span>
+                                </a>
+                            </li>
+                        </div>
+
+                    </ul>
+                </li>
+
+
+                @php
                     $isManagePayments = Route::is('admin.payroll.employees.*');
                 @endphp
                 <li class="has-sub {{ $isManagePayments ? 'active expand' : '' }}">
@@ -302,29 +333,25 @@
                         data-parent="#sidebar-menu">
                         <div class="sub-menu">
                             <li>
-                                <a class="sidenav-item-link"
-                                    href="{{ route('admin.payroll.employees.index') }}">
+                                <a class="sidenav-item-link" href="{{ route('admin.payroll.employees.index') }}">
                                     <i class="mdi mdi-eye-outline mr-1"></i>
                                     <span class="nav-text">View All payrolls</span>
                                 </a>
                             </li>
                             <li>
-                                <a class="sidenav-item-link"
-                                    href="{{ route('admin.payroll.employees.pending') }}">
+                                <a class="sidenav-item-link" href="{{ route('admin.payroll.employees.pending') }}">
                                     <i class="mdi mdi-clock-outline mr-1"></i>
                                     <span class="nav-text">Pending payrolls</span>
                                 </a>
                             </li>
                             <li>
-                                <a class="sidenav-item-link"
-                                    href="{{ route('admin.payroll.employees.approved') }}">
+                                <a class="sidenav-item-link" href="{{ route('admin.payroll.employees.approved') }}">
                                     <i class="mdi mdi-check-circle-outline mr-1"></i>
                                     <span class="nav-text">Approved payrolls</span>
                                 </a>
                             </li>
                             <li>
-                                <a class="sidenav-item-link"
-                                    href="{{ route('admin.payroll.employees.rejected') }}">
+                                <a class="sidenav-item-link" href="{{ route('admin.payroll.employees.rejected') }}">
                                     <i class="mdi mdi-close-circle-outline mr-1"></i>
                                     <span class="nav-text">Rejected payrolls</span>
                                 </a>

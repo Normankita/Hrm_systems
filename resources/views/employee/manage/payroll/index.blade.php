@@ -11,16 +11,18 @@
                             @can('create_payroll')
                                 {{-- <form action="{{ route('employee.manage.payrolls.generateAll') }}" method="POST" class="mb-0"> --}}
                                 {{-- @csrf --}}
-                                <a href="{{ route('employee.manage.payrolls.getEmployees') }}" class="btn btn-primary">
-                                    <i class="mdi mdi-cash-multiple"></i>
-                                    Generate Payroll
+                                <a href="{{ route('employee.manage.payrolls.getEmployees') }}"
+                                    class="btn btn-primary">
+                                        <i class="mdi mdi-cash-multiple"></i>
+                                            Generate Payroll
                                 </a>
                                 {{-- </form> --}}
                             @endcan
                         </div>
 
                         <div class="table-responsive">
-                            <table class="dt-table table table-bordered table-hover align-middle text-nowrap table-sm">
+                            <table class="dt-table table table-bordered table-hover align-middle
+                             text-nowrap table-sm">
                                 <thead class="table-light text-dark">
                                     <tr>
                                         <th>#</th>

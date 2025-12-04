@@ -9,6 +9,11 @@
                         <span class="sr-only">Loading...</span>
                     </div>
                 </div>
+                <div v-if="loading" class="col-4">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
             </div>
             <div class="d-none" class="row" id="entry">
                 <div class="col-12" v-if="showLoader">
@@ -23,7 +28,6 @@
                 <div v-if="!showLoader" class="col-12">
                     <div class="card">
                         <div class="card-body">
-
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <h3 class="mb-0">Select for Payment</h3>
                                 <button type="button" v-on:click="submitForPayment" class="btn btn-primary">
@@ -89,7 +93,8 @@
             data() {
                 return {
                     pageComplete: false,
-                    formSubmmitted: false
+                    formSubmmitted: false,
+                    loading: false
                 }
             },
             mounted() {
@@ -108,10 +113,11 @@
                 // Define any methods if needed
                 async submitForPayment() {
                     if (confirm('Confirm to disburse ')) {
+                        this.loading = true;
                         this.formSubmmitted = true;
                         const selected = handler1.getSelected();
                         const uri = "{{ route('employee.manage.payrolls.generateSelected') }}";
-                        const redirectUrl = "{{ route('employee.manage.payrolls.index') }}";
+                        const redirectUrl = "{{ route('admin.payrolls.index') }}";
                         console.log(selected, uri);
                         await axios.post(uri, {
                                 selected_employees: selected
@@ -124,11 +130,13 @@
                                     this.formSubmmitted = false;
                                     alert(response.data.message);
                                 }
+                                this.loading = false;
                             })
                             .catch(error => {
                                 this.formSubmmitted = false;
                                 console.error('Error generating payroll:', error);
                                 alert('An error occurred while generating payroll.');
+                                this.loading = false;
                             });
                     }
                 }
