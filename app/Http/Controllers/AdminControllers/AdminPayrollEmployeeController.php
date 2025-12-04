@@ -39,9 +39,10 @@ class AdminPayrollEmployeeController extends Controller
      */
     public function pending()
     {
+        $backRoute = route('admin.payroll.employees.index');
         $payrolls = Payroll::where('status', 'pending')->get();
         return view('admin.payroll.payments.pending',
-         compact('payrolls'));
+         compact('payrolls', 'backRoute'));
     }
 
 
@@ -51,17 +52,19 @@ class AdminPayrollEmployeeController extends Controller
      */
     public function approved()
     {
+        $backRoute = route('admin.payroll.employees.index');
         $payrolls = Payroll::where('status', 'approved')->get();
         return view('admin.payroll.payments.approved',
-         compact('payrolls'));
+         compact('payrolls', 'backRoute'));
     }
 
     public function rejected()
     {
+        $backRoute = route('admin.payroll.employees.index');
         $payrolls = Payroll::where('status', 'rejected')->get();
         return view(
             'admin.payroll.payments.rejected',
-            compact('payrolls')
+            compact('payrolls', 'backRoute')
         );
     }
 
@@ -74,6 +77,7 @@ class AdminPayrollEmployeeController extends Controller
      */
     public function reject(Request $request, Payroll $payroll)
     {
+        $backRoute = route('admin.payroll.employees.index');
         $request->validate([
             'reason' => 'required|string|max:1000',
         ]);
@@ -84,7 +88,8 @@ class AdminPayrollEmployeeController extends Controller
         $payroll->update($data);
         $payroll->recordEvent('update', $data);
         return back()->with('success',
-         'Payroll rejected successfully.');
+         'Payroll rejected successfully.')
+            ->with('backRoute', $backRoute);
     }
 
 

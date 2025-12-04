@@ -1,5 +1,14 @@
-@props(['payrolls', 'title', 'backRoute' => null,
-'viewRoute' => 'employee.manage.payrolls.show'])
+@php
+    $defaultBackRoute = auth()->user()->hasRole('ADMIN')
+        ? route('admin.payroll.employees.index')
+        : route('employee.manage.payroll.employees.index');
+    $defaultViewRoute = auth()->user()->hasRole('ADMIN')
+        ? 'admin.payrolls.show'
+        : 'employee.manage.payrolls.show';
+@endphp
+
+@props(['payrolls', 'title', 'backRoute' => $defaultBackRoute,
+'viewRoute' => $defaultViewRoute])
 
 @can('view_payment')
     <div class="row">
@@ -23,6 +32,7 @@
                             @endif
                         @endif
                     </div>
+                    info@simbaworks.co.tz
                     <div class="table-responsive">
                         <span>Total Payrolls: {{ $payrolls->count() }}</span>
                         <table
