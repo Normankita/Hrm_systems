@@ -6,7 +6,7 @@
 @extends('layouts.system')
 
 @section('content')
-    <div class="row justify-content-center"  id="loader">
+    <div class="row justify-content-center" id="loader">
         <div class="spinner-border text-primary" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
@@ -40,7 +40,7 @@
                 </div>
             </div>
             <div v-if="!empSubmit && allowance_id" class="col-md-12 mb-4">
-                <div class="row mb-3"  v-if="selectedEmployees.length > 0">
+                <div class="row mb-3" v-if="selectedEmployees.length > 0">
                     <div class="col-md-3">
                         <label>Default Amount</label>
                         <input type="number" class="form-control" v-model="defaultAmount" v-on:input="applyDefaultAmount">
@@ -91,8 +91,8 @@
                     </div>
                 </div>
                 <div class="text-end mt-2">
-                    <button v-if="selectedEmployees.length > 0" class="btn btn-sm btn-primary" type="button" v-on:click="submitSelectedEmployees"
-                        :disabled="empSubmit">                      
+                    <button v-if="selectedEmployees.length > 0" class="btn btn-sm btn-primary" type="button"
+                        v-on:click="submitSelectedEmployees" :disabled="empSubmit">
                         Submit
                     </button>
                 </div>
@@ -120,10 +120,10 @@
                                             <td>{{ ++$key }}</td>
                                             <td>{{ $category->name }}</td>
                                             <td>
-                                                <x-system.btn-view :route="route(
-                                                    'admin.employee.allowances.groups.allowanceDetails',
-                                                    [$group->id, $category->id],
-                                                )" />
+                                                <x-system.btn-view :route="route('admin.employee.allowances.groups.allowanceDetails', [
+                                                    $group->id,
+                                                    $category->id,
+                                                ])" />
                                             </td>
                                         </tr>
                                     @endforeach
@@ -229,32 +229,33 @@
                         return;
                     }
 
-                    axios.post(`/api/groups/assign/allowance/to/group/${this.group.id}`, {
-                            user: this.user,
-                            employees: selected,
-                            allowance_id: this.allowance_id,
-                        })
-                        .then(res => {
-                            if (res.status == 200) {
-                                if (res.data.status === 'success') {
-                                    alert('Employee Added Successfully...');
-                                    location.reload();
-                                } else {
-                                    this.empSubmit = false;
-                                    this.error = "Failed to submit.";
-                                    alert(this.error);
-                                }
-                            } else {
-                                alert('bad request please try again');
-                            }
-                        })
-                        .catch(() => {
+                    let submitingAllowance = "{{ route('groups.assig.allowance.to.group', $group->id) }}"
+                    axios.post(submitingAllowance, {}
+                        user: this.user,
+                        employees: selected,
+                        allowance_id: this.allowance_id,
+                    })
+                .then(res => {
+                    if (res.status == 200) {
+                        if (res.data.status === 'success') {
+                            alert('Employee Added Successfully...');
+                            location.reload();
+                        } else {
                             this.empSubmit = false;
-                            this.error = "Error occurred. Try again.";
+                            this.error = "Failed to submit.";
                             alert(this.error);
-                        });
-                }
+                        }
+                    } else {
+                        alert('bad request please try again');
+                    }
+                })
+                .catch(() => {
+                    this.empSubmit = false;
+                    this.error = "Error occurred. Try again.";
+                    alert(this.error);
+                });
             }
+        }
         }).mount('#emps');
     </script>
 @endsection

@@ -230,8 +230,8 @@
                         alert("No employees selected.");
                         return;
                     }
-
-                    axios.post(`/api/groups/assign/allowance/to/group/${this.group.id}`, {
+                    let submitingAllowance = "{{ route('groups.assig.allowance.to.group', $group->id) }}"
+                    axios.post(submitingAllowance, {
                             user: this.user,
                             employees: selected,
                             allowance_id: this.allowance_id,

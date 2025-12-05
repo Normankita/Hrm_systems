@@ -22,7 +22,8 @@ Route::prefix('groups')
         Route::post('/add/employees/to/group/{id}', 'addMembersToGroup')
         ->name('add.employees.to.group');
         Route::post('/remove/employees/from/group/{id}', 'removeMembersFromGroup')->name('remove.employees.to.group');
-        Route::post('/assign/allowance/to/group/{id}', 'assignAllowanceToGroup')->name('assig.allowance.to.group');
+        Route::post('/assign/allowance/to/group/{id}', 'assignAllowanceToGroup')
+            ->name('assig.allowance.to.group');
     });
 
 
