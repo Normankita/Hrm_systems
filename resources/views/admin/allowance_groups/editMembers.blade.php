@@ -193,15 +193,18 @@
                 selectAll() {
                     this.employees.forEach(e => this.selectItem(e));
                 },
+
                 toggleAll(event) {
                     const checked = event.target.checked;
                     this.employees.forEach(e => e.selected = checked);
                 },
+
                 applyDefaultFrequency() {
                     this.employees.forEach(e => {
                         if (e.selected) e.frequency = this.defaultFrequency;
                     });
                 },
+
                 submitSelectedEmployees() {
                     this.empSubmit = true;
                     const selected = this.selectedOptions;
@@ -212,18 +215,21 @@
                         return;
                     }
 
-                    axios.post(
-                            `/api/groups/add/employees/to/group/${this.group.id}/allowance/${this.allowance.id}`, {
-                                user: this.user,
-                                employees: selected,
-                                effectiveFrom: this.effectiveFrom
-                            })
+                    let submittingRoute =
+                        "{{ route('groups.add.employees.to.group.allowance', [$group->id, $allowance->id]) }}";
+                    axios.post(submittingRoute, {
+                            user: this.user,
+                            employees: selected,
+                            effectiveFrom: this.effectiveFrom
+                        })
                         .then(res => {
                             console.log(res.data);
                             if (res.data.status === 'success') {
                                 console.log("I am the one ")
                                 this.empSubmit = false;
-                                redirectToGroup(`/employee/manage/allowances/groups/${this.group.id}/allowances/${this.allowance.id}`)
+                                let redirectUrl =
+                                    "{{ route('admin.employee.allowances.groups.allowanceDetails', [$group->id, $allowance->id]) }}";
+                                redirectToGroup(redirectUrl);
                             } else {
                                 this.empSubmit = false;
                                 this.error = "Failed to submit.";
@@ -234,8 +240,6 @@
                             this.error = "Error occurred. Try again.";
                         });
                 },
-
-
 
                 onSearch() {
                     const input = this.$refs.searchInput;
@@ -256,6 +260,7 @@
 
                     this.showDropdown = true;
                 },
+                
                 selectItem(item) {
                     this.selectedItem = "";
                     this.searchTerm = "";

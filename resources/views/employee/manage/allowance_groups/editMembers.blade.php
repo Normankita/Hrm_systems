@@ -211,9 +211,8 @@
                         alert("No employees selected.");
                         return;
                     }
-
-                    axios.post(
-                            `/api/groups/add/employees/to/group/${this.group.id}/allowance/${this.allowance.id}`, {
+                    let submittingRoute = "{{ route('groups.add.employees.to.group.allowance', [$group->id, $allowance->id]) }}";
+                    axios.post(submittingRoute, {
                                 user: this.user,
                                 employees: selected,
                                 effectiveFrom: this.effectiveFrom
@@ -223,7 +222,8 @@
                             if (res.data.status === 'success') {
                                 console.log("I am the one ")
                                 this.empSubmit = false;
-                                redirectToGroup(`/employee/manage/allowances/groups/${this.group.id}/allowances/${this.allowance.id}`)
+                                let redirectUrl = "{{ route('employee.manage.employee.allowances.groups.allowanceDetails', [$group->id, $allowance->id]) }}"
+                                redirectToGroup(redirectUrl)
                             } else {
                                 this.empSubmit = false;
                                 this.error = "Failed to submit.";

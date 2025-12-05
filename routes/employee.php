@@ -140,7 +140,8 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::get('/assign-allowance/{group}', 'getGroupMembersToAssignAllowance')->name('assign');
 
         // group allawances details routes
-        Route::get('/{group}/allowances/{allowance}', 'getGroupAllowanceDetails')->name('allowanceDetails');
+        Route::get('/{group}/allowances/{allowance}', 'getGroupAllowanceDetails')
+            ->name('allowanceDetails');
         Route::get('/{group}/categories/{category}/edit/members', 'editMembers')->name('editMengers');
     });
 

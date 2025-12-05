@@ -130,7 +130,7 @@
                         user: this.user,
                         employees: this.selectedEmployees
                     };
-                    const route = `/api/groups/add/employees/to/group/${this.group.id}`;
+                    let route = "{{ route('groups.add.employees.to.group', $group->id) }}";
                     axios.post(route, embeded)
                         .then(response => {
                             const data = response.data;
@@ -146,7 +146,7 @@
                 },
                 deleteEmployeeFromGroup() {
                     let dt = handler1.getSelected();
-                    const route = `/api/groups/remove/employees/from/group/${this.group.id}`;
+                    const route = "{{ route('groups.remove.employees.to.group', $group->id) }}";
                     axios.post(route, {
                             employees: handler1.getSelected(),
                             user: this.user
