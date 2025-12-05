@@ -188,9 +188,11 @@
                         @foreach ($employee->allowances as $allowance)
                             <x-system.modal id="editAllowanceModal-{{ $allowance->id }}"
                                 form="editAllowanceForm-{{ $allowance->id }}"
-                                title="Edit Allowance - {{ $allowance->allowance->name ?? '' }}" size="md" :inside="true">
+                                title="Edit Allowance - {{ $allowance->name ?? '' }}" size="md"
+                                    :inside="true">
                                 <form
-                                    action="{{ route('employee.manage.employee.allowances.update', [$employee->id, $allowance->id]) }}"
+                                    action="{{ route('employee.manage.employee.allowances.update',
+                                     [$employee->id, $allowance->id]) }}"
                                     method="POST" id="editAllowanceForm-{{ $allowance->id }}">
                                     @csrf
                                     @method('PUT')
@@ -205,7 +207,8 @@
                                         <label for="frequency" class="form-label">Frequency</label>
                                         <select name="frequency_id" class="form-control" required>
                                             @foreach ($frequencies as $frequency)
-                                                <option value="{{ $frequency->id }}" @selected(old('frequency_id', $allowance->pivot->allowance_frequency_id) == $frequency->id)>
+                                                <option value="{{ $frequency->id }}"
+                                                    @selected(old('frequency_id', $allowance->pivot->allowance_frequency_id) == $frequency->id)>
                                                     {{ $frequency->name }}
                                                 </option>
                                             @endforeach
@@ -216,7 +219,6 @@
                                         <button type="submit" class="btn btn-primary">Update Allowance</button>
                                     </div>
                                 </form>
-
                             </x-system.modal>
                         @endforeach
                     @endcan

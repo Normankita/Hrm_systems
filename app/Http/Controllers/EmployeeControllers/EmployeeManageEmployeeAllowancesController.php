@@ -10,6 +10,7 @@ use App\Models\Employee;
 use App\Models\GroupCategoryEmployeeAllowance;
 use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 class EmployeeManageEmployeeAllowancesController extends Controller
@@ -106,16 +107,20 @@ class EmployeeManageEmployeeAllowancesController extends Controller
 
     public function update(Request $request, $employeeId, $allowanceId)
     {
-        $request->validate([
+        $rules = [
             'amount' => ['required', 'numeric', 'min:0'],
-            'frequency' => ['required', Rule::in(['monthly', 'quarterly', 'yearly', 'one-time'])],
-        ]);
+            'frequency_id' => ['required'],
+        ];
 
+        $validate = Validator::make($request->all(), $rules);
+        if ($validate->fails()) {
+            return redirect()->back()->withErrors($validate);
+        }
         $employee = Employee::findOrFail($employeeId);
 
         $employee->allowances()->updateExistingPivot($allowanceId, [
             'amount' => $request->amount,
-            'frequency' => $request->frequency,
+            'allowance_frequency_id' => $request->frequency_id,
             'updated_at' => now(),
         ]);
         $employee->recordEvent('update', $request->all());

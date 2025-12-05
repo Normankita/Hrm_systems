@@ -113,6 +113,7 @@
                                 </div>
                             @endhasanyrole
                         @endcan
+
                         {{-- PayGrade Update (PAYROLL_MANAGER) --}}
                         @can('edit_paygrade')
                             @hasrole('EMPLOYEE')
@@ -148,7 +149,9 @@
                         @canany(['edit_allowances', 'view_allowances', 'create_allowances'])
                             @hasrole('EMPLOYEE')
                                 <div class="col-md-6 mt-2">
-                                    <x-system.btn-view class="btn btn-block btn-primary btn-custom me-2" :route="route('employee.manage.employee.allowances.index', $employee)"
+                                    <x-system.btn-view
+                                        textColor='text-white'
+                                        class="btn btn-block btn-primary btn-custom me-2" :route="route('employee.manage.employee.allowances.index', $employee)"
                                         text="Manage Allowances" />
                                 </div>
                             @endhasrole
@@ -159,7 +162,9 @@
                         @canany(['edit_deductions', 'view_deductions', 'create_deductions'])
                             @hasrole('EMPLOYEE')
                                 <div class="col-md-6 mt-2">
-                                    <x-system.btn-view class="btn btn-block btn-primary btn-custom me-2" :route="route('employee.manage.deductions.index', $employee)"
+                                    <x-system.btn-view
+                                        textColor='text-white'
+                                        class="btn btn-block btn-primary btn-custom me-2" :route="route('employee.manage.deductions.index', $employee)"
                                         text="Manage Deductions" />
                                 </div>
                             @endhasrole

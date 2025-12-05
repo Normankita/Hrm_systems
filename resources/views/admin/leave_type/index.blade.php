@@ -15,7 +15,8 @@
                                 <x-system.modal-button class="btn btn-primary mb-3" id="createLeaveType" text="Create Leave Type" />
                                 <x-system.modal size="modal-lg" id="createLeaveType" title="Create Leave Type"
                                     form="createLeaveTypeForm">
-                                    <form id="createLeaveTypeForm" action="{{ route('admin.leave.type.store') }}"
+                                    <form id="createLeaveTypeForm"
+                                    action="{{ route('admin.leave.type.store') }}"
                                         method="POST">
                                         @csrf
                                         <div class="modal-body">
@@ -23,6 +24,9 @@
                                                 <label for="name">Leave Type Name</label>
                                                 <input type="text" value="{{ old('name') }}" class="form-control"
                                                     name="name" id="name" required>
+                                                @error('name')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
                                             </div>
                                             <div class="form-group">
                                                 <label for="deducts_from_annual_leave">Is Annual Deducted</label>
@@ -31,10 +35,16 @@
                                                     <option value="1">Yes</option>
                                                     <option value="0">No</option>
                                                 </select>
+                                                @error('deducts_from_annual_leave')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
                                             </div>
                                             <div class="form-group">
                                                 <label for="description">Leave Type description</label>
                                                 <textarea class="form-control" name="description">{{ old('description') }}</textarea>
+                                                @error('description')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
                                             </div>
                                             <div class="form-group">
                                                 <label for="required_approval">Require Approval</label>
@@ -42,10 +52,16 @@
                                                     <option value="1">Yes</option>
                                                     <option value="0">No</option>
                                                 </select>
+                                                @error('required_approval')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
                                             </div>
                                             <div class="form-group">
                                                 <label for="eligibility_criteria">Eligibility Criteria</label>
                                                 <textarea class="form-control" name="eligibility_criteria">{{ old('eligibility_criteria') }}</textarea>
+                                                @error('eligibility_criteria')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
                                             </div>
                                             <div class="form-group" v-if="showCompensated">
                                                 <label for="is_compensated">Is Compensated</label>
@@ -53,6 +69,9 @@
                                                     <option value="1">Yes</option>
                                                     <option value="0">No</option>
                                                 </select>
+                                                @error('is_compensated')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
                                             </div>
                                         </div>
                                     </form>

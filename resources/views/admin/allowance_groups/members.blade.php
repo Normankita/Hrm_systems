@@ -114,6 +114,15 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
+
+    <script>
+        window.addEventListener("pageshow", function(event) {
+            if (event.persisted) {
+                console.log("User returned to this page using back/forward.");
+            }
+        });
+    </script>
+
     <script>
         // receive employee data from backend
         const employees = {!! json_encode($employees) !!};
@@ -183,16 +192,17 @@
                         return;
                     }
 
-                    axios.post(`/api/groups/add/employees/to/group/${this.group.id}`, {
+                    let addingRoute = "{{ route('groups.add.employees.to.group', $group->id) }}";
+                    axios.post(addingRoute, {
                             user: this.user,
                             employees: selected
                         })
                         .then(res => {
-                            console.log(res.data);
                             if (res.data.status === 'success') {
-                                console.log("I am the one ")
-                                redirectToGroup("/admin/allowances/groups/" + this.group.id + "/edit")
-
+                                this.empSubmit = false;
+                                this.selectedOptions = [];
+                                   let redirectUrl = "{{  route('admin.employee.allowances.groups.edit', $group->id) }}";
+                                redirectToGroup(redirectUrl)
                             } else {
                                 this.empSubmit = false;
                                 this.error = "Failed to submit.";

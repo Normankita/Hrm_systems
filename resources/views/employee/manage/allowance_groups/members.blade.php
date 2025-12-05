@@ -182,16 +182,18 @@
                         alert("No employees selected.");
                         return;
                     }
-
-                    axios.post(`/api/groups/add/employees/to/group/${this.group.id}`, {
+                    let addingRoute = "{{ route('groups.add.employees.to.group', $group->id) }}";
+                    axios.post(addingRoute, {
                             user: this.user,
                             employees: selected
                         })
                         .then(res => {
                             console.log(res.data);
                             if (res.data.status === 'success') {
-                                console.log("I am the one ")
-                                redirectToGroup("/employee/manage/allowances/groups/" + this.group.id + "/edit")
+                                this.selectedOptions = [];
+                                this.empSubmit = false;
+                                let redirectUrl = "{{  route('employee.manage.employee.allowances.groups.edit', $group->id) }}";
+                                redirectToGroup(redirectUrl)
 
                             } else {
                                 this.empSubmit = false;

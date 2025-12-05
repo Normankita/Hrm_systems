@@ -27,7 +27,8 @@ class EmployeeProfileController extends Controller
         $employee = Auth::user()->employee;
 
         $attachments = $employee->attachments()->get();
-        return view('employee.profile.index', compact('employee', 'attachments'));
+        return view('employee.profile.index',
+         compact('employee', 'attachments'));
     }
 
     public function edit($id)
@@ -120,6 +121,12 @@ class EmployeeProfileController extends Controller
         $outcome = $this->employeeService->updateProfilePhoto($request, $id);
 
         if ($outcome) {
+            if ($outcome['status'] === 'error') {
+                return redirect()->back()->withErrors([
+                    'message' => $outcome['message'],
+                    'status' => 'error',
+                ]);
+            }
             return redirect()->route('employees.profile.index', $outcome['employee']->id)
                 ->with('success', __('Passport photo updated successfully'));
         }

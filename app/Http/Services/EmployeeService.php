@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Throwable;
 
@@ -153,13 +154,21 @@ class EmployeeService
 
     public function UpdateProfilePhoto(Request $request, $id)
     {
-        $request->validate([
+        $rules = [
             'profile_picture' => [
                 'required',
                 'mimes:jpeg,png,jpg',
-            ],
-        ]);
+            ]
+        ];
 
+        // start validating the details as follows
+        $validate = Validator::make($request->all(), $rules);
+        if ($validate->fails()) {
+            return [
+                'status' => 'error',
+                'message' => $validate->errors()->first()
+            ];
+        }
         $employee = EmployeeTrait::getEmployeeById($id);
         if (!$employee) {
             return redirect()->back()->with([
@@ -178,11 +187,15 @@ class EmployeeService
             $path = $photo->storeAs('attachments/employees/profile_photos', $filename, 'public');
 
             // delete the existing profile if it exists.
-            $this->deleteFile($employee->profile_picture);
+            if ($employee->profile_picture) {
+                $this->deleteFile($employee->profile_picture);
+            }
 
             // Update the employee's profile picture.
             $employee->update(['profile_picture' => $path]);
-            $employee->recordEvent('update', ['details' => 'profile picture update', 'target' => $employee->id]);
+            $employee->recordEvent('update', [
+                'details' => 'profile picture update',
+                'target' => $employee->id]);
             $this->handlePassportToProfilePhotoUpload($request);
             return [
                 'status' => 'success',
@@ -247,7 +260,7 @@ class EmployeeService
                         ];
                     }
                 }
-                
+
                 // start creating user first
                 $gender = $row[1] == 0 ? 'female' : 'male';
                 $marital_status = $row[6] == 1 ? 'married' : 'single';
