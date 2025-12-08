@@ -230,7 +230,7 @@
                     }
 
                     let submitingAllowance = "{{ route('groups.assig.allowance.to.group', $group->id) }}"
-                    axios.post(submitingAllowance, {}
+                    axios.post(submitingAllowance, {
                         user: this.user,
                         employees: selected,
                         allowance_id: this.allowance_id,
