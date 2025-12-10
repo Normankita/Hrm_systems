@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\ApiAllowanceGroupMembersController;
 use App\Http\Controllers\Api\ApiAllowanceGroupsController;
 use App\Http\Controllers\Api\ApiAttendanceController;
+use App\Http\Controllers\Api\ApiAttendanceSessionController;
 use App\Http\Controllers\Api\ApiDisbursementsController;
 use App\Http\Controllers\Api\ApiEmployeePayrollController;
 use App\Http\Controllers\Api\ApiEmployeesController;
@@ -112,5 +113,15 @@ Route::middleware(['auth'])->group(function () {
         'fetchEmployees'
     ])
         ->name('fetch.employees');
+});
+
+
+Route::middleware([])->group(function () {
+    // Additional authenticated API routes can be added here
+    Route::get('/update/shift', [
+        ApiAttendanceSessionController::class,
+        'updateEmployeeSession'
+    ])
+        ->name('update.employee.shift');
 });
 

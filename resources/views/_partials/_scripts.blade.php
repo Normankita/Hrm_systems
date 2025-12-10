@@ -45,7 +45,6 @@
      });
  </script>
 
-
  <script src="{{ asset('bootstrap5.1.1/plugins/jquery/jquery.min.js') }}"></script>
  <script src="{{ asset('bootstrap5.1.1/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
  <script src="{{ asset('bootstrap5.1.1/plugins/simplebar/simplebar.min.js') }}"></script>

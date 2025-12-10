@@ -426,4 +426,9 @@ class Employee extends Model
             ->first();
     }
 
+    public function oldEmployeeShifts()
+    {
+        return $this->hasMany(OldEmployeeShift::class, 'employee_id');
+    }
+
 }

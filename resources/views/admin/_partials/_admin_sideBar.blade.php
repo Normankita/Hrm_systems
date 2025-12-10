@@ -223,6 +223,12 @@
                                                 <span class="nav-text">Manage Session</span>
                                             </a>
                                         </li>
+                                          <li>
+                                            <a class="sidenav-item-link"
+                                                href="{{ route('admin.attendances.sessions.get.employees.shift') }}">
+                                                <span class="nav-text">Employee Shift</span>
+                                            </a>
+                                        </li>
                                         <li>
                                             <a class="sidenav-item-link"
                                                 href="{{ route('admin.attendances.sessions.get.dashboard') }}">

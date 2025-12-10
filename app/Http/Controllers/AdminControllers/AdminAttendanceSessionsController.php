@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AdminControllers;
 use App\Http\Controllers\Controller;
 use App\Models\AttendanceRecord;
 use App\Models\AttendanceSession;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -46,8 +47,8 @@ class AdminAttendanceSessionsController extends Controller
         $validate = Validator::make($request->all(), $rules);
         if ($validate->fails()) {
             return redirect()->back()
-            ->with('error', 'Fail to create session')
-            ->withErrors($validate)->withInput();
+                ->with('error', 'Fail to create session')
+                ->withErrors($validate)->withInput();
         }
 
         $session = AttendanceSession::create([
@@ -58,8 +59,10 @@ class AdminAttendanceSessionsController extends Controller
             'is_active' => true, // Default to active
         ]);
         if (!$session) {
-            return redirect()->back()->with('error',
-             'Failed to create session');
+            return redirect()->back()->with(
+                'error',
+                'Failed to create session'
+            );
         }
         return redirect()->back()->with('success', 'Session created successfully');
     }
@@ -97,8 +100,8 @@ class AdminAttendanceSessionsController extends Controller
         $validate = Validator::make($request->all(), $rules);
         if ($validate->fails()) {
             return redirect()->back()
-            ->with('error', 'Validation failed')
-            ->withErrors($validate)->withInput();
+                ->with('error', 'Validation failed')
+                ->withErrors($validate)->withInput();
         }
         $session->update([
             'session_type' => $request->type,
@@ -112,12 +115,36 @@ class AdminAttendanceSessionsController extends Controller
 
     public function getSessionDashboard()
     {
-        $attendanceRecords = AttendanceRecord::with('employee',
-         'attendanceSession')
+        $attendanceRecords = AttendanceRecord::with(
+            'employee',
+            'attendanceSession'
+        )
             ->orderBy('date', 'desc')
             ->get();
         return view('admin.attendance.sessions.dashboard', [
             'attendanceRecords' => $attendanceRecords
+        ]);
+    }
+
+    public function getEmployeesShifts()
+    {
+        // fetch employees and their session records
+        $employees = Employee::with('attendanceSession')
+            ->get();
+        // fetch to selection shifts shifts
+        $shifts = AttendanceSession::where('company_id', auth()->user()->company_id)
+            ->get();
+        $employees = $employees->map(function($employee) use ($shifts) {
+            return [
+                'empId' => $employee->id,
+                'full_name' => $employee->full_name,
+                'sessionId' => $employee->attendanceSession->id,
+                'session_type' => $employee->attendanceSession->session_type
+            ];
+        });
+        return view('admin.attendance.sessions.employeesShifts', [
+            'employees' => $employees,
+            'shifts' => $shifts
         ]);
     }
 }

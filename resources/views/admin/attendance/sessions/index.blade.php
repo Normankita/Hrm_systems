@@ -15,7 +15,7 @@
 
                         <!-- Table -->
                         <div class="table-responsive">
-                            <table class="table dt-table table-hover table-bordered align-middle">
+                            <table class="table dt-table table-hover table-sm table-bordered align-middle">
                                 <thead class="table-light">
                                     <tr>
                                         <th scope="col">#</th>
@@ -38,7 +38,7 @@
                                                     {{ $session->is_active ? 'Active' : 'Inactive' }}
                                                 </span></td>
                                             <td class="text-center">
-                                                <x-system.modal-button class="btn btn-sm btn-primary" :id="'session-' . $session->id"
+                                                <x-system.modal-button class="btn btn-sm btn-primary p-0 px-1" :id="'session-' . $session->id"
                                                     text="Edit" />
                                             </td>
                                         </tr>

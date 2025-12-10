@@ -157,6 +157,8 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
     ->controller(AdminAttendanceSessionsController::class)
     ->name('admin.attendances.sessions.')
     ->group(function () {
+        Route::get('/employees/shifts', 'getEmployeesShifts')
+            ->name('get.employees.shift');
         Route::get('/', 'index')->name('index')
             ->middleware('HasCompanyProfile');
         Route::post('/store', 'store')->name('store')
