@@ -72,7 +72,7 @@ trait AttendanceTrait
                     }
                 ) : null
             ],
-            'status' => 'required|in:present,absent,late,leave',
+            // 'status' => 'required|in:present,absent,late,leave',
             'remarks' => 'nullable|string|max:255',
         ], $message);
     }
@@ -165,7 +165,10 @@ trait AttendanceTrait
     {
         $employeeId = $employeeId ?? auth()->user()->employee->id;
         $inTime = self::employeeInTime($employeeId);
-        $comparingTime = $comparingTime ?? now();
+                $comparingTime = $comparingTime ?? now();
+
+        $inTime = Carbon::parse($inTime);
+        $comparingTime = Carbon::parse($comparingTime);
         return $comparingTime->greaterThan($inTime);
     }
 
@@ -224,6 +227,25 @@ trait AttendanceTrait
     }
 
 
+    public static function getStateAndTime($employeeId, $comparingTime = null)
+    {
+        $EmpInTime = self::employeeInTime($employeeId);
+        if (!$comparingTime || empty($comparingTime)) {
+            $time = $EmpInTime;
+            $state = 'present';
+        } else {
+            $isLate = self::isLate($employeeId, $comparingTime);
+            if ($isLate) {
+                $state = 'late';
+            } else {
+                $state = 'present';
+            }
+            $time = $comparingTime;
+        }
+        return ['state' => $state, 'time' => $time];
+    }
+
+
 
     public static function updateAttendance($attendanceId, $data)
     {
@@ -244,12 +266,15 @@ trait AttendanceTrait
             $data['check_in_time'] = null;
             $data['check_out_time'] = null;
         } else {
-            if (empty($data['check_in']) || is_null($data['check_in'])) {
+            if (empty($data['check_in_time']) || is_null($data['check_in_time'])) {
                 $data['check_in_time'] = now()->format('H:i:s');
             }
         }
         $attendance->update($data);
-        return response()->json(['success' => 'Attendance record updated successfully'], 200);
+        return response()->json(
+            ['success' => 'Attendance record updated successfully'],
+            200
+        );
     }
 
 
@@ -268,7 +293,7 @@ trait AttendanceTrait
         DB::beginTransaction();
         try {
             // checking if the date is already closed
-            $attendance = ClosedDay::whereDate('closed_date', 'like',  $date."%")
+            $attendance = ClosedDay::whereDate('closed_date', 'like', $date . "%")
                 ->first();
             if ($attendance) {
                 // change status to true

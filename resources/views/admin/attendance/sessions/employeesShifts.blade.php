@@ -55,15 +55,20 @@
                             <h5 class="modal-title" id="exampleModalFormTitle">
                                 Edit Shift For: <span v-if="selectedEmployee">@{{ selectedEmployee.full_name }}</span>
                             </h5>
-                            <div>
-                                <p><span v-if="selectedEmployee"><b>Currently: @{{ selectedEmployee.session_type }}</b></span></p>
-                            </div>
-                            <button type="button" v-on:click="closeModal" class="close" data-dismiss="modal" aria-label="Close">
+                            <button type="button" v-on:click="closeModal" class="close" data-dismiss="modal"
+                                aria-label="Close">
                                 <span aria-hidden="true">×</span>
                             </button>
                         </div>
 
                         <div class="modal-body" v-if="selectedEmployee">
+                            <div>
+                                <p>
+                                    <span v-if="selectedEmployee"><b>Currently: @{{ selectedEmployee.session_type }}</b></span>
+                                </p>
+                                <p>Shift In Time: @{{ employeeShiftDetails.start_time }}</p>
+                                <p>Shift Out Time: @{{ employeeShiftDetails.end_time }}</p>
+                            </div>
                             <div class="form-group">
                                 <label>Current Shift</label>
                                 <input type="text" class="form-control" :value="selectedEmployee.session_type" disabled>
@@ -73,7 +78,7 @@
                                 <label>New Shift</label>
                                 <select class="form-control" v-model="newShift">
                                     <option v-for="shift in shifts" :value="shift.id">
-                                        @{{ shift.session_type }}
+                                        @{{ shift.session_type }} == @{{ shift.start_time }} - @{{ shift.end_time }}
                                 </select>
                             </div>
                         </div>
@@ -102,12 +107,15 @@
                     employees: @json($employees),
                     selectedEmployee: null,
                     newShift: null,
-                    authUserId: {{ auth()->user()->id }}
+                    authUserId: {{ auth()->user()->id }},
+                    employeeShiftDetails: null,
                 }
             },
             methods: {
                 editShift(index) {
                     this.selectedEmployee = this.employees[index]; // store selected employee
+                    this.employeeShiftDetails = this.shifts.find(shift => shift.id == this.selectedEmployee?.sessionId) || {};
+                    console.log(this.employeeShiftDetails);
                     $('#edit-shift').modal('show'); // show modal
                 },
                 submitEdit() {
@@ -128,6 +136,7 @@
                         const updatedShift = this.shifts.find(shift => shift.id == shift_id);
                         // update the local data
                         this.selectedEmployee.session_type = updatedShift.session_type;
+                        this.selectedEmployee.sessionId = updatedShift.id;
                         this.newShift = null;
                         this.closeModal();
                     }).catch(error => {

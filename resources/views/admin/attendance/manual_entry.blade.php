@@ -60,7 +60,7 @@
                                             </div>
 
                                         </div>
-                                        <div v-if="type == 'check_in'" class="mb-3">
+                                        {{-- <div v-if="type == 'check_in'" class="mb-3">
                                             <label for="state form-label">State</label>
                                             <select v-model="state" class="form-control" id="">
                                                 <option value="present">Present</option>
@@ -68,7 +68,7 @@
                                                 <option v-if="!type && !time" value="absent">Absent</option>
                                                 <option v-if="!type && !time" value="leave">Leave</option>
                                             </select>
-                                        </div>
+                                        </div> --}}
                                         <table class="table table table-responsive dt-table">
                                             <label class="p-2" for="allSelector">Select All</label>
                                             <input type="checkbox" id="all-checker">
@@ -102,68 +102,6 @@
                                 </div>
                             </x-system.modal>
                         </div>
-                        {{-- <form id="manualEntryForm" method="POST" action="{{ route('admin.attendances.manual.entry.store') }}">
-                    @csrf
-                    <div class="row mb-3">
-                        <div class="col-md-4">
-                            <label for="employee_id" class="form-label">Employee</label>
-                            @livewire('employee-search')
-                        </div>
-                        <div class="col-md-4">
-                            <label for="date" class="form-label">Date</label>
-                            <input readonly name="date" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}"
-                                type="date" class="form-control" id="date">
-                            @error('date')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="col-md-4">
-                            <label for="status" class="form-label">Status</label>
-                            <select name="status" class="form-select" id="status">
-                                <option value="present">Present</option>
-                                <option value="absent">Absent</option>
-                                <option value="leave">Leave</option>
-                                <option value="late">Late</option>
-                            </select>
-                            @error('status')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <!-- Time Inputs -->
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="check_in" class="form-label">Check In</label>
-                            <input name="check_in" type="time" class="form-control" id="check_in">
-                            @error('check_in')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="col-md-6">
-                            <label for="check_out" class="form-label">Check Out</label>
-                            <input name="check_out" type="time" class="form-control" id="check_out">
-                            @error('check_out')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <!-- Notes -->
-                    <div class="mb-3">
-                        <label for="notes" class="form-label">Notes</label>
-                        <textarea name="remarks" class="form-control" id="notes" rows="2"></textarea>
-                        @error('remarks')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <!-- Actions -->
-                    <div class="text-end">
-                        <button type="reset" class="btn btn-sm btn-secondary">Reset</button>
-                        <button type="submit" class="btn btn-sm btn-primary">Save Entry</button>
-                    </div>
-                </form> --}}
                     </div>
                 </div>
 
@@ -239,7 +177,7 @@
                             <div class="mb-3">
                                 <label for="check_in" class="form-label">Check In</label>
                                 <input name="check_in" type="time" class="form-control" id="check_in"
-                                    value="{{ $attendance->check_in_time }}">
+                                    value="{{ \Carbon\Carbon::parse($attendance->check_in_time)->format('H:i') }}">
                                 @error('check_in')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -247,7 +185,7 @@
                             <div class="mb-3">
                                 <label for="check_out" class="form-label">Check Out</label>
                                 <input name="check_out" type="time" class="form-control" id="check_out"
-                                    value="{{ $attendance->check_out_time }}">
+                                    value="{{ \Carbon\Carbon::parse($attendance->check_out_time)->format('H:i') }}">
                                 @error('check_out')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -295,8 +233,8 @@
             data() {
                 return {
                     loading: false,
-                    type: '', // Bind to the check-in time input
-                    time: '',
+                    type: null, // Bind to the check-in time input
+                    time: null,
                     state: 'present',
                 }
             },
@@ -329,7 +267,7 @@
                         employees_ids: employeeIds,
                         time: this.time,
                         type: this.type,
-                        state: this.state // Use the Vue data property for state
+                        state: null // Use the Vue data property for state
                     };
                     this.loading = true;
                     axios.post(storeUri, requestData, {

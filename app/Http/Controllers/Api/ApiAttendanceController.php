@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Services\DailyAttendanceService;
 use App\Http\Utils\Traits\AttendanceTrait;
+use App\Models\Employee;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,8 +26,7 @@ class ApiAttendanceController extends Controller
     {
         $rules = [
             'employees_ids' => 'required|array',
-            'type' => 'sometimes|in:check_in,check_out',
-            'state' => 'required|in:present,absent,late,leave',
+            'type' => 'sometimes|in:check_in,check_out'
         ];
         // validate icoming data first
         $validate = Validator::make($request->all(), $rules);
@@ -54,13 +54,26 @@ class ApiAttendanceController extends Controller
         DB::beginTransaction();
         try {
             foreach ($request->employees_ids as $employeeId) {
+                if ($trueType == 'check_in_time') {
+                    // fund the employee and know if he's late or not in this time
+                    $response = self::getStateAndTime($employeeId, $time);
+                    $determinedState = $response['state'];
+                    $determinedTime = $response['time'];
+                } else {
+                    if (!$time || empty($time)) {
+                        $determinedTime = self::outTime($employeeId);
+                    } else {
+                        $determinedTime = $time;
+                    }
+                    $determinedState = null;
+                }
+
                 $reqDetails = [];
                 $reqDetails['employee_id'] = $employeeId;
                 $reqDetails['type'] = $type;
-                $reqDetails[$trueType] = $time ??
-                    ($request->state == 'present' ? null : null);
+                $reqDetails[$trueType] = $determinedTime;
                 $reqDetails['date'] = $request->date ?? now()->format('Y-m-d');
-                $reqDetails['status'] = $request->state ?? 'present';
+                $reqDetails['status'] = $determinedState;
                 $reqDetails['remarks'] = $request->remarks ?? '';
 
                 $reqDetails = (object) $reqDetails;
@@ -104,15 +117,17 @@ class ApiAttendanceController extends Controller
             'date' => 'required'
         ];
         $validate = Validator::make($request->all(), $rules);
-        if($validate->fails()) {
+        if ($validate->fails()) {
             return response()->json([
-                'error' => 'bad parameter given'  
-            ],  401);
+                'error' => 'bad parameter given'
+            ], 401);
         }
         $user = User::find($request->input('id'));
         $date = $request->input('date');
-        $response = AttendanceTrait::closeAttendanceForTheDay($date,
-            $user->company->id);
+        $response = AttendanceTrait::closeAttendanceForTheDay(
+            $date,
+            $user->company->id
+        );
         if ($response['status'] == 'fail') {
             return response()->json([
                 'error' => $response['message'],
