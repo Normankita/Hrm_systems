@@ -30,7 +30,7 @@ class PayslipPdfService
         // );
 
     }
-    
+
     public function generate(Payroll $payroll): string
     {
 
@@ -43,7 +43,8 @@ class PayslipPdfService
         ];
         $filename = $payroll->employee->full_name . '_' . $payroll->period;
         // This now returns the storage path directly
-        return PdfTrait::generatePdf('pdfs.payslip', $filename, $data, store: true);
+        return PdfTrait::generatePdf('pdfs.payslip',
+         $filename, $data, store: true);
 
     }
 }

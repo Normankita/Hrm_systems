@@ -85,7 +85,7 @@
                                                 auth()->user()->hasPermissionTo('reject_payment'))
                                                 @if ($payroll->status !== 'approved' && $payroll->status !== 'rejected')
                                                     <x-system.modal-button
-                                                        class="btn btn-outline-danger p-1 btn-sm mdi mdi-close"
+                                                        class="btn btn-outline-danger p-0 px-1 btn-sm mdi mdi-close"
                                                         id="rejectPayroll{{ $payroll->id }}" text="Reject" textColor="" />
                                                 @endif
                                             @endif

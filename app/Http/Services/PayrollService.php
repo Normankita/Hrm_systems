@@ -65,9 +65,9 @@ class PayrollService
             }
 
             // Statutory deductions
-            $paye = $basic * ($contributions['PAYE'] ?? 0) / 100;
             $nssf = $basic * ($contributions['NSSF'] ?? 0) / 100;
             $psssf = $basic * ($contributions['PSSSF'] ?? 0) / 100;
+            $paye = ($basic - $nssf - $psssf) * ($contributions['PAYE'] ?? 0) / 100;
             $sdl = $basic * ($contributions['SDL'] ?? 0) / 100;
             $wcf = $basic * ($contributions['WCF'] ?? 0) / 100;
 
@@ -133,7 +133,7 @@ class PayrollService
                 DB::rollBack();
                 return [
                     'status' => 'error',
-                    'message' => 'Failed to generate payroll for employee : '. $employee->full_name
+                    'message' => 'Failed to generate payroll for employee : ' . $employee->full_name
                 ];
             }
         }
