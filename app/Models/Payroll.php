@@ -4,14 +4,16 @@ namespace App\Models;
 
 use App\Http\Utils\Traits\HasDateFilter;
 use App\Http\Utils\Traits\HasEvents;
+use App\Http\Utils\Traits\onBootTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
 class Payroll extends Model
 {
-    use HasDateFilter, HasEvents;
+    use HasDateFilter, HasEvents, onBootTrait;
     protected $fillable = [
+        'company_id',
         'employee_id',
         'pay_grade_id',
         'payroll_date',
