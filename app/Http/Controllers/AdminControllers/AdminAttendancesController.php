@@ -101,33 +101,58 @@ class AdminAttendancesController extends Controller
      * returns the manual entry page
      * @return \Illuminate\Contracts\View\View
      */
-    public function manualEntryPage()
-    {
-        // selecting employees for attendance
-        $whoAttendToday = Employee::whoAttendToday();
-        $whoCheckOutToday = Employee::whoCheckoutToday();
-        $whoCheckOutTodayIds = $whoCheckOutToday->pluck('id');
-        $forCheckout = Employee::whoAttendToday()
-            ->where('check_out_time', null);
-        $employees = Employee::where('state', 'active')
-            ->get()
-            ->map(function ($employee) use ($whoAttendToday, $whoCheckOutTodayIds) {
-                if ($whoCheckOutTodayIds->contains($employee->id)) {
-                    return null;
-                }
-                $employee->intend = !$whoAttendToday->contains($employee) ? 'checkIn' : 'checkOut';
-                return $employee;
-            })->filter()->values();
-        $getByDate = Carbon::now()->format('Y-m-d');
-        $attendance = DailyAttendanceService::getDayBasedAttendance($getByDate);
-        return view('admin.attendance.manual_entry', [
-            'date' => $getByDate,
-            'todayAttendance' => $attendance,
-            'employees' => $employees,
-            'whoAttendToday' => $whoAttendToday,
-            'forCheckout' => $forCheckout
-        ]);
-    }
+  public function manualEntryPage()
+{
+    $today = Carbon::today();
+
+    // employees who checked in / out today
+    $whoAttendToday = Employee::whoAttendToday();       // checked in
+    $whoCheckOutToday = Employee::whoCheckoutToday();   // checked out
+    $whoCheckOutTodayIds = $whoCheckOutToday->pluck('id');
+
+    // employees who checked in but not checked out
+    $forCheckout = $whoAttendToday->whereNull('check_out_time');
+
+    // IDs of employees who have attendance today (not absent)
+    $attendedTodayIds = Attendance::whereDate('attendance_date', $today)
+        ->where('status', '!=', 'absent')
+        ->pluck('employee_id');
+
+    // get active employees:
+    //   - those who attended today, OR
+    //   - those without attendance
+    $employees = Employee::query()
+        ->where('state', 'active')
+        ->whereNotIn('id', $whoCheckOutTodayIds)
+        ->where(function ($q) use ($attendedTodayIds, $today) {
+            $q->whereIn('id', $attendedTodayIds) // attended today
+              ->orWhereDoesntHave('attendances', function ($q2) use ($today) {
+                  $q2->whereDate('attendance_date', $today);
+              }); // no attendance today at all
+        })
+        ->get()
+        ->map(function ($employee) use ($attendedTodayIds) {
+            // determine intention
+            $employee->intend = $attendedTodayIds->contains($employee->id)
+                ? 'checkOut'
+                : 'checkIn';
+
+            return $employee;
+        })
+        ->values();
+
+    // get today's full attendance list
+    $attendance = DailyAttendanceService::getDayBasedAttendance($today->format('Y-m-d'));
+
+    return view('admin.attendance.manual_entry', [
+        'date'            => $today->format('Y-m-d'),
+        'todayAttendance' => $attendance,
+        'employees'       => $employees,
+        'whoAttendToday'  => $whoAttendToday,
+        'forCheckout'     => $forCheckout,
+    ]);
+}
+
 
 
     /**

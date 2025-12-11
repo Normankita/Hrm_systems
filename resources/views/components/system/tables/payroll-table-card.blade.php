@@ -104,7 +104,7 @@
                                                 auth()->user()->hasPermissionTo('reject_payment'))
                                     <x-system.modal id="rejectPayroll{{ $payroll->id }}" title="Reject Payroll">
                                         <div>
-                                            <h3>Reject: <b>{{ $payroll->employee->full_name }}'s</b> Payroll</h3>
+                                            <h3>Reject: <b>{{ $payroll->employee?->full_name }}'s</b> Payroll</h3>
                                         </div>
                                         <form action="{{ route('employee.manage.payroll.employees.reject', $payroll) }}"
                                             method="POST">

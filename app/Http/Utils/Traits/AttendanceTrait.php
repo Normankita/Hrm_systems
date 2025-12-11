@@ -332,5 +332,36 @@ trait AttendanceTrait
         }
     }
 
+    public static function uncloseAttendanceForTheDay(
+        $date,
+        $company_id
+    ) {
+        DB::beginTransaction();
+        try {
+            // checking if the date is already closed
+            $attendance = ClosedDay::whereDate('closed_date', 'like', $date . "%")
+                ->first();
+            if (!$attendance) {
+                DB::rollBack();
+                return ['status' => 'fail', 'message' => 'The date is not closed yet'];
+            }
+            // delete all attendance records marked as absent from system close
+            $attendances = Attendance::where('status', 'absent')
+                ->where('remarks', 'default from system close')
+                ->whereDate('attendance_date', 'like', $date . "%")
+                ->get();
+            foreach ($attendances as $att) {
+                $att->delete();
+            }
+            // delete the closed day record
+            $attendance->delete();
+            DB::commit();
+            return ['status' => 'success'];
+        } catch (Exception $e) {
+            DB::rollBack();
+            return ['status' => 'fail', 'message' => $e->getMessage()];
+        }
+    }
+
 
 }

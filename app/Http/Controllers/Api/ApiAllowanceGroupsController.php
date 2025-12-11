@@ -190,4 +190,24 @@ class ApiAllowanceGroupsController extends Controller
         ]);
     }
 
+
+    public function updateGroupDetails(Request $request)
+    {
+        $group = AllowanceGroup::find($request->id);
+        if (!$group) {
+            return response()->json([
+                'status' => 'fail',
+                'message' => 'Allowance group not found'
+            ], 404);
+        }
+        $group->name = $request->name;
+        $group->description = $request->description;
+        $group->save();
+        return response()->json([
+            'group' => $group,
+            'status' => 'success',
+            'message' => 'Allowance group updated successfully'
+        ]);
+    }
+
 }

@@ -137,6 +137,33 @@ class ApiAttendanceController extends Controller
             'message' => 'Attendance closed for the day successfully',
         ], 200);
     }
+
+    public function uncloseAttendance(Request $request)
+    {
+        $rules = [
+            'date' => 'required'
+        ];
+        $validate = Validator::make($request->all(), $rules);
+        if ($validate->fails()) {
+            return response()->json([
+                'error' => 'bad parameter given'
+            ], 401);
+        }
+        $date = $request->input('date');
+        $companyId = Auth::user()->company->id;
+        $response = AttendanceTrait::uncloseAttendanceForTheDay(
+            $date,
+            $companyId
+        );
+        if ($response['status'] == 'fail') {
+            return response()->json([
+                'error' => $response['message'],
+            ], 500);
+        }
+        return response()->json([
+            'message' => 'Attendance unclosed for the day successfully',
+        ], 200);
+    }
 }
 
 

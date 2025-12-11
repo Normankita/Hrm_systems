@@ -60,15 +60,6 @@
                                             </div>
 
                                         </div>
-                                        {{-- <div v-if="type == 'check_in'" class="mb-3">
-                                            <label for="state form-label">State</label>
-                                            <select v-model="state" class="form-control" id="">
-                                                <option value="present">Present</option>
-                                                <option value="late">Late</option>
-                                                <option v-if="!type && !time" value="absent">Absent</option>
-                                                <option v-if="!type && !time" value="leave">Leave</option>
-                                            </select>
-                                        </div> --}}
                                         <table class="table table table-responsive dt-table">
                                             <label class="p-2" for="allSelector">Select All</label>
                                             <input type="checkbox" id="all-checker">

@@ -20,7 +20,8 @@
                     </div>
                     <div class="card-body">
                         <div class="mb-3">
-                            <a href="{{ route('employee.manage.attendance.dailyAttendance') }}" class="btn btn-primary mx-2">
+                            <a href="{{ route('employee.manage.attendance.dailyAttendance') }}"
+                                class="btn btn-primary mx-2">
                                 View Daily Attendance
                             </a>
                             <x-system.modal-button id="groupSelection" text="MARK" />
@@ -40,16 +41,15 @@
                                     </div>
                                     <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
-                                            <button v-if="!loading" class="btn btn-primary btn-sm mx-2" v-on:click="markSelected()"
-                                                type="button">
+                                            <button v-if="!loading" class="btn btn-primary btn-sm mx-2"
+                                                v-on:click="markSelected()" type="button">
                                                 mark selected
                                             </button>
                                         </div>
 
                                         <div v-if="isCheckIn" class="mb-3">
                                             <label for="time" class="form-label">Time</label>
-                                            <input type="time" class="form-control" id="check_in"
-                                                v-model="time">
+                                            <input type="time" class="form-control" id="check_in" v-model="time">
 
                                             <div class="mb-3">
                                                 <label for="state" class="form-label">Type</label>
@@ -59,15 +59,6 @@
                                                 </select>
                                             </div>
 
-                                        </div>
-                                        <div v-if="type == 'check_in'" class="mb-3">
-                                            <label for="state form-label">State</label>
-                                            <select v-model="state" class="form-control" id="">
-                                                <option value="present">Present</option>
-                                                <option value="late">Late</option>
-                                                <option v-if="!type && !time" value="absent">Absent</option>
-                                                <option v-if="!type && !time" value="leave">Leave</option>
-                                            </select>
                                         </div>
                                         <table class="table table table-responsive dt-table">
                                             <label class="p-2" for="allSelector">Select All</label>
@@ -141,7 +132,7 @@
                                         </td>
                                         <td>
                                             <x-system.modal-button id="editAttendance{{ $attendance->id }}" text="Edit"
-                                                class="btn btn-outline-primary btn-sm" textColor="text-primary"
+                                                class="btn btn-outline-primary btn-sm p-0 px-1" textColor="text-primary"
                                                 icon="mdi mdi-pencil" />
 
                                             <form action="{{ route('admin.attendances.delete', $attendance->id) }}"
@@ -150,7 +141,8 @@
                                                 @csrf
                                                 @method('DELETE')
 
-                                                <button type="button" class="btn btn-outline-danger p-1 mdi mdi-delete"
+                                                <button type="button"
+                                                    class="btn btn-sm btn-outline-danger p-0 px-1 mdi mdi-delete"
                                                     onclick="event.preventDefault(); if (confirm('Are you sure you want to delete this attendance record?')) { document.getElementById('deleteAttendanceForm{{ $attendance->id }}').submit(); }">
                                                     Delete
                                                 </button>
@@ -165,8 +157,7 @@
                 </div>
                 @foreach ($todayAttendance as $attendance)
                     <x-system.modal size="modal-lg" id="editAttendance{{ $attendance->id }}">
-                        <form id="editAttendanceForm{{ $attendance->id }}"
-                            action="{{ route('admin.attendances.update', $attendance->id) }}" method="POST">
+                        <form id="editAttendanceForm{{ $attendance->id }}" action="" method="POST">
                             @csrf
                             @method('PUT')
                             <div class="mb-3">
@@ -233,8 +224,8 @@
             data() {
                 return {
                     loading: false,
-                    type: '', // Bind to the check-in time input
-                    time: '',
+                    type: null, // Bind to the check-in time input
+                    time: null,
                     state: 'present',
                 }
             },
@@ -267,7 +258,7 @@
                         employees_ids: employeeIds,
                         time: this.time,
                         type: this.type,
-                        state: this.state // Use the Vue data property for state
+                        state: null // Use the Vue data property for state
                     };
                     this.loading = true;
                     axios.post(storeUri, requestData, {
@@ -280,7 +271,6 @@
                                 this.loading = false;
                                 alert(response.data.error);
                             }
-                            console.log("Response:", response);
                         })
                         .catch(error => {
                             this.loading = false;

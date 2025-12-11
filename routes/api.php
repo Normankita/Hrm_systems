@@ -21,10 +21,12 @@ Route::prefix('groups')
     ->name('groups.')
     ->group(function () {
         Route::post('/add/employees/to/group/{id}', 'addMembersToGroup')
-        ->name('add.employees.to.group');
+            ->name('add.employees.to.group');
         Route::post('/remove/employees/from/group/{id}', 'removeMembersFromGroup')->name('remove.employees.to.group');
         Route::post('/assign/allowance/to/group/{id}', 'assignAllowanceToGroup')
             ->name('assig.allowance.to.group');
+        Route::put('/update/group/details', 'updateGroupDetails')
+        ->name('update.group.details');
     });
 
 
@@ -68,8 +70,9 @@ Route::middleware([])
             ->name('manual.entry.store')
             ->middleware('HasCompanyProfile');
         Route::post('/close', 'closeAttendance')
-            ->name('close')
-           ;
+            ->name('close');
+        Route::post('/unclose', 'uncloseAttendance')
+            ->name('unclose');
     });
 
 

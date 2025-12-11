@@ -146,22 +146,24 @@
 
                 },
                 deleteEmployeeFromGroup() {
-                    let dt = handler1.getSelected();
-                    const route = "{{ route('groups.remove.employees.to.group', $group->id) }}";
-                    axios.post(route, {
-                            employees: handler1.getSelected(),
-                            user: this.user
-                        })
-                        .then(response => {
-                            const data = response.data;
-                            if (data.status == 'success') {
-                                location.reload();
-                            }
-                        })
-                        .catch(error => {
-                            this.empSubmit = false;
-                            this.error = "Something went wrong, refresh page and try again";
-                        });
+                    if (confirm('Are you sure you want to remove selected employees from this group?')) {
+                        let dt = handler1.getSelected();
+                        const route = "{{ route('groups.remove.employees.to.group', $group->id) }}";
+                        axios.post(route, {
+                                employees: handler1.getSelected(),
+                                user: this.user
+                            })
+                            .then(response => {
+                                const data = response.data;
+                                if (data.status == 'success') {
+                                    location.reload();
+                                }
+                            })
+                            .catch(error => {
+                                this.empSubmit = false;
+                                this.error = "Something went wrong, refresh page and try again";
+                            });
+                    }
                 },
             },
 

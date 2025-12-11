@@ -355,7 +355,7 @@ class Employee extends Model
         $today = Carbon::now()->format('Y-m-d');
         $todayAttendance = Attendance::with('employee')
             ->whereDate('attendance_date', $today)
-            ->whereIn('status', ['absent', 'late'])
+            ->whereIn('status', ['present', 'late'])
             ->get();
         $employees = $todayAttendance->pluck('employee');
         return $employees;

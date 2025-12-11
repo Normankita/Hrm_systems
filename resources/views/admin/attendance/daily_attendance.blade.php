@@ -19,9 +19,12 @@
             </div>
             <div class="col-sm-12 col-md-4">
                 @if (!$isClosed)
-                    <button class="btn btn-danger btn-sm trt"
-                        v-on:click="closeAttendance()">
-                            Close Entrence
+                    <button class="btn btn-danger btn-sm trt" v-on:click="closeAttendance()">
+                        Close Entrence
+                    </button>
+                @else
+                    <button class="btn btn-success btn-sm trt" v-on:click="unCloseAttendance()">
+                        Re-Open Entrence
                     </button>
                 @endif
                 <button class="btn btn-primary btn-sm">
@@ -140,11 +143,12 @@
                                                 bg-danger text-white @endif
                                             ">{{ $attendance->status }}</span>
                                     </td>
-                                    <td>{{ $attendance->check_in_time ? Carbon::parse($attendance->check_in_time)->format('H:ia') : "--" }}
+                                    <td>{{ $attendance->check_in_time ? Carbon::parse($attendance->check_in_time)->format('H:ia') : '--' }}
                                     </td>
-                                    <td>{{ $attendance->check_out_time ? Carbon::parse($attendance->check_out_time)->format('H:ia') : "--" }}
+                                    <td>{{ $attendance->check_out_time ? Carbon::parse($attendance->check_out_time)->format('H:ia') : '--' }}
                                     </td>
-                                    <td>{{ $attendance->remarks ? substr($attendance->remarks, 0, 20) . '...' : '--' }}</td>
+                                    <td>{{ $attendance->remarks ? substr($attendance->remarks, 0, 20) . '...' : '--' }}
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -167,6 +171,29 @@
                     if (confirm('Are you sure you want to close attendance for this day?')) {
                         NProgress.start();
                         axios.post('{{ route('attendances.close') }}', {
+                                date: '{{ $date }}',
+                                id: '{{ auth()->user()->id }}',
+                            }, {
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                    'Content-Type': 'application/json'
+                                }
+                            })
+                            .then(response => {
+                                alert(response.data.message);
+                                location.reload();
+                            })
+                            .catch(error => {
+                                NProgress.done();
+                                console.error('Error:', error);
+                                alert('An error occurred while closing attendance.');
+                            });
+                    }
+                },
+                unCloseAttendance() {
+                    if (confirm('Unclose Closed Attendance?')) {
+                        NProgress.start();
+                        axios.post('{{ route('attendances.unclose') }}', {
                                 date: '{{ $date }}',
                                 id: '{{ auth()->user()->id }}',
                             }, {
