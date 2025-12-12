@@ -8,6 +8,7 @@ use App\Http\Services\EmployeeService;
 use App\Http\Utils\Traits\EmployeeTrait;
 use App\Http\Services\PayrollService;
 use App\Http\Services\PayslipPdfService;
+use App\Models\Contribution;
 use App\Models\Employee;
 use App\Models\Payroll;
 use Illuminate\Support\Facades\DB;
@@ -165,14 +166,19 @@ class AdminPayrollEmployeeController extends Controller
         route('admin.payrolls.index'));
         $employee = Employee::find($payroll->employee_id);
 
+        $constributionsDivisions = $payroll->contributions_divisions;
+
+        $contributions = Contribution::all();
+
         $deductions = $payroll->deductions()->get();
 
         return view(
-            'employee.manage.payroll.payments.show',
+            'admin.payroll.payments.show',
             compact(
                 'employee',
                 'payroll',
-                'deductions'
+                'deductions',
+                'constributionsDivisions'
             )
         )
             ->with('backRoute', $backRoute);

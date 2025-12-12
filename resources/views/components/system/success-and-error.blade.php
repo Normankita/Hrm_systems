@@ -30,7 +30,12 @@
 
     @if ($errors->any())
         <div class="alert alert-danger">
-           <span>Error Submitting The Form, Inspect And Try Again.</span>
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @break
+                @endforeach
+            </ul>
         </div>
     @endif
 

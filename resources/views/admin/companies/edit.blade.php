@@ -61,6 +61,7 @@
                         <div class="row col-sm-12 col-md-12">
                             <h3 class="mb-3">Statutory Deductions(%)</h3>
                             @foreach ($contributions as $contribution)
+                            @if($contribution->name == "NSSF" || $contribution->name == "PSSSF")
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-md-3">
                                         <label for="percent_{{ $contribution->id }}"
@@ -91,6 +92,24 @@
                                             value="{{ $contribution->company_percent }}" required>
                                     </div>
                                 </div>
+                            @else
+                                <div class="row mb-3">
+                                    <div class="col-sm-12 col-md-6">
+                                        <label for="percent_{{ $contribution->id }}"
+                                            class="form-label">{{ $contribution->name }} (%)</label>
+                                        <input type="number" step="0.01" class="form-control" id="percent_{{ $contribution->id }}"
+                                            name="contributions[{{ $contribution->id }}][percent]"
+                                            value="{{ $contribution->percent }}" required>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6">
+                                        <label for="description_{{ $contribution->id }}"
+                                            class="form-label">Description</label>
+                                        <input type="text" class="form-control" id="description_{{ $contribution->id }}"
+                                            name="contributions[{{ $contribution->id }}][description]"
+                                            value="{{ $contribution->description }}" required>
+                                    </div>
+                                </div>
+                            @endif
                             @endforeach
                         </div>
                     </div>

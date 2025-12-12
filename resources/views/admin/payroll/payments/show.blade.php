@@ -1,5 +1,9 @@
-@extends('layouts.system')
+@php
+    use App\Http\Utils\Traits\ContributionDivisionTrait as DivTrait;
+    $sysContributions = app\Models\Contribution::all();
+@endphp
 
+@extends('layouts.system')
 
 @section('content')
     <div class="row">
@@ -48,30 +52,77 @@
                     @endforelse
 
                     {{-- SECTION: Statutory Contributions --}}
-                    <h5 class="text-muted mt-4 mb-3">Statutory Contributions</h5>
+                    <h3 class="text-muted mt-4 mb-3">Statutory Contributions</h3>
                     <div class="row mb-2">
                         <div class="col-md-4">PAYE</div>
-                        <div class="col-md-8">{{ number_format($payroll->paye, 2) }}</div>
-                    </div>
+                        <div class="col-md-8">
+                            <b >
+                            {{ number_format($payroll->paye, 2) }}</div>
+                            </b>
+                    </div><hr />
                     @if ($payroll->nssf)
                         <div class="row mb-2">
-                            <div class="col-md-4">NSSF</div>
-                            <div class="col-md-8">{{ number_format($payroll->nssf, 2) }}</div>
-                        </div>
+                            <div class="col-md-3">NSSF</div>
+                            <div class="col-md-3">
+                                <p>Employee({{ DivTrait::getContributionPercent('employee_nssf', $sysContributions) }}%)</p>
+                                <b>
+                                    {{ number_format($constributionsDivisions->employee_nssf, 2) }}
+                                </b>
+                            </div>
+
+                            <div class="col-md-3">
+                                <p>Company({{ DivTrait::getContributionPercent('company_nssf', $sysContributions) }}%)</p>
+                                <b>
+                                    {{ number_format($constributionsDivisions->company_nssf, 2) }}
+                                </b>
+                            </div>
+
+                            <div class="col-md-3">
+                                <p>Total(100%)</p>
+                                <b>
+                                    {{ number_format($constributionsDivisions->employee_nssf + $constributionsDivisions->company_nssf, 2) }}
+                                </b>
+                            </div>
+                        </div><hr />
                     @endif
                     @if ($payroll->psssf)
                         <div class="row mb-2">
-                            <div class="col-md-4">PSSSF</div>
-                            <div class="col-md-8">{{ number_format($payroll->psssf, 2) }}</div>
+                            <div class="col-md-3">PSSSF</div>
+                            <div class="col-md-3">
+                                <p>Employee({{ DivTrait::getContributionPercent('employee_psssf', $sysContributions) }}%)</p>
+                                <b>
+                                    {{ number_format($constributionsDivisions->employee_psssf, 2) }}
+                                </b>
+                            </div>
+                            <div class="col-md-3">
+                                <p>Company({{ DivTrait::getContributionPercent('company_psssf', $sysContributions) }}%)</p>
+                                <b>
+                                    {{ number_format($constributionsDivisions->company_psssf, 2) }}
+                                </b>
+                            </div>
+                            <div class="col-md-3">
+                                <p>Total(100%)</p>
+                                <b>
+                                    {{ number_format($constributionsDivisions->employee_psssf + $constributionsDivisions->company_psssf, 2) }}
+                                </b>
+                            </div>
                         </div>
                     @endif
                     <div class="row mb-2">
                         <div class="col-md-4">SDL</div>
-                        <div class="col-md-8">{{ number_format($payroll->sdl, 2) }}</div>
+                        <div class="col-md-8">
+                            <b>
+                                {{ number_format($payroll->sdl, 2) }}
+                            </b>
+                        </div>
                     </div>
                     <div class="row mb-2">
                         <div class="col-md-4">WCF</div>
-                        <div class="col-md-8">{{ number_format($payroll->wcf, 2) }}</div>
+                        <div class="col-md-8">
+                            <b>
+                            {{ number_format($payroll->wcf, 2) }}
+                            </b>    
+                        </div>
                     </div>
 
                     {{-- SECTION: Summary --}}

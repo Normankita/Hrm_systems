@@ -41,9 +41,7 @@ class AdminCompanyController extends Controller
             'tin_number' => 'required|string|max:50',
             'contributions' => 'required|array',
             'contributions.*.percent' => 'required|numeric|min:0|max:100',
-            'contributions.*.description' => 'required|string|max:255',
-            'contributions.*.employee_percent' => 'required|numeric|min:0|max:100',
-            'contributions.*.company_percent' => 'required|numeric|min:0|max:100',
+            'contributions.*.description' => 'required|string|max:255'
         ]);
 
         // filtering the settings fields from the form field
@@ -102,9 +100,9 @@ class AdminCompanyController extends Controller
             return redirect()->route('admin.companies.edit', $company->id)
                 ->with('fail', 'Company details updated successfully.');
         }
-
+        session()->flash('status', 'success');
         return redirect()->route('admin.companies.edit', $company->id)
-            ->with('success', 'Company details updated successfully.');
+            ->with(['status' => 'success', 'message' => 'Company details updated successfully.']);
     }
 
 }

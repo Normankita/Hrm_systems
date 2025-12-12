@@ -28,4 +28,10 @@ class ContributionsDivision extends Model
         return $this->belongsTo(Payroll::class,
              'payroll_id');
     }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'company_id');
+    }
+
 }

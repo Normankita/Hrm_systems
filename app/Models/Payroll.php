@@ -71,7 +71,7 @@ class Payroll extends Model
 
     public function contributions_divisions()
     {
-        return $this->hasMany(ContributionsDivision::class, 'contribution_id');
+        return $this->hasOne(ContributionsDivision::class, 'payroll_id');
     }
 
 
