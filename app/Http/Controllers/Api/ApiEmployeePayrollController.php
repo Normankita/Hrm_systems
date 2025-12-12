@@ -27,7 +27,8 @@ class ApiEmployeePayrollController extends Controller
         if ($response['status'] === 'error') {
             return response()->json([
                 'status' => 'error',
-                'message' => $response['message']
+                'message' => $response['message'],
+                'error' => $response['error'] ?? 'Unknown error'
             ]);
         }
         $payrolls = $response['data'];

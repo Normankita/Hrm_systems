@@ -42,6 +42,8 @@ class AdminCompanyController extends Controller
             'contributions' => 'required|array',
             'contributions.*.percent' => 'required|numeric|min:0|max:100',
             'contributions.*.description' => 'required|string|max:255',
+            'contributions.*.employee_percent' => 'required|numeric|min:0|max:100',
+            'contributions.*.company_percent' => 'required|numeric|min:0|max:100',
         ]);
 
         // filtering the settings fields from the form field
@@ -70,9 +72,17 @@ class AdminCompanyController extends Controller
             ]);
 
             foreach ($request->input('contributions', []) as $contributionId => $data) {
+                $totalPercent = $data['employee_percent'] + $data['company_percent'];
+                if ($totalPercent < 100 || $totalPercent > 100) {
+                    DB::rollBack();
+                    return redirect()->route('admin.companies.edit', $company->id)
+                        ->with('fail', 'The Company and Employee total percent for ' . Contribution::find($contributionId)->name . ' must be 100.');
+                }
                 Contribution::where('id', $contributionId)->update([
                     'percent' => $data['percent'],
                     'description' => $data['description'],
+                    'employee_percent' => $data['employee_percent'],
+                    'company_percent' => $data['company_percent'],
                 ]);
             }
 

@@ -36,7 +36,8 @@
 
                             <div class="table-responsive">
                                 <span>Total Employees: {{ $employees->count() }}</span>
-                                <table class="table dt-table table-bordered table-hover align-middle text-nowrap">
+                                <table class="table dt-table table-bordered table-hover align-middle text-nowrap"
+                                    id="emp-table">
                                     <div>
                                         <label class="px-3" for="all_checker">Select All</label>
                                         <input type="checkbox" id="all-checker" name="all_checker">
@@ -88,7 +89,7 @@
 
 @section('scripts')
     <script>
-        const handler1 = new TableSelectionHandler('.dt-table', '#all-checker');
+        let handler1 = new TableSelectionHandler('.dt-table', '#all-checker');
         const app = Vue.createApp({
             data() {
                 return {
@@ -118,7 +119,6 @@
                         const selected = handler1.getSelected();
                         const uri = "{{ route('employee.manage.payrolls.generateSelected') }}";
                         const redirectUrl = "{{ route('admin.payrolls.index') }}";
-                        console.log(selected, uri);
                         await axios.post(uri, {
                                 selected_employees: selected
                             })
@@ -137,8 +137,16 @@
                                 console.error('Error generating payroll:', error);
                                 alert('An error occurred while generating payroll.');
                                 this.loading = false;
+                            }).finally(() => {
+                                this.loading = false;
+                                console.log("Restarting a table main function")
+                                this.toggleTable();
                             });
                     }
+                },
+                toggleTable() {
+                    $('#emp-table').DataTable();
+                    handler1 = new TableSelectionHandler('.dt-table', '#all-checker');
                 }
             }
         });

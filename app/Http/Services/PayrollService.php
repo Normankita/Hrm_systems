@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Http\Utils\Traits\PdfTrait;
 use App\Models\Contribution;
+use App\Models\ContributionsDivision;
 use App\Models\Employee;
 use App\Models\Payroll;
 use Carbon\Carbon;
@@ -44,7 +45,15 @@ class PayrollService
         $today = Carbon::today();
         $period = $today->format('Y-m');
 
-        $contributions = Contribution::pluck('percent', 'name');
+        $contributions = Contribution::select(
+            DB::raw("name as name"),
+            DB::raw("percent as percent"),
+            DB::raw("employee_percent as employee_percent"),
+            DB::raw("company_percent as company_percent")
+        )
+            ->get()
+            ->keyBy('name')
+            ->toArray();
         $generated = [];
 
         foreach ($employees as $employee) {
@@ -64,14 +73,30 @@ class PayrollService
                 }
             }
 
-            // Statutory deductions
-            $nssf = $basic * ($contributions['NSSF'] ?? 0) / 100;
-            $psssf = $basic * ($contributions['PSSSF'] ?? 0) / 100;
-            $paye = ($basic - $nssf - $psssf) * ($contributions['PAYE'] ?? 0) / 100;
-            $sdl = $basic * ($contributions['SDL'] ?? 0) / 100;
-            $wcf = $basic * ($contributions['WCF'] ?? 0) / 100;
+            $nssf = $basic * ($contributions['NSSF']['percent'] ?? 0) / 100;
+            $psssf = $basic * ($contributions['PSSSF']['percent'] ?? 0) / 100;
+            $employee_nssf = $nssf * ($contributions['NSSF']['employee_percent'] ?? 0) / 100;
+            $employee_psssf = $psssf * ($contributions['PSSSF']['employee_percent'] ?? 0) / 100;
+            $paye = ($basic - $employee_nssf - $employee_psssf) *
+                ($contributions['PAYE']['percent'] ?? 0) / 100;
 
-            $statutory = $paye + $nssf + $psssf + $sdl + $wcf;
+            $sdl = $basic * ($contributions['SDL']['percent'] ?? 0) / 100;
+            $wcf = $basic * ($contributions['WCF']['percent'] ?? 0) / 100;
+
+            // Statutory deductions for company side
+            $company_nssf = $nssf * ($contributions['NSSF']['company_percent'] ?? 0) / 100;
+            $company_psssf = $psssf * ($contributions['PSSSF']['company_percent'] ?? 0) / 100;
+            $company_paye = $paye * ($contributions['PAYE']['company_percent'] ?? 0) / 100;
+            $company_sdl = $sdl * ($contributions['SDL']['company_percent'] ?? 0) / 100;
+            $company_wcf = $wcf * ($contributions['WCF']['company_percent'] ?? 0) / 100;
+
+            // Statutory deductions for employee side
+            $employee_paye = $paye * ($contributions['PAYE']['employee_percent'] ?? 0) / 100;
+            $employee_sdl = $sdl * ($contributions['SDL']['employee_percent'] ?? 0) / 100;
+            $employee_wcf = $wcf * ($contributions['WCF']['employee_percent'] ?? 0) / 100;
+
+            $statutory = $employee_paye + $employee_nssf + $employee_psssf + 
+                $employee_sdl + $employee_wcf;
 
             // Custom deductions (e.g., loans)
             $customDeductions = 0;
@@ -115,7 +140,22 @@ class PayrollService
                     'wcf' => $wcf,
                     'entrence_reference' => $ref,
                 ];
+                $contributionDivisionData = [
+                    'company_nssf' => $company_nssf,
+                    'company_psssf' => $company_psssf,
+                    'company_paye' => $company_paye,
+                    'company_sdl' => $company_sdl,
+                    'company_wcf' => $company_wcf,
+                    'employee_nssf' => $employee_nssf,
+                    'employee_psssf' => $employee_psssf,
+                    'employee_paye' => $employee_paye,
+                    'employee_sdl' => $employee_sdl,
+                    'employee_wcf' => $employee_wcf,
+                    'company_id' => $employee->company_id,
+                ];
                 $payroll = Payroll::create($payrolldata);
+                $contributionDivisionData['payroll_id'] = $payroll->id;
+                ContributionsDivision::create($contributionDivisionData);
                 $payroll->recordEvent('add', $payrolldata);
                 foreach ($deductionsToAttach as $item) {
                     $payroll->deductions()->attach($item['id'], [
@@ -133,6 +173,7 @@ class PayrollService
                 DB::rollBack();
                 return [
                     'status' => 'error',
+                    'error' => $e->getMessage(),
                     'message' => 'Failed to generate payroll for employee : ' . $employee->full_name
                 ];
             }

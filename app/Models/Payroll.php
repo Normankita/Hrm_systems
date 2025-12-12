@@ -69,6 +69,10 @@ class Payroll extends Model
         return $this->belongsToMany(EmployeeAllowance::class, 'employee_allowance_payroll')->withPivot('amount');
     }
 
+    public function contributions_divisions()
+    {
+        return $this->hasMany(ContributionsDivision::class, 'contribution_id');
+    }
 
 
 }

@@ -16,10 +16,13 @@ class Contribution extends Model
         'percent',
         'description',
         'company_id',
+        'employee_percent',
+        'company_percent'
     ];
 
     public function company()
     {
         return $this->belongsTo(Company::class);
     }
+
 }
