@@ -73,7 +73,7 @@
 
 <body>
     <div class="payslip">
-        <h2>Company Name</h2>
+        <h2>{{ strtoupper($company->name) }}</h2>
         <h4>Employee Payslip</h4>
         <p style="text-align:center;"><strong>Period:</strong> {{ $payroll->period }}</p>
 
@@ -112,7 +112,7 @@
                 </tr>
                 <tr>
                     <td><strong>Gross Salary</strong></td>
-                    <td><strong>{{ number_format($payroll->gross_salary, 2) }}</strong></td>
+                    <td><strong>{{ number_format($payroll->gross_salary, 2) }}/=</strong></td>
                 </tr>
             </tbody>
         </table>
@@ -132,27 +132,27 @@
 
                 <tr>
                     <td>PAYE</td>
-                    <td>{{ number_format($payroll->paye, 2) }}</td>
+                    <td>{{ number_format($payroll->contributions_divisions->employee_paye, 2) }}</td>
                 </tr>
                 @if ($payroll->nssf)
                     <tr>
                         <td>NSSF</td>
-                        <td>{{ number_format($payroll->nssf, 2) }}</td>
+                        <td>{{ number_format($payroll->contributions_divisions->employee_nssf, 2) }}</td>
                     </tr>
                 @endif
                 @if ($payroll->psssf)
                     <tr>
                         <td>PSSSF</td>
-                        <td>{{ number_format($payroll->psssf, 2) }}</td>
+                        <td>{{ number_format($payroll->contributions_divisions->employee_psssf, 2) }}</td>
                     </tr>
                 @endif
                 <tr>
                     <td>SDL</td>
-                    <td>{{ number_format($payroll->sdl, 2) }}</td>
+                    <td>{{ number_format($payroll->contributions_divisions->employee_sdl, 2) }}</td>
                 </tr>
                 <tr>
                     <td>WCF</td>
-                    <td>{{ number_format($payroll->wcf, 2) }}</td>
+                    <td>{{ number_format($payroll->contributions_divisions->employee_wcf, 2) }}</td>
                 </tr>
 
                 @if ($payroll->deductions instanceof \Illuminate\Support\Collection)
@@ -166,13 +166,15 @@
 
 
                 @php
-                    $totalStatutory = $payroll->paye + $payroll->nssf + $payroll->psssf + $payroll->sdl + $payroll->wcf;
+                    $contrDivision = $payroll->contributions_divisions;
+                    $totalStatutory = $contrDivision->employee_paye + $contrDivision->employee_nssf + $contrDivision->employee_psssf
+                        + $contrDivision->employee_psssf + $contrDivision->employee_sdl
+                        + $contrDivision->employee_wcf;
                     $totalDeductions = $totalStatutory + $totalCustomDeductions;
                 @endphp
-
                 <tr>
                     <td><strong>Total Deductions</strong></td>
-                    <td><strong>{{ number_format($totalDeductions, 2) }}</strong></td>
+                    <td><strong>{{ number_format($totalDeductions, 2) }}/=</strong></td>
                 </tr>
             </tbody>
         </table>

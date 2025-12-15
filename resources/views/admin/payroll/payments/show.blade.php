@@ -64,13 +64,19 @@
                         <div class="row mb-2">
                             <div class="col-md-3">NSSF</div>
                             <div class="col-md-3">
-                                <p>Employee({{ DivTrait::getContributionPercent('employee_nssf', $sysContributions) }}%)</p>
+                                @php
+                                    $employeeNssfPercent = DivTrait::getContributionPercent('employee_nssf', $sysContributions);
+                                @endphp
+                                <p>Employee({{ $employeeNssfPercent }}%)</p>
                                 <b>
                                     {{ number_format($constributionsDivisions->employee_nssf, 2) }}
                                 </b>
                             </div>
 
                             <div class="col-md-3">
+                                @php
+                                    $companyNssfPercent = DivTrait::getContributionPercent('company_nssf', $sysContributions);
+                                @endphp
                                 <p>Company({{ DivTrait::getContributionPercent('company_nssf', $sysContributions) }}%)</p>
                                 <b>
                                     {{ number_format($constributionsDivisions->company_nssf, 2) }}
@@ -78,7 +84,7 @@
                             </div>
 
                             <div class="col-md-3">
-                                <p>Total(100%)</p>
+                                <p>Total({{ $employeeNssfPercent + $companyNssfPercent }}%)</p>
                                 <b>
                                     {{ number_format($constributionsDivisions->employee_nssf + $constributionsDivisions->company_nssf, 2) }}
                                 </b>
@@ -121,7 +127,7 @@
                         <div class="col-md-8">
                             <b>
                             {{ number_format($payroll->wcf, 2) }}
-                            </b>    
+                            </b>
                         </div>
                     </div>
 

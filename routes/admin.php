@@ -241,7 +241,8 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
         Route::get('/display/rejected', 'rejected')->name('rejected');
 
         Route::post('/{payroll}/reject', 'reject')->name('reject');
-        Route::view('/reports', 'admin.payroll.reports.index')->name('manageIndex');
+        Route::view('/reports', 'admin.payroll.reports.index')
+            ->name('manageIndex');
     });
 
 

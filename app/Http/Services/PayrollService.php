@@ -75,8 +75,8 @@ class PayrollService
 
             $nssf = $basic * ($contributions['NSSF']['percent'] ?? 0) / 100;
             $psssf = $basic * ($contributions['PSSSF']['percent'] ?? 0) / 100;
-            $employee_nssf = $nssf * ($contributions['NSSF']['employee_percent'] ?? 0) / 100;
-            $employee_psssf = $psssf * ($contributions['PSSSF']['employee_percent'] ?? 0) / 100;
+            $employee_nssf = $basic * ($contributions['NSSF']['employee_percent'] ?? 0) / 100;
+            $employee_psssf = $basic * ($contributions['PSSSF']['employee_percent'] ?? 0) / 100;
             $paye = ($basic - $employee_nssf - $employee_psssf) *
                 ($contributions['PAYE']['percent'] ?? 0) / 100;
 
@@ -84,18 +84,18 @@ class PayrollService
             $wcf = $basic * ($contributions['WCF']['percent'] ?? 0) / 100;
 
             // Statutory deductions for company side
-            $company_nssf = $nssf * ($contributions['NSSF']['company_percent'] ?? 0) / 100;
-            $company_psssf = $psssf * ($contributions['PSSSF']['company_percent'] ?? 0) / 100;
-            $company_paye = $paye * ($contributions['PAYE']['company_percent'] ?? 0) / 100;
-            $company_sdl = $sdl * ($contributions['SDL']['company_percent'] ?? 0) / 100;
-            $company_wcf = $wcf * ($contributions['WCF']['company_percent'] ?? 0) / 100;
+            $company_nssf = $basic * ($contributions['NSSF']['company_percent'] ?? 0) / 100;
+            $company_psssf = $basic * ($contributions['PSSSF']['company_percent'] ?? 0) / 100;
+            $company_paye = $basic * ($contributions['PAYE']['company_percent'] ?? 0) / 100;
+            $company_sdl = $basic * ($contributions['SDL']['company_percent'] ?? 0) / 100;
+            $company_wcf = $basic * ($contributions['WCF']['company_percent'] ?? 0) / 100;
 
             // Statutory deductions for employee side
-            $employee_paye = $paye * ($contributions['PAYE']['employee_percent'] ?? 0) / 100;
-            $employee_sdl = $sdl * ($contributions['SDL']['employee_percent'] ?? 0) / 100;
-            $employee_wcf = $wcf * ($contributions['WCF']['employee_percent'] ?? 0) / 100;
+            $employee_paye = $basic * ($contributions['PAYE']['employee_percent'] ?? 0) / 100;
+            $employee_sdl = $basic * ($contributions['SDL']['employee_percent'] ?? 0) / 100;
+            $employee_wcf = $basic * ($contributions['WCF']['employee_percent'] ?? 0) / 100;
 
-            $statutory = $employee_paye + $employee_nssf + $employee_psssf + 
+            $statutory = $employee_paye + $employee_nssf + $employee_psssf +
                 $employee_sdl + $employee_wcf;
 
             // Custom deductions (e.g., loans)

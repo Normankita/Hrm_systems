@@ -68,13 +68,17 @@ class AdminCompanyController extends Controller
                 'brela_reg_number' => $request->brela_reg_number,
                 'tin_number' => $request->tin_number,
             ]);
-
             foreach ($request->input('contributions', []) as $contributionId => $data) {
+                // if array data doesnt has employee_percent or company_percent, skip it
+                if (!isset($data['employee_percent']) || !isset($data['company_percent'])) {
+                    $data['employee_percent'] = $data['percent'];
+                    $data['company_percent'] = 0;
+                }
                 $totalPercent = $data['employee_percent'] + $data['company_percent'];
-                if ($totalPercent < 100 || $totalPercent > 100) {
+                if ($totalPercent != $data['percent']) {
                     DB::rollBack();
                     return redirect()->route('admin.companies.edit', $company->id)
-                        ->with('fail', 'The Company and Employee total percent for ' . Contribution::find($contributionId)->name . ' must be 100.');
+                        ->with('fail', 'The Company and Employee total percent for ' . Contribution::find($contributionId)->name . ' must '.$data['percent']. '%. Currently, it is '.$totalPercent.'%. Please correct it and try again.');
                 }
                 Contribution::where('id', $contributionId)->update([
                     'percent' => $data['percent'],
@@ -98,7 +102,7 @@ class AdminCompanyController extends Controller
         } catch (Throwable $throwable) {
             DB::rollBack();
             return redirect()->route('admin.companies.edit', $company->id)
-                ->with('fail', 'Company details updated successfully.');
+                ->with('fail', 'An error occurred while updating company details: ' . $throwable->getMessage());
         }
         session()->flash('status', 'success');
         return redirect()->route('admin.companies.edit', $company->id)
