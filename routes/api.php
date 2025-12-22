@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ApiAllowanceFrequencyController;
 use App\Http\Controllers\Api\ApiAllowanceGroupMembersController;
 use App\Http\Controllers\Api\ApiAllowanceGroupsController;
 use App\Http\Controllers\Api\ApiAttendanceController;
@@ -128,3 +129,12 @@ Route::middleware([])->group(function () {
         ->name('update.employee.shift');
 });
 
+
+Route::middleware([])->group(function () {
+    // Additional authenticated API routes can be added here
+    Route::put('/allowance/frequency', [
+        ApiAllowanceFrequencyController::class,
+        'updateFrequency'
+    ])
+        ->name('update.frequency');
+});
