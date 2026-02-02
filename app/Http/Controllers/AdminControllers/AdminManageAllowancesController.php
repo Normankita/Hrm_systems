@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AdminControllers;
 use App\Http\Controllers\Controller;
 use App\Models\Allowance;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class AdminManageAllowancesController extends Controller
 {
@@ -31,14 +32,21 @@ class AdminManageAllowancesController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
+        $companyId = auth()->user()->company_id;
+        // allowance name must be unique in within the company
+        $validated = Validator::make($request->all(), [
+            'name' => 'required|string|max:255|unique:allowances,name,company_id,' . $companyId,
             'description' => 'required|string|max:255',
             'is_taxable' => 'required|boolean',
         ]);
+        if ($validated->fails()) {
+            return redirect()->back()
+                ->withErrors($validated)
+                ->withInput();
+        }
 
         $allowance= Allowance::create([
-            'company_id' => auth()->user()->company_id,
+            'company_id' => $companyId,
             'name' => $request->name,
             'description' => $request->description,
             'is_taxable' => $request->is_taxable

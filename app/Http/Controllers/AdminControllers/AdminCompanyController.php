@@ -9,6 +9,7 @@ use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Throwable;
+use Illuminate\Support\Facades\Validator;
 
 class AdminCompanyController extends Controller
 {
@@ -32,7 +33,7 @@ class AdminCompanyController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
+        $validated = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'address' => 'required|string|max:255',
             'contact_number' => 'required|string|max:20',
@@ -43,6 +44,11 @@ class AdminCompanyController extends Controller
             'contributions.*.percent' => 'required|numeric|min:0|max:100',
             'contributions.*.description' => 'required|string|max:255'
         ]);
+        if ($validated->fails()) {
+            return redirect()->back()
+                ->withErrors($validated)
+                ->withInput();
+        }
 
         // filtering the settings fields from the form field
         $formFields = collect($request->all());
@@ -78,7 +84,8 @@ class AdminCompanyController extends Controller
                 if ($totalPercent != $data['percent']) {
                     DB::rollBack();
                     return redirect()->route('admin.companies.edit', $company->id)
-                        ->with('fail', 'The Company and Employee total percent for ' . Contribution::find($contributionId)->name . ' must '.$data['percent']. '%. Currently, it is '.$totalPercent.'%. Please correct it and try again.');
+                        ->with('fail', 'The Company and Employee total percent for ' . Contribution::find($contributionId)->name . ' must '.$data['percent']. '%. Currently, it is '.$totalPercent.'%. Please correct it and try again.')
+                        ->withInput();
                 }
                 Contribution::where('id', $contributionId)->update([
                     'percent' => $data['percent'],

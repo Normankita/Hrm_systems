@@ -67,7 +67,7 @@
                                             <!-- make the group desc less than 50 words -->
                                             {{ Str::limit($group->description, 50) }}
                                         </td>
-                                        <td>{{ $group->employees()->count() }}</td>
+                                        <td>{{ $group->employees()->where('isActive', true)->count() }}</td>
                                         <td>
                                             <x-system.btn-view text="view"
                                                 route="{{ route('admin.employee.allowances.groups.edit', $group->id) }}" />

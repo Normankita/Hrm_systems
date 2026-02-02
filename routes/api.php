@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\ApiEmployeePayrollController;
 use App\Http\Controllers\Api\ApiEmployeesController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\ApiManageAllowanceController;
 
 
 Route::get('/users', function () {
@@ -110,7 +111,7 @@ Route::middleware([])->group(function () {
 });
 
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware([])->group(function () {
     // Additional authenticated API routes can be added here
     Route::post('/fetch/employees', [
         ApiEmployeesController::class,
@@ -137,4 +138,13 @@ Route::middleware([])->group(function () {
         'updateFrequency'
     ])
         ->name('update.frequency');
+});
+
+Route::middleware([])->group(function () {
+    // Additional authenticated API routes can be added here
+    Route::put('/allowance/{allowance}', [
+        ApiManageAllowanceController::class,
+        'update'
+    ])
+        ->name('update.allowance');
 });

@@ -25,6 +25,7 @@ class OwnerSeeder extends Seeder
             'tin_number' => '1234567890',
             'isActive' => false
         ]);
+        
         $company->delete();
         $admin = User::create([
             'name' => 'Todaysky Company',
