@@ -7,17 +7,17 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-4">
-                        <x-system.reports.report-card-anchor title="Rejected Leaves" :route="route('employee.manage.leave.reports.rejected')">
+                        <x-system.reports.report-card-anchor title="Rejected Leaves" :route="route('admin.leave.reports.rejected')">
                         </x-system.reports.report-card-anchor>
                     </div>
 
                     <div class="col-md-4">
-                        <x-system.reports.report-card-anchor title="Accepted Leaves" :route="route('employee.manage.leave.reports.accepted')">
+                        <x-system.reports.report-card-anchor title="Accepted Leaves" :route="route('admin.leave.reports.accepted')">
                         </x-system.reports.report-card-anchor>
                     </div>
 
                          <div class="col-md-4">
-                        <x-system.reports.report-card-anchor title="Pending Leaves" :route="route('employee.manage.leave.reports.pending')">
+                        <x-system.reports.report-card-anchor title="Pending Leaves" :route="route('admin.leave.reports.pending')">
                         </x-system.reports.report-card-anchor>
                     </div>
                 </div>

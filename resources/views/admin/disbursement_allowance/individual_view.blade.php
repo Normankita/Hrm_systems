@@ -7,7 +7,7 @@
                 <div class="card-body">
                     <div class="col-sm-12 col-md-12">
                         <!-- sending to back page -->
-                        <x-back-button :route="route('employee.manage.disbursements.index')"></x-back-button>
+                        <x-back-button :route="route('admin.disbursements.index')"></x-back-button>
                     </div>
                     <div class="col-sm-12 col-md-12">
                         <h2 class="card-title lead" style="text-transform: capitalize;">

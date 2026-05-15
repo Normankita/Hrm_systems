@@ -16,6 +16,7 @@ use App\Http\Controllers\AdminControllers\AdminManageLeavesController;
 use App\Http\Controllers\AdminControllers\AdminPayGradeController;
 use App\Http\Controllers\AdminControllers\AdminPayrollEmployeeController;
 use App\Http\Controllers\AdminControllers\AdminPermissionsController;
+use App\Http\Controllers\AdminControllers\AdminReportsController;
 use App\Http\Controllers\AdminControllers\AdminSettingController;
 use App\Http\Controllers\Api\ApiRolesController;
 use App\Http\Controllers\EmployeeControllers\EmployeePayGradeController;
@@ -255,6 +256,27 @@ Route::prefix('admin/leave/reports')
         Route::get('/rejected', 'getRejectedLeavesPage')->name('rejected');
         Route::get('/accepted', 'getAcceptedLeavesPage')->name('accepted');
         Route::get('/pending', 'getPendingLeavesPage')->name('pending');
+    });
+
+// Reports (server-side, optimized for large datasets)
+Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
+    ->prefix('admin/reports')
+    ->controller(AdminReportsController::class)
+    ->name('admin.reports.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index')->middleware('can:view_reports');
+
+        Route::get('/employees', 'employees')->name('employees')->middleware('can:view_employee_reports');
+        Route::get('/employees/data', 'employeesData')->name('employees.data')->middleware('can:view_employee_reports');
+        Route::get('/employees/export', 'employeesExport')->name('employees.export')->middleware('can:view_employee_reports');
+
+        Route::get('/attendance', 'attendance')->name('attendance')->middleware('can:view_attendance_reports');
+        Route::get('/attendance/data', 'attendanceData')->name('attendance.data')->middleware('can:view_attendance_reports');
+        Route::get('/attendance/export', 'attendanceExport')->name('attendance.export')->middleware('can:view_attendance_reports');
+
+        Route::get('/payroll', 'payroll')->name('payroll')->middleware('can:view_payroll_reports');
+        Route::get('/payroll/data', 'payrollData')->name('payroll.data')->middleware('can:view_payroll_reports');
+        Route::get('/payroll/export', 'payrollExport')->name('payroll.export')->middleware('can:view_payroll_reports');
     });
 
 

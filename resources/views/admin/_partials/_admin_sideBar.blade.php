@@ -397,6 +397,71 @@
                     </ul>
                 </li>
 
+                @php
+                    $isPageReports = Route::is('admin.reports.*');
+                @endphp
+                @canany([
+                    'view_reports',
+                    'view_employee_reports',
+                    'view_attendance_reports',
+                    'view_leave_reports',
+                    'view_payroll_reports',
+                    'view_allowance_reports',
+                    'view_loan_reports',
+                    'view_deduction_reports',
+                    'view_disbursement_reports',
+                ])
+                    <li class="has-sub {{ $isPageReports ? 'active expand' : '' }}">
+                        <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                            data-target="#reports-menu" aria-expanded="{{ $isPageReports ? 'true' : 'false' }}"
+                            aria-controls="reports-menu">
+                            <i class="mdi mdi-file-chart"></i>
+                            <span class="nav-text">Reports</span>
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="collapse {{ $isPageReports ? 'show' : '' }}" id="reports-menu"
+                            data-parent="#sidebar-menu">
+                            <div class="sub-menu">
+                                @can('view_reports')
+                                    <li>
+                                        <a class="sidenav-item-link" href="{{ route('admin.reports.index') }}">
+                                            <span class="nav-text">Reports Dashboard</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('view_employee_reports')
+                                    <li>
+                                        <a class="sidenav-item-link" href="{{ route('admin.reports.employees') }}">
+                                            <span class="nav-text">Employees</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('view_attendance_reports')
+                                    <li>
+                                        <a class="sidenav-item-link" href="{{ route('admin.reports.attendance') }}">
+                                            <span class="nav-text">Attendance</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('view_payroll_reports')
+                                    <li>
+                                        <a class="sidenav-item-link" href="{{ route('admin.reports.payroll') }}">
+                                            <span class="nav-text">Payroll</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('view_leave_reports')
+                                    <li>
+                                        <a class="sidenav-item-link" href="{{ route('admin.leave.reports.reports') }}">
+                                            <span class="nav-text">Leaves (legacy)</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                            </div>
+                        </ul>
+                    </li>
+                @endcanany
+
                 <li class="mt-3">
                     <a class="sidenav-item-link" style="color: white; padding: 10px 15px;"
                         href="{{ route('admin.companies.edit', auth()->user()->company_id) }}">
