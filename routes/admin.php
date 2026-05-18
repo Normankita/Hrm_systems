@@ -9,6 +9,7 @@ use App\Http\Controllers\AdminControllers\AdminManageEmployeeAllowancesControlle
 use App\Http\Controllers\AdminControllers\AdminManageLeaveTypeController;
 use App\Http\Controllers\AdminControllers\AdminRoleController;
 use App\Http\Controllers\AdminControllers\AdminCompanyController;
+use App\Http\Controllers\AdminControllers\AdminContractsController;
 use App\Http\Controllers\AdminControllers\AdminDepartmentController;
 use App\Http\Controllers\AdminControllers\AdminEmployeeController;
 use App\Http\Controllers\AdminControllers\AdminManageAllowanceFrequencyController;
@@ -248,6 +249,7 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
 
 
 Route::prefix('admin/leave/reports')
+    ->middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
     ->controller(AdminManageLeavesController::class)
     ->name('admin.leave.reports.')
     ->group(function () {
@@ -332,4 +334,14 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
         Route::post('/store', 'store')->name('store');
         Route::get('/view/disbursed/group', 'viewDisbursementsGroup')
             ->name('group.view');
+    });
+
+
+Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
+    ->prefix('admin/contracts')
+    ->controller(AdminContractsController::class)
+    ->name('admin.contracts.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/contracts/file/{id}', 'download')->name('download.file');
     });

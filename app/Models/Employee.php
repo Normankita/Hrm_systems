@@ -432,4 +432,10 @@ class Employee extends Model
         return $this->hasMany(OldEmployeeShift::class, 'employee_id');
     }
 
+    public function role() 
+    {
+        $user = $this->user;
+        return $user->activeRole();
+    }
+
 }

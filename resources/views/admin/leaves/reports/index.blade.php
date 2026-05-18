@@ -1,4 +1,5 @@
 @extends('layouts.system')
+
 @section('content')
         <div class="card shadow rounded">
             <div class="card-header bg-primary">
