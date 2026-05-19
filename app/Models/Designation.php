@@ -38,7 +38,7 @@ class Designation extends Model
         return $this->belongsToMany(Rank::class, DesignationRoleMapping::class);
     }
 
-    public static function getOrCreateDesignation(String $name, int $departmentId) 
+    public static function getOrCreateDesignation(String $name, int $departmentId)
     {
         $designation = self::where('name', $name)->first();
         if (!$designation) {

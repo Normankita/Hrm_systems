@@ -27,6 +27,7 @@ class CreateContractModel extends Component
     public $basic_salary;
     public $files = []; // multiple uploads
 
+
     protected $rules = [
         'employee_name' => 'required|string|max:255',
         'contract_type' => 'required|string|max:255',
@@ -35,10 +36,29 @@ class CreateContractModel extends Component
     ];
 
 
+    public $showModal = false;
+
+    public function openModal()
+    {
+        $this->showModal = true;
+
+        // Dispatch browser event to show Bootstrap modal
+        $this->dispatch('show-modal', modalId: 'createContractModel');
+    }
+
+    public function closeModal()
+    {
+        $this->showModal = false;
+        $this->dispatch('hide-modal', modalId: 'createContractModel');
+    }
+
+
     public function searchEmployee()
     {
-        if (strlen($this->employee_name) < 2) {
-            $this->employees = [];
+        if (strlen($this->employee_name) < 1) {
+            $this->employees = Employee::where('full_name', 'like', '%' . $this->employee_name . '%')
+                ->orderBy('full_name')->limit(20)
+             ->get();
             return;
         }
         $this->employees = Employee::where('full_name', 'like', '%' . $this->employee_name . '%')
@@ -46,7 +66,7 @@ class CreateContractModel extends Component
             ->get();
     }
 
-    public function selectEmployee($id)
+    public function selectEmployee(int $id)
     {
         $employee = Employee::find($id);
 
@@ -59,7 +79,6 @@ class CreateContractModel extends Component
 
     public function save()
     {
-
 
         $this->validate();
 
@@ -78,6 +97,7 @@ class CreateContractModel extends Component
             $designation_id = Designation::getOrCreateDesignation(
                 $employee->role()->name,
                 $employee->department_id)->id;
+
 
             // 1. Create contract
             $contract = EmployeeContract::create([
@@ -128,6 +148,7 @@ class CreateContractModel extends Component
         $this->dispatch('contractCreated');
 
     }
+    
 
 
     public function render()

@@ -11,31 +11,32 @@
 
             {{-- Employee Name --}}
             <div class="col-md-4">
-                <input type="text"
-                       class="form-control"
-                       placeholder="Employee name..."
-                       wire:model.debounce.500ms="employee_name">
+                <input type="text" class="form-control" placeholder="Employee name..." wire:model="nameSearch"
+                    wire:input="filterBy('employee_name')">
+
             </div>
 
             {{-- Contract Type --}}
             <div class="col-md-3">
-                <input type="text"
-                       class="form-control"
-                       placeholder="Contract type..."
-                       wire:model.debounce.500ms="contract_type">
+                  <select class="form-control" 
+                  wire:model="contractTypeSearch"
+                  wire:input="filterBy('contract_type')">
+                        <option value="">-- Contract Type --</option>
+                        @foreach (\App\Enums\ContractEnum::cases() as $type)
+                            <option value="{{ $type->value }}">{{ $type->name }}</option>
+                        @endforeach
+                    </select>
             </div>
 
             {{-- Created At (from date) --}}
             <div class="col-md-3">
-                <input type="date"
-                       class="form-control"
-                       wire:model="created_at">
+                <input type="date" class="form-control" 
+                wire:model="createdAtSearch" wire:input="filterBy('created_at')" placeholder="Created At">
             </div>
 
             {{-- Reset --}}
             <div class="col-md-2 d-grid">
-                <button class="btn btn-outline-secondary"
-                        wire:click="resetFilters">
+                <button class="btn btn-outline-secondary" wire:click="resetFilters">
                     Reset
                 </button>
             </div>
@@ -47,32 +48,48 @@
             <table class="table table-hover align-middle">
                 <thead class="table-light">
                     <tr>
+                        <th>No:_</th>
                         <th>Contract #</th>
                         <th>Employee Name</th>
                         <th>Contract Type</th>
                         <th>Start Date</th>
                         <th>End Date</th>
                         <th>Created At</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     @forelse($contracts as $contract)
-                        <tr>
+                        <tr wire:loading.remove wire:target="filterBy">
+                            <td>{{ $loop->iteration }}</td>
                             <td>{{ $contract->contract_number }}</td>
                             <td>{{ $contract->employee_name }}</td>
                             <td>{{ $contract->contract_type }}</td>
                             <td>{{ $contract->start_date }}</td>
                             <td>{{ $contract->end_date }}</td>
                             <td>{{ $contract->created_at }}</td>
+                            <td>
+                                <a href="" class="btn btn-sm btn-info">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                            </td>
                         </tr>
                     @empty
-                        <tr>
-                            <td colspan="6" class="text-center text-muted py-4">
+                        <tr wire:loading.remove wire:target="filterBy">
+                            <td colspan="8" class="text-center text-muted py-4">
                                 No contracts found
                             </td>
                         </tr>
                     @endforelse
+
+                    <!-- Loading Row -->
+                    <tr wire:loading wire:target="filterBy">
+                        <td colspan="8" class="text-center py-4">
+                            <span class="spinner-border text-primary" role="status"></span>
+                            <span class="ms-2">Loading contracts...</span>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>

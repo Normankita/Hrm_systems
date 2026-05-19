@@ -12,6 +12,9 @@ class ContractTable extends Component
     public $created_at;
     public $employee_name;
     public $contract_type;
+    public $nameSearch;
+    public $contractTypeSearch;
+    public $createdAtSearch;
 
     public function filter()
     {
@@ -40,12 +43,12 @@ class ContractTable extends Component
             ->when($this->employee_name, function ($query) {
                 $query->where(function ($q) {
                     $q->where(
-                        'employees.first_name',
+                        'employees.full_name',
                         'LIKE',
                         '%' . $this->employee_name . '%'
                     )
                     ->orWhere(
-                        'employees.last_name',
+                        'employees.full_name',
                         'LIKE',
                         '%' . $this->employee_name . '%'
                     );
@@ -78,17 +81,36 @@ class ContractTable extends Component
         return $contracts;
     }
 
+
+    public function filterBy($filterBy)
+    {
+        switch ($filterBy) {
+            case 'created_at':
+                $this->created_at = $this->createdAtSearch;
+                break;
+            case 'employee_name':
+                $this->employee_name = $this->nameSearch;
+                break;
+            case 'contract_type':
+                $this->contract_type = $this->contractTypeSearch;
+                break;
+        }
+        $this->employee_name = $this->nameSearch;
+        $this->render();
+    }
+
+
+
     public function render()
     {
         $contracts = $this->getContracts();
         return view('livewire.contract-table', compact('contracts'));
     }
 
-    // litsening to dispatch in the create contract component
     #[On('contractCreated')]
-    public function refreshContracts()
+    public function contractCreated()
     {
-        // reload the table by re-rendering the component
         $this->render();
     }
+
 }
