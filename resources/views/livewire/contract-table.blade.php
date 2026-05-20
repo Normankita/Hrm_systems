@@ -18,7 +18,7 @@
 
             {{-- Contract Type --}}
             <div class="col-md-3">
-                  <select class="form-control" 
+                  <select class="form-control"
                   wire:model="contractTypeSearch"
                   wire:input="filterBy('contract_type')">
                         <option value="">-- Contract Type --</option>
@@ -30,7 +30,7 @@
 
             {{-- Created At (from date) --}}
             <div class="col-md-3">
-                <input type="date" class="form-control" 
+                <input type="date" class="form-control"
                 wire:model="createdAtSearch" wire:input="filterBy('created_at')" placeholder="Created At">
             </div>
 
@@ -62,7 +62,8 @@
                 <tbody>
                     @forelse($contracts as $contract)
                         <tr wire:loading.remove wire:target="filterBy">
-                            <td>{{ $loop->iteration }}</td>
+                            <!-- display a number with consideration to the link -->
+                            <td>{{ $contracts->firstItem() + $loop->index }}</td>
                             <td>{{ $contract->contract_number }}</td>
                             <td>{{ $contract->employee_name }}</td>
                             <td>{{ $contract->contract_type }}</td>
@@ -70,8 +71,8 @@
                             <td>{{ $contract->end_date }}</td>
                             <td>{{ $contract->created_at }}</td>
                             <td>
-                                <a href="" class="btn btn-sm btn-info">
-                                    <i class="bi bi-eye"></i>
+                                <a href="{{  route('admin.contracts.show', $contract->id) }}">
+                                    <i class="mdi mdi-eye"></i>
                                 </a>
                             </td>
                         </tr>
@@ -92,6 +93,10 @@
                     </tr>
                 </tbody>
             </table>
+            <!-- display a table links -->
+            <div class="mt-3">
+                {{ $contracts->links('livewire::bootstrap') }}
+            </div>
         </div>
 
     </div>

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Http\Utils\Traits\onBootTrait;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\ContractFile;
 
 class EmployeeContract extends Model
 {
@@ -32,9 +33,8 @@ class EmployeeContract extends Model
         'signed_date',
         'signed_document',
         'created_by',
-
         // Additional fields
-        'contract_type',
+        'contract_type',    
         'work_location',
         'contract_file_id',
     ];
@@ -57,6 +57,16 @@ class EmployeeContract extends Model
     public static function next_contract_number() {
         $latestContract = self::latest('id')->first();
         return $latestContract ? 'CTR-' . str_pad($latestContract->id + 1, 6, '0', STR_PAD_LEFT) : 'CTR-000001';
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function contractFiles()
+    {
+        return $this->hasMany(ContractFile::class, 'employee_contract_id');
     }
 
 }

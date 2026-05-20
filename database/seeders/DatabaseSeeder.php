@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
         // --- developemnt seeders --
         // seeder for factory, remove in production
         $this->call( AttendanceSeeder::class );
+        $this->call(ContractPermissionSeeder::class);
 
     }
 }

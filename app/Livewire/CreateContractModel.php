@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Http\Utils\Traits\EmployeeTrait;
 use App\Models\ContractFile;
 use App\Models\ContractType;
 use App\Models\Designation;
@@ -55,15 +56,15 @@ class CreateContractModel extends Component
 
     public function searchEmployee()
     {
+        $employees = EmployeeTrait::getNonContractEmployees();
         if (strlen($this->employee_name) < 1) {
-            $this->employees = Employee::where('full_name', 'like', '%' . $this->employee_name . '%')
-                ->orderBy('full_name')->limit(20)
-             ->get();
+            $this->employees = $employees;
             return;
         }
-        $this->employees = Employee::where('full_name', 'like', '%' . $this->employee_name . '%')
-            ->limit(100)
-            ->get();
+        $this->employees = $employees->filter(function ($employee) {
+            return str_contains(strtolower($employee->full_name), strtolower($this->employee_name));
+        });
+        return;
     }
 
     public function selectEmployee(int $id)
@@ -87,6 +88,7 @@ class CreateContractModel extends Component
             session()->flash('error', 'Selected employee not found.');
             return;
         }
+        $role = $employee->role();
 
         DB::beginTransaction();
         try {
@@ -95,7 +97,7 @@ class CreateContractModel extends Component
             $contract_id = ContractType::getOrCreateContractType($this->contract_type)->id;
 
             $designation_id = Designation::getOrCreateDesignation(
-                $employee->role()->name,
+                $role->name,
                 $employee->department_id)->id;
 
 
@@ -113,7 +115,7 @@ class CreateContractModel extends Component
                 'end_date' => null,
                 'probation_end_date' => null,
                 'created_by' => $authUser->id,
-                'currancy' => 'TZS'
+                'currancy' => 'TZS',
             ]);
 
             if ($this->files) {

@@ -435,6 +435,7 @@ class Employee extends Model
     public function role() 
     {
         $user = $this->user;
+        $user = User::find($user->id);
         return $user->activeRole();
     }
 

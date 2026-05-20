@@ -5,9 +5,12 @@ namespace App\Livewire;
 use App\Models\EmployeeContract;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class ContractTable extends Component
 {
+
+    use WithPagination;
 
     public $created_at;
     public $employee_name;
@@ -46,11 +49,6 @@ class ContractTable extends Component
                         'employees.full_name',
                         'LIKE',
                         '%' . $this->employee_name . '%'
-                    )
-                    ->orWhere(
-                        'employees.full_name',
-                        'LIKE',
-                        '%' . $this->employee_name . '%'
                     );
                 });
             })
@@ -76,7 +74,7 @@ class ContractTable extends Component
     public function getContracts()
     {
         $contracts = $this->filter()
-            ->get();
+            ->paginate(20);
 
         return $contracts;
     }

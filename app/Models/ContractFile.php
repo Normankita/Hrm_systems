@@ -25,4 +25,9 @@ class ContractFile extends Model
     {
         return $this->belongsTo(EmployeeContract::class, 'employee_contract_id');
     }
+
+    public function contract()
+    {
+        return $this->belongsTo(EmployeeContract::class, 'employee_contract_id');
+    }
 }

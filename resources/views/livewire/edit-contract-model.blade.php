@@ -5,24 +5,22 @@
     </button>
 
     <!-- Modal -->
-    <div class="modal fade" id="createContractModel" tabindex="-1" 
-    aria-labelledby="createContractModelLabel"
+    <div class="modal fade" id="editContractModel" tabindex="-1"
+    aria-labelledby="editContractModelLabel"
         aria-hidden="true" wire:ignore.self> <!-- Important -->
 
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h5 class="modal-title" id="createContractModelLabel">Create new Contract Form</h5>
+                    <h5 class="modal-title" id="editContractModelLabel">Create new Contract Form</h5>
                     <button type="button" class="close" aria-label="Close" wire:click="closeModal">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
 
                 <div class="modal-body">
-                    {{-- Your form or content here --}}
-
-                    <div class="card shadow-sm border-0">
+                     <div class="card shadow-sm border-0">
 
                         <div class="card-header bg-white">
                             <h5 class="mb-0">Create Contract</h5>
@@ -136,10 +134,14 @@
                                     </div>
                                 @endif
 
+
+                                <div>
+                                    <!-- current uploaded contracts and option to delete them -->
+                                    
+                                </div>
                             </form>
                         </div>
                     </div>
-
                 </div>
 
                 <div class="modal-footer">

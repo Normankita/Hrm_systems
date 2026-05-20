@@ -342,6 +342,9 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
     ->controller(AdminContractsController::class)
     ->name('admin.contracts.')
     ->group(function () {
+        Route::get('/show/{id}', 'show')->name('show');
+        // route must be protected
+        Route::get('/download/{id}', 'download')->name('download');
         Route::get('/', 'index')->name('index');
         Route::get('/contracts/file/{id}', 'download')->name('download.file');
     });
