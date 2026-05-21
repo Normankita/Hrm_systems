@@ -68,6 +68,17 @@ class Employee extends Model
         return $this->hasOne(EmployeeContract::class);
     }
 
+    public function trainingParticipants()
+    {
+        return $this->hasMany(TrainingParticipant::class);
+    }
+
+    public function trainings()
+    {
+        return $this->belongsToMany(Training::class, 'training_participants')
+            ->withPivot(['status', 'enrolled_at', 'completed_at', 'notes'])
+            ->withTimestamps();
+    }
 
     public function documents()
     {

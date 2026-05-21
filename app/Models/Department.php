@@ -25,4 +25,9 @@ class Department extends Model
     {
         return $this->hasMany(Designation::class);
     }
+
+    public function trainings()
+    {
+        return $this->belongsToMany(Training::class, 'department_training')->withTimestamps();
+    }
 }

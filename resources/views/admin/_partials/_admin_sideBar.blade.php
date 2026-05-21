@@ -476,6 +476,34 @@
                     </ul>
                 </li>
 
+                @php
+                    $isPageTrainings = Route::is('admin.trainings.*') || Route::is('admin.instructors.*');
+                @endphp
+                <li class="has-sub {{ $isPageTrainings ? 'active expand' : '' }}">
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                        data-target="#trainings_menu" aria-expanded="{{ $isPageTrainings ? 'true' : 'false' }}"
+                        aria-controls="trainings_menu">
+                        <i class="mdi mdi-school"></i>
+                        <span class="nav-text">Trainings</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="collapse {{ $isPageTrainings ? 'show' : '' }}" id="trainings_menu"
+                        data-parent="#sidebar-menu">
+                        <div class="sub-menu">
+                            <li>
+                                <a class="sidenav-item-link" href="{{ route('admin.trainings.index') }}">
+                                    <span class="nav-text">Manage Trainings</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="sidenav-item-link" href="{{ route('admin.instructors.index') }}">
+                                    <span class="nav-text">Manage Instructors</span>
+                                </a>
+                            </li>
+                        </div>
+                    </ul>
+                </li>
+
                 <li class="mt-3">
                     <a class="sidenav-item-link" style="color: white; padding: 10px 15px;"
                         href="{{ route('admin.companies.edit', auth()->user()->company_id) }}">

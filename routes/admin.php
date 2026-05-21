@@ -5,7 +5,6 @@ use App\Http\Controllers\AdminControllers\AdminAttendancesController;
 use App\Http\Controllers\AdminControllers\AdminAttendanceSessionsController;
 use App\Http\Controllers\AdminControllers\AdminManageAllowancesController;
 use App\Http\Controllers\AdminControllers\AdminManageDisbursements;
-use App\Http\Controllers\AdminControllers\AdminManageEmployeeAllowancesController;
 use App\Http\Controllers\AdminControllers\AdminManageLeaveTypeController;
 use App\Http\Controllers\AdminControllers\AdminRoleController;
 use App\Http\Controllers\AdminControllers\AdminCompanyController;
@@ -20,8 +19,9 @@ use App\Http\Controllers\AdminControllers\AdminPermissionsController;
 use App\Http\Controllers\AdminControllers\AdminReportsController;
 use App\Http\Controllers\AdminControllers\AdminSettingController;
 use App\Http\Controllers\Api\ApiRolesController;
-use App\Http\Controllers\EmployeeControllers\EmployeePayGradeController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminControllers\AdminInstructorController;
+use App\Http\Controllers\AdminControllers\AdminTrainingController;
 
 
 Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
@@ -347,4 +347,32 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
         Route::get('/download/{id}', 'download')->name('download');
         Route::get('/', 'index')->name('index');
         Route::get('/contracts/file/{id}', 'download')->name('download.file');
+    });
+
+
+Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
+    ->prefix('admin/instructors')
+    ->controller(AdminInstructorController::class)
+    ->name('admin.instructors.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
+        Route::put('/{instructor}', 'update')->name('update');
+        Route::delete('/{instructor}', 'destroy')->name('destroy');
+    });
+
+Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
+    ->prefix('admin/trainings')
+    ->controller(AdminTrainingController::class)
+    ->name('admin.trainings.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{training}', 'show')->name('show');
+        Route::put('/{training}', 'update')->name('update');
+        Route::delete('/{training}', 'destroy')->name('destroy');
+        Route::post('/{training}/enroll/department', 'enrollByDepartment')->name('enroll.department');
+        Route::post('/{training}/enroll/employees', 'enrollEmployees')->name('enroll.employees');
+        Route::patch('/{training}/participants/{participant}', 'updateParticipant')->name('participants.update');
+        Route::delete('/{training}/participants/{participant}', 'removeParticipant')->name('participants.destroy');
     });
