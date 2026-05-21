@@ -6,152 +6,182 @@ use App\Http\Utils\Traits\EmployeeTrait;
 use App\Models\ContractFile;
 use App\Models\ContractType;
 use App\Models\Designation;
+use App\Models\Employee;
 use App\Models\EmployeeContract;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use App\Models\Employee;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 class CreateContractModel extends Component
 {
-
     use WithFileUploads;
 
-    public $employee_name;
-    public $contract_type;
-    public $created_at;
-    public $employees = [];
-    public $employee_id = null;
-    public $work_location;
-    public $basic_salary;
-    public $files = []; // multiple uploads
+    public bool $showModal = false;
 
+    public ?string $employee_name = null;
+    public ?int $employee_id = null;
+    public array $employees = [];
 
-    protected $rules = [
-        'employee_name' => 'required|string|max:255',
-        'contract_type' => 'required|string|max:255',
-        'created_at'    => 'required|date',
-        'files.*'       => 'file|mimes:pdf|max:10240', // 10MB each
-    ];
+    public ?string $contract_type = null;
+    public ?string $start_date = null;
+    public ?string $end_date = null;
+    public ?string $probation_end_date = null;
+    public ?string $signed_date = null;
+    public ?string $work_location = null;
+    public $basic_salary = null;
+    public ?string $currency = 'TZS';
+    public ?string $payment_frequency = null;
+    public ?string $contract_status = 'active';
+    public ?string $termination_reason = null;
 
+    public array $files = [];
 
-    public $showModal = false;
-
-    public function openModal()
+    private function fetchEmployeeSalary()
     {
-        $this->showModal = true;
+        $employeeId = $this->employee_id;
+        $employee = Employee::findOrFail($employeeId);
+        $baseSalary = $employee->getBaseSalary();
+        $this->basic_salary = $baseSalary ?? 0;
+    }
 
-        // Dispatch browser event to show Bootstrap modal
+    protected function rules(): array
+    {
+        return [
+            'employee_name' => 'required|string|max:255',
+            'employee_id' => 'required|exists:employees,id',
+            'contract_type' => 'required|string|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'probation_end_date' => 'nullable|date',
+            'signed_date' => 'nullable|date',
+            'work_location' => 'nullable|string|max:255',
+            'basic_salary' => 'nullable|numeric|min:0',
+            'currency' => 'nullable|string|max:10',
+            'payment_frequency' => 'nullable|string|max:50',
+            'contract_status' => 'required|string|max:50',
+            'termination_reason' => 'nullable|string|max:1000',
+            'files' => 'required|array|min:1',
+            'files.*' => 'file|mimes:pdf|max:10240',
+        ];
+    }
+
+    public function openModal(): void
+    {
+        $this->resetForm();
+        $this->start_date = now()->format('Y-m-d');
+        $this->showModal = true;
         $this->dispatch('show-modal', modalId: 'createContractModel');
     }
 
-    public function closeModal()
+    public function closeModal(): void
     {
         $this->showModal = false;
         $this->dispatch('hide-modal', modalId: 'createContractModel');
     }
 
-
-    public function searchEmployee()
+    public function searchEmployee(): void
     {
         $employees = EmployeeTrait::getNonContractEmployees();
-        if (strlen($this->employee_name) < 1) {
-            $this->employees = $employees;
+
+        if (strlen((string) $this->employee_name) < 1) {
+            $this->employees = $employees->all();
             return;
         }
+
         $this->employees = $employees->filter(function ($employee) {
             return str_contains(strtolower($employee->full_name), strtolower($this->employee_name));
-        });
-        return;
+        })->values()->all();
     }
 
-    public function selectEmployee(int $id)
+    public function selectEmployee(int $id): void
     {
         $employee = Employee::find($id);
-
         if ($employee) {
             $this->employee_id = $employee->id;
             $this->employee_name = $employee->full_name;
             $this->employees = [];
+            $this->fetchEmployeeSalary();
         }
     }
 
-    public function save()
+    public function save(): void
     {
-
         $this->validate();
 
         $employee = Employee::find($this->employee_id);
-        if (!$employee) {
+
+        if (! $employee) {
             session()->flash('error', 'Selected employee not found.');
             return;
         }
-        $role = $employee->role();
 
         DB::beginTransaction();
+
         try {
             $authUser = Auth::user();
-            $contract_number = EmployeeContract::next_contract_number();
-            $contract_id = ContractType::getOrCreateContractType($this->contract_type)->id;
-
-            $designation_id = Designation::getOrCreateDesignation(
+            $contractType = ContractType::getOrCreateContractType($this->contract_type);
+            $role = $employee->role();
+            $designationId = Designation::getOrCreateDesignation(
                 $role->name,
-                $employee->department_id)->id;
+                $employee->department_id
+            )->id;
 
-
-            // 1. Create contract
             $contract = EmployeeContract::create([
-                'employee_name' => $this->employee_name,
                 'contract_type' => $this->contract_type,
-                'contract_number' => $contract_number,
-                'created_at'    => $this->created_at,
-                'employee_id'   => $this->employee_id,
-                'contract_type_id' => $contract_id,
+                'contract_number' => EmployeeContract::next_contract_number(),
+                'employee_id' => $this->employee_id,
+                'contract_type_id' => $contractType->id,
                 'department_id' => $employee->department_id,
-                'designation_id' => $designation_id,
-                'start_date' => $this->created_at,
-                'end_date' => null,
-                'probation_end_date' => null,
+                'designation_id' => $designationId,
+                'start_date' => $this->start_date,
+                'end_date' => $this->end_date ?: null,
+                'probation_end_date' => $this->probation_end_date ?: null,
+                'signed_date' => $this->signed_date ?: null,
+                'work_location' => $this->work_location,
+                'basic_salary' => $this->basic_salary,
+                'currency' => $this->currency,
+                'payment_frequency' => $this->payment_frequency,
+                'contract_status' => $this->contract_status,
+                'termination_reason' => $this->termination_reason,
                 'created_by' => $authUser->id,
-                'currancy' => 'TZS',
             ]);
 
-            if ($this->files) {
-                foreach ($this->files as $file) {
+            foreach ($this->files as $file) {
+                $fileName = uniqid('contract_') . '.' . $file->getClientOriginalExtension();
+                $path = $file->storeAs('contracts', $fileName, 'local');
 
-                    // secure filename (avoid original exposure)
-                    $fileName = uniqid('contract_') . '.' . $file->getClientOriginalExtension();
-
-                    // store in PRIVATE disk (NOT public)
-                    $path = $file->storeAs('contracts', $fileName, 'local');
-
-                    ContractFile::create([
-                        'contract_id' => $contract->id,
-                        'file_path'   => $path,
-                        'original_name' => $file->getClientOriginalName(),
-                        'employee_contract_id' => $contract->id,
-                    ]);
-                }
+                ContractFile::create([
+                    'file_path' => $path,
+                    'original_name' => $file->getClientOriginalName(),
+                    'employee_contract_id' => $contract->id,
+                ]);
             }
+
+            DB::commit();
+
+            session()->flash('success', 'Contract created successfully.');
+            $this->dispatch('contractCreated');
+            $this->closeModal();
+            $this->resetForm();
         } catch (\Exception $e) {
             DB::rollBack();
             session()->flash('error', 'Error creating contract: ' . $e->getMessage());
-            return;
         }
-
-        DB::commit();
-
-        session()->flash('success', 'Contract created successfully with files.');
-
-        $this->reset(['employee_name', 'contract_type', 'created_at', 'files']);
-
-        $this->dispatch('contractCreated');
-
     }
-    
 
+    private function resetForm(): void
+    {
+        $this->reset([
+            'employee_name', 'employee_id', 'employees', 'contract_type',
+            'start_date', 'end_date', 'probation_end_date', 'signed_date',
+            'work_location', 'basic_salary', 'currency', 'payment_frequency',
+            'contract_status', 'termination_reason', 'files',
+        ]);
+        $this->currency = 'TZS';
+        $this->contract_status = 'active';
+    }
 
     public function render()
     {

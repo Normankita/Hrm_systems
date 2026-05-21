@@ -20,6 +20,7 @@ use App\Http\Controllers\AdminControllers\AdminReportsController;
 use App\Http\Controllers\AdminControllers\AdminSettingController;
 use App\Http\Controllers\Api\ApiRolesController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminControllers\AdminEmployeeRelationsController;
 use App\Http\Controllers\AdminControllers\AdminInstructorController;
 use App\Http\Controllers\AdminControllers\AdminTrainingController;
 
@@ -349,6 +350,14 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
         Route::get('/contracts/file/{id}', 'download')->name('download.file');
     });
 
+
+Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
+    ->prefix('admin/employee-relations')
+    ->controller(AdminEmployeeRelationsController::class)
+    ->name('admin.employee-relations.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+    });
 
 Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
     ->prefix('admin/instructors')

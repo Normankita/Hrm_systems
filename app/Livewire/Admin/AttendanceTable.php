@@ -12,7 +12,7 @@ class AttendanceTable extends Component
     use WithSortingAndSearch;
 
     public string $search = '';
-    public $perPage = 10;
+    public $perPage = 100;
     public $sortField = 'created_at';
     public $sortDirection = 'desc';
 

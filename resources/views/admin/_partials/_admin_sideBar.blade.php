@@ -163,6 +163,7 @@
                         'admin.attendances.manual.entry.page',
                         'admin.attendances.sessions.index',
                         'admin.attendances.sessions.get.dashboard',
+                        'admin.attendances.sessions.*',
                     );
                 @endphp
                 <li class="has-sub {{ $isPageAttendance ? 'active expand' : '' }}">
@@ -460,7 +461,7 @@
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
                         data-target="#contract_menu" aria-expanded="{{ $isPageContracts ? 'true' : 'false' }}"
                         aria-controls="contract_menu">
-                        <i class="mdi mdi-sitemap"></i>
+                        <i class="mdi mdi-account"></i>
                         <span class="nav-text">Contracts</span>
                         <b class="caret"></b>
                     </a>
@@ -474,6 +475,16 @@
                             </li>
                         </div>
                     </ul>
+                </li>
+
+                @php
+                    $isPageEmployeeRelations = Route::is('admin.employee-relations.*');
+                @endphp
+                <li class="{{ $isPageEmployeeRelations ? 'active' : '' }}">
+                    <a class="sidenav-item-link" href="{{ route('admin.employee-relations.index') }}">
+                        <i class="mdi mdi-account-tie"></i>
+                        <span class="nav-text">Employee Relations</span>
+                    </a>
                 </li>
 
                 @php

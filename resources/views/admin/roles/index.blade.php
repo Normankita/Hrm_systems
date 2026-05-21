@@ -33,14 +33,14 @@
                                             <x-system.modal-button text="Edit"
                                                 icon="bi bi-pencil-square"
                                                 textColor="text-dark"
-                                                class="  mdi mdi-pencil btn btn-outline-dark btn-sm p-1 mx-1"
+                                                class="  mdi mdi-pencil btn btn-outline-dark btn-sm p-1 mx-1 btn-custome"
                                                 id="roles_update-{{ $role->id }}" />
                                         </td>
                                         <td>
                                             <x-system.btn-edit
                                                 :route="route('admin.roles.edit.permissions', $role->id)"
                                                 text="Manage"
-                                                class="btn btn-dark btn-block">
+                                                class="btn btn-dark btn-block btn-custome">
                                                 Manage
                                             </x-system.btn-edit>
                                         </td>

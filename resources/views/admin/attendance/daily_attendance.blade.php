@@ -40,7 +40,7 @@
                     @csrf
                     <div class="col-md-3">
                         <label class="form-label">Date</label>
-                        <input name="date" type="date" value="{{ \Carbon\Carbon::parse($date)->format('Y-m-d') }}"
+                        <input name="date" type="date" value="{{ Carbon::parse($date)->format('Y-m-d') }}"
                             class="form-control">
                     </div>
                     <div class="col-md-3">
@@ -188,6 +188,8 @@
                                 console.error('Error:', error);
                                 alert('An error occurred while closing attendance.');
                             });
+                    }else {
+                        location.reload();
                     }
                 },
                 unCloseAttendance() {

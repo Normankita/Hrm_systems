@@ -72,7 +72,11 @@
             </div>
 
             <div class="card-body table-responsive">
-                @livewire('admin.attendance-table')
+                <div class="row justify-content-center">
+                    <div class="col-sm-12 col-md-12">
+                        @livewire('admin.attendance-table')
+                    </div>
+                </div>
             </div>
         </div>
     </div>

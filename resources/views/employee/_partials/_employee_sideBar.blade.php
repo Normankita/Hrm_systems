@@ -412,6 +412,35 @@
                     </li>
                 @endcan
 
+
+                
+                @php
+                    $isManageLeaveTypes = Route::is('employee.manage.leave.type.*');
+                @endphp
+                {{-- LeaveType management starts here  --}}
+                @can('view_leaveTypes')
+                    <li class="has-sub {{ $isManageLeaveTypes ? 'active expand' : '' }}">
+                        <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                            data-target="#leaveType-menu" aria-expanded="{{ $isManageLeaveTypes ? 'true' : 'false' }}"
+                                aria-controls="leaveType-menu">
+                            <i class="mdi mdi-calendar"></i>
+                            <span class="nav-text">LeaveType</span>
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="collapse {{ $isManageLeaveTypes ? 'show' : '' }}" id="leaveType-menu"
+                                data-parent="#sidebar-menu">
+                            <div class="sub-menu">
+                                <li>
+                                    <a class="sidenav-item-link" href="{{ route('employee.manage.leave.type.index') }}">
+                                        <span class="nav-text">Manage LeaveTypes</span>
+                                    </a>
+                                </li>
+                            </div>
+                        </ul>
+                    </li>
+                @endcan
+                
+
                 @php
                     $isPageReports = Route::is('employee.manage.reports.*');
                 @endphp

@@ -3,6 +3,8 @@
 use App\Http\Controllers\EmployeeControllers\EmployeeManageAllowanceFrequencyController;
 use App\Http\Controllers\EmployeeControllers\EmployeeAllowanceGroupController;
 use App\Http\Controllers\EmployeeControllers\EmployeeAttendancesController;
+use App\Http\Controllers\EmployeeControllers\EmployeeContractsController;
+use App\Http\Controllers\EmployeeControllers\EmployeeInstructorController;
 use App\Http\Controllers\EmployeeControllers\EmployeeLeaveController;
 use App\Http\Controllers\EmployeeControllers\EmployeeManageAllowancesController;
 use App\Http\Controllers\EmployeeControllers\EmployeeManageAttendanceController;
@@ -20,6 +22,8 @@ use App\Http\Controllers\EmployeeControllers\EmployeeProfileController;
 use App\Http\Controllers\EmployeeControllers\EmployeeReportsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmployeeControllers\EmployeePayGradeController;
+use App\Http\Controllers\EmployeeControllers\EmployeeRelationsController;
+use App\Http\Controllers\EmployeeControllers\EmployeeTrainingController;
 
 // Leave Request Routes
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
@@ -356,3 +360,54 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::get('/dashboard', 'dashboard')
             ->name('dashboard')->can('ind_view_attendance');
     });
+
+
+
+    Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
+    ->prefix('employee/contracts')
+    ->controller(EmployeeContractsController::class)
+    ->name('employee.contracts.')
+    ->group(function () {
+        Route::get('/show/{id}', 'show')->name('show');
+        // route must be protected
+        Route::get('/download/{id}', 'download')->name('download');
+        Route::get('/', 'index')->name('index');
+        Route::get('/contracts/file/{id}', 'download')->name('download.file');
+    });
+
+
+Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
+    ->prefix('employee/employee-relations')
+    ->controller(EmployeeRelationsController::class)
+    ->name('employee.employee-relations.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+    });
+
+Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
+    ->prefix('employee/instructors')
+    ->controller(EmployeeInstructorController::class)
+    ->name('employee.instructors.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
+        Route::put('/{instructor}', 'update')->name('update');
+        Route::delete('/{instructor}', 'destroy')->name('destroy');
+    });
+
+Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
+    ->prefix('employee/trainings')
+    ->controller(EmployeeTrainingController::class)
+    ->name('employee.trainings.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{training}', 'show')->name('show');
+        Route::put('/{training}', 'update')->name('update');
+        Route::delete('/{training}', 'destroy')->name('destroy');
+        Route::post('/{training}/enroll/department', 'enrollByDepartment')->name('enroll.department');
+        Route::post('/{training}/enroll/employees', 'enrollEmployees')->name('enroll.employees');
+        Route::patch('/{training}/participants/{participant}', 'updateParticipant')->name('participants.update');
+        Route::delete('/{training}/participants/{participant}', 'removeParticipant')->name('participants.destroy');
+    });
+
