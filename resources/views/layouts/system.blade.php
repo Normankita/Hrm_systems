@@ -7,6 +7,8 @@
 
     @yield('_links')
 
+    @yield('styles')
+
     <style>
         #toast {
             visibility: hidden;
@@ -29,6 +31,28 @@
             visibility: visible;
             opacity: 1;
             bottom: 50px;
+        }
+        .btn-sm {
+            padding: 0.2rem 0.4rem;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            border-radius: 0.2rem;
+        }
+
+        .btn-sm i {
+            font-size: 0.875rem;
+        }
+
+        .btn-sm:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-sm:focus {
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        .btn-sm:active {
+            background-color: #004085;
         }
     </style>
     @livewireStyles

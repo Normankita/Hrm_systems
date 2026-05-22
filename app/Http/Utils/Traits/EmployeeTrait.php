@@ -204,5 +204,42 @@ trait EmployeeTrait
     }
 
 
+    /**
+     * Get employees that dont have contract or whose contract is expired
+     * @return \Illuminate\Database\Eloquent\Collection<int, Employee>|\Illuminate\Support\Collection<int, \stdClass>
+     */
+    public static function getNonContractEmployees()
+    {
+        // employee that dont have contract or whose contract is expired
+        $employees = Employee::whereDoesntHave('contract')
+            ->orWhereHas('contract', function ($query) {
+                // if end_date is null, then the contract is active
+                $query->whereNotNull('end_date')
+                    ->where('end_date', '<', now())
+                    ->where('contract_status', 'active');
+            })
+            ->orderBy('full_name')
+            ->get();
+        return $employees;
+    }
+
+
+    /**
+     * Get employees that have contract and whose contract is not expired
+     * @return \Illuminate\Database\Eloquent\Collection<int, Employee>|\Illuminate\Support\Collection<int, \stdClass>
+     */
+    public static function getContractEmployees()
+    {
+        // employee that have contract and whose contract is not expired
+        $employees = Employee::whereHas('contract', function ($query) {
+            $query->whereNotNull('end_date')
+                ->where('end_date', '>', now())
+                ->where('contract_status', 'active');
+        })
+        ->orderBy('full_name')
+        ->get();
+        return $employees;
+    }
+
 
 }

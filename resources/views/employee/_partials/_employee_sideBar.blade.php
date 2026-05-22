@@ -83,6 +83,25 @@
                     </li>
                 @endcanany
 
+                @php
+                    $isMyContracts = Route::is('employee.contracts.*');
+                @endphp
+                <li class="{{ $isMyContracts ? 'active' : '' }}">
+                    <a class="sidenav-item-link" href="{{ route('employee.contracts.index') }}">
+                        <i class="mdi mdi-file-document-outline"></i>
+                        <span class="nav-text">My Contracts</span>
+                    </a>
+                </li>
+
+                @php
+                    $isMyRelations = Route::is('employee.employee-relations.*');
+                @endphp
+                <li class="{{ $isMyRelations ? 'active' : '' }}">
+                    <a class="sidenav-item-link" href="{{ route('employee.employee-relations.index') }}">
+                        <i class="mdi mdi-handshake"></i>
+                        <span class="nav-text">My Relations</span>
+                    </a>
+                </li>
 
                 <li class="section-title">
                     MaNAGEMENT
@@ -95,6 +114,30 @@
                         Route::is('employee.manage.employees.index') ||
                         Route::is('employee.manage.employees.reports.index');
                 @endphp
+
+                @php
+                    $isManageContracts = Route::is('employee.manage.contracts.*');
+                @endphp
+                @can('view_contracts')
+                    <li class="{{ $isManageContracts ? 'active' : '' }}">
+                        <a class="sidenav-item-link" href="{{ route('employee.manage.contracts.index') }}">
+                            <i class="mdi mdi-file-document-outline"></i>
+                            <span class="nav-text">Manage Contracts</span>
+                        </a>
+                    </li>
+                @endcan
+
+                @php
+                    $isManageRelations = Route::is('employee.manage.employee-relations.*');
+                @endphp
+                @can('view_employee_relations')
+                    <li class="{{ $isManageRelations ? 'active' : '' }}">
+                        <a class="sidenav-item-link" href="{{ route('employee.manage.employee-relations.index') }}">
+                            <i class="mdi mdi-handshake"></i>
+                            <span class="nav-text">Manage Relations</span>
+                        </a>
+                    </li>
+                @endcan
 
                 @if ($canCreate || $canView)
                     <li class="has-sub {{ $isManageEmp ? 'active expalnd' : '' }}">
@@ -411,6 +454,100 @@
                         </ul>
                     </li>
                 @endcan
+
+
+                
+                @php
+                    $isManageLeaveTypes = Route::is('employee.manage.leave.type.*');
+                @endphp
+                {{-- LeaveType management starts here  --}}
+                @can('view_leaveTypes')
+                    <li class="has-sub {{ $isManageLeaveTypes ? 'active expand' : '' }}">
+                        <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                            data-target="#leaveType-menu" aria-expanded="{{ $isManageLeaveTypes ? 'true' : 'false' }}"
+                                aria-controls="leaveType-menu">
+                            <i class="mdi mdi-calendar"></i>
+                            <span class="nav-text">LeaveType</span>
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="collapse {{ $isManageLeaveTypes ? 'show' : '' }}" id="leaveType-menu"
+                                data-parent="#sidebar-menu">
+                            <div class="sub-menu">
+                                <li>
+                                    <a class="sidenav-item-link" href="{{ route('employee.manage.leave.type.index') }}">
+                                        <span class="nav-text">Manage LeaveTypes</span>
+                                    </a>
+                                </li>
+                            </div>
+                        </ul>
+                    </li>
+                @endcan
+                
+
+                @php
+                    $isPageReports = Route::is('employee.manage.reports.*');
+                @endphp
+                @canany([
+                    'view_reports',
+                    'view_employee_reports',
+                    'view_attendance_reports',
+                    'view_leave_reports',
+                    'view_payroll_reports',
+                    'view_allowance_reports',
+                    'view_loan_reports',
+                    'view_deduction_reports',
+                    'view_disbursement_reports',
+                ])
+                    <li class="has-sub {{ $isPageReports ? 'active expand' : '' }}">
+                        <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                            data-target="#reports-menu-employee" aria-expanded="{{ $isPageReports ? 'true' : 'false' }}"
+                            aria-controls="reports-menu-employee">
+                            <i class="mdi mdi-file-chart"></i>
+                            <span class="nav-text">Reports</span>
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="collapse {{ $isPageReports ? 'show' : '' }}" id="reports-menu-employee"
+                            data-parent="#sidebar-menu">
+                            <div class="sub-menu">
+                                @can('view_reports')
+                                    <li>
+                                        <a class="sidenav-item-link" href="{{ route('employee.manage.reports.index') }}">
+                                            <span class="nav-text">Reports Dashboard</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('view_employee_reports')
+                                    <li>
+                                        <a class="sidenav-item-link" href="{{ route('employee.manage.reports.employees') }}">
+                                            <span class="nav-text">Employees</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('view_attendance_reports')
+                                    <li>
+                                        <a class="sidenav-item-link" href="{{ route('employee.manage.reports.attendance') }}">
+                                            <span class="nav-text">Attendance</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('view_payroll_reports')
+                                    <li>
+                                        <a class="sidenav-item-link" href="{{ route('employee.manage.reports.payroll') }}">
+                                            <span class="nav-text">Payroll</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('view_leave_reports')
+                                    <li>
+                                        <a class="sidenav-item-link" href="{{ route('employee.manage.leave.reports.reports') }}">
+                                            <span class="nav-text">Leaves (legacy)</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                            </div>
+                        </ul>
+                    </li>
+                @endcanany
 
 
                 @php

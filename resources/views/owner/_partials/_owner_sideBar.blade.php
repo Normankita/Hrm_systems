@@ -48,6 +48,13 @@
                         <span class="nav-text">My Profile</span>
                     </a>
                 </li>
+                <li>
+                    <a class="sidenav-item-link" href="{{ route('owner.settings.index') }}"
+                        style="color: white; padding: 10px 15px;">
+                        <i class="mdi mdi-account-circle"></i>
+                        <span class="nav-text">Settings</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

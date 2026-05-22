@@ -5,10 +5,10 @@ use App\Http\Controllers\AdminControllers\AdminAttendancesController;
 use App\Http\Controllers\AdminControllers\AdminAttendanceSessionsController;
 use App\Http\Controllers\AdminControllers\AdminManageAllowancesController;
 use App\Http\Controllers\AdminControllers\AdminManageDisbursements;
-use App\Http\Controllers\AdminControllers\AdminManageEmployeeAllowancesController;
 use App\Http\Controllers\AdminControllers\AdminManageLeaveTypeController;
 use App\Http\Controllers\AdminControllers\AdminRoleController;
 use App\Http\Controllers\AdminControllers\AdminCompanyController;
+use App\Http\Controllers\AdminControllers\AdminContractsController;
 use App\Http\Controllers\AdminControllers\AdminDepartmentController;
 use App\Http\Controllers\AdminControllers\AdminEmployeeController;
 use App\Http\Controllers\AdminControllers\AdminManageAllowanceFrequencyController;
@@ -16,10 +16,13 @@ use App\Http\Controllers\AdminControllers\AdminManageLeavesController;
 use App\Http\Controllers\AdminControllers\AdminPayGradeController;
 use App\Http\Controllers\AdminControllers\AdminPayrollEmployeeController;
 use App\Http\Controllers\AdminControllers\AdminPermissionsController;
+use App\Http\Controllers\AdminControllers\AdminReportsController;
 use App\Http\Controllers\AdminControllers\AdminSettingController;
 use App\Http\Controllers\Api\ApiRolesController;
-use App\Http\Controllers\EmployeeControllers\EmployeePayGradeController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminControllers\AdminEmployeeRelationsController;
+use App\Http\Controllers\AdminControllers\AdminInstructorController;
+use App\Http\Controllers\AdminControllers\AdminTrainingController;
 
 
 Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
@@ -247,6 +250,7 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
 
 
 Route::prefix('admin/leave/reports')
+    ->middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
     ->controller(AdminManageLeavesController::class)
     ->name('admin.leave.reports.')
     ->group(function () {
@@ -255,6 +259,27 @@ Route::prefix('admin/leave/reports')
         Route::get('/rejected', 'getRejectedLeavesPage')->name('rejected');
         Route::get('/accepted', 'getAcceptedLeavesPage')->name('accepted');
         Route::get('/pending', 'getPendingLeavesPage')->name('pending');
+    });
+
+// Reports (server-side, optimized for large datasets)
+Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
+    ->prefix('admin/reports')
+    ->controller(AdminReportsController::class)
+    ->name('admin.reports.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index')->middleware('can:view_reports');
+
+        Route::get('/employees', 'employees')->name('employees')->middleware('can:view_employee_reports');
+        Route::get('/employees/data', 'employeesData')->name('employees.data')->middleware('can:view_employee_reports');
+        Route::get('/employees/export', 'employeesExport')->name('employees.export')->middleware('can:view_employee_reports');
+
+        Route::get('/attendance', 'attendance')->name('attendance')->middleware('can:view_attendance_reports');
+        Route::get('/attendance/data', 'attendanceData')->name('attendance.data')->middleware('can:view_attendance_reports');
+        Route::get('/attendance/export', 'attendanceExport')->name('attendance.export')->middleware('can:view_attendance_reports');
+
+        Route::get('/payroll', 'payroll')->name('payroll')->middleware('can:view_payroll_reports');
+        Route::get('/payroll/data', 'payrollData')->name('payroll.data')->middleware('can:view_payroll_reports');
+        Route::get('/payroll/export', 'payrollExport')->name('payroll.export')->middleware('can:view_payroll_reports');
     });
 
 
@@ -310,4 +335,54 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
         Route::post('/store', 'store')->name('store');
         Route::get('/view/disbursed/group', 'viewDisbursementsGroup')
             ->name('group.view');
+    });
+
+
+Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
+    ->prefix('admin/contracts')
+    ->controller(AdminContractsController::class)
+    ->name('admin.contracts.')
+    ->group(function () {
+        Route::get('/show/{id}', 'show')->name('show');
+        // route must be protected
+        Route::get('/download/{id}', 'download')->name('download');
+        Route::get('/', 'index')->name('index');
+        Route::get('/contracts/file/{id}', 'download')->name('download.file');
+    });
+
+
+Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
+    ->prefix('admin/employee-relations')
+    ->controller(AdminEmployeeRelationsController::class)
+    ->name('admin.employee-relations.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/download/{id}', 'download')->name('download');
+    });
+
+Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
+    ->prefix('admin/instructors')
+    ->controller(AdminInstructorController::class)
+    ->name('admin.instructors.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
+        Route::put('/{instructor}', 'update')->name('update');
+        Route::delete('/{instructor}', 'destroy')->name('destroy');
+    });
+
+Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
+    ->prefix('admin/trainings')
+    ->controller(AdminTrainingController::class)
+    ->name('admin.trainings.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{training}', 'show')->name('show');
+        Route::put('/{training}', 'update')->name('update');
+        Route::delete('/{training}', 'destroy')->name('destroy');
+        Route::post('/{training}/enroll/department', 'enrollByDepartment')->name('enroll.department');
+        Route::post('/{training}/enroll/employees', 'enrollEmployees')->name('enroll.employees');
+        Route::patch('/{training}/participants/{participant}', 'updateParticipant')->name('participants.update');
+        Route::delete('/{training}/participants/{participant}', 'removeParticipant')->name('participants.destroy');
     });

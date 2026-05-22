@@ -163,6 +163,7 @@
                         'admin.attendances.manual.entry.page',
                         'admin.attendances.sessions.index',
                         'admin.attendances.sessions.get.dashboard',
+                        'admin.attendances.sessions.*',
                     );
                 @endphp
                 <li class="has-sub {{ $isPageAttendance ? 'active expand' : '' }}">
@@ -223,7 +224,7 @@
                                                 <span class="nav-text">Manage Session</span>
                                             </a>
                                         </li>
-                                          <li>
+                                        <li>
                                             <a class="sidenav-item-link"
                                                 href="{{ route('admin.attendances.sessions.get.employees.shift') }}">
                                                 <span class="nav-text">Employee Shift</span>
@@ -307,8 +308,7 @@
                         data-parent="#sidebar-menu">
                         <div class="sub-menu">
                             <li>
-                                <a class="sidenav-item-link"
-                                href="{{ route('admin.payrolls.getEmployees') }}">
+                                <a class="sidenav-item-link" href="{{ route('admin.payrolls.getEmployees') }}">
                                     <span class="nav-text">Select Employees</span>
                                 </a>
                             </li>
@@ -391,6 +391,124 @@
                             <li>
                                 <a class="sidenav-item-link" href="{{ route('admin.departments.index') }}">
                                     <span class="nav-text">view departments</span>
+                                </a>
+                            </li>
+                        </div>
+                    </ul>
+                </li>
+
+                @php
+                    $isPageReports = Route::is('admin.reports.*');
+                @endphp
+                @canany(['view_reports', 'view_employee_reports', 'view_attendance_reports', 'view_leave_reports',
+                    'view_payroll_reports', 'view_allowance_reports', 'view_loan_reports', 'view_deduction_reports',
+                    'view_disbursement_reports'])
+                    <li class="has-sub {{ $isPageReports ? 'active expand' : '' }}">
+                        <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                            data-target="#reports-menu" aria-expanded="{{ $isPageReports ? 'true' : 'false' }}"
+                            aria-controls="reports-menu">
+                            <i class="mdi mdi-file-chart"></i>
+                            <span class="nav-text">Reports</span>
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="collapse {{ $isPageReports ? 'show' : '' }}" id="reports-menu"
+                            data-parent="#sidebar-menu">
+                            <div class="sub-menu">
+                                @can('view_reports')
+                                    <li>
+                                        <a class="sidenav-item-link" href="{{ route('admin.reports.index') }}">
+                                            <span class="nav-text">Reports Dashboard</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('view_employee_reports')
+                                    <li>
+                                        <a class="sidenav-item-link" href="{{ route('admin.reports.employees') }}">
+                                            <span class="nav-text">Employees</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('view_attendance_reports')
+                                    <li>
+                                        <a class="sidenav-item-link" href="{{ route('admin.reports.attendance') }}">
+                                            <span class="nav-text">Attendance</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('view_payroll_reports')
+                                    <li>
+                                        <a class="sidenav-item-link" href="{{ route('admin.reports.payroll') }}">
+                                            <span class="nav-text">Payroll</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('view_leave_reports')
+                                    <li>
+                                        <a class="sidenav-item-link" href="{{ route('admin.leave.reports.reports') }}">
+                                            <span class="nav-text">Leaves (legacy)</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                            </div>
+                        </ul>
+                    </li>
+                @endcanany
+
+                @php
+                    $isPageContracts = Route::is('admin.contracts.index');
+                @endphp
+                <li class="has-sub {{ $isPageContracts ? 'active expand' : '' }}">
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                        data-target="#contract_menu" aria-expanded="{{ $isPageContracts ? 'true' : 'false' }}"
+                        aria-controls="contract_menu">
+                        <i class="mdi mdi-account"></i>
+                        <span class="nav-text">Contracts</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="collapse {{ $isPageContracts ? 'show' : '' }}" id="contract_menu"
+                        data-parent="#sidebar-menu">
+                        <div class="sub-menu">
+                            <li>
+                                <a class="sidenav-item-link" href="{{ route('admin.contracts.index') }}">
+                                    <span class="nav-text">view Contracts</span>
+                                </a>
+                            </li>
+                        </div>
+                    </ul>
+                </li>
+
+                @php
+                    $isPageEmployeeRelations = Route::is('admin.employee-relations.*');
+                @endphp
+                <li class="{{ $isPageEmployeeRelations ? 'active' : '' }}">
+                    <a class="sidenav-item-link" href="{{ route('admin.employee-relations.index') }}">
+                        <i class="mdi mdi-account-tie"></i>
+                        <span class="nav-text">Employee Relations</span>
+                    </a>
+                </li>
+
+                @php
+                    $isPageTrainings = Route::is('admin.trainings.*') || Route::is('admin.instructors.*');
+                @endphp
+                <li class="has-sub {{ $isPageTrainings ? 'active expand' : '' }}">
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse"
+                        data-target="#trainings_menu" aria-expanded="{{ $isPageTrainings ? 'true' : 'false' }}"
+                        aria-controls="trainings_menu">
+                        <i class="mdi mdi-school"></i>
+                        <span class="nav-text">Trainings</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="collapse {{ $isPageTrainings ? 'show' : '' }}" id="trainings_menu"
+                        data-parent="#sidebar-menu">
+                        <div class="sub-menu">
+                            <li>
+                                <a class="sidenav-item-link" href="{{ route('admin.trainings.index') }}">
+                                    <span class="nav-text">Manage Trainings</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="sidenav-item-link" href="{{ route('admin.instructors.index') }}">
+                                    <span class="nav-text">Manage Instructors</span>
                                 </a>
                             </li>
                         </div>

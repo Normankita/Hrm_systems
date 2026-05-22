@@ -13,7 +13,7 @@
                 data-bs-toggle="modal" id="{{ $id }}" :text="$attachmentName" />
         </div>
     </div>
-    <x-system.modal size="modal-md" id="{{ $id }}" title="{{ $attachmentName }}">
+    <x-system.modal size="modal-xl" id="{{ $id }}" title="{{ $attachmentName }}">
         @if (str_contains($type, 'image'))
             <img style="height: 100vh; width: 100%; object-fit: contain;"
             src="{{ asset('storage/' . $path) }}"

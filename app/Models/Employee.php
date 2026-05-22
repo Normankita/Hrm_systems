@@ -68,6 +68,17 @@ class Employee extends Model
         return $this->hasOne(EmployeeContract::class);
     }
 
+    public function trainingParticipants()
+    {
+        return $this->hasMany(TrainingParticipant::class);
+    }
+
+    public function trainings()
+    {
+        return $this->belongsToMany(Training::class, 'training_participants')
+            ->withPivot(['status', 'enrolled_at', 'completed_at', 'notes'])
+            ->withTimestamps();
+    }
 
     public function documents()
     {
@@ -430,6 +441,13 @@ class Employee extends Model
     public function oldEmployeeShifts()
     {
         return $this->hasMany(OldEmployeeShift::class, 'employee_id');
+    }
+
+    public function role() 
+    {
+        $user = $this->user;
+        $user = User::find($user->id);
+        return $user->activeRole();
     }
 
 }

@@ -29,5 +29,9 @@
         </table>
     </div>
 
-    {{ $attendances->links() }}
+    <div class="row justify-content-start">
+        <div class="col-sm-12 col-md-10">
+            {{ $attendances->links('pagination::bootstrap-5') }}
+        </div>
+    </div>
 </div>

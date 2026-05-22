@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             RolesSeeder::class,
             PermissionSeeder::class,
             AllowancePermissionSeeder::class,
+            ReportsPermissionSeeder::class,
             UserSeeder::class,
             StatusSeeder::class,
             EmployeeStatusHistorySeeder::class,
@@ -34,6 +35,9 @@ class DatabaseSeeder extends Seeder
         // --- developemnt seeders --
         // seeder for factory, remove in production
         $this->call( AttendanceSeeder::class );
+        $this->call(ContractPermissionSeeder::class);
+        $this->call(EmployeeRelationsPermissionSeeder::class);
+        $this->call(TrainingPermissionSeeder::class);
 
     }
 }

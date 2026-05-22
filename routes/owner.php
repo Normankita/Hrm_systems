@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Owner\OwnerCompaniesController;
+use App\Http\Controllers\OwnerSettingsController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'role:OWNER'])
@@ -14,3 +15,12 @@ Route::middleware(['auth', 'role:OWNER'])
         Route::post('/addAdmin', 'addAdmin')->name('addAdmin');
         Route::post('/toggleStatus/{id}', 'toggleStatus')->name('toggleStatus');
     });
+
+
+    Route::middleware(['auth', 'role:OWNER'])
+        ->prefix('/owner/settings')
+        ->name('owner.settings.')
+        ->controller(OwnerSettingsController::class)
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+        });

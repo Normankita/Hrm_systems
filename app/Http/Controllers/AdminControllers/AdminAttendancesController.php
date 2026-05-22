@@ -7,6 +7,7 @@ use App\Http\Services\DailyAttendanceService;
 use App\Http\Utils\Traits\AttendanceTrait;
 use App\Models\Attendance;
 use App\Models\ClosedDay;
+use App\Models\Company;
 use App\Models\Employee;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
