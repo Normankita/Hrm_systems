@@ -1,0 +1,32 @@
+<?php
+namespace App\Models;
+
+use App\Http\Utils\Traits\HasEvents;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Deduction extends Model
+{
+    use HasFactory, HasEvents;
+
+    protected $fillable = [
+        'employee_id',
+        'name',
+        'description',
+        'total_amount',
+        'installments',
+        'installment_amount',
+    ];
+
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
+    }
+
+    public function payrolls()
+    {
+        return $this->belongsToMany(Payroll::class)
+                    ->withPivot('total_amount')
+                    ->withTimestamps();
+    }
+}

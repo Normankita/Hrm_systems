@@ -1,0 +1,92 @@
+<?php
+
+namespace App\Http\Controllers\Auth;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
+
+class AuthenticatedSessionController extends Controller
+{
+    /**
+     * Display the login view.
+     */
+    public function create(): View
+    {
+        return view('auth.login');
+    }
+
+    /**
+     * Handle an incoming authentication request.
+     */
+    public function store(LoginRequest $request): RedirectResponse
+    {
+        $request->authenticate();
+
+        $request->session()->regenerate();
+
+        // Check if the user is an owner
+        if (!Auth::user()->hasRole('OWNER') && !Auth::user()->hasRole('ADMIN')) {
+            if (Auth::user()->roles()->count() < 2) {
+                $this->logoutLogic($request);
+                return redirect()->back()->withErrors([
+                    'error' => 'Access denied. You have No Role in this Company.']
+                );
+            }
+        }
+        if (!(Auth::user()->hasRole('OWNER'))) {
+            $request->session()->put('company', Auth::user()->company);
+            $request->session()->put('leave_days', 30);
+            $this->userLoggedIn();
+        }
+        return redirect()->intended(route('dashboard', absolute: false));
+    }
+
+    /**
+     * Destroy an authenticated session.
+     */
+    public function destroy(Request $request): RedirectResponse
+    {
+        $this->logoutLogic($request);
+        return redirect('/');
+    }
+
+
+    private function logoutLogic(Request $request): void
+    {
+        Auth::guard('web')->logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        $request->session()->forget('company');
+        $request->session()->forget('leave_days');
+        $request->session()->flush();
+        $this->userLoggedOut();
+    }
+
+    private function userLoggedIn(): void
+    {
+        $user = User::find(Auth::id());
+        // Assuming you have a User model and the user is authenticated
+        // You can also use Auth::user() if you prefer
+        if ($user) {
+            $user->is_logged_in = true;
+            $user->save();
+        }
+    }
+
+    private function userLoggedOut(): void
+    {
+        $user = User::find(Auth::id());
+        if ($user) {
+            $user->is_logged_in = false;
+            $user->save();
+        }
+    }
+}

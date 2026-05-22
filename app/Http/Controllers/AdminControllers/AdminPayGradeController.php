@@ -1,0 +1,87 @@
+<?php
+
+namespace App\Http\Controllers\AdminControllers;
+
+use App\Http\Utils\Helpers;
+use App\Http\Controllers\Controller;
+use App\Http\Utils\Traits\PayGradeTrait;
+use Illuminate\Http\Request;
+use App\Models\PayGrade;
+
+
+class AdminPayGradeController extends Controller
+{
+        use PayGradeTrait;
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $pay_grades = PayGrade::orderBy("created_at", "desc")->paginate(10);
+        return view('admin.paygrade.index', compact('pay_grades'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        Helpers::sanitizeRequestNumbers($request);
+        $response = $this->validatePayGrade($request);
+        if ($response['status'] === 'error') {
+            return redirect()->back()
+                ->with('error', $response['message'])
+                ->withInput();
+        }
+        // $base = $request->base_salary;
+        // $max = $request->max_salary;
+        $this->createPayGrade($request);
+        return redirect()->route('admin.paygrades.index')->with('success', 'Pay Grade created successfully');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(PayGrade $payGrade)
+    {
+        // Assuming you will later show the view
+        return view('admin.paygrade.show', compact('payGrade'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(PayGrade $payGrade)
+    {
+        return view('admin.paygrade.edit', compact('payGrade'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, PayGrade $payGrade)
+    {
+        Helpers::sanitizeRequestNumbers($request);
+        $response = $this->validatePayGrade($request, $payGrade->id);
+        if ($response['status'] === 'error') {
+            return redirect()->back()
+                ->with('error', $response['message'])
+                ->withInput();
+        }
+        $this->updatePayGrade($request, $payGrade);
+
+        return redirect()->route('admin.paygrades.index')
+            ->with('success', 'Pay Grade updated successfully');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(PayGrade $payGrade)
+    {
+        $payGrade->delete();
+        return redirect()->route('admin.paygrades.index')->with('success', 'Pay Grade deleted successfully');
+    }
+
+}
