@@ -10,6 +10,11 @@ class DisciplinesTable extends Component
 {
     use WithPagination;
 
+    public ?int $employeeId = null;
+    public bool $allowManage = true;
+    public bool $personalMode = false;
+    public bool $requirePermission = false;
+
     public string $search = '';
     public string $statusFilter = '';
 
@@ -22,7 +27,8 @@ class DisciplinesTable extends Component
 
     public function render()
     {
-        $disciplines = EmployeeDiscipline::with(['employee', 'issuer'])
+        $disciplines = EmployeeDiscipline::with(['employee', 'issuer', 'documents'])
+            ->when($this->employeeId, fn ($q) => $q->where('employee_id', $this->employeeId))
             ->when($this->search, fn ($q) => $q->where(function ($q) {
                 $q->where('reference_number', 'like', '%' . $this->search . '%')
                     ->orWhere('action_type', 'like', '%' . $this->search . '%')

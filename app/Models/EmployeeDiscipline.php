@@ -38,4 +38,9 @@ class EmployeeDiscipline extends Model
     {
         return $this->morphMany(EmployeeRelationResolution::class, 'resolvable');
     }
+
+    public function documents(): MorphMany
+    {
+        return $this->morphMany(EmployeeRelationDocument::class, 'documentable');
+    }
 }

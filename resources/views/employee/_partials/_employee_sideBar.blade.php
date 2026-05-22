@@ -93,6 +93,16 @@
                     </a>
                 </li>
 
+                @php
+                    $isMyRelations = Route::is('employee.employee-relations.*');
+                @endphp
+                <li class="{{ $isMyRelations ? 'active' : '' }}">
+                    <a class="sidenav-item-link" href="{{ route('employee.employee-relations.index') }}">
+                        <i class="mdi mdi-handshake"></i>
+                        <span class="nav-text">My Relations</span>
+                    </a>
+                </li>
+
                 <li class="section-title">
                     MaNAGEMENT
                 </li>
@@ -113,6 +123,18 @@
                         <a class="sidenav-item-link" href="{{ route('employee.manage.contracts.index') }}">
                             <i class="mdi mdi-file-document-outline"></i>
                             <span class="nav-text">Manage Contracts</span>
+                        </a>
+                    </li>
+                @endcan
+
+                @php
+                    $isManageRelations = Route::is('employee.manage.employee-relations.*');
+                @endphp
+                @can('view_employee_relations')
+                    <li class="{{ $isManageRelations ? 'active' : '' }}">
+                        <a class="sidenav-item-link" href="{{ route('employee.manage.employee-relations.index') }}">
+                            <i class="mdi mdi-handshake"></i>
+                            <span class="nav-text">Manage Relations</span>
                         </a>
                     </li>
                 @endcan

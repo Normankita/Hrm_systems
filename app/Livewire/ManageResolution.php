@@ -2,6 +2,8 @@
 
 namespace App\Livewire;
 
+use App\Http\Utils\Traits\AuthorizesRelationAccess;
+use App\Livewire\Traits\ManagesRelationDocuments;
 use App\Models\EmployeeComplaint;
 use App\Models\EmployeeConflict;
 use App\Models\EmployeeDiscipline;
@@ -12,8 +14,15 @@ use Livewire\Component;
 
 class ManageResolution extends Component
 {
+    use AuthorizesRelationAccess, ManagesRelationDocuments;
+
     public ?int $resolutionId = null;
     public bool $showModal = false;
+    public bool $viewOnly = false;
+    public bool $personalMode = false;
+    public ?int $employeeId = null;
+    public string $downloadRoute = 'admin.employee-relations.download';
+
     public ?string $reference_number = null;
     public string $case_key = '';
     public string $resolvable_type = '';
@@ -26,7 +35,7 @@ class ManageResolution extends Component
 
     protected function rules(): array
     {
-        return [
+        return array_merge([
             'resolvable_type' => 'required|string',
             'resolvable_id' => 'required|integer',
             'title' => 'required|string|max:255',
@@ -34,23 +43,38 @@ class ManageResolution extends Component
             'action_taken' => 'nullable|string|max:5000',
             'status' => 'required|string',
             'resolved_at' => 'nullable|date',
-        ];
+        ], $this->documentValidationRules());
     }
 
     #[On('openResolutionModal')]
     public function openModal(): void
     {
         $this->resolutionId = null;
+        $this->viewOnly = false;
         $this->resetForm();
         $this->showModal = true;
         $this->dispatch('show-modal', modalId: 'manageResolutionModal');
     }
 
+    #[On('viewResolution')]
+    public function viewResolution(int $id): void
+    {
+        $this->openEdit($id);
+        $this->viewOnly = true;
+    }
+
     #[On('editResolution')]
     public function openEdit(int $id): void
     {
-        $record = EmployeeRelationResolution::findOrFail($id);
+        $record = EmployeeRelationResolution::with('documents')->findOrFail($id);
+        if ($this->personalMode) {
+            $this->authorizeOwnRelationModel($record);
+            $this->viewOnly = true;
+        }
         $this->resolutionId = $record->id;
+        if (! $this->personalMode) {
+            $this->viewOnly = false;
+        }
         $this->reference_number = $record->reference_number;
         $this->resolvable_type = $record->resolvable_type;
         $this->resolvable_id = $record->resolvable_id;
@@ -60,6 +84,7 @@ class ManageResolution extends Component
         $this->action_taken = $record->action_taken ?? '';
         $this->status = $record->status;
         $this->resolved_at = $record->resolved_at?->format('Y-m-d');
+        $this->loadRelationDocuments($record);
         $this->showModal = true;
         $this->dispatch('show-modal', modalId: 'manageResolutionModal');
     }
@@ -81,6 +106,10 @@ class ManageResolution extends Component
 
     public function save(): void
     {
+        if ($this->viewOnly) {
+            return;
+        }
+
         $this->updatedCaseKey();
         $this->validate();
         $userId = Auth::id();
@@ -97,14 +126,17 @@ class ManageResolution extends Component
         ];
 
         if ($this->resolutionId) {
-            EmployeeRelationResolution::findOrFail($this->resolutionId)->update($data);
+            $record = EmployeeRelationResolution::findOrFail($this->resolutionId);
+            $record->update($data);
+            $this->syncRelationDocuments($record);
             session()->flash('success', 'Resolution updated successfully.');
         } else {
-            EmployeeRelationResolution::create([
+            $record = EmployeeRelationResolution::create([
                 ...$data,
                 'reference_number' => EmployeeRelationResolution::nextReferenceNumber('RES'),
                 'created_by' => $userId,
             ]);
+            $this->syncRelationDocuments($record);
             session()->flash('success', 'Resolution recorded successfully.');
         }
 
@@ -129,13 +161,26 @@ class ManageResolution extends Component
     {
         $cases = [];
 
-        foreach (EmployeeComplaint::whereNotIn('status', ['Closed'])->orderByDesc('complaint_date')->limit(50)->get() as $c) {
+        $complaintQuery = EmployeeComplaint::whereNotIn('status', ['Closed'])->orderByDesc('complaint_date')->limit(50);
+        $disciplineQuery = EmployeeDiscipline::whereNotIn('status', ['Closed'])->orderByDesc('discipline_date')->limit(50);
+        $conflictQuery = EmployeeConflict::whereNotIn('status', ['Closed'])->orderByDesc('conflict_date')->limit(50);
+
+        if ($this->employeeId) {
+            $complaintQuery->where('employee_id', $this->employeeId);
+            $disciplineQuery->where('employee_id', $this->employeeId);
+            $conflictQuery->where(function ($q) {
+                $q->where('employee_id', $this->employeeId)
+                    ->orWhere('other_employee_id', $this->employeeId);
+            });
+        }
+
+        foreach ($complaintQuery->get() as $c) {
             $cases[] = ['type' => EmployeeComplaint::class, 'id' => $c->id, 'label' => "Complaint {$c->reference_number} — {$c->subject}"];
         }
-        foreach (EmployeeDiscipline::whereNotIn('status', ['Closed'])->orderByDesc('discipline_date')->limit(50)->get() as $c) {
+        foreach ($disciplineQuery->get() as $c) {
             $cases[] = ['type' => EmployeeDiscipline::class, 'id' => $c->id, 'label' => "Discipline {$c->reference_number} — {$c->action_type}"];
         }
-        foreach (EmployeeConflict::whereNotIn('status', ['Closed'])->orderByDesc('conflict_date')->limit(50)->get() as $c) {
+        foreach ($conflictQuery->get() as $c) {
             $cases[] = ['type' => EmployeeConflict::class, 'id' => $c->id, 'label' => "Conflict {$c->reference_number} — {$c->subject}"];
         }
 
@@ -144,8 +189,9 @@ class ManageResolution extends Component
 
     private function resetForm(): void
     {
-        $this->reset(['reference_number', 'case_key', 'resolvable_type', 'resolvable_id', 'title', 'summary', 'action_taken', 'status', 'resolved_at', 'resolutionId']);
+        $this->reset(['reference_number', 'case_key', 'resolvable_type', 'resolvable_id', 'title', 'summary', 'action_taken', 'status', 'resolved_at', 'resolutionId', 'viewOnly']);
         $this->status = 'Open';
+        $this->resetRelationDocuments();
     }
 
     public function render()

@@ -6,6 +6,7 @@ use App\Http\Utils\Traits\GeneratesReferenceNumber;
 use App\Http\Utils\Traits\onBootTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class EmployeeRelationResolution extends Model
@@ -32,6 +33,11 @@ class EmployeeRelationResolution extends Model
     public function createdBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function documents(): MorphMany
+    {
+        return $this->morphMany(EmployeeRelationDocument::class, 'documentable');
     }
 
     public static function resolvableTypes(): array

@@ -22,6 +22,7 @@ use App\Http\Controllers\EmployeeControllers\EmployeeProfileController;
 use App\Http\Controllers\EmployeeControllers\EmployeeReportsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmployeeControllers\EmployeePayGradeController;
+use App\Http\Controllers\EmployeeControllers\EmployeeManageRelationsController;
 use App\Http\Controllers\EmployeeControllers\EmployeeRelationsController;
 use App\Http\Controllers\EmployeeControllers\EmployeeTrainingController;
 use App\Http\Controllers\EmployeeManageInstructorController;
@@ -394,6 +395,16 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->name('employee.employee-relations.')
     ->group(function () {
         Route::get('/', 'index')->name('index');
+        Route::get('/download/{id}', 'download')->name('download');
+    });
+
+Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
+    ->prefix('employee/manage/employee-relations')
+    ->controller(EmployeeManageRelationsController::class)
+    ->name('employee.manage.employee-relations.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index')->middleware('can:view_employee_relations');
+        Route::get('/download/{id}', 'download')->name('download')->middleware('can:download_employee_relations');
     });
 /**
  * Routes for employee to Manage Instructor

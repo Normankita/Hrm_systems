@@ -357,6 +357,7 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
     ->name('admin.employee-relations.')
     ->group(function () {
         Route::get('/', 'index')->name('index');
+        Route::get('/download/{id}', 'download')->name('download');
     });
 
 Route::middleware(['auth', 'HasCompanyProfile', 'role:ADMIN'])
