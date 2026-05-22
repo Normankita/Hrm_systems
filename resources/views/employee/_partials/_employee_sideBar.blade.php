@@ -83,6 +83,15 @@
                     </li>
                 @endcanany
 
+                @php
+                    $isMyContracts = Route::is('employee.contracts.*');
+                @endphp
+                <li class="{{ $isMyContracts ? 'active' : '' }}">
+                    <a class="sidenav-item-link" href="{{ route('employee.contracts.index') }}">
+                        <i class="mdi mdi-file-document-outline"></i>
+                        <span class="nav-text">My Contracts</span>
+                    </a>
+                </li>
 
                 <li class="section-title">
                     MaNAGEMENT
@@ -95,6 +104,18 @@
                         Route::is('employee.manage.employees.index') ||
                         Route::is('employee.manage.employees.reports.index');
                 @endphp
+
+                @php
+                    $isManageContracts = Route::is('employee.manage.contracts.*');
+                @endphp
+                @can('view_contracts')
+                    <li class="{{ $isManageContracts ? 'active' : '' }}">
+                        <a class="sidenav-item-link" href="{{ route('employee.manage.contracts.index') }}">
+                            <i class="mdi mdi-file-document-outline"></i>
+                            <span class="nav-text">Manage Contracts</span>
+                        </a>
+                    </li>
+                @endcan
 
                 @if ($canCreate || $canView)
                     <li class="has-sub {{ $isManageEmp ? 'active expalnd' : '' }}">

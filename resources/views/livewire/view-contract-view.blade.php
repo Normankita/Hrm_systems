@@ -224,7 +224,7 @@
                             <td>
                                 @if ($contract->contractFiles->count() > 0)
                                     @foreach ($contract->contractFiles as $file)
-                                        <a href="{{ route('admin.contracts.download', $file->id) }}" target="_blank"
+                                        <a href="{{ route($downloadRoute, $file->id) }}" target="_blank"
                                             class="mb-2 d-block">
                                             <i class="bi bi-download"></i>
                                             Download Contract {{ $loop->iteration }}

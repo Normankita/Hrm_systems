@@ -10,6 +10,8 @@ class ViewContractView extends Component
 {
     public EmployeeContract $contract;
 
+    public string $downloadRoute = 'admin.contracts.download';
+
     #[On('contractUpdated')]
     public function refreshContract(): void
     {

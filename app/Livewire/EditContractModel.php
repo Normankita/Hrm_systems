@@ -20,6 +20,8 @@ class EditContractModel extends Component
 
     public int $contractId;
 
+    public string $downloadRoute = 'admin.contracts.download';
+
     public bool $showModal = false;
 
     public ?string $contract_number = null;

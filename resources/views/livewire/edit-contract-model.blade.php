@@ -78,7 +78,7 @@
                                                                     title="{{ $file['original_name'] }}">
                                                                     {{ $file['original_name'] }}
                                                                 </p>
-                                                                <a href="{{ route('admin.contracts.download', $file['id']) }}"
+                                                                <a href="{{ route($downloadRoute, $file['id']) }}"
                                                                     target="_blank"
                                                                     class="btn btn-link btn-sm text-decoration-none p-0 mt-1 {{ $markedForDelete ? 'disabled pe-none' : '' }}">
                                                                     <i class="bi bi-download"></i> Preview

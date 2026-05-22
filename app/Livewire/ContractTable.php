@@ -19,6 +19,11 @@ class ContractTable extends Component
     public $contractTypeSearch;
     public $createdAtSearch;
 
+    /** When set, only contracts for this employee are listed (personal view). */
+    public ?int $employeeId = null;
+
+    public string $showRoute = 'admin.contracts.show';
+
     public function filter()
     {
         $contracts = EmployeeContract::query()
@@ -59,6 +64,10 @@ class ContractTable extends Component
                     'LIKE',
                     '%' . $this->contract_type . '%'
                 );
+            })
+
+            ->when($this->employeeId, function ($query) {
+                $query->where('employee_contracts.employee_id', $this->employeeId);
             })
 
             ->orderBy('employee_contracts.created_at', 'DESC');

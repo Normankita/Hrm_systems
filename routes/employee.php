@@ -4,7 +4,7 @@ use App\Http\Controllers\EmployeeControllers\EmployeeManageAllowanceFrequencyCon
 use App\Http\Controllers\EmployeeControllers\EmployeeAllowanceGroupController;
 use App\Http\Controllers\EmployeeControllers\EmployeeAttendancesController;
 use App\Http\Controllers\EmployeeControllers\EmployeeContractsController;
-use App\Http\Controllers\EmployeeControllers\EmployeeInstructorController;
+use App\Http\Controllers\EmployeeControllers\EmployeeManageContractsController;
 use App\Http\Controllers\EmployeeControllers\EmployeeLeaveController;
 use App\Http\Controllers\EmployeeControllers\EmployeeManageAllowancesController;
 use App\Http\Controllers\EmployeeControllers\EmployeeManageAttendanceController;
@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmployeeControllers\EmployeePayGradeController;
 use App\Http\Controllers\EmployeeControllers\EmployeeRelationsController;
 use App\Http\Controllers\EmployeeControllers\EmployeeTrainingController;
+use App\Http\Controllers\EmployeeManageInstructorController;
 
 // Leave Request Routes
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
@@ -362,20 +363,31 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     });
 
 
-
-    Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
+/**
+ * Routes for employee to deal with his individual Contracts
+ */
+Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('employee/contracts')
     ->controller(EmployeeContractsController::class)
     ->name('employee.contracts.')
     ->group(function () {
-        Route::get('/show/{id}', 'show')->name('show');
-        // route must be protected
-        Route::get('/download/{id}', 'download')->name('download');
         Route::get('/', 'index')->name('index');
-        Route::get('/contracts/file/{id}', 'download')->name('download.file');
+        Route::get('/show/{id}', 'show')->name('show');
+        Route::get('/download/{id}', 'download')->name('download');
     });
 
-
+Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
+    ->prefix('employee/manage/contracts')
+    ->controller(EmployeeManageContractsController::class)
+    ->name('employee.manage.contracts.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index')->middleware('can:view_contracts');
+        Route::get('/show/{id}', 'show')->name('show')->middleware('can:view_contracts');
+        Route::get('/download/{id}', 'download')->name('download')->middleware('can:download_contracts');
+    });
+/**
+ * Routes for employee to deal with his individual relation
+ */
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('employee/employee-relations')
     ->controller(EmployeeRelationsController::class)
@@ -383,10 +395,12 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->group(function () {
         Route::get('/', 'index')->name('index');
     });
-
+/**
+ * Routes for employee to Manage Instructor
+ */
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('employee/instructors')
-    ->controller(EmployeeInstructorController::class)
+    ->controller(EmployeeManageInstructorController::class)
     ->name('employee.instructors.')
     ->group(function () {
         Route::get('/', 'index')->name('index');
@@ -394,7 +408,9 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::put('/{instructor}', 'update')->name('update');
         Route::delete('/{instructor}', 'destroy')->name('destroy');
     });
-
+/**
+ * Routes for employee to Manage Training
+ */
 Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
     ->prefix('employee/trainings')
     ->controller(EmployeeTrainingController::class)
@@ -405,9 +421,13 @@ Route::middleware(['auth', 'HasCompanyProfile', 'role:EMPLOYEE'])
         Route::get('/{training}', 'show')->name('show');
         Route::put('/{training}', 'update')->name('update');
         Route::delete('/{training}', 'destroy')->name('destroy');
-        Route::post('/{training}/enroll/department', 'enrollByDepartment')->name('enroll.department');
-        Route::post('/{training}/enroll/employees', 'enrollEmployees')->name('enroll.employees');
-        Route::patch('/{training}/participants/{participant}', 'updateParticipant')->name('participants.update');
-        Route::delete('/{training}/participants/{participant}', 'removeParticipant')->name('participants.destroy');
+        Route::post('/{training}/enroll/department', 'enrollByDepartment')
+            ->name('enroll.department');
+        Route::post('/{training}/enroll/employees', 'enrollEmployees')
+            ->name('enroll.employees');
+        Route::patch('/{training}/participants/{participant}', 'updateParticipant')
+            ->name('participants.update');
+        Route::delete('/{training}/participants/{participant}', 'removeParticipant')
+            ->name('participants.destroy');
     });
 

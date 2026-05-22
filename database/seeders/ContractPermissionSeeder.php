@@ -48,6 +48,11 @@ class ContractPermissionSeeder extends Seeder
 
         $adminRole = Role::findByName('ADMIN');
         $adminRole->givePermissionTo(array_map(fn ($p) => $p['name'], $permissions));
+
+        $employeeRole = Role::where('name', 'EMPLOYEE')->first();
+        if ($employeeRole) {
+            $employeeRole->givePermissionTo(array_map(fn ($p) => $p['name'], $permissions));
+        }
     }
 
 }

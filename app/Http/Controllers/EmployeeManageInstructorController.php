@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\EmployeeControllers;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class EmployeeInstructorController extends Controller
+class EmployeeManageInstructorController extends Controller
 {
     public function index()
     {
@@ -22,10 +21,8 @@ class EmployeeInstructorController extends Controller
 
     }
 
-
     public function destroy($instructor)
     {
 
     }
-
 }

@@ -9,12 +9,13 @@
         {{-- FILTERS --}}
         <div class="row g-3 mb-3">
 
-            {{-- Employee Name --}}
-            <div class="col-md-4">
-                <input type="text" class="form-control" placeholder="Employee name..." wire:model="nameSearch"
-                    wire:input="filterBy('employee_name')">
-
-            </div>
+            @if (!$employeeId)
+                {{-- Employee Name --}}
+                <div class="col-md-4">
+                    <input type="text" class="form-control" placeholder="Employee name..." wire:model="nameSearch"
+                        wire:input="filterBy('employee_name')">
+                </div>
+            @endif
 
             {{-- Contract Type --}}
             <div class="col-md-3">
@@ -50,7 +51,9 @@
                     <tr>
                         <th>No:_</th>
                         <th>Contract #</th>
-                        <th>Employee Name</th>
+                        @if (!$employeeId)
+                            <th>Employee Name</th>
+                        @endif
                         <th>Contract Type</th>
                         <th>Start Date</th>
                         <th>End Date</th>
@@ -65,20 +68,22 @@
                             <!-- display a number with consideration to the link -->
                             <td>{{ $contracts->firstItem() + $loop->index }}</td>
                             <td>{{ $contract->contract_number }}</td>
-                            <td>{{ $contract->employee_name }}</td>
+                            @if (!$employeeId)
+                                <td>{{ $contract->employee_name }}</td>
+                            @endif
                             <td>{{ $contract->contract_type }}</td>
                             <td>{{ $contract->start_date }}</td>
                             <td>{{ $contract->end_date }}</td>
                             <td>{{ $contract->created_at }}</td>
                             <td>
-                                <a href="{{  route('admin.contracts.show', $contract->id) }}">
+                                <a href="{{ route($showRoute, $contract->id) }}">
                                     <i class="mdi mdi-eye"></i>
                                 </a>
                             </td>
                         </tr>
                     @empty
                         <tr wire:loading.remove wire:target="filterBy">
-                            <td colspan="8" class="text-center text-muted py-4">
+                            <td colspan="{{ $employeeId ? 7 : 8 }}" class="text-center text-muted py-4">
                                 No contracts found
                             </td>
                         </tr>
@@ -86,7 +91,7 @@
 
                     <!-- Loading Row -->
                     <tr wire:loading wire:target="filterBy">
-                        <td colspan="8" class="text-center py-4">
+                        <td colspan="{{ $employeeId ? 7 : 8 }}" class="text-center py-4">
                             <span class="spinner-border text-primary" role="status"></span>
                             <span class="ms-2">Loading contracts...</span>
                         </td>
